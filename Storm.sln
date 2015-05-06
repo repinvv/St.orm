@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StormGenerator", "StormGenerator\StormGenerator.csproj", "{63E951A8-D094-449C-A77F-CA096D814E68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storm", "Storm\Storm.csproj", "{377745A9-5931-4803-8EBC-6E3F59242F2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{63E951A8-D094-449C-A77F-CA096D814E68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E951A8-D094-449C-A77F-CA096D814E68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E951A8-D094-449C-A77F-CA096D814E68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{377745A9-5931-4803-8EBC-6E3F59242F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{377745A9-5931-4803-8EBC-6E3F59242F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{377745A9-5931-4803-8EBC-6E3F59242F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{377745A9-5931-4803-8EBC-6E3F59242F2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
