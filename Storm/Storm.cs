@@ -15,7 +15,7 @@
 
         public static List<TDal> GetEntities<TDal, TDb>(IQueryable<TDb> query, ICustomContext context, LoadParameter[] parameters) where TDal : IDalEntity<TDb>
         {
-            return StormGetImplementation.GetEntities<TDal, TDb>(query, context, parameters);
+            return StormGetImplementation.GetEntities<TDal>(query, context, parameters);
         }
     }
 }

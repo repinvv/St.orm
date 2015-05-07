@@ -40,10 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\GetByQuery.cs" />
+    <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Implementation\RepositoryStorage.cs" />
+    <Compile Include="Interfaces\IDeletable.cs" />
     <Compile Include="Interfaces\Internal\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
     <Compile Include="Interfaces\ICustomContext.cs" />
+    <Compile Include="Interfaces\Internal\ILoadService.cs" />
+    <Compile Include="Interfaces\IWriteable.cs" />
     <Compile Include="Storm.cs" />
     <Compile Include="Interfaces\IGetByQuery.cs" />
     <Compile Include="Interfaces\IDalEntity.cs" />

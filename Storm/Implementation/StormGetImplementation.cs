@@ -7,9 +7,12 @@
 
     internal static class StormGetImplementation
     {
-        public static List<TDal> GetEntities<TDal, TDb>(IQueryable<TDb> query, ICustomContext context, LoadParameter[] parameters) where TDal : IDalEntity<TDb>
+        public static List<TDal> GetEntities<TDal>(IQueryable query, ICustomContext context, LoadParameter[] parameters) where TDal : IDalEntity
         {
-            return new List<TDal>();
+            var parametersDictionary = parameters.ToDictionary(x => x.Key, x => x.Value);
+            var loadService = new LoadService<TDal>(parametersDictionary, context);
+            var repo = RepositoryStorage.GetRepository<TDal>();
+            return repo.Materialize(query, loadService);
         }
     }
 }
