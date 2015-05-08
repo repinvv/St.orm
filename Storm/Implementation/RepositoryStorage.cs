@@ -12,9 +12,10 @@
         public static IDalRepository<TDal> GetRepository<TDal>() where TDal : IDalEntity
         {
             object repo;
-            if (!Repositories.TryGetValue(typeof(TDal), out repo))
+            var type = typeof(TDal);
+            if (!Repositories.TryGetValue(type, out repo))
             {
-                Repositories[typeof(TDal)] = repo = typeof(TDal).IsValueType ? default(TDal) : Activator.CreateInstance(typeof(TDal));
+                Repositories[type] = repo = Activator.CreateInstance(type);
             }
 
             return repo as IDalRepository<TDal>;

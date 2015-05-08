@@ -42,7 +42,9 @@
     <Compile Include="Implementation\GetByQuery.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Implementation\RepositoryStorage.cs" />
+    <Compile Include="Interfaces\IDalEntityGeneric.cs" />
     <Compile Include="Interfaces\IDeletable.cs" />
+    <Compile Include="Interfaces\Internal\IAmLazy.cs" />
     <Compile Include="Interfaces\Internal\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
     <Compile Include="Interfaces\ICustomContext.cs" />

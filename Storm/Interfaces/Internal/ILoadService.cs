@@ -12,11 +12,10 @@
             
         ILoadService<TInherited> ForType<TInherited>() where TInherited : IDalEntity;
 
-        List<TField> GetProperty<TField, TIndex>(int propertyIndex, IQueryable<object> query, Func<TField, TIndex> indexLambda, TIndex key)
-            where TField : IDalEntity
-            where TIndex : class;
+        List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex key)
+            where TField : IDalEntity;
 
-        List<TField> GetProperty<TField, TIndex>(int propertyIndex, IQueryable<object> query, Func<TField, TIndex> indexLambda, TIndex? key)
+        List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex? key)
             where TField : IDalEntity
             where TIndex : struct;
     }

@@ -17,7 +17,7 @@
         {
             Parameters = parametersDictionary;
             this.context = context;
-            fields = new object[RepositoryStorage.GetRepository<TDal>().RelationPropertiesCount];
+            fields = new object[RepositoryStorage.GetRepository<TDal>().RelationPropertiesCount()];
         }
 
         public Dictionary<object, object> Parameters { get; private set; }
@@ -37,7 +37,7 @@
             return inherited;
         }
 
-        private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TIndex>(int propertyIndex, IQueryable<object> query, Func<TField, TIndex> indexLambda)
+        private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda)
             where TField : IDalEntity
         {
             if (fields[propertyIndex] != null)
@@ -49,7 +49,7 @@
             fields[propertyIndex] = items;
             var materialized = RepositoryStorage
                 .GetRepository<TField>()
-                .Materialize(query, new LoadService<TField>(Parameters, context));
+                .Materialize(query(), new LoadService<TField>(Parameters, context));
             foreach (var entity in materialized)
             {
                 List<TField> list;
@@ -66,14 +66,13 @@
             return items;
         }
 
-        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, IQueryable<object> query, Func<TField, TIndex> indexLambda, TIndex key)
+        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex key) 
             where TField : IDalEntity
-            where TIndex : class
         {
             return key == null ? new List<TField>() : GetItemsDictionary(propertyIndex, query, indexLambda)[key];
         }
 
-        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, IQueryable<object> query, Func<TField, TIndex> indexLambda, TIndex? key)
+        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex? key)
             where TField : IDalEntity
             where TIndex : struct
         {

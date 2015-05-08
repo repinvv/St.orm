@@ -5,7 +5,7 @@
 
     public interface IDalRepository<TDal> where TDal : IDalEntity
     {
-        int RelationPropertiesCount { get; }
+        int RelationPropertiesCount();
 
         List<TDal> Materialize(IQueryable query, ILoadService<TDal> loadService);
     }
