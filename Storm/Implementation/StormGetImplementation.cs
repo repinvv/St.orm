@@ -15,7 +15,7 @@
             var repo = RepositoryStorage.GetRepository<TDal>();
             var items = repo.Materialize(query, loadService);
             var result = new List<TDal>(items.Count);
-            result.AddRange(items.Select(x => (x as IAmLazy<TDal>).Clone()));
+            result.AddRange(items.Select(x => (x as IAmClonable<TDal>).Clone()));
             return result;
         }
     }
