@@ -8,8 +8,6 @@
 
         public Type Type { get; set; }
 
-        public string TypeName { get; set; }
-
         public bool IsNullable { get; set; }
 
         public bool IsPrimaryKey { get; set; }
@@ -18,9 +16,9 @@
 
         public string StorageType { get; set; }
 
-        public int Length { get; set; }
+        public int StorageLength { get; set; }
 
-        public bool Nullable { get; set; }
+        public bool StorageNullable { get; set; }
 
         public int Index { get; set; }
     }

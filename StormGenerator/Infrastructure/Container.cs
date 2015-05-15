@@ -6,10 +6,9 @@
     {
         private readonly IoC container;
 
-        public Container(object source)
+        public Container()
         {
             container = new IoC();
-            Register(source);
             Register(this);
         }
 

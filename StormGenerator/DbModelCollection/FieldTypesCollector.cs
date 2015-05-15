@@ -34,11 +34,11 @@
 
                     field.StorageType = source.Attribute("Type").Value;
                     var nullableAttr = source.Attribute("Nullable");
-                    field.Nullable = nullableAttr == null || nullableAttr.Value.ToLower() != "false";
+                    field.StorageNullable = nullableAttr == null || nullableAttr.Value.ToLower() != "false";
                     var maxlenAttr = source.Attribute("MaxLength");
                     if (maxlenAttr != null)
                     {
-                        field.Length = int.Parse(maxlenAttr.Value);
+                        field.StorageLength = int.Parse(maxlenAttr.Value);
                     }
                 }
             }

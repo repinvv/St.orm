@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelpfulExtensions.cs" />
     <Compile Include="Implementation\GetByQuery.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Implementation\RepositoryStorage.cs" />

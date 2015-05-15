@@ -4,7 +4,6 @@ namespace StormGenerator.DbModelCollection
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-    using StormGenerator.Common;
     using StormGenerator.Model.Db;
 
     internal class ModelFieldCollector
@@ -23,8 +22,7 @@ namespace StormGenerator.DbModelCollection
                        FieldName = name,
                        IsIdentity = isId,
                        IsNullable = isNullable,
-                       Type = type,
-                       TypeName = type.GetTypeName()
+                       Type = type
                    };
         }
 

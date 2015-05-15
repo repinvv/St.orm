@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StormGenerator</RootNamespace>
-    <AssemblyName>St.ormGenerator</AssemblyName>
+    <AssemblyName>St.orm.Generator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,26 +40,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\GenerationConstants.cs" />
+    <Compile Include="DbModelCollection\AssociationCollector.cs" />
+    <Compile Include="DbModelCollection\AssociationTypeUpdater.cs" />
     <Compile Include="GeneratedFile.cs" />
+    <Compile Include="Generation\Generator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
+    <Compile Include="Model\Db\DbAssociation.cs" />
     <Compile Include="StormGeneration.cs" />
     <Compile Include="Common\CommonGen.cs" />
     <Compile Include="DbModelCollection\FieldTypesCollector.cs" />
     <Compile Include="DbModelCollection\ModelCollector.cs" />
     <Compile Include="DbModelCollection\ModelFieldCollector.cs" />
-    <Compile Include="DbModelCollection\ModelsCollector.cs" />
+    <Compile Include="DbModelCollection\DbModelsCollector.cs" />
     <Compile Include="DbModelCollection\SchemaNamesCollector.cs" />
     <Compile Include="Model\Db\DbField.cs" />
     <Compile Include="Model\Db\DbModel.cs" />
     <Compile Include="Model\Field.cs" />
     <Compile Include="Model\MappingField.cs" />
     <Compile Include="Model\Model.cs" />
-    <Compile Include="Model\Serial\FieldType.cs" />
-    <Compile Include="Model\Serial\SerialField.cs" />
-    <Compile Include="Model\Serial\SerialModel.cs" />
+    <Compile Include="Model\Config\FieldType.cs" />
+    <Compile Include="Model\Config\SerialField.cs" />
+    <Compile Include="Model\Config\ModelConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

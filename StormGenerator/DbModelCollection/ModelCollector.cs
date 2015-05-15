@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.DbModelCollection
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
     using StormGenerator.Model.Db;
@@ -18,8 +19,8 @@
             var attributes = xelement.Attributes();
             var elements = xelement.Elements().ToArray();
             var fields = elements.Where(x => x.Name.LocalName == "Property")
-                                 .Select(x => modelFieldsCollector.GetModelField(x)).ToArray();
-            for (int i = 0; i < fields.Length; i++)
+                                 .Select(x => modelFieldsCollector.GetModelField(x)).ToList();
+            for (int i = 0; i < fields.Count; i++)
             {
                 fields[i].Index = i;
             }
@@ -28,7 +29,8 @@
             return new DbModel
                    {
                        Name = attributes.First(x => x.Name == "Name").Value,
-                       Fields = fields
+                       Fields = fields,
+                       Associations = new List<DbAssociation>()
                    };
         }
     }

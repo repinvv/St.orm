@@ -1,8 +1,8 @@
-﻿namespace StormGenerator.Model.Serial
+﻿namespace StormGenerator.Model.Config
 {
     using System.Collections.Generic;
 
-    public class SerialModel
+    public class ModelConfig
     {
         public string Name { get; set; }
 
@@ -10,6 +10,6 @@
 
         public bool IsStructure { get; set; }
 
-        public List<SerialField> Fields { get; set; } 
+        public List<FieldConfig> Fields { get; set; } 
     }
 }

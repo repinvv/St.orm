@@ -1,6 +1,6 @@
-﻿namespace StormGenerator.Model.Serial
+﻿namespace StormGenerator.Model.Config
 {
-    public class SerialField
+    public class FieldConfig
     {
         public string Name { get; set; }
 

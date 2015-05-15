@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Model.Serial
+﻿namespace StormGenerator.Model.Config
 {
     public enum FieldType
     {

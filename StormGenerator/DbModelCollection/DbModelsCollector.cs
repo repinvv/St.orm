@@ -7,17 +7,25 @@
     using System.Xml.XPath;
     using StormGenerator.Model.Db;
 
-    internal class ModelsCollector
+    internal class DbModelsCollector
     {
         private readonly ModelCollector modelCollector;
         private readonly FieldTypesCollector fieldTypesCollector;
         private readonly SchemaNamesCollector schemaNamesCollector;
+        private readonly AssociationCollector associationCollector;
+        private readonly AssociationTypeUpdater associationTypeUpdater;
 
-        public ModelsCollector(ModelCollector modelCollector, FieldTypesCollector fieldTypesCollector, SchemaNamesCollector schemaNamesCollector)
+        public DbModelsCollector(ModelCollector modelCollector, 
+            FieldTypesCollector fieldTypesCollector, 
+            SchemaNamesCollector schemaNamesCollector,
+            AssociationCollector associationCollector,
+            AssociationTypeUpdater associationTypeUpdater)
         {
             this.modelCollector = modelCollector;
             this.fieldTypesCollector = fieldTypesCollector;
             this.schemaNamesCollector = schemaNamesCollector;
+            this.associationCollector = associationCollector;
+            this.associationTypeUpdater = associationTypeUpdater;
         }
 
         public IEnumerable<DbModel> GetModels(string edmxSchema)
@@ -29,23 +37,23 @@
             var elements = xdoc.XPathSelectElement("/edmx:Edmx/edmx:Runtime/edmx:ConceptualModels", namespaceManager)
                                .Elements()
                                .First()
-                               .Elements()
-                               .Where(x => x.Name.LocalName == "EntityType");
-            var models = elements.Select(x => modelCollector.GetModel(x)).ToList();
+                               .Elements().ToList();
+            var models = elements.Where(x => x.Name.LocalName == "EntityType").Select(x => modelCollector.GetModel(x)).ToList();
             elements = xdoc.XPathSelectElement("/edmx:Edmx/edmx:Runtime/edmx:StorageModels", namespaceManager)
                                .Elements()
                                .First()
-                               .Elements()
-                               .Where(x => x.Name.LocalName == "EntityType");
-            fieldTypesCollector.UpdateFieldTypes(models, elements);
+                               .Elements().ToList();
+            associationCollector.PopulateAssociations(models, elements.Where(x => x.Name.LocalName == "Association").ToList());
+            fieldTypesCollector.UpdateFieldTypes(models, elements.Where(x => x.Name.LocalName == "EntityType"));
             elements = xdoc.XPathSelectElement("/edmx:Edmx/edmx:Runtime/edmx:StorageModels", namespaceManager)
                            .Elements()
                            .First()
-                           .Elements();
-            var a = elements
-                           .First(x => x.Name.LocalName == "EntityContainer");
+                           .Elements().ToList();
+            models.ForEach(x => associationTypeUpdater.UpdateAssociationTypes(x));
+            var a = elements.First(x => x.Name.LocalName == "EntityContainer");
             elements = a.Elements()
-                        .Where(x => x.Name.LocalName == "EntitySet");
+                        .Where(x => x.Name.LocalName == "EntitySet")
+                        .ToList();
             schemaNamesCollector.UpdateSchemaName(models, elements);
             return models;
         }
