@@ -48,7 +48,14 @@
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
-    <Compile Include="Model\Db\DbAssociation.cs" />
+    <Compile Include="ModelsCollector\ModelsCollector.cs" />
+    <Compile Include="ModelsCollector\NameCreator.cs" />
+    <Compile Include="ModelsCollector\RelationFieldsCreator.cs" />
+    <Compile Include="Models\Db\DbAssociation.cs" />
+    <Compile Include="Models\Relation\JoinField.cs" />
+    <Compile Include="Models\Relation\ManyToManyField.cs" />
+    <Compile Include="Models\Relation\ManyToOneField.cs" />
+    <Compile Include="Models\Relation\OneToManyField.cs" />
     <Compile Include="StormGeneration.cs" />
     <Compile Include="Common\CommonGen.cs" />
     <Compile Include="DbModelCollection\FieldTypesCollector.cs" />
@@ -56,14 +63,14 @@
     <Compile Include="DbModelCollection\ModelFieldCollector.cs" />
     <Compile Include="DbModelCollection\DbModelsCollector.cs" />
     <Compile Include="DbModelCollection\SchemaNamesCollector.cs" />
-    <Compile Include="Model\Db\DbField.cs" />
-    <Compile Include="Model\Db\DbModel.cs" />
-    <Compile Include="Model\Field.cs" />
-    <Compile Include="Model\MappingField.cs" />
-    <Compile Include="Model\Model.cs" />
-    <Compile Include="Model\Config\FieldType.cs" />
-    <Compile Include="Model\Config\SerialField.cs" />
-    <Compile Include="Model\Config\ModelConfig.cs" />
+    <Compile Include="Models\Db\DbField.cs" />
+    <Compile Include="Models\Db\DbModel.cs" />
+    <Compile Include="Models\Relation\RelationField.cs" />
+    <Compile Include="Models\MappingField.cs" />
+    <Compile Include="Models\Model.cs" />
+    <Compile Include="Models\Config\FieldType.cs" />
+    <Compile Include="Models\Config\SerialField.cs" />
+    <Compile Include="Models\Config\ModelConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

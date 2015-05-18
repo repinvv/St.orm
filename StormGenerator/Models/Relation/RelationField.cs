@@ -1,0 +1,16 @@
+﻿namespace StormGenerator.Models.Relation
+{
+    public abstract class RelationField
+    {
+        public string Name { get; set; }
+
+        public Model FieldModel { get; set; }
+
+        public bool IsList { get; set; }
+
+        public override string ToString()
+        {
+            return "Field: " + Name + " FieldModel: " + FieldModel.Name;
+        }
+    }
+}

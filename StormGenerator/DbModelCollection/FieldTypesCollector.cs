@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-    using StormGenerator.Model.Db;
+    using StormGenerator.Models.Db;
 
     internal class FieldTypesCollector
     {
@@ -25,8 +25,8 @@
                         continue;
                     }
 
-                    var field = model.Fields.FirstOrDefault(x => x.FieldName == source.Attribute("Name").Value)
-                                ?? model.Fields.FirstOrDefault(x => x.FieldName.Substring(0, x.FieldName.Length - 1) == source.Attribute("Name").Value);
+                    var field = model.Fields.FirstOrDefault(x => x.Name == source.Attribute("Name").Value)
+                                ?? model.Fields.FirstOrDefault(x => x.Name.Substring(0, x.Name.Length - 1) == source.Attribute("Name").Value);
                     if (field == null)
                     {
                         continue;

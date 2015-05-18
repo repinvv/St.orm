@@ -18,12 +18,6 @@
 
         public const int IndentSize = 4;
 
-        public const string Subquery = "subquery";
-
-        public const string Split = "split";
-
-        public const string Temp = "temp";
-
-        public const string Repo = "repo";
+        public const int MaximumAutoOneToManyFields = 4;
     }
 }

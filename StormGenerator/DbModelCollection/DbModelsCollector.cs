@@ -5,7 +5,7 @@
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.XPath;
-    using StormGenerator.Model.Db;
+    using StormGenerator.Models.Db;
 
     internal class DbModelsCollector
     {
@@ -28,7 +28,7 @@
             this.associationTypeUpdater = associationTypeUpdater;
         }
 
-        public IEnumerable<DbModel> GetModels(string edmxSchema)
+        public List<DbModel> GetModels(string edmxSchema)
         {
             const string SchemaName = "http://schemas.microsoft.com/ado/2009/11/edmx";
             var xdoc = XDocument.Load(edmxSchema);

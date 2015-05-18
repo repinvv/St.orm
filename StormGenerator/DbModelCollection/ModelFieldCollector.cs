@@ -4,7 +4,7 @@ namespace StormGenerator.DbModelCollection
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-    using StormGenerator.Model.Db;
+    using StormGenerator.Models.Db;
 
     internal class ModelFieldCollector
     {
@@ -19,7 +19,7 @@ namespace StormGenerator.DbModelCollection
             var type = GetFieldType(typeName, isNullable);
             return new DbField
                    {
-                       FieldName = name,
+                       Name = name,
                        IsIdentity = isId,
                        IsNullable = isNullable,
                        Type = type
@@ -58,7 +58,7 @@ namespace StormGenerator.DbModelCollection
         public List<DbField> GetKeyFields(XElement element, IEnumerable<DbField> fields)
         {
             var names = element.Elements().Select(x => x.Attribute("Name").Value).ToArray();
-            return fields.Where(x => names.Contains(x.FieldName)).ToList();
+            return fields.Where(x => names.Contains(x.Name)).ToList();
         }
     }
 }

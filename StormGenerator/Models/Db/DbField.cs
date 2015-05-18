@@ -1,10 +1,10 @@
-﻿namespace StormGenerator.Model.Db
+﻿namespace StormGenerator.Models.Db
 {
     using System;
 
     public class DbField
     {
-        public string FieldName { get; set; }
+        public string Name { get; set; }
 
         public Type Type { get; set; }
 

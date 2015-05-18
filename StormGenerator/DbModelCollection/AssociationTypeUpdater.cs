@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.DbModelCollection
 {
     using System.Linq;
-    using StormGenerator.Model.Db;
+    using StormGenerator.Models.Db;
 
     internal class AssociationTypeUpdater
     {

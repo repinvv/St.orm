@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Xml.Linq;
     using St.Orm;
-    using StormGenerator.Model.Db;
+    using StormGenerator.Models.Db;
 
     internal class AssociationCollector
     {
@@ -80,12 +80,12 @@
         private DbField GetOrCreateModelField(DbModel dependentModel, XElement element)
         {
             var fieldName = element.Attribute("Name").Value;
-            var field = dependentModel.Fields.FirstOrDefault(y => y.FieldName == fieldName);
+            var field = dependentModel.Fields.FirstOrDefault(y => y.Name == fieldName);
             if (field == null)
             {
                 field = new DbField
                         {
-                            FieldName = fieldName,
+                            Name = fieldName,
                             IsPrimaryKey = true,
                             Index = dependentModel.Fields.Count,
                             IsNullable = false
