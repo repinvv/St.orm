@@ -56,6 +56,7 @@
     <Compile Include="Models\Relation\ManyToManyField.cs" />
     <Compile Include="Models\Relation\ManyToOneField.cs" />
     <Compile Include="Models\Relation\OneToManyField.cs" />
+    <Compile Include="RelationsCollection.cs" />
     <Compile Include="StormGeneration.cs" />
     <Compile Include="Common\CommonGen.cs" />
     <Compile Include="DbModelCollection\FieldTypesCollector.cs" />
