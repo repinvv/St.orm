@@ -1,4 +1,4 @@
-﻿namespace StormGenerator
+﻿namespace StormGenerator.Models.Config
 {
     public enum RelationsMode
     {

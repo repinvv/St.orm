@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Models.Relation
+﻿namespace StormGenerator.Models.Pregen.Relation
 {
     internal class ManyToManyField : RelationField
     {

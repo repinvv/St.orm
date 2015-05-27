@@ -4,8 +4,9 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Models;
-    using StormGenerator.Models.Db;
-    using StormGenerator.Models.Relation;
+    using StormGenerator.Models.Config.Db;
+    using StormGenerator.Models.Pregen;
+    using StormGenerator.Models.Pregen.Relation;
 
     internal class ModelsCollector
     {

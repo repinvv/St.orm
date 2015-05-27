@@ -1,11 +1,9 @@
-﻿namespace StormGenerator.Models.Db
+﻿namespace StormGenerator.Models.Config.Db
 {
     using System.Collections.Generic;
 
     internal class DbModel
     {
-        public bool IsManyToManyLink { get; set; }
-
         public string Name { get; set; }
 
         public string SchemaName { get; set; }

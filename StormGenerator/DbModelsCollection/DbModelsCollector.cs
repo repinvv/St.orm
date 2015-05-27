@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.DbModelsCollection
 {
     using System.Collections.Generic;
-    using StormGenerator.Models.Db;
+    using StormGenerator.Models.Config.Db;
 
     internal class DbModelsCollector
     {

@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Models.Db
+﻿namespace StormGenerator.Models.Config.Db
 {
     using System.Collections.Generic;
 

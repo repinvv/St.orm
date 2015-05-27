@@ -1,8 +1,8 @@
-﻿namespace StormGenerator.Models
+﻿namespace StormGenerator.Models.Pregen
 {
     using System.Collections.Generic;
-    using StormGenerator.Models.Db;
-    using StormGenerator.Models.Relation;
+    using StormGenerator.Models.Config.Db;
+    using StormGenerator.Models.Pregen.Relation;
 
     internal class Model
     {

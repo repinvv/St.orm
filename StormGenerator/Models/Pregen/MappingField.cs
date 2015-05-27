@@ -1,7 +1,7 @@
-﻿namespace StormGenerator.Models
+﻿namespace StormGenerator.Models.Pregen
 {
     using System;
-    using StormGenerator.Models.Db;
+    using StormGenerator.Models.Config.Db;
 
     internal class MappingField
     {
