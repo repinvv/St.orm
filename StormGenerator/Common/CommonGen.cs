@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
-    public static class CommonGen
+    internal static class CommonGen
     {
         private static readonly Dictionary<Type, string> TypeAliases = new Dictionary<Type, string>
                                                                        {

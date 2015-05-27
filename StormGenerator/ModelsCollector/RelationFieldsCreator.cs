@@ -32,7 +32,7 @@
 
         private void PopulateOneToMany(Model model, Dictionary<DbModel, Model> modelDict)
         {
-            if (model.DbModel.Associations.Count(x => !x.Dependent.IsManyToManyLink) < GenerationConstants.MaximumAutoOneToManyFields)
+            if (model.DbModel.Associations.Count(x => !x.Dependent.IsManyToManyLink) < GenerationConstants.AutoModelCreation.MaximumOneToManyFields)
             {
                 var fields = model.DbModel.Associations.Where(x => !x.Dependent.IsManyToManyLink)
                                   .Select(x => CreateOneToMany(x, modelDict[x.Dependent]));

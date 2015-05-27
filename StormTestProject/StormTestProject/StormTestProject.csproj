@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{63E951A8-D094-449C-A77F-CA096D814E68}</ProjectGuid>
+    <ProjectGuid>{7664C56C-C32F-4E81-BB6D-2262074B18A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StormGenerator</RootNamespace>
-    <AssemblyName>St.orm.Generator</AssemblyName>
+    <RootNamespace>StormTestProject</RootNamespace>
+    <AssemblyName>StormTestProject</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\StormTestProject\packages\st.orm.0.1.0\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,7 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,45 +49,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\GenerationConstants.cs" />
-    <Compile Include="DbModelsCollection\DbConnectionCreator.cs" />
-    <Compile Include="DbModelsCollection\DbModelsCollector.cs" />
-    <Compile Include="GeneratedFile.cs" />
-    <Compile Include="Generation\Generator.cs" />
-    <Compile Include="Infrastructure\Container.cs" />
-    <Compile Include="Infrastructure\IoC.cs" />
-    <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
-    <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
-    <Compile Include="ModelsCollector\ModelsCollector.cs" />
-    <Compile Include="ModelsCollector\NameCreator.cs" />
-    <Compile Include="ModelsCollector\RelationFieldsCreator.cs" />
-    <Compile Include="Models\Db\DbAssociation.cs" />
-    <Compile Include="Models\Relation\JoinField.cs" />
-    <Compile Include="Models\Relation\ManyToManyField.cs" />
-    <Compile Include="Models\Relation\ManyToOneField.cs" />
-    <Compile Include="Models\Relation\OneToManyField.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="Models\Config\RelationsCollection.cs" />
-    <Compile Include="StormGeneration.cs" />
-    <Compile Include="Common\CommonGen.cs" />
-    <Compile Include="Models\Db\DbField.cs" />
-    <Compile Include="Models\Db\DbModel.cs" />
-    <Compile Include="Models\Relation\RelationField.cs" />
-    <Compile Include="Models\MappingField.cs" />
-    <Compile Include="Models\Model.cs" />
-    <Compile Include="Models\Config\FieldType.cs" />
-    <Compile Include="Models\Config\SerialField.cs" />
-    <Compile Include="Models\Config\ModelConfig.cs" />
+    <Compile Include="StormEntities.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="StormTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Storm\Storm.csproj">
-      <Project>{377745a9-5931-4803-8ebc-6e3f59242f2b}</Project>
-      <Name>Storm</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <None Include="Config.storm" />
+    <None Include="file1">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </None>
+    <None Include="file2">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="StormEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StormEntities.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\Project.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

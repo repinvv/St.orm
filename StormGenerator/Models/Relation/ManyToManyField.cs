@@ -1,6 +1,6 @@
 ﻿namespace StormGenerator.Models.Relation
 {
-    public class ManyToManyField : RelationField
+    internal class ManyToManyField : RelationField
     {
         public Model MediatorModel { get; set; }
 

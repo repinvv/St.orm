@@ -3,7 +3,7 @@
     using System;
     using StormGenerator.Models.Db;
 
-    public class MappingField
+    internal class MappingField
     {
         public string Name { get; set; }
 

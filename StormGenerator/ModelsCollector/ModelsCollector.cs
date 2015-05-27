@@ -18,7 +18,7 @@
             this.relationFieldsCreator = relationFieldsCreator;
         }
 
-        public List<Model> CollectModelsWithSettings(List<DbModel> dbmodels, string settingsFile)
+        public List<Model> CollectModelsWithSettings(List<DbModel> dbmodels, Options settingsFile)
         {
             var models = dbmodels.Select(CreateModel).ToList();
             relationFieldsCreator.PopulateRelations(models);

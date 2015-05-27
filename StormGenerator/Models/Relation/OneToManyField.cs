@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class OneToManyField : RelationField
+    internal class OneToManyField : RelationField
     {
         public List<MappingField> FarEndJoinFields { get; set; } 
     }

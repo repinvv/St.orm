@@ -1,6 +1,6 @@
 ﻿namespace StormGenerator.Models.Relation
 {
-    public abstract class RelationField
+    internal abstract class RelationField
     {
         public string Name { get; set; }
 

@@ -6,22 +6,25 @@
 
     public class StormGeneration
     {
-        public List<GeneratedFile> Generate(string edmx, string config, string outputNamespace)
+        public List<GeneratedFile> Generate(Options options)
         {
-            return new Container().Get<Generator>()
-                                  .Generate(edmx, config, outputNamespace) ?? new List<GeneratedFile>
-                                                                              {
-                                                                                  new GeneratedFile
-                                                                                  {
-                                                                                      Name = "file1",
-                                                                                      Content = "file1"
-                                                                                  },
-                                                                                  new GeneratedFile
-                                                                                  {
-                                                                                      Name = "file2",
-                                                                                      Content = "file2"
-                                                                                  }
-                                                                              };
+            var generator = new Container().Get<Generator>();
+            var models = generator.Generate(options);
+            models = models
+                     ?? new List<GeneratedFile>
+                        {
+                            new GeneratedFile
+                            {
+                                Name = "file1",
+                                Content = "file1"
+                            },
+                            new GeneratedFile
+                            {
+                                Name = "file2",
+                                Content = "file2"
+                            }
+                        };
+            return models;
         }
     }
 }

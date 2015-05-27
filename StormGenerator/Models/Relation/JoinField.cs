@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class JoinField : RelationField
+    internal class JoinField : RelationField
     {
         public List<MappingField> NearEndJoinFields { get; set; }
 

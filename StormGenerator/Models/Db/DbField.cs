@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class DbField
+    internal class DbField
     {
         public string Name { get; set; }
 

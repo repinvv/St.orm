@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.Generation
 {
     using System.Collections.Generic;
-    using StormGenerator.DbModelCollection;
+    using StormGenerator.DbModelsCollection;
     using StormGenerator.ModelsCollector;
 
     internal class Generator
@@ -15,10 +15,10 @@
             this.modelsCollector = modelsCollector;
         }
 
-        public List<GeneratedFile> Generate(string edmx, string config, string outputNamespace)
+        public List<GeneratedFile> Generate(Options options)
         {
-            var dbmodels = dbmodelsCollector.GetModels(edmx);
-            var models = modelsCollector.CollectModelsWithSettings(dbmodels, config);
+            var dbmodels = dbmodelsCollector.GetModels(options);
+            ////var models = modelsCollector.CollectModelsWithSettings(dbmodels, options);
             return null;
         }
     }

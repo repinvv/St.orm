@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class DbAssociation
+    internal class DbAssociation
     {
         public DbModel Dependent { get; set; }
 

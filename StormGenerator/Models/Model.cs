@@ -4,7 +4,7 @@
     using StormGenerator.Models.Db;
     using StormGenerator.Models.Relation;
 
-    public class Model
+    internal class Model
     {
         public string Name { get; set; }
 

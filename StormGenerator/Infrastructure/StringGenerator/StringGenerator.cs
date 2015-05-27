@@ -5,7 +5,7 @@
     using System.Text;
     using StormGenerator.Common;
 
-    public class StringGenerator : IStringGenerator
+    internal class StringGenerator : IStringGenerator
     {
         private StringBuilder builder = new StringBuilder();
         private int indentCount = 0;

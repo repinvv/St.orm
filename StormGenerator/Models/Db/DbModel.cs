@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class DbModel
+    internal class DbModel
     {
         public bool IsManyToManyLink { get; set; }
 
