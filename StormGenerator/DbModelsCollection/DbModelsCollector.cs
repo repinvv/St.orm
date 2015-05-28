@@ -7,11 +7,13 @@
     {
         private readonly DbConnectionCreator connectionCreator;
         private readonly TableReader tableReader;
+        private readonly DbFieldsCollector fieldsCollector;
 
-        public DbModelsCollector(DbConnectionCreator connectionCreator, TableReader tableReader)
+        public DbModelsCollector(DbConnectionCreator connectionCreator, TableReader tableReader, DbFieldsCollector fieldsCollector)
         {
             this.connectionCreator = connectionCreator;
             this.tableReader = tableReader;
+            this.fieldsCollector = fieldsCollector;
         }
 
         public List<DbModel> GetModels(Options options)
@@ -20,6 +22,7 @@
             {
                 connection.Open();
                 var models = tableReader.ReadTables(connection);
+                fieldsCollector.CollectFields(models, connection);
                 return models;
             }
         }

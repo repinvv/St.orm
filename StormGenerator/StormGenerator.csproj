@@ -41,8 +41,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\GenerationConstants.cs" />
+    <Compile Include="DbModelsCollection\ColumnReader.cs" />
+    <Compile Include="DbModelsCollection\DbColumn.cs" />
     <Compile Include="DbModelsCollection\DbConnectionCreator.cs" />
+    <Compile Include="DbModelsCollection\DbFieldsCollector.cs" />
     <Compile Include="DbModelsCollection\DbModelsCollector.cs" />
+    <Compile Include="DbModelsCollection\Reader.cs" />
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Generator.cs" />
