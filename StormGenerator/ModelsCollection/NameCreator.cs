@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.ModelsCollector
+﻿namespace StormGenerator.ModelsCollection
 {
     using System;
     using System.Linq;

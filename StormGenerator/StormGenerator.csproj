@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,16 +43,16 @@
     <Compile Include="Common\GenerationConstants.cs" />
     <Compile Include="DbModelsCollection\DbConnectionCreator.cs" />
     <Compile Include="DbModelsCollection\DbModelsCollector.cs" />
+    <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Generator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
-    <Compile Include="ModelsCollector\ModelsCollector.cs" />
-    <Compile Include="ModelsCollector\NameCreator.cs" />
-    <Compile Include="ModelsCollector\RelationFieldsCreator.cs" />
+    <Compile Include="ModelsCollection\NameCreator.cs" />
     <Compile Include="Models\Config\Db\DbAssociation.cs" />
+    <Compile Include="Models\Config\StormConfig.cs" />
     <Compile Include="Models\Pregen\Relation\JoinField.cs" />
     <Compile Include="Models\Pregen\Relation\ManyToManyField.cs" />
     <Compile Include="Models\Pregen\Relation\ManyToOneField.cs" />

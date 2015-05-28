@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    internal class ModelConfig
+    public class ModelConfig
     {
         public string Name { get; set; }
 
