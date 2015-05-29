@@ -25,7 +25,9 @@
                                                    {
                                                        Name = r["TABLE_NAME"] as string,
                                                        SchemaName = r["TABLE_SCHEMA"] as string,
-                                                       IsView = "VIEW" == r["TABLE_TYPE"] as string
+                                                       IsView = "VIEW" == r["TABLE_TYPE"] as string,
+                                                       Fields = new List<DbField>(),
+                                                       Associations = new List<DbAssociation>()
                                                    };
             return reader.Read(connection, Query, func);
         }

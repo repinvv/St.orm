@@ -27,7 +27,7 @@
 	{
         OutputNamespace = "StormTestProject",
 	    SettingsFile = currentPath + @"\config.storm",
-        ForceLoadDbInfo = false,        
+        ForceLoadDbInfo = true,        
 		ConnectionString = null,
         Server = "localhost",
         Database = "StormTest",

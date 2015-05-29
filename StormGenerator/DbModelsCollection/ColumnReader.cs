@@ -1,6 +1,7 @@
 ﻿namespace StormGenerator.DbModelsCollection
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
 
@@ -18,7 +19,7 @@
             this.reader = reader;
         }
 
-        public object ReadColumns(DbConnection connection)
+        public List<DbColumn> ReadColumns(DbConnection connection)
         {
             Func<IDataReader, DbColumn> func = r =>
                 new DbColumn
@@ -28,10 +29,10 @@
                     Name = r["COLUMN_NAME"] as string,
                     Type = r["DATA_TYPE"] as string,
                     Index = (int)r["ORDINAL_POSITION"],
-                    IsNullable = (bool)r["IS_NULLABLE"],
+                    IsNullable = r["IS_NULLABLE"] as string == "YES",
                     StringLength = r["CHARACTER_MAXIMUM_LENGTH"] as int? ?? 0,
-                    IsIdentity = (bool)r["IsIdentity"],
-                    IsComputed = (bool)r["IsComputed"],
+                    IsIdentity = (int)r["IsIdentity"] == 1,
+                    IsComputed = (int)r["IsComputed"] == 1,
                 };
             return reader.Read(connection, Query, func);
         }
