@@ -11,7 +11,5 @@
         public bool IsView { get; set; }
 
         public List<DbField> Fields { get; set; }
-
-        public List<DbAssociation> Associations { get; set; }
     }
 }

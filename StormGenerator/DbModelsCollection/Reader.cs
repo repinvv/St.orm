@@ -24,5 +24,20 @@
                 return output;
             }
         }
+
+        public void Read(DbConnection connection, string query, Action<IDataReader> func)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = query;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        func(reader);
+                    }
+                }
+            }
+        }
     }
 }

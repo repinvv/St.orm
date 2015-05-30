@@ -46,6 +46,7 @@
     <Compile Include="DbModelsCollection\DbConnectionCreator.cs" />
     <Compile Include="DbModelsCollection\DbFieldsCollector.cs" />
     <Compile Include="DbModelsCollection\DbModelsCollector.cs" />
+    <Compile Include="DbModelsCollection\ForeignKeyReader.cs" />
     <Compile Include="DbModelsCollection\PrimaryKeyReader.cs" />
     <Compile Include="DbModelsCollection\Reader.cs" />
     <Compile Include="DbModelsCollection\TableReader.cs" />

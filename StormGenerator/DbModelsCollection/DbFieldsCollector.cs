@@ -73,6 +73,7 @@
                        IsReadonly = column.IsComputed,
                        Index = column.Index,
                        StringLength = column.StringLength,
+                       Associations = new List<DbAssociation>()
                    };
         }
 

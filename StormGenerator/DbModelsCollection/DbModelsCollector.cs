@@ -9,16 +9,19 @@
         private readonly TableReader tableReader;
         private readonly DbFieldsCollector fieldsCollector;
         private readonly PrimaryKeyReader primaryKeyReader;
+        private readonly ForeignKeyReader foreignKeyReader;
 
         public DbModelsCollector(DbConnectionCreator connectionCreator, 
             TableReader tableReader, 
             DbFieldsCollector fieldsCollector,
-            PrimaryKeyReader primaryKeyReader)
+            PrimaryKeyReader primaryKeyReader,
+            ForeignKeyReader foreignKeyReader)
         {
             this.connectionCreator = connectionCreator;
             this.tableReader = tableReader;
             this.fieldsCollector = fieldsCollector;
             this.primaryKeyReader = primaryKeyReader;
+            this.foreignKeyReader = foreignKeyReader;
         }
 
         public List<DbModel> GetModels(Options options)
@@ -29,6 +32,7 @@
                 var models = tableReader.ReadTables(connection);
                 fieldsCollector.CollectFields(models, connection);
                 primaryKeyReader.MarkPrimaryKeys(models, connection);
+                foreignKeyReader.GetForeignKeys(models, connection);
                 return models;
             }
         }

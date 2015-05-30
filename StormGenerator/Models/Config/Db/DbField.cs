@@ -1,6 +1,6 @@
 ﻿namespace StormGenerator.Models.Config.Db
 {
-    using System;
+    using System.Collections.Generic;
 
     public class DbField
     {
@@ -19,5 +19,7 @@
         public int Index { get; set; }
 
         public bool IsReadonly { get; set; }
+
+        public List<DbAssociation> Associations { get; set; }
     }
 }

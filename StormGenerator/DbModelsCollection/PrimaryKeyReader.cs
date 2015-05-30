@@ -35,7 +35,7 @@
         public void MarkPrimaryKeys(List<DbModel> models, DbConnection connection)
         {
             var modelDict = models.ToDictionary(x => new { x.Name, x.SchemaName });
-            Func<IDataReader, int> func =
+            Action<IDataReader> func =
             r =>
             {
                 var name = r["TABLE_NAME"] as string;
@@ -44,7 +44,6 @@
                 var model = modelDict[key];
                 var columnName = r["COLUMN_NAME"] as string;
                 model.Fields.First(x => x.Name == columnName).IsPrimaryKey = true;
-                return 0;
             };
             reader.Read(connection, Query, func);
         }

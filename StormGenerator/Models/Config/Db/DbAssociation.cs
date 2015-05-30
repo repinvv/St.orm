@@ -1,11 +1,11 @@
 ﻿namespace StormGenerator.Models.Config.Db
 {
-    using System.Collections.Generic;
-
     public class DbAssociation
     {
-        public DbModel Dependent { get; set; }
+        public string Schema { get; set; }
 
-        public List<DbField> ReferenceFields { get; set; }
+        public string Table { get; set; }
+
+        public string Field { get; set; }
     }
 }
