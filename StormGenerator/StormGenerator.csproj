@@ -56,6 +56,7 @@
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
+    <Compile Include="ModelsCollection\ModelsCollector.cs" />
     <Compile Include="ModelsCollection\NameCreator.cs" />
     <Compile Include="Models\Config\Db\DbAssociation.cs" />
     <Compile Include="Models\Config\StormConfig.cs" />
