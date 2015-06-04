@@ -9,39 +9,38 @@
 
     internal class PrimaryKeyReader
     {
-        private const string Query = @"
-				SELECT
-					k.TABLE_SCHEMA,
-                    k.TABLE_NAME,
-					k.COLUMN_NAME
-				FROM
-					INFORMATION_SCHEMA.KEY_COLUMN_USAGE k
-					JOIN
-						INFORMATION_SCHEMA.TABLE_CONSTRAINTS c
-					ON
-						k.CONSTRAINT_CATALOG = c.CONSTRAINT_CATALOG AND
-						k.CONSTRAINT_SCHEMA  = c.CONSTRAINT_SCHEMA AND
-						k.CONSTRAINT_NAME    = c.CONSTRAINT_NAME
-				WHERE
-					c.CONSTRAINT_TYPE='PRIMARY KEY'";
+        private const string Query = 
+@"SELECT k.*
+  FROM
+   INFORMATION_SCHEMA.KEY_COLUMN_USAGE k
+   JOIN
+     INFORMATION_SCHEMA.TABLE_CONSTRAINTS c
+   ON
+     k.CONSTRAINT_CATALOG = c.CONSTRAINT_CATALOG AND
+     k.CONSTRAINT_SCHEMA  = c.CONSTRAINT_SCHEMA AND
+     k.CONSTRAINT_NAME    = c.CONSTRAINT_NAME
+  WHERE
+    c.CONSTRAINT_TYPE='PRIMARY KEY'";
 
         private readonly Reader reader;
+        private readonly TableIdCreator tableIdCreator;
 
-        public PrimaryKeyReader(Reader reader)
+        public PrimaryKeyReader(Reader reader, TableIdCreator tableIdCreator)
         {
             this.reader = reader;
+            this.tableIdCreator = tableIdCreator;
         }
 
         public void MarkPrimaryKeys(List<DbModel> models, DbConnection connection)
         {
-            var modelDict = models.ToDictionary(x => new { x.Name, x.SchemaName });
+            var modelDict = models.ToDictionary(x => x.Id);
             Action<IDataReader> func =
             r =>
             {
                 var name = r["TABLE_NAME"] as string;
-                var schemaName = r["TABLE_SCHEMA"] as string;
-                var key = new { Name = name, SchemaName = schemaName };
-                var model = modelDict[key];
+                var schema = r["TABLE_SCHEMA"] as string;
+                var db = r["TABLE_CATALOG"] as string;
+                var model = modelDict[tableIdCreator.CreateTableId(db, schema, name)];
                 var columnName = r["COLUMN_NAME"] as string;
                 model.Fields.First(x => x.Name == columnName).IsPrimaryKey = true;
             };

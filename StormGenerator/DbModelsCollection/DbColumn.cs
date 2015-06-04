@@ -2,9 +2,7 @@
 {
     internal class DbColumn
     {
-        public string TableSchema { get; set; }
-
-        public string TableName { get; set; }
+        public string TableId { get; set; }
 
         public string Name { get; set; }
 

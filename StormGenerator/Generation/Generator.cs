@@ -6,14 +6,17 @@
     using System.Web.Script.Serialization;
     using StormGenerator.DbModelsCollection;
     using StormGenerator.Models.Config;
+    using StormGenerator.ModelsCollection;
 
     internal class Generator
     {
         private readonly DbModelsCollector dbmodelsCollector;
+        private readonly ModelsCollector modelsCollector;
 
-        public Generator(DbModelsCollector dbmodelsCollector)
+        public Generator(DbModelsCollector dbmodelsCollector, ModelsCollector modelsCollector)
         {
             this.dbmodelsCollector = dbmodelsCollector;
+            this.modelsCollector = modelsCollector;
         }
 
         public List<GeneratedFile> Generate(Options options)
@@ -26,7 +29,8 @@
                 file = new JavaScriptSerializer().Serialize(stormConfig);
                 File.WriteAllText(options.SettingsFile, file);
             }
-            
+
+            var models = modelsCollector.CollectModels(stormConfig);
             return null;
         }
     }

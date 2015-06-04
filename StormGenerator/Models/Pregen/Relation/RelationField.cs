@@ -1,10 +1,16 @@
 ﻿namespace StormGenerator.Models.Pregen.Relation
 {
+    using System.Collections.Generic;
+
     internal abstract class RelationField
     {
         public string Name { get; set; }
 
         public Model FieldModel { get; set; }
+
+        public List<MappingField> NearEndFields { get; set; }
+
+        public List<MappingField> FarEndFields { get; set; } 
 
         public bool IsList { get; set; }
 

@@ -14,6 +14,8 @@
 
         public List<RelationField> RelationFields { get; set; }
 
+        public bool IsReadonly { get; set; }
+
         public override string ToString()
         {
             return "Model: " + Name;

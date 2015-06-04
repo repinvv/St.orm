@@ -2,10 +2,12 @@
 {
     public class DbAssociation
     {
-        public string Schema { get; set; }
+        public string ConstraintId { get; set; }
 
-        public string Table { get; set; }
+        public int Index { get; set; }
 
-        public string Field { get; set; }
+        public string TableId { get; set; }
+
+        public string FieldName { get; set; }
     }
 }

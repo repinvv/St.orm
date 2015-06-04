@@ -5,6 +5,8 @@
 
     public class StormConfig
     {
+        public RelationsMode RelationsMode { get; set; }
+
         public List<DbModel> DbModels { get; set; }
 
         public List<ModelConfig> ModelConfigs { get; set; }

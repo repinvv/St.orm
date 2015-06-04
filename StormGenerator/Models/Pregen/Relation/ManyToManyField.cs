@@ -4,8 +4,6 @@
     {
         public Model MediatorModel { get; set; }
 
-        public MappingField NearEndJoinField { get; set; }
-
-        public MappingField FarEndJoinField { get; set; }
+        public RelationField MediatorMtoField { get; set; }
     }
 }

@@ -1,15 +1,17 @@
 ﻿namespace StormGenerator.ModelsCollection
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     internal class NameCreator
     {
-        private static readonly string[] Separators = { "_", "-" };
+        private readonly string[] separators = { "_", "-" };
+        private readonly List<char> addEs = new List<char> { 'h', 'x', };
 
         public string CreateCamelCaseName(string source)
         {
-            return string.Join(string.Empty, source.Split(Separators, StringSplitOptions.RemoveEmptyEntries).Select(ConvertSection));
+            return string.Join(string.Empty, source.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(ConvertSection));
         }
 
         private string ConvertSection(string arg)
@@ -24,7 +26,11 @@
 
         public string CreatePluralName(string name)
         {
-            return name.Last() == 's' ? name : name + "s";
+            return name.Last() == 's'
+                ? name
+                : addEs.Contains(name.Last())
+                    ? name + "es"
+                    : name + "s";
         }
     }
 }
