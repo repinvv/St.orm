@@ -31,13 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.Extended">
       <HintPath>..\packages\EntityFramework.Extended.6.1.0.133\lib\net45\EntityFramework.Extended.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -49,6 +49,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calculation.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CalculationDetails.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comment.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Coverage.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CoverageDepartment.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CoverageEligibilityGroup.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Covered.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Currency.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Department.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EligibilityGroup.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Emp.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmpToDependent.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Policy.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Premium.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormEntities.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -56,16 +101,13 @@
     </Compile>
     <Compile Include="StormTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tax.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Config.storm" />
-    <None Include="file1">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </None>
-    <None Include="file2">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="StormEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\UsingsGenerator.cs" />
     <Compile Include="Common\GenerationConstants.cs" />
     <Compile Include="DbModelsCollection\ColumnReader.cs" />
     <Compile Include="DbModelsCollection\DbColumn.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Generator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />

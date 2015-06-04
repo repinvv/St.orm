@@ -1,10 +1,13 @@
 ﻿namespace StormGenerator.Generation
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Web.Script.Serialization;
+    using StormGenerator.Common;
     using StormGenerator.DbModelsCollection;
+    using StormGenerator.Generation.ModelGeneration;
     using StormGenerator.Models.Config;
     using StormGenerator.ModelsCollection;
 
@@ -12,11 +15,13 @@
     {
         private readonly DbModelsCollector dbmodelsCollector;
         private readonly ModelsCollector modelsCollector;
+        private readonly ModelGenerator modelGenerator;
 
-        public Generator(DbModelsCollector dbmodelsCollector, ModelsCollector modelsCollector)
+        public Generator(DbModelsCollector dbmodelsCollector, ModelsCollector modelsCollector, ModelGenerator modelGenerator)
         {
             this.dbmodelsCollector = dbmodelsCollector;
             this.modelsCollector = modelsCollector;
+            this.modelGenerator = modelGenerator;
         }
 
         public List<GeneratedFile> Generate(Options options)
@@ -31,7 +36,11 @@
             }
 
             var models = modelsCollector.CollectModels(stormConfig);
-            return null;
+            var output = new List<GeneratedFile>();
+            output.AddRange(models.Select(x => modelGenerator.GenerateModel(x, options.OutputNamespace)));
+            output.ForEach(x => x.Name = x.Name + ".cs");
+            output.ForEach(x => x.Content = GenerationConstants.GenerationMark + Environment.NewLine + x.Content);
+            return output;
         }
     }
 }

@@ -18,5 +18,14 @@
         {
             public const int MaximumOneToManyFields = 4;
         }
+
+        public static class ModelGeneration
+        {
+            public static readonly string[] Usings =
+            {
+                "System.ComponentModel.DataAnnotations",
+                "System.ComponentModel.DataAnnotations.Schema"
+            };
+        }
     }
 }
