@@ -9,13 +9,46 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("comment")]
+    [Table("StormTest.dbo.comment")]
     public partial class Comment
     {
+        [Key]
+        [Column("comment_id", Order = 0)]
+        public int CommentId { get;set; }
+
+        [Column("comment_type", Order = 1)]
+        public int CommentType { get;set; }
+
+        [Column("policy_id", Order = 2)]
+        public int? PolicyId { get;set; }
+
+        [Column("premium_id", Order = 3)]
+        public int? PremiumId { get;set; }
+
+        [Required]
+        [Column("comment_text", Order = 4)]
+        public string CommentText { get;set; }
+
+        [Column("author_user_id", Order = 5)]
+        public int AuthorUserId { get;set; }
+
+        [Column("created", Order = 6)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 7)]
+        public DateTime Updated { get;set; }
+
+        #region Private fields
+
         private Comment clonedFrom;
+
+        #endregion
+
+        #region Constructors
 
         public Comment(Comment clonedFrom)
         {
@@ -24,30 +57,10 @@ namespace StormTestProject
 
         public Comment() { }
 
-        [Key]
-        [Column("comment_id")]
-        public int CommentId { get;set; }
+        #endregion
 
-        [Column("comment_type")]
-        public int CommentType { get;set; }
+        #region Lazy properties
 
-        [Column("policy_id")]
-        public int? PolicyId { get;set; }
-
-        [Column("premium_id")]
-        public int? PremiumId { get;set; }
-
-        [Required]
-        [Column("comment_text")]
-        public string CommentText { get;set; }
-
-        [Column("author_user_id")]
-        public int AuthorUserId { get;set; }
-
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

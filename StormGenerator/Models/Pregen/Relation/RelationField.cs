@@ -6,6 +6,8 @@
     {
         public string Name { get; set; }
 
+        public string AssociationId { get; set; }
+
         public Model FieldModel { get; set; }
 
         public List<MappingField> NearEndFields { get; set; }

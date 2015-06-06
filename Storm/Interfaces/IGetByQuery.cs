@@ -16,6 +16,6 @@
         /// <param name="context"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        List<TDal> Get<TDal>(ICustomContext context, params LoadParameter[] parameters) where TDal : IDalEntity<TDb>;
+        List<TDal> Get<TDal>(IStormContext context, params LoadParameter[] parameters) where TDal : IDalEntity<TDb>;
     }
 }

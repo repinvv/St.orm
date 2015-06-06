@@ -9,13 +9,44 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("emp_to_dependent")]
+    [Table("StormTest.dbo.emp_to_dependent")]
     public partial class EmpToDependent
     {
+        [Key]
+        [Required]
+        [MaxLength(9)]
+        [Column("ssn", Order = 0)]
+        public string Ssn { get;set; }
+
+        [Key]
+        [Required]
+        [MaxLength(15)]
+        [Column("client", Order = 1)]
+        public string Client { get;set; }
+
+        [Key]
+        [Required]
+        [MaxLength(9)]
+        [Column("dep_ssn", Order = 2)]
+        public string DepSsn { get;set; }
+
+        [Key]
+        [Required]
+        [MaxLength(15)]
+        [Column("dep_client", Order = 3)]
+        public string DepClient { get;set; }
+
+        #region Private fields
+
         private EmpToDependent clonedFrom;
+
+        #endregion
+
+        #region Constructors
 
         public EmpToDependent(EmpToDependent clonedFrom)
         {
@@ -24,28 +55,10 @@ namespace StormTestProject
 
         public EmpToDependent() { }
 
-        [Key]
-        [Required]
-        [MaxLength(9)]
-        [Column("ssn")]
-        public string Ssn { get;set; }
+        #endregion
 
-        [Key]
-        [Required]
-        [MaxLength(15)]
-        [Column("client")]
-        public string Client { get;set; }
+        #region Lazy properties
 
-        [Key]
-        [Required]
-        [MaxLength(9)]
-        [Column("dep_ssn")]
-        public string DepSsn { get;set; }
-
-        [Key]
-        [Required]
-        [MaxLength(15)]
-        [Column("dep_client")]
-        public string DepClient { get;set; }
+        #endregion
     }
 }

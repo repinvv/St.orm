@@ -9,13 +9,42 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("premium")]
+    [Table("StormTest.dbo.premium")]
     public partial class Premium
     {
+        [Key]
+        [Column("premium_id", Order = 0)]
+        public int PremiumId { get;set; }
+
+        [Column("premium_type", Order = 1)]
+        public int PremiumType { get;set; }
+
+        [Column("coverage_id", Order = 2)]
+        public int CoverageId { get;set; }
+
+        [Column("amount", Order = 3)]
+        public decimal Amount { get;set; }
+
+        [Column("created", Order = 4)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 5)]
+        public DateTime Updated { get;set; }
+
+        public virtual List<Comment> Comments { get { return property0; } set { property0 = value; } }
+
+        #region Private fields
+
         private Premium clonedFrom;
+        private Comment field0;
+
+        #endregion
+
+        #region Constructors
 
         public Premium(Premium clonedFrom)
         {
@@ -24,23 +53,12 @@ namespace StormTestProject
 
         public Premium() { }
 
-        [Key]
-        [Column("premium_id")]
-        public int PremiumId { get;set; }
+        #endregion
 
-        [Column("premium_type")]
-        public int PremiumType { get;set; }
+        #region Lazy properties
 
-        [Column("coverage_id")]
-        public int CoverageId { get;set; }
+        private List<Comment> property0 { get;set; }
 
-        [Column("amount")]
-        public decimal Amount { get;set; }
-
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

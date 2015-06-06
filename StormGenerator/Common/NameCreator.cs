@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.ModelsCollection
+﻿namespace StormGenerator.Common
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,8 @@
     internal class NameCreator
     {
         private readonly string[] separators = { "_", "-" };
-        private readonly List<char> addEs = new List<char> { 'h', 'x', };
+        private readonly List<char> addEs = new List<char> { 'h', 'x', 's' };
+        private readonly List<char> syllables = new List<char> { 'a', 'e', 'i', 'o', 'u', 'y' };
 
         public string CreateCamelCaseName(string source)
         {
@@ -26,11 +27,25 @@
 
         public string CreatePluralName(string name)
         {
-            return name.Last() == 's'
-                ? name
-                : addEs.Contains(name.Last())
-                    ? name + "es"
-                    : name + "s";
+            if (addEs.Contains(char.ToLower(name.Last())))
+            {
+                return name + "es";
+            }
+
+            if (char.ToLower(name.Last()) == 'a')
+            {
+                return name + "e";
+            }
+
+            if (char.ToLower(name.Last()) == 'y')
+            {
+                if (name.Length > 1 && !syllables.Contains(char.ToLower(name[name.Length - 2])))
+                {
+                    return name.Substring(0, name.Length - 1) + "ies";
+                } 
+            }
+
+            return name + "s";
         }
     }
 }

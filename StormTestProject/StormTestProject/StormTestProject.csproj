@@ -39,9 +39,14 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="St.orm">
+      <HintPath>..\packages\st.orm.0.1.0\St.orm.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +84,22 @@
     <Compile Include="Department.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EF\calculation.cs" />
+    <Compile Include="EF\calculation_details.cs" />
+    <Compile Include="EF\comment.cs" />
+    <Compile Include="EF\country.cs" />
+    <Compile Include="EF\coverage.cs" />
+    <Compile Include="EF\coverage_department.cs" />
+    <Compile Include="EF\coverage_eligibility_group.cs" />
+    <Compile Include="EF\covered.cs" />
+    <Compile Include="EF\currency.cs" />
+    <Compile Include="EF\department.cs" />
+    <Compile Include="EF\eligibility_group.cs" />
+    <Compile Include="EF\emp.cs" />
+    <Compile Include="EF\Model1.cs" />
+    <Compile Include="EF\policy.cs" />
+    <Compile Include="EF\premium.cs" />
+    <Compile Include="EF\tax.cs" />
     <Compile Include="EligibilityGroup.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -101,6 +122,9 @@
     </Compile>
     <Compile Include="StormTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StormTestContext.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Tax.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

@@ -9,13 +9,50 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("policy")]
+    [Table("StormTest.dbo.policy")]
     public partial class Policy
     {
+        [Key]
+        [Column("policy_id", Order = 0)]
+        public int PolicyId { get;set; }
+
+        [Column("country_id", Order = 1)]
+        public int CountryId { get;set; }
+
+        [Column("currency_id", Order = 2)]
+        public int CurrencyId { get;set; }
+
+        [Required]
+        [MaxLength(256)]
+        [Column("name", Order = 3)]
+        public string Name { get;set; }
+
+        [Column("created", Order = 4)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 5)]
+        public DateTime Updated { get;set; }
+
+        public virtual List<Tax> Taxes { get { return property0; } set { property0 = value; } }
+
+        public virtual List<Coverage> Coverages { get { return property1; } set { property1 = value; } }
+
+        public virtual List<Comment> Comments { get { return property2; } set { property2 = value; } }
+
+        #region Private fields
+
         private Policy clonedFrom;
+        private Tax field0;
+        private Coverage field1;
+        private Comment field2;
+
+        #endregion
+
+        #region Constructors
 
         public Policy(Policy clonedFrom)
         {
@@ -24,25 +61,16 @@ namespace StormTestProject
 
         public Policy() { }
 
-        [Key]
-        [Column("policy_id")]
-        public int PolicyId { get;set; }
+        #endregion
 
-        [Column("country_id")]
-        public int CountryId { get;set; }
+        #region Lazy properties
 
-        [Column("currency_id")]
-        public int CurrencyId { get;set; }
+        private List<Tax> property0 { get;set; }
 
-        [Required]
-        [MaxLength(256)]
-        [Column("name")]
-        public string Name { get;set; }
+        private List<Coverage> property1 { get;set; }
 
-        [Column("created")]
-        public DateTime Created { get;set; }
+        private List<Comment> property2 { get;set; }
 
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

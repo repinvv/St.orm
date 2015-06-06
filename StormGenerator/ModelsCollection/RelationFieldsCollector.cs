@@ -4,23 +4,24 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Models.Config;
-    using StormGenerator.Models.Config.Db;
     using StormGenerator.Models.Pregen;
-    using StormGenerator.Models.Pregen.Relation;
 
     internal class RelationFieldsCollector
     {
         private readonly RelationsCollector relationsCollector;
         private readonly ManyToManyFieldsCollector manyToManyFieldsCollector;
         private readonly RelationFieldFactory fieldFactory;
+        private readonly RelationsModeChecker modeChecker;
 
         public RelationFieldsCollector(RelationsCollector relationsCollector,
             ManyToManyFieldsCollector manyToManyFieldsCollector,
-            RelationFieldFactory fieldFactory)
+            RelationFieldFactory fieldFactory,
+            RelationsModeChecker modeChecker)
         {
             this.relationsCollector = relationsCollector;
             this.manyToManyFieldsCollector = manyToManyFieldsCollector;
             this.fieldFactory = fieldFactory;
+            this.modeChecker = modeChecker;
         }
 
         public void CollectRelations(List<Model> models, RelationsMode relationsMode)
@@ -31,18 +32,18 @@
             }
 
             var relations = relationsCollector.CollectRelations(models);
-            var mtmModels = new HashSet<Model>(manyToManyFieldsCollector.CollectManyToManyLinks(relations));
+            var mtmModels = manyToManyFieldsCollector.CollectManyToManyLinks(relations, relationsMode);
 
             foreach (var relation in relations.Where(x => !mtmModels.Contains(x.Key)))
             {
                 var groups = relation.Value.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model)).ToList();
                 
-                if (relationsMode == RelationsMode.All || groups.Count() <= GenerationConstants.AutoModelCreation.MaximumOneToManyFields)
+                if (modeChecker.IsOtmRelationNeeded(relation.Value, mtmModels, relationsMode))
                 {
                     relation.Key.RelationFields.AddRange(groups.Select(x => fieldFactory.CreateOneToManyField(x.ToList())));
                 }
 
-                if (relationsMode == RelationsMode.All || groups.Count() > GenerationConstants.AutoModelCreation.MaximumOneToManyFields)
+                if (modeChecker.IsMtoRelationNeeded(relation.Value, mtmModels, relationsMode))
                 {
                     foreach (var group in groups)
                     {

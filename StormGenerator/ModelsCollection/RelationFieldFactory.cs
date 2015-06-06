@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using StormGenerator.Common;
+    using StormGenerator.Models.Config;
     using StormGenerator.Models.Pregen;
     using StormGenerator.Models.Pregen.Relation;
 
@@ -19,6 +21,7 @@
             return new ManyToOneField
             {
                 Name = relations[0].RootModel.Name,
+                AssociationId = relations[0].Id,
                 FieldModel = relations[0].RootModel,
                 FarEndFields = relations.Select(x => x.RootField).ToList(),
                 NearEndFields = relations.Select(x => x.Field).ToList()
@@ -30,6 +33,8 @@
             return new OneToManyField
             {
                 Name = nameCreator.CreatePluralName(relations[0].Model.Name),
+                IsList = true,
+                AssociationId = relations[0].Id,
                 FieldModel = relations[0].Model,
                 NearEndFields = relations.Select(x => x.RootField).ToList(),
                 FarEndFields = relations.Select(x => x.Field).ToList()
@@ -44,6 +49,7 @@
                            {
                                Name = nameCreator.CreatePluralName(last.RootModel.Name),
                                FieldModel = last.RootModel,
+                               AssociationId = first.Id,
                                IsList = true,
                                NearEndFields = new List<MappingField> { first.RootField },
                                FarEndFields = new List<MappingField> { first.Field },

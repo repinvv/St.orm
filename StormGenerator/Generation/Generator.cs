@@ -7,6 +7,7 @@
     using System.Web.Script.Serialization;
     using StormGenerator.Common;
     using StormGenerator.DbModelsCollection;
+    using StormGenerator.Generation.ContextGeneration;
     using StormGenerator.Generation.ModelGeneration;
     using StormGenerator.Models.Config;
     using StormGenerator.ModelsCollection;
@@ -16,12 +17,17 @@
         private readonly DbModelsCollector dbmodelsCollector;
         private readonly ModelsCollector modelsCollector;
         private readonly ModelGenerator modelGenerator;
+        private readonly ContextGenerator contextGenerator;
 
-        public Generator(DbModelsCollector dbmodelsCollector, ModelsCollector modelsCollector, ModelGenerator modelGenerator)
+        public Generator(DbModelsCollector dbmodelsCollector,
+            ModelsCollector modelsCollector, 
+            ModelGenerator modelGenerator,
+            ContextGenerator contextGenerator)
         {
             this.dbmodelsCollector = dbmodelsCollector;
             this.modelsCollector = modelsCollector;
             this.modelGenerator = modelGenerator;
+            this.contextGenerator = contextGenerator;
         }
 
         public List<GeneratedFile> Generate(Options options)
@@ -37,7 +43,10 @@
 
             var models = modelsCollector.CollectModels(stormConfig);
             var output = new List<GeneratedFile>();
+
             output.AddRange(models.Select(x => modelGenerator.GenerateModel(x, options.OutputNamespace)));
+            output.Add(contextGenerator.GenerateContext(models, options.ContextName, options.OutputNamespace));
+
             output.ForEach(x => x.Name = x.Name + ".cs");
             output.ForEach(x => x.Content = GenerationConstants.GenerationMark + Environment.NewLine + x.Content);
             return output;

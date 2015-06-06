@@ -9,13 +9,34 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("calculation")]
+    [Table("StormTest.stats.calculation")]
     public partial class Calculation
     {
+        [Key]
+        [Column("calculation_id", Order = 0)]
+        public Guid CalculationId { get;set; }
+
+        [MaxLength(256)]
+        [Column("name", Order = 1)]
+        public string Name { get;set; }
+
+        [Column("due_date", Order = 2)]
+        public DateTime? DueDate { get;set; }
+
+        public virtual List<CalculationDetails> CalculationDetailses { get { return property0; } set { property0 = value; } }
+
+        #region Private fields
+
         private Calculation clonedFrom;
+        private CalculationDetails field0;
+
+        #endregion
+
+        #region Constructors
 
         public Calculation(Calculation clonedFrom)
         {
@@ -24,15 +45,12 @@ namespace StormTestProject
 
         public Calculation() { }
 
-        [Key]
-        [Column("calculation_id")]
-        public Guid CalculationId { get;set; }
+        #endregion
 
-        [MaxLength(256)]
-        [Column("name")]
-        public string Name { get;set; }
+        #region Lazy properties
 
-        [Column("due_date")]
-        public DateTime? DueDate { get;set; }
+        private List<CalculationDetails> property0 { get;set; }
+
+        #endregion
     }
 }

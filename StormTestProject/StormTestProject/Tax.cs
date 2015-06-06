@@ -9,13 +9,36 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("tax")]
+    [Table("StormTest.dbo.tax")]
     public partial class Tax
     {
+        [Key]
+        [Column("tax_id", Order = 0)]
+        public int TaxId { get;set; }
+
+        [Column("policy_id", Order = 1)]
+        public int PolicyId { get;set; }
+
+        [Column("amount", Order = 2)]
+        public decimal Amount { get;set; }
+
+        [Column("created", Order = 3)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 4)]
+        public DateTime Updated { get;set; }
+
+        #region Private fields
+
         private Tax clonedFrom;
+
+        #endregion
+
+        #region Constructors
 
         public Tax(Tax clonedFrom)
         {
@@ -24,20 +47,10 @@ namespace StormTestProject
 
         public Tax() { }
 
-        [Key]
-        [Column("tax_id")]
-        public int TaxId { get;set; }
+        #endregion
 
-        [Column("policy_id")]
-        public int PolicyId { get;set; }
+        #region Lazy properties
 
-        [Column("amount")]
-        public decimal Amount { get;set; }
-
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

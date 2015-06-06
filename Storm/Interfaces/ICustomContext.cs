@@ -3,7 +3,7 @@
     using System.Data.Common;
     using System.Linq;
 
-    public interface ICustomContext
+    public interface IStormContext
     {
         IQueryable<T> Set<T>() where T : class;
 

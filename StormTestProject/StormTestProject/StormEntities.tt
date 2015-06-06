@@ -26,6 +26,7 @@
 	var options = new Options
 	{
         OutputNamespace = "StormTestProject",
+		ContextName = "StormTestContext",
 	    SettingsFile = currentPath + @"\config.storm",
         ForceLoadDbInfo = true,        
 		ConnectionString = null,

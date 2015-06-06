@@ -9,13 +9,36 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("calculation_details")]
+    [Table("StormTest.stats.calculation_details")]
     public partial class CalculationDetails
     {
+        [Key]
+        [Column("calculation_details_id", Order = 0)]
+        public Guid CalculationDetailsId { get;set; }
+
+        [Column("calculation_id", Order = 1)]
+        public Guid CalculationId { get;set; }
+
+        [Column("year", Order = 2)]
+        public int Year { get;set; }
+
+        [Column("month", Order = 3)]
+        public int Month { get;set; }
+
+        [Column("value", Order = 4)]
+        public decimal Value { get;set; }
+
+        #region Private fields
+
         private CalculationDetails clonedFrom;
+
+        #endregion
+
+        #region Constructors
 
         public CalculationDetails(CalculationDetails clonedFrom)
         {
@@ -24,20 +47,10 @@ namespace StormTestProject
 
         public CalculationDetails() { }
 
-        [Key]
-        [Column("calculation_details_id")]
-        public Guid CalculationDetailsId { get;set; }
+        #endregion
 
-        [Column("calculation_id")]
-        public Guid CalculationId { get;set; }
+        #region Lazy properties
 
-        [Column("year")]
-        public int Year { get;set; }
-
-        [Column("month")]
-        public int Month { get;set; }
-
-        [Column("value")]
-        public decimal Value { get;set; }
+        #endregion
     }
 }

@@ -8,7 +8,7 @@
     {
         Dictionary<object, object> Parameters { get; }
 
-        ICustomContext Context { get; }
+        IStormContext Context { get; }
             
         ILoadService<TInherited> ForType<TInherited>() where TInherited : IDalEntity;
 

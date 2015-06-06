@@ -8,7 +8,7 @@
 
     internal static class StormGetImplementation
     {
-        public static List<TDal> GetEntities<TDal>(IQueryable query, ICustomContext context, LoadParameter[] parameters) where TDal : IDalEntity
+        public static List<TDal> GetEntities<TDal>(IQueryable query, IStormContext context, LoadParameter[] parameters) where TDal : IDalEntity
         {
             var parametersDictionary = parameters.ToDictionary(x => x.Key, x => x.Value);
             var loadService = new LoadService<TDal>(parametersDictionary, context);

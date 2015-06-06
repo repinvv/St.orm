@@ -9,13 +9,42 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("eligibility_group")]
+    [Table("StormTest.dbo.eligibility_group")]
     public partial class EligibilityGroup
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("eligibility_group_id", Order = 0)]
+        public int EligibilityGroupId { get;set; }
+
+        [Required]
+        [MaxLength(256)]
+        [Column("name", Order = 1)]
+        public string Name { get;set; }
+
+        [Column("created", Order = 2)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 3)]
+        public DateTime Updated { get;set; }
+
+        public virtual List<Coverage> Coverages { get { return property0; } set { property0 = value; } }
+
+        public virtual List<Coverage> Coverages { get { return property1; } set { property1 = value; } }
+
+        #region Private fields
+
         private EligibilityGroup clonedFrom;
+        private Coverage field0;
+        private Coverage field1;
+
+        #endregion
+
+        #region Constructors
 
         public EligibilityGroup(EligibilityGroup clonedFrom)
         {
@@ -24,20 +53,14 @@ namespace StormTestProject
 
         public EligibilityGroup() { }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("eligibility_group_id")]
-        public int EligibilityGroupId { get;set; }
+        #endregion
 
-        [Required]
-        [MaxLength(256)]
-        [Column("name")]
-        public string Name { get;set; }
+        #region Lazy properties
 
-        [Column("created")]
-        public DateTime Created { get;set; }
+        private List<Coverage> property0 { get;set; }
 
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        private List<Coverage> property1 { get;set; }
+
+        #endregion
     }
 }

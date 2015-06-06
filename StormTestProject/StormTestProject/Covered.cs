@@ -9,13 +9,39 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("covered")]
+    [Table("StormTest.dbo.covered")]
     public partial class Covered
     {
+        [Key]
+        [Column("covered_id", Order = 0)]
+        public int CoveredId { get;set; }
+
+        [Column("covered_type", Order = 1)]
+        public int CoveredType { get;set; }
+
+        [Column("coverage_id", Order = 2)]
+        public int CoverageId { get;set; }
+
+        [Column("headcount", Order = 3)]
+        public int Headcount { get;set; }
+
+        [Column("created", Order = 4)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 5)]
+        public DateTime Updated { get;set; }
+
+        #region Private fields
+
         private Covered clonedFrom;
+
+        #endregion
+
+        #region Constructors
 
         public Covered(Covered clonedFrom)
         {
@@ -24,23 +50,10 @@ namespace StormTestProject
 
         public Covered() { }
 
-        [Key]
-        [Column("covered_id")]
-        public int CoveredId { get;set; }
+        #endregion
 
-        [Column("covered_type")]
-        public int CoveredType { get;set; }
+        #region Lazy properties
 
-        [Column("coverage_id")]
-        public int CoverageId { get;set; }
-
-        [Column("headcount")]
-        public int Headcount { get;set; }
-
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

@@ -1,19 +1,25 @@
 ﻿namespace StormGenerator.Generation.ModelGeneration
 {
+    using System;
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Generation.ModelGeneration.PropertyGeneration;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
     internal class ModelGenerator
     {
         private readonly IStringGenerator stringGenerator;
-        private readonly UsingsGenerator usingsGenerator;
+        private readonly ModelPartsGeneratorFactory modelPartsGeneratorFactory;
+        private readonly FieldUtility fieldUtility;
 
-        public ModelGenerator(IStringGenerator stringGenerator, UsingsGenerator usingsGenerator)
+        public ModelGenerator(IStringGenerator stringGenerator, 
+            ModelPartsGeneratorFactory modelPartsGeneratorFactory,
+            FieldUtility fieldUtility)
         {
             this.stringGenerator = stringGenerator;
-            this.usingsGenerator = usingsGenerator;
+            this.modelPartsGeneratorFactory = modelPartsGeneratorFactory;
+            this.fieldUtility = fieldUtility;
         }
 
         public GeneratedFile GenerateModel(Model model, string outputNamespace)
@@ -27,6 +33,11 @@
 
         private string GenerateModelContent(Model model, string outputNamespace)
         {
+            if (model.IsStruct && model.RelationFields.Any())
+            {
+                throw new Exception("Struct types can't have navigation properties.");
+            }
+
             stringGenerator.AppendLine("namespace " + outputNamespace);
             stringGenerator.Braces(() => GenerateModelDefinition(model));
             return stringGenerator.ToString();
@@ -34,87 +45,82 @@
 
         private void GenerateModelDefinition(Model model)
         {
-            var usings = model.MappingFields.Select(GetUsing).ToList();
-            usings.AddRange(GenerationConstants.ModelGeneration.Usings);
-            usingsGenerator.GenerateUsings(stringGenerator, usings);
+            var partGenerator = modelPartsGeneratorFactory.GetPartsGenerator(model);
+            partGenerator.GenerateUsings(model, stringGenerator);
             stringGenerator.AppendLine();
-            if (!model.IsStruct)
-            {
-                stringGenerator.AppendLine("[Table(\"" + model.DbModel.Name + "\")]");
-            }
-
-            var type = model.IsStruct ? "struct" : "class";
-            stringGenerator.AppendLine("public partial " + type + " " + model.Name);
-            stringGenerator.Braces(() => GenerateContents(model));
+            partGenerator.GenerateDefinition(model, stringGenerator);
+            stringGenerator.Braces(() => GenerateContents(model, partGenerator));
         }
 
-        private void GenerateContents(Model model)
+        private void GenerateContents(Model model, IModelPartsGenerator partGenerator)
         {
-            GenerateClonedFrom(model);
-            bool first = true;
-            foreach (var mappingField in model.MappingFields)
-            {
-                if (!first)
-                {
-                    stringGenerator.AppendLine();
-                }
-
-                GenerateProperty(mappingField, !model.IsStruct);
-                first = false;
-            }
+            GenerateProperties(model, partGenerator);
+            GeneratePrivateFields(model, partGenerator);
+            stringGenerator.AppendLine();
+            GenerateConstructors(model, partGenerator);
+            stringGenerator.AppendLine();
+            GenerateLazyProperties(model);
         }
 
-        private void GenerateProperty(MappingField mappingField, bool generateAttributes)
+        private void GenerateLazyProperties(Model model)
         {
-            if (generateAttributes)
+            stringGenerator.AppendLine("#region Lazy properties");
+            stringGenerator.AppendLine();
+            for (int index = 0; index < model.RelationFields.Count; index++)
             {
-                if (mappingField.DbField.IsPrimaryKey)
-                {
-                    stringGenerator.AppendLine("[Key]");
-                    if (mappingField.DbField.IsIdentity)
-                    {
-                        stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
-                    }
-                }
-
-                if (mappingField.Type == typeof(string))
-                {
-                    if (!mappingField.DbField.IsNullable)
-                    {
-                        stringGenerator.AppendLine("[Required]");
-                    }
-
-                    if (mappingField.DbField.StringLength > 0)
-                    {
-                        stringGenerator.AppendLine("[MaxLength(" + mappingField.DbField.StringLength + ")]");
-                    }
-                }
-
-                stringGenerator.AppendLine("[Column(\"" + mappingField.DbField.Name + "\")]");
+                var field = model.RelationFields[index];
+                stringGenerator.AppendLine("private " + fieldUtility.GetRelationFieldType(field) + " property" + index + " { get;set; }");
+                stringGenerator.AppendLine();
             }
 
-            stringGenerator.AppendLine("public " + mappingField.Type.GetTypeName() + " " + mappingField.Name + " { get;set; }");
+            stringGenerator.AppendLine("#endregion");
         }
 
-        private string GetUsing(MappingField arg)
+        private void GenerateConstructors(Model model, IModelPartsGenerator partGenerator)
         {
-            return arg.Type.Namespace;
+            stringGenerator.AppendLine("#region Constructors");
+            stringGenerator.AppendLine();
+            partGenerator.GenerateConstructors(model, stringGenerator);
+            stringGenerator.AppendLine();
+            stringGenerator.AppendLine("#endregion");
         }
 
-        private void GenerateClonedFrom(Model model)
+        private void GenerateProperties(Model model, IModelPartsGenerator partGenerator)
         {
-            if (model.IsStruct)
+            // stringGenerator.AppendLine("#region Properties");
+            // stringGenerator.AppendLine();
+            for (int index = 0; index < model.MappingFields.Count; index++)
             {
-                return;
+                var field = model.MappingFields[index];
+                partGenerator.GenerateMappingProperty(field, index, stringGenerator);
+                stringGenerator.AppendLine();
             }
 
-            stringGenerator.AppendLine("private " + model.Name + " clonedFrom;");
+            for (int index = 0; index < model.RelationFields.Count; index++)
+            {
+                var field = model.RelationFields[index];
+
+                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name 
+                    + " { get { return property" + index + "; } set { property" + index + " = value; } }");
+                stringGenerator.AppendLine();
+            }
+
+            // stringGenerator.AppendLine("#endregion");
+        }
+
+        private void GeneratePrivateFields(Model model, IModelPartsGenerator partGenerator)
+        {
+            stringGenerator.AppendLine("#region Private fields");
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public " + model.Name + "(" + model.Name + " clonedFrom)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("this.clonedFrom = clonedFrom;"));
+            partGenerator.GeneratePrivateFields(model, stringGenerator);
+            for (int index = 0; index < model.RelationFields.Count; index++)
+            {
+                var field = model.RelationFields[index];
+                stringGenerator.AppendLine("private " + field.FieldModel.Name + " field" + index + ";");
+            }
+
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public " + model.Name + "() { }");
-            stringGenerator.AppendLine();
+            stringGenerator.AppendLine("#endregion");
         }
     }
 }

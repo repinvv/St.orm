@@ -9,13 +9,44 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("currency")]
+    [Table("StormTest.dbo.currency")]
     public partial class Currency
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("currency_id", Order = 0)]
+        public int CurrencyId { get;set; }
+
+        [Required]
+        [MaxLength(256)]
+        [Column("name", Order = 1)]
+        public string Name { get;set; }
+
+        [Required]
+        [MaxLength(10)]
+        [Column("currency_code", Order = 2)]
+        public string CurrencyCode { get;set; }
+
+        [Column("created", Order = 3)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 4)]
+        public DateTime Updated { get;set; }
+
+        public virtual List<Policy> Policies { get { return property0; } set { property0 = value; } }
+
+        #region Private fields
+
         private Currency clonedFrom;
+        private Policy field0;
+
+        #endregion
+
+        #region Constructors
 
         public Currency(Currency clonedFrom)
         {
@@ -24,25 +55,12 @@ namespace StormTestProject
 
         public Currency() { }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("currency_id")]
-        public int CurrencyId { get;set; }
+        #endregion
 
-        [Required]
-        [MaxLength(256)]
-        [Column("name")]
-        public string Name { get;set; }
+        #region Lazy properties
 
-        [Required]
-        [MaxLength(10)]
-        [Column("currency_code")]
-        public string CurrencyCode { get;set; }
+        private List<Policy> property0 { get;set; }
 
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

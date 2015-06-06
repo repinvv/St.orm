@@ -9,13 +9,38 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("emp")]
+    [Table("StormTest.dbo.emp")]
     public partial class Emp
     {
+        [Key]
+        [Required]
+        [MaxLength(9)]
+        [Column("ssn", Order = 0)]
+        public string Ssn { get;set; }
+
+        [Key]
+        [Required]
+        [MaxLength(15)]
+        [Column("client", Order = 1)]
+        public string Client { get;set; }
+
+        public virtual List<EmpToDependent> EmpToDependents { get { return property0; } set { property0 = value; } }
+
+        public virtual List<EmpToDependent> EmpToDependents { get { return property1; } set { property1 = value; } }
+
+        #region Private fields
+
         private Emp clonedFrom;
+        private EmpToDependent field0;
+        private EmpToDependent field1;
+
+        #endregion
+
+        #region Constructors
 
         public Emp(Emp clonedFrom)
         {
@@ -24,16 +49,14 @@ namespace StormTestProject
 
         public Emp() { }
 
-        [Key]
-        [Required]
-        [MaxLength(9)]
-        [Column("ssn")]
-        public string Ssn { get;set; }
+        #endregion
 
-        [Key]
-        [Required]
-        [MaxLength(15)]
-        [Column("client")]
-        public string Client { get;set; }
+        #region Lazy properties
+
+        private List<EmpToDependent> property0 { get;set; }
+
+        private List<EmpToDependent> property1 { get;set; }
+
+        #endregion
     }
 }

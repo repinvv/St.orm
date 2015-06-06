@@ -9,11 +9,11 @@
     internal class LoadService<TDal> : ILoadService<TDal>
         where TDal : IDalEntity
     {
-        private readonly ICustomContext context;
+        private readonly IStormContext context;
         private readonly object[] fields;
         private readonly Dictionary<Type, object> inheritedServices = new Dictionary<Type, object>();
 
-        public LoadService(Dictionary<object, object> parametersDictionary, ICustomContext context)
+        public LoadService(Dictionary<object, object> parametersDictionary, IStormContext context)
         {
             Parameters = parametersDictionary;
             this.context = context;
@@ -22,7 +22,7 @@
 
         public Dictionary<object, object> Parameters { get; private set; }
 
-        public ICustomContext Context { get { return context; } }
+        public IStormContext Context { get { return context; } }
 
         public ILoadService<TInherited> ForType<TInherited>() where TInherited : IDalEntity
         {

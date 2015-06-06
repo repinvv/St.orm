@@ -4,6 +4,8 @@
     {
         public string OutputNamespace { get; set; }
 
+        public string ContextName { get; set; }
+
         public string SettingsFile { get; set; }
 
         public bool ForceLoadDbInfo { get; set; }

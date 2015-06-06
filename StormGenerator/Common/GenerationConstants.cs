@@ -1,5 +1,7 @@
 ﻿namespace StormGenerator.Common
 {
+    using St.Orm.Interfaces;
+
     internal static class GenerationConstants
     {
         public const string GenerationMark =
@@ -16,15 +18,22 @@
 
         public static class AutoModelCreation
         {
-            public const int MaximumOneToManyFields = 4;
+            public const int MaximumOneToManyFields = 5;
         }
 
         public static class ModelGeneration
         {
-            public static readonly string[] Usings =
+            public static readonly string[] MappedClassUsings =
             {
                 "System.ComponentModel.DataAnnotations",
-                "System.ComponentModel.DataAnnotations.Schema"
+                "System.ComponentModel.DataAnnotations.Schema",
+                "System.Collections.Generic"
+            };
+
+            public static readonly string[] ContextUsings =
+            {
+                "System.Data.Entity",
+                typeof(IStormContext).Namespace
             };
         }
     }

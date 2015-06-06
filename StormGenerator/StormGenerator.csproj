@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\NameNormalizer.cs" />
     <Compile Include="Common\UsingsGenerator.cs" />
     <Compile Include="Common\GenerationConstants.cs" />
     <Compile Include="DbModelsCollection\ColumnReader.cs" />
@@ -53,8 +54,16 @@
     <Compile Include="DbModelsCollection\TableIdCreator.cs" />
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
+    <Compile Include="Generation\CommonGeneration\ObjectStringService.cs" />
+    <Compile Include="Generation\ContextGeneration\ContextGenerator.cs" />
+    <Compile Include="Generation\ContextGeneration\InitializersGenerator.cs" />
     <Compile Include="Generation\Generator.cs" />
+    <Compile Include="Generation\ModelGeneration\ClassPartsGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\FieldUtility.cs" />
     <Compile Include="Generation\ModelGeneration\ModelGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\IModelPartsGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelGeneratorFactory.cs" />
+    <Compile Include="Generation\ModelGeneration\StructPartsGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
@@ -62,10 +71,11 @@
     <Compile Include="ModelsCollection\FieldTypeService.cs" />
     <Compile Include="ModelsCollection\ManyToManyFieldsCollector.cs" />
     <Compile Include="ModelsCollection\ModelsCollector.cs" />
-    <Compile Include="ModelsCollection\NameCreator.cs" />
+    <Compile Include="Common\NameCreator.cs" />
     <Compile Include="ModelsCollection\RelationFieldFactory.cs" />
     <Compile Include="ModelsCollection\RelationFieldsCollector.cs" />
     <Compile Include="ModelsCollection\RelationsCollector.cs" />
+    <Compile Include="ModelsCollection\RelationsModeChecker.cs" />
     <Compile Include="Models\Config\Db\DbAssociation.cs" />
     <Compile Include="Models\Config\StormConfig.cs" />
     <Compile Include="Models\Pregen\Relation\JoinField.cs" />
@@ -76,7 +86,7 @@
     <Compile Include="Options.cs" />
     <Compile Include="Models\Config\RelationsMode.cs" />
     <Compile Include="StormGeneration.cs" />
-    <Compile Include="Common\CommonGen.cs" />
+    <Compile Include="Generation\CommonGeneration\TypeNameService.cs" />
     <Compile Include="Models\Config\Db\DbField.cs" />
     <Compile Include="Models\Config\Db\DbModel.cs" />
     <Compile Include="Models\Pregen\Relation\RelationField.cs" />
@@ -92,6 +102,9 @@
       <Project>{377745a9-5931-4803-8ebc-6e3f59242f2b}</Project>
       <Name>Storm</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generation\ModelGeneration\LazyGeneration\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\Project.Targets" />

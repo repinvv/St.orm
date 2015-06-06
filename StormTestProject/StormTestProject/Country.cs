@@ -9,13 +9,44 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("country")]
+    [Table("StormTest.dbo.country")]
     public partial class Country
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("country_id", Order = 0)]
+        public int CountryId { get;set; }
+
+        [Required]
+        [MaxLength(256)]
+        [Column("name", Order = 1)]
+        public string Name { get;set; }
+
+        [Required]
+        [MaxLength(10)]
+        [Column("country_code", Order = 2)]
+        public string CountryCode { get;set; }
+
+        [Column("created", Order = 3)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 4)]
+        public DateTime Updated { get;set; }
+
+        public virtual List<Policy> Policies { get { return property0; } set { property0 = value; } }
+
+        #region Private fields
+
         private Country clonedFrom;
+        private Policy field0;
+
+        #endregion
+
+        #region Constructors
 
         public Country(Country clonedFrom)
         {
@@ -24,25 +55,12 @@ namespace StormTestProject
 
         public Country() { }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("country_id")]
-        public int CountryId { get;set; }
+        #endregion
 
-        [Required]
-        [MaxLength(256)]
-        [Column("name")]
-        public string Name { get;set; }
+        #region Lazy properties
 
-        [Required]
-        [MaxLength(10)]
-        [Column("country_code")]
-        public string CountryCode { get;set; }
+        private List<Policy> property0 { get;set; }
 
-        [Column("created")]
-        public DateTime Created { get;set; }
-
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        #endregion
     }
 }

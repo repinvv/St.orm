@@ -9,13 +9,46 @@
 namespace StormTestProject
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("coverage_eligibility_group")]
+    [Table("StormTest.dbo.coverage_eligibility_group")]
     public partial class CoverageEligibilityGroup
     {
+        [Key]
+        [Column("coverage_id", Order = 0)]
+        public int CoverageId { get;set; }
+
+        [Key]
+        [Column("eligibility_group_id", Order = 1)]
+        public int EligibilityGroupId { get;set; }
+
+        [Column("created", Order = 2)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 3)]
+        public DateTime Updated { get;set; }
+
+        public virtual Coverage Coverage { get { return property0; } set { property0 = value; } }
+
+        public virtual EligibilityGroup EligibilityGroup { get { return property1; } set { property1 = value; } }
+
+        public virtual Coverage Coverage { get { return property2; } set { property2 = value; } }
+
+        public virtual EligibilityGroup EligibilityGroup { get { return property3; } set { property3 = value; } }
+
+        #region Private fields
+
         private CoverageEligibilityGroup clonedFrom;
+        private Coverage field0;
+        private EligibilityGroup field1;
+        private Coverage field2;
+        private EligibilityGroup field3;
+
+        #endregion
+
+        #region Constructors
 
         public CoverageEligibilityGroup(CoverageEligibilityGroup clonedFrom)
         {
@@ -24,18 +57,18 @@ namespace StormTestProject
 
         public CoverageEligibilityGroup() { }
 
-        [Key]
-        [Column("coverage_id")]
-        public int CoverageId { get;set; }
+        #endregion
 
-        [Key]
-        [Column("eligibility_group_id")]
-        public int EligibilityGroupId { get;set; }
+        #region Lazy properties
 
-        [Column("created")]
-        public DateTime Created { get;set; }
+        private Coverage property0 { get;set; }
 
-        [Column("updated")]
-        public DateTime Updated { get;set; }
+        private EligibilityGroup property1 { get;set; }
+
+        private Coverage property2 { get;set; }
+
+        private EligibilityGroup property3 { get;set; }
+
+        #endregion
     }
 }
