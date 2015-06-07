@@ -17,34 +17,25 @@ namespace StormTestProject
     public partial class CoverageEligibilityGroup
     {
         [Key]
-        [Column("coverage_id", Order = 0)]
+        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
         [Key]
-        [Column("eligibility_group_id", Order = 1)]
+        [Column("eligibility_group_id", Order = 2)]
         public int EligibilityGroupId { get;set; }
 
-        [Column("created", Order = 2)]
+        [Column("created", Order = 3)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 3)]
+        [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
-        public virtual Coverage Coverage { get { return property0; } set { property0 = value; } }
-
-        public virtual EligibilityGroup EligibilityGroup { get { return property1; } set { property1 = value; } }
-
-        public virtual Coverage Coverage { get { return property2; } set { property2 = value; } }
-
-        public virtual EligibilityGroup EligibilityGroup { get { return property3; } set { property3 = value; } }
+        public virtual EligibilityGroup EligibilityGroup { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
         private CoverageEligibilityGroup clonedFrom;
-        private Coverage field0;
-        private EligibilityGroup field1;
-        private Coverage field2;
-        private EligibilityGroup field3;
+        private EligibilityGroup field0;
 
         #endregion
 
@@ -61,13 +52,7 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private Coverage property0 { get;set; }
-
-        private EligibilityGroup property1 { get;set; }
-
-        private Coverage property2 { get;set; }
-
-        private EligibilityGroup property3 { get;set; }
+        private EligibilityGroup property0 { get;set; }
 
         #endregion
     }

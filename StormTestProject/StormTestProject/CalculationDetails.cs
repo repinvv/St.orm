@@ -17,19 +17,19 @@ namespace StormTestProject
     public partial class CalculationDetails
     {
         [Key]
-        [Column("calculation_details_id", Order = 0)]
+        [Column("calculation_details_id", Order = 1)]
         public Guid CalculationDetailsId { get;set; }
 
-        [Column("calculation_id", Order = 1)]
+        [Column("calculation_id", Order = 2)]
         public Guid CalculationId { get;set; }
 
-        [Column("year", Order = 2)]
+        [Column("year", Order = 3)]
         public int Year { get;set; }
 
-        [Column("month", Order = 3)]
+        [Column("month", Order = 4)]
         public int Month { get;set; }
 
-        [Column("value", Order = 4)]
+        [Column("value", Order = 5)]
         public decimal Value { get;set; }
 
         #region Private fields

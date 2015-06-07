@@ -18,29 +18,23 @@ namespace StormTestProject
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("department_id", Order = 0)]
+        [Column("department_id", Order = 1)]
         public int DepartmentId { get;set; }
 
         [Required]
         [MaxLength(256)]
-        [Column("name", Order = 1)]
+        [Column("name", Order = 2)]
         public string Name { get;set; }
 
-        [Column("created", Order = 2)]
+        [Column("created", Order = 3)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 3)]
+        [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
-
-        public virtual List<Coverage> Coverages { get { return property0; } set { property0 = value; } }
-
-        public virtual List<Coverage> Coverages { get { return property1; } set { property1 = value; } }
 
         #region Private fields
 
         private Department clonedFrom;
-        private Coverage field0;
-        private Coverage field1;
 
         #endregion
 
@@ -56,10 +50,6 @@ namespace StormTestProject
         #endregion
 
         #region Lazy properties
-
-        private List<Coverage> property0 { get;set; }
-
-        private List<Coverage> property1 { get;set; }
 
         #endregion
     }

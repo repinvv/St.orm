@@ -17,22 +17,22 @@ namespace StormTestProject
     public partial class Covered
     {
         [Key]
-        [Column("covered_id", Order = 0)]
+        [Column("covered_id", Order = 1)]
         public int CoveredId { get;set; }
 
-        [Column("covered_type", Order = 1)]
+        [Column("covered_type", Order = 2)]
         public int CoveredType { get;set; }
 
-        [Column("coverage_id", Order = 2)]
+        [Column("coverage_id", Order = 3)]
         public int CoverageId { get;set; }
 
-        [Column("headcount", Order = 3)]
+        [Column("headcount", Order = 4)]
         public int Headcount { get;set; }
 
-        [Column("created", Order = 4)]
+        [Column("created", Order = 5)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 5)]
+        [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
         #region Private fields

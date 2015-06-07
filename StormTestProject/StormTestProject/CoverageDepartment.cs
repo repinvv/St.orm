@@ -17,34 +17,25 @@ namespace StormTestProject
     public partial class CoverageDepartment
     {
         [Key]
-        [Column("coverage_id", Order = 0)]
+        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
         [Key]
-        [Column("department_id", Order = 1)]
+        [Column("department_id", Order = 2)]
         public int DepartmentId { get;set; }
 
-        [Column("created", Order = 2)]
+        [Column("created", Order = 3)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 3)]
+        [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
-        public virtual Coverage Coverage { get { return property0; } set { property0 = value; } }
-
-        public virtual Department Department { get { return property1; } set { property1 = value; } }
-
-        public virtual Coverage Coverage { get { return property2; } set { property2 = value; } }
-
-        public virtual Department Department { get { return property3; } set { property3 = value; } }
+        public virtual Department Department { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
         private CoverageDepartment clonedFrom;
-        private Coverage field0;
-        private Department field1;
-        private Coverage field2;
-        private Department field3;
+        private Department field0;
 
         #endregion
 
@@ -61,13 +52,7 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private Coverage property0 { get;set; }
-
-        private Department property1 { get;set; }
-
-        private Coverage property2 { get;set; }
-
-        private Department property3 { get;set; }
+        private Department property0 { get;set; }
 
         #endregion
     }

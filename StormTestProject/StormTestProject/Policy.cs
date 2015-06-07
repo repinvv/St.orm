@@ -17,24 +17,24 @@ namespace StormTestProject
     public partial class Policy
     {
         [Key]
-        [Column("policy_id", Order = 0)]
+        [Column("policy_id", Order = 1)]
         public int PolicyId { get;set; }
 
-        [Column("country_id", Order = 1)]
+        [Column("country_id", Order = 2)]
         public int CountryId { get;set; }
 
-        [Column("currency_id", Order = 2)]
+        [Column("currency_id", Order = 3)]
         public int CurrencyId { get;set; }
 
         [Required]
         [MaxLength(256)]
-        [Column("name", Order = 3)]
+        [Column("name", Order = 4)]
         public string Name { get;set; }
 
-        [Column("created", Order = 4)]
+        [Column("created", Order = 5)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 5)]
+        [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
         public virtual List<Tax> Taxes { get { return property0; } set { property0 = value; } }

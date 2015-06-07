@@ -12,14 +12,17 @@
         private readonly IStringGenerator stringGenerator;
         private readonly ModelPartsGeneratorFactory modelPartsGeneratorFactory;
         private readonly FieldUtility fieldUtility;
+        private readonly NameNormalizer nameNormalizer;
 
         public ModelGenerator(IStringGenerator stringGenerator, 
             ModelPartsGeneratorFactory modelPartsGeneratorFactory,
-            FieldUtility fieldUtility)
+            FieldUtility fieldUtility,
+            NameNormalizer nameNormalizer)
         {
             this.stringGenerator = stringGenerator;
             this.modelPartsGeneratorFactory = modelPartsGeneratorFactory;
             this.fieldUtility = fieldUtility;
+            this.nameNormalizer = nameNormalizer;
         }
 
         public GeneratedFile GenerateModel(Model model, string outputNamespace)
@@ -89,17 +92,20 @@
         {
             // stringGenerator.AppendLine("#region Properties");
             // stringGenerator.AppendLine();
+            var names = nameNormalizer.NormalizeNames(model.MappingFields.Select(x => x.Name).ToList());
             for (int index = 0; index < model.MappingFields.Count; index++)
             {
                 var field = model.MappingFields[index];
-                partGenerator.GenerateMappingProperty(field, index, stringGenerator);
+                field.Name = names[index];
+                partGenerator.GenerateMappingProperty(field, stringGenerator);
                 stringGenerator.AppendLine();
             }
 
+            names = nameNormalizer.NormalizeNames(model.RelationFields.Select(x => x.Name).ToList());
             for (int index = 0; index < model.RelationFields.Count; index++)
             {
                 var field = model.RelationFields[index];
-
+                field.Name = names[index];
                 stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name 
                     + " { get { return property" + index + "; } set { property" + index + " = value; } }");
                 stringGenerator.AppendLine();

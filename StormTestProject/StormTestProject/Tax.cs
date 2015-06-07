@@ -17,19 +17,19 @@ namespace StormTestProject
     public partial class Tax
     {
         [Key]
-        [Column("tax_id", Order = 0)]
+        [Column("tax_id", Order = 1)]
         public int TaxId { get;set; }
 
-        [Column("policy_id", Order = 1)]
+        [Column("policy_id", Order = 2)]
         public int PolicyId { get;set; }
 
-        [Column("amount", Order = 2)]
+        [Column("amount", Order = 3)]
         public decimal Amount { get;set; }
 
-        [Column("created", Order = 3)]
+        [Column("created", Order = 4)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 4)]
+        [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
         #region Private fields

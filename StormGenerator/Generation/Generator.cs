@@ -18,16 +18,19 @@
         private readonly ModelsCollector modelsCollector;
         private readonly ModelGenerator modelGenerator;
         private readonly ContextGenerator contextGenerator;
+        private readonly NameNormalizer nameNormalizer;
 
         public Generator(DbModelsCollector dbmodelsCollector,
             ModelsCollector modelsCollector, 
             ModelGenerator modelGenerator,
-            ContextGenerator contextGenerator)
+            ContextGenerator contextGenerator,
+            NameNormalizer nameNormalizer)
         {
             this.dbmodelsCollector = dbmodelsCollector;
             this.modelsCollector = modelsCollector;
             this.modelGenerator = modelGenerator;
             this.contextGenerator = contextGenerator;
+            this.nameNormalizer = nameNormalizer;
         }
 
         public List<GeneratedFile> Generate(Options options)
@@ -42,6 +45,12 @@
             }
 
             var models = modelsCollector.CollectModels(stormConfig);
+            var names = nameNormalizer.NormalizeNames(models.Select(x => x.Name).ToList());
+            for (int index = 0; index < models.Count; index++)
+            {
+                models[index].Name = names[index];
+            }
+
             var output = new List<GeneratedFile>();
 
             output.AddRange(models.Select(x => modelGenerator.GenerateModel(x, options.OutputNamespace)));

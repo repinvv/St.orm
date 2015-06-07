@@ -17,22 +17,22 @@ namespace StormTestProject
     public partial class Premium
     {
         [Key]
-        [Column("premium_id", Order = 0)]
+        [Column("premium_id", Order = 1)]
         public int PremiumId { get;set; }
 
-        [Column("premium_type", Order = 1)]
+        [Column("premium_type", Order = 2)]
         public int PremiumType { get;set; }
 
-        [Column("coverage_id", Order = 2)]
+        [Column("coverage_id", Order = 3)]
         public int CoverageId { get;set; }
 
-        [Column("amount", Order = 3)]
+        [Column("amount", Order = 4)]
         public decimal Amount { get;set; }
 
-        [Column("created", Order = 4)]
+        [Column("created", Order = 5)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 5)]
+        [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
         public virtual List<Comment> Comments { get { return property0; } set { property0 = value; } }

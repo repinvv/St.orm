@@ -50,8 +50,6 @@ namespace StormTestProject
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             InitializeCalculationRelations(modelBuilder);
-            InitializeDepartmentRelations(modelBuilder);
-            InitializeEligibilityGroupRelations(modelBuilder);
             InitializeCurrencyRelations(modelBuilder);
             InitializeCountryRelations(modelBuilder);
             InitializePolicyRelations(modelBuilder);
@@ -68,16 +66,6 @@ namespace StormTestProject
                 .HasMany(x => x.CalculationDetailses)
                 .WithRequired()
                 .HasForeignKey(x => x.CalculationId);
-        }
-
-        protected virtual void InitializeDepartmentRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Department>()
-        }
-
-        protected virtual void InitializeEligibilityGroupRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<EligibilityGroup>()
         }
 
         protected virtual void InitializeCurrencyRelations(DbModelBuilder modelBuilder)
@@ -115,6 +103,18 @@ namespace StormTestProject
         protected virtual void InitializeCoverageRelations(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Coverage>()
+                .HasMany(x => x.Departments)
+                .WithMany()
+                .Map(m => m.ToTable("StormTest.dbo.coverage_department")
+                    .MapLeftKey("coverage_id")
+                    .MapRightKey("department_id"));
+            modelBuilder.Entity<Coverage>()
+                .HasMany(x => x.EligibilityGroups)
+                .WithMany()
+                .Map(m => m.ToTable("StormTest.dbo.coverage_eligibility_group")
+                    .MapLeftKey("coverage_id")
+                    .MapRightKey("eligibility_group_id"));
+            modelBuilder.Entity<Coverage>()
                 .HasMany(x => x.Premiums)
                 .WithRequired()
                 .HasForeignKey(x => x.CoverageId);
@@ -147,7 +147,7 @@ namespace StormTestProject
                 .WithRequired()
                 .HasForeignKey(x => new { f1 = x.Ssn, f2 = x.Client });
             modelBuilder.Entity<Emp>()
-                .HasMany(x => x.EmpToDependents)
+                .HasMany(x => x.EmpToDependents2)
                 .WithRequired()
                 .HasForeignKey(x => new { f1 = x.DepSsn, f2 = x.DepClient });
         }

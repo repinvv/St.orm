@@ -11,8 +11,8 @@
     {
         public bool IsOtmRelationNeeded(List<Relation> relations, HashSet<Model> mtmModels, RelationsMode relationsMode)
         {
-            var groups = relations.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model));
-            return relations.Any() &&
+            var groups = relations.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model)).ToList();
+            return groups.Any() &&
                    (relationsMode == RelationsMode.All || groups.Count() <= GenerationConstants.AutoModelCreation.MaximumOneToManyFields);
         }
 

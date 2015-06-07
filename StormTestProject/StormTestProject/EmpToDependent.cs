@@ -19,25 +19,25 @@ namespace StormTestProject
         [Key]
         [Required]
         [MaxLength(9)]
-        [Column("ssn", Order = 0)]
+        [Column("ssn", Order = 1)]
         public string Ssn { get;set; }
 
         [Key]
         [Required]
         [MaxLength(15)]
-        [Column("client", Order = 1)]
+        [Column("client", Order = 2)]
         public string Client { get;set; }
 
         [Key]
         [Required]
         [MaxLength(9)]
-        [Column("dep_ssn", Order = 2)]
+        [Column("dep_ssn", Order = 3)]
         public string DepSsn { get;set; }
 
         [Key]
         [Required]
         [MaxLength(15)]
-        [Column("dep_client", Order = 3)]
+        [Column("dep_client", Order = 4)]
         public string DepClient { get;set; }
 
         #region Private fields

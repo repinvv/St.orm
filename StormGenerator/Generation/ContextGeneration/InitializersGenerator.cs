@@ -87,6 +87,18 @@
             }
 
             relationIds.Add(field.MediatorMtoField.AssociationId);
+            stringGenerator.AppendLine(".HasMany(x => x." + field.Name + ")");
+            var reverseField = field.MediatorMtoField.FieldModel.RelationFields.OfType<ManyToManyField>()
+                .FirstOrDefault(x => x.MediatorMtoField.AssociationId == field.AssociationId);
+            var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
+            stringGenerator.AppendLine(".WithMany(" + reverse + ")");
+            stringGenerator.AppendLine(".Map(m => m.ToTable(\"" + field.MediatorModel.DbModel.Id + "\")");
+            stringGenerator.PushIndent();
+            var leftKeys = field.FarEndFields.Select(x => "\"" + x.DbField.Name + "\"");
+            stringGenerator.AppendLine(".MapLeftKey(" + string.Join(", ", leftKeys) + ")");
+            var rightKeys = field.MediatorMtoField.NearEndFields.Select(x => "\"" + x.DbField.Name + "\"");
+            stringGenerator.AppendLine(".MapRightKey(" + string.Join(", ", rightKeys) + "));");
+            stringGenerator.PopIndent();
         }
     }
 }

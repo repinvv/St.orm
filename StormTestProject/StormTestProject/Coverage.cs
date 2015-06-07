@@ -17,43 +17,37 @@ namespace StormTestProject
     public partial class Coverage
     {
         [Key]
-        [Column("coverage_id", Order = 0)]
+        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
-        [Column("policy_id", Order = 1)]
+        [Column("policy_id", Order = 2)]
         public int PolicyId { get;set; }
 
         [MaxLength(256)]
-        [Column("comment", Order = 2)]
+        [Column("comment", Order = 3)]
         public string Comment { get;set; }
 
-        [Column("created", Order = 3)]
+        [Column("created", Order = 4)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 4)]
+        [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
         public virtual List<Department> Departments { get { return property0; } set { property0 = value; } }
 
         public virtual List<EligibilityGroup> EligibilityGroups { get { return property1; } set { property1 = value; } }
 
-        public virtual List<Department> Departments { get { return property2; } set { property2 = value; } }
+        public virtual List<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
-        public virtual List<EligibilityGroup> EligibilityGroups { get { return property3; } set { property3 = value; } }
-
-        public virtual List<Premium> Premiums { get { return property4; } set { property4 = value; } }
-
-        public virtual List<Covered> Covereds { get { return property5; } set { property5 = value; } }
+        public virtual List<Covered> Covereds { get { return property3; } set { property3 = value; } }
 
         #region Private fields
 
         private Coverage clonedFrom;
         private Department field0;
         private EligibilityGroup field1;
-        private Department field2;
-        private EligibilityGroup field3;
-        private Premium field4;
-        private Covered field5;
+        private Premium field2;
+        private Covered field3;
 
         #endregion
 
@@ -74,13 +68,9 @@ namespace StormTestProject
 
         private List<EligibilityGroup> property1 { get;set; }
 
-        private List<Department> property2 { get;set; }
+        private List<Premium> property2 { get;set; }
 
-        private List<EligibilityGroup> property3 { get;set; }
-
-        private List<Premium> property4 { get;set; }
-
-        private List<Covered> property5 { get;set; }
+        private List<Covered> property3 { get;set; }
 
         #endregion
     }

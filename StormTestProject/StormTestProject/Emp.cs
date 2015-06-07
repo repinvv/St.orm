@@ -19,18 +19,18 @@ namespace StormTestProject
         [Key]
         [Required]
         [MaxLength(9)]
-        [Column("ssn", Order = 0)]
+        [Column("ssn", Order = 1)]
         public string Ssn { get;set; }
 
         [Key]
         [Required]
         [MaxLength(15)]
-        [Column("client", Order = 1)]
+        [Column("client", Order = 2)]
         public string Client { get;set; }
 
         public virtual List<EmpToDependent> EmpToDependents { get { return property0; } set { property0 = value; } }
 
-        public virtual List<EmpToDependent> EmpToDependents { get { return property1; } set { property1 = value; } }
+        public virtual List<EmpToDependent> EmpToDependents2 { get { return property1; } set { property1 = value; } }
 
         #region Private fields
 

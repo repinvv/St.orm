@@ -18,23 +18,23 @@ namespace StormTestProject
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("country_id", Order = 0)]
+        [Column("country_id", Order = 1)]
         public int CountryId { get;set; }
 
         [Required]
         [MaxLength(256)]
-        [Column("name", Order = 1)]
+        [Column("name", Order = 2)]
         public string Name { get;set; }
 
         [Required]
         [MaxLength(10)]
-        [Column("country_code", Order = 2)]
+        [Column("country_code", Order = 3)]
         public string CountryCode { get;set; }
 
-        [Column("created", Order = 3)]
+        [Column("created", Order = 4)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 4)]
+        [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
         public virtual List<Policy> Policies { get { return property0; } set { property0 = value; } }

@@ -17,14 +17,14 @@ namespace StormTestProject
     public partial class Calculation
     {
         [Key]
-        [Column("calculation_id", Order = 0)]
+        [Column("calculation_id", Order = 1)]
         public Guid CalculationId { get;set; }
 
         [MaxLength(256)]
-        [Column("name", Order = 1)]
+        [Column("name", Order = 2)]
         public string Name { get;set; }
 
-        [Column("due_date", Order = 2)]
+        [Column("due_date", Order = 3)]
         public DateTime? DueDate { get;set; }
 
         public virtual List<CalculationDetails> CalculationDetailses { get { return property0; } set { property0 = value; } }

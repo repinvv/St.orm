@@ -30,7 +30,7 @@
             stringGenerator.AppendLine("public partial struct " + model.Name);
         }
 
-        public void GenerateMappingProperty(MappingField field, int index, IStringGenerator stringGenerator)
+        public void GenerateMappingProperty(MappingField field, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public " + nameService.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
         }

@@ -39,8 +39,6 @@
                 if (keys.Count == 2 && keys.All(x => x.DbField.Associations.Any()) && 
                     restOfFields.Count <= 2 && restOfFields.All(x => x.Type == typeof(DateTime)) && first.RootModel != last.RootModel)
                 {
-                    fieldFactory.CreateManyToManyField(first, last);
-                    fieldFactory.CreateManyToManyField(last, first);
                     mtmModels.Add(new Tuple<Model, Relation, Relation>(mtmModel, first, last));
                 }
             }

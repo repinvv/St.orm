@@ -17,29 +17,29 @@ namespace StormTestProject
     public partial class Comment
     {
         [Key]
-        [Column("comment_id", Order = 0)]
+        [Column("comment_id", Order = 1)]
         public int CommentId { get;set; }
 
-        [Column("comment_type", Order = 1)]
+        [Column("comment_type", Order = 2)]
         public int CommentType { get;set; }
 
-        [Column("policy_id", Order = 2)]
+        [Column("policy_id", Order = 3)]
         public int? PolicyId { get;set; }
 
-        [Column("premium_id", Order = 3)]
+        [Column("premium_id", Order = 4)]
         public int? PremiumId { get;set; }
 
         [Required]
-        [Column("comment_text", Order = 4)]
+        [Column("comment_text", Order = 5)]
         public string CommentText { get;set; }
 
-        [Column("author_user_id", Order = 5)]
+        [Column("author_user_id", Order = 6)]
         public int AuthorUserId { get;set; }
 
-        [Column("created", Order = 6)]
+        [Column("created", Order = 7)]
         public DateTime Created { get;set; }
 
-        [Column("updated", Order = 7)]
+        [Column("updated", Order = 8)]
         public DateTime Updated { get;set; }
 
         #region Private fields

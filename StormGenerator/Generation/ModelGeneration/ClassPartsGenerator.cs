@@ -31,7 +31,7 @@
             stringGenerator.AppendLine("public partial class " + model.Name);
         }
 
-        public void GenerateMappingProperty(MappingField field, int index, IStringGenerator stringGenerator)
+        public void GenerateMappingProperty(MappingField field, IStringGenerator stringGenerator)
         {
             if (field.DbField.IsPrimaryKey)
             {
@@ -55,8 +55,8 @@
                 }
             }
 
-            stringGenerator.AppendLine("[Column(\"" + field.DbField.Name + "\", Order = " + index + ")]");
-            structPartsGenerator.GenerateMappingProperty(field, index, stringGenerator);
+            stringGenerator.AppendLine("[Column(\"" + field.DbField.Name + "\", Order = " + field.DbField.Index + ")]");
+            structPartsGenerator.GenerateMappingProperty(field, stringGenerator);
         }
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)

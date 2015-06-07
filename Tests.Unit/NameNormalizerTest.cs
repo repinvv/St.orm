@@ -42,7 +42,7 @@
 
             // verify
             Assert.AreNotSame(result, list);
-            CollectionAssert.AreEqual(result, list);
+            CollectionAssert.AreEqual(expected, result);
         }
     }
 }
