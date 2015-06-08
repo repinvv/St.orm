@@ -18,6 +18,8 @@
 
         public bool IsReadonly { get; set; }
 
+        public bool IsManyToManyLink { get; set; }
+
         public override string ToString()
         {
             return "Model: " + Name;

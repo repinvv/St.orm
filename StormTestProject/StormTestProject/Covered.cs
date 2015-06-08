@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.covered")]
+    [Table("model.covered")]
     public partial class Covered
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("covered_id", Order = 1)]
         public int CoveredId { get;set; }
 

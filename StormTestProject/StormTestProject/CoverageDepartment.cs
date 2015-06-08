@@ -10,25 +10,12 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.coverage_department")]
     public partial class CoverageDepartment
     {
-        [Key]
-        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
-        [Key]
-        [Column("department_id", Order = 2)]
         public int DepartmentId { get;set; }
-
-        [Column("created", Order = 3)]
-        public DateTime Created { get;set; }
-
-        [Column("updated", Order = 4)]
-        public DateTime Updated { get;set; }
 
         public virtual Department Department { get { return property0; } set { property0 = value; } }
 

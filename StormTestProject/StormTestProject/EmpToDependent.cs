@@ -13,7 +13,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.emp_to_dependent")]
+    [Table("emp_to_dependent")]
     public partial class EmpToDependent
     {
         [Key]

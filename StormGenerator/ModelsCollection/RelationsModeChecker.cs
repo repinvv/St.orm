@@ -4,21 +4,20 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Models.Config;
-    using StormGenerator.Models.Pregen;
     using StormGenerator.Models.Pregen.Relation;
 
     internal class RelationsModeChecker
     {
-        public bool IsOtmRelationNeeded(List<Relation> relations, HashSet<Model> mtmModels, RelationsMode relationsMode)
+        public bool IsOtmRelationNeeded(List<Relation> relations, RelationsMode relationsMode)
         {
-            var groups = relations.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model)).ToList();
+            var groups = relations.GroupBy(x => x.Id).Where(x => !x.First().Model.IsManyToManyLink).ToList();
             return groups.Any() &&
                    (relationsMode == RelationsMode.All || groups.Count() <= GenerationConstants.AutoModelCreation.MaximumOneToManyFields);
         }
 
-        public bool IsMtoRelationNeeded(List<Relation> relations, HashSet<Model> mtmModels, RelationsMode relationsMode)
+        public bool IsMtoRelationNeeded(List<Relation> relations, RelationsMode relationsMode)
         {
-            var groups = relations.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model));
+            var groups = relations.GroupBy(x => x.Id).Where(x => !x.First().Model.IsManyToManyLink);
             return relationsMode == RelationsMode.All || groups.Count() > GenerationConstants.AutoModelCreation.MaximumOneToManyFields;
         }
     }

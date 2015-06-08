@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.premium")]
+    [Table("model.premium")]
     public partial class Premium
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("premium_id", Order = 1)]
         public int PremiumId { get;set; }
 

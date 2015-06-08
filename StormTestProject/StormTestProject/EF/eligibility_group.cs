@@ -20,8 +20,10 @@ namespace StormTestProject.EF
         [StringLength(256)]
         public string name { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual ICollection<coverage_eligibility_group> coverage_eligibility_group { get; set; }

@@ -10,13 +10,15 @@
     {
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
-        private readonly TypeNameService nameService;
+        private readonly PlainClassPartsGenerator classPartsGenerator;
 
-        public StructPartsGenerator(UsingsGenerator usingsGenerator, FieldUtility fieldUtility, TypeNameService nameService)
+        public StructPartsGenerator(UsingsGenerator usingsGenerator, 
+            FieldUtility fieldUtility, 
+            PlainClassPartsGenerator classPartsGenerator)
         {
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
-            this.nameService = nameService;
+            this.classPartsGenerator = classPartsGenerator;
         }
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
@@ -30,9 +32,9 @@
             stringGenerator.AppendLine("public partial struct " + model.Name);
         }
 
-        public void GenerateMappingProperty(MappingField field, IStringGenerator stringGenerator)
+        public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public " + nameService.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
+            classPartsGenerator.GenerateMappingProperty(model, field, stringGenerator);
         }
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)

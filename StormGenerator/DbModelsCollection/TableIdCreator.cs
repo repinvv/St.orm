@@ -2,9 +2,9 @@
 {
     internal class TableIdCreator
     {
-        public string CreateTableId(string db, string schema, string name)
+        public string CreateTableId(string schema, string table)
         {
-            return db + "." + schema + "." + name;
+            return schema == "dbo" ? table : (schema + "." + table);
         }
     }
 }

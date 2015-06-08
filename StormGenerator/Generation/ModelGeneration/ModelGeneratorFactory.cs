@@ -5,12 +5,16 @@
     internal class ModelPartsGeneratorFactory
     {
         private readonly StructPartsGenerator structPartsGenerator;
-        private readonly ClassPartsGenerator classPartsGenerator;
+        private readonly AttributedClassPartsGenerator attributedClassPartsGenerator;
+        private readonly PlainClassPartsGenerator plainClassPartsGenerator;
 
-        public ModelPartsGeneratorFactory(StructPartsGenerator structPartsGenerator, ClassPartsGenerator classPartsGenerator)
+        public ModelPartsGeneratorFactory(StructPartsGenerator structPartsGenerator, 
+            AttributedClassPartsGenerator attributedClassPartsGenerator,
+            PlainClassPartsGenerator plainClassPartsGenerator)
         {
             this.structPartsGenerator = structPartsGenerator;
-            this.classPartsGenerator = classPartsGenerator;
+            this.attributedClassPartsGenerator = attributedClassPartsGenerator;
+            this.plainClassPartsGenerator = plainClassPartsGenerator;
         }
 
         public IModelPartsGenerator GetPartsGenerator(Model model)
@@ -20,7 +24,12 @@
                 return structPartsGenerator;
             }
 
-            return classPartsGenerator;
+            if (model.IsManyToManyLink)
+            {
+                return plainClassPartsGenerator;
+            }
+
+            return attributedClassPartsGenerator;
         }
     }
 }

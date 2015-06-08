@@ -39,6 +39,7 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="St.orm">
       <HintPath>..\packages\st.orm.0.1.0\St.orm.dll</HintPath>
     </Reference>
@@ -89,7 +90,6 @@
     <Compile Include="EF\comment.cs" />
     <Compile Include="EF\country.cs" />
     <Compile Include="EF\coverage.cs" />
-    <Compile Include="EF\coverage_department.cs" />
     <Compile Include="EF\coverage_eligibility_group.cs" />
     <Compile Include="EF\covered.cs" />
     <Compile Include="EF\currency.cs" />
@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseScripts\DropTables.sql" />

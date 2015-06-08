@@ -13,7 +13,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.eligibility_group")]
+    [Table("eligibility_group")]
     public partial class EligibilityGroup
     {
         [Key]

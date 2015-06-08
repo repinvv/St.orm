@@ -6,7 +6,7 @@ namespace StormTestProject.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("premium")]
+    [Table("model.premium")]
     public partial class premium
     {
         public premium()
@@ -24,8 +24,10 @@ namespace StormTestProject.EF
 
         public decimal amount { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual ICollection<comment> comment { get; set; }

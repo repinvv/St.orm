@@ -17,5 +17,7 @@
         public bool IsIdentity { get; set; }
 
         public bool IsComputed { get; set; }
+
+        public string Default { get; set; }
     }
 }

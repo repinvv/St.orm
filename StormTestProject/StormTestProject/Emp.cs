@@ -13,7 +13,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.emp")]
+    [Table("emp")]
     public partial class Emp
     {
         [Key]

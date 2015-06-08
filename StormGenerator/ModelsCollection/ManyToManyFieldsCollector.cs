@@ -18,9 +18,9 @@
             this.modeChecker = modeChecker;
         }
 
-        public HashSet<Model> CollectManyToManyLinks(Dictionary<Model, List<Relation>> relations, RelationsMode relationsMode)
+        public void CollectManyToManyLinks(Dictionary<Model, List<Relation>> relations, RelationsMode relationsMode)
         {
-            var mtmModels = new List<Tuple<Model, Relation, Relation>>();
+            var mtmLinks = new List<Tuple<Relation, Relation>>();
             var groupedRelations = relations.SelectMany(x => x.Value)
                                             .GroupBy(x => x.Id)
                                             .Where(x => x.Count() == 1)
@@ -39,25 +39,23 @@
                 if (keys.Count == 2 && keys.All(x => x.DbField.Associations.Any()) && 
                     restOfFields.Count <= 2 && restOfFields.All(x => x.Type == typeof(DateTime)) && first.RootModel != last.RootModel)
                 {
-                    mtmModels.Add(new Tuple<Model, Relation, Relation>(mtmModel, first, last));
+                    mtmLinks.Add(new Tuple<Relation, Relation>(first, last));
+                    mtmModel.IsManyToManyLink = true;
                 }
             }
 
-            var output = new HashSet<Model>(mtmModels.Select(x => x.Item1));
-            foreach (var mtmModel in mtmModels)
+            foreach (var mtmModel in mtmLinks)
             {
-                if (modeChecker.IsOtmRelationNeeded(relations[mtmModel.Item2.RootModel], output, relationsMode))
+                if (modeChecker.IsOtmRelationNeeded(relations[mtmModel.Item1.RootModel], relationsMode))
                 {
-                    fieldFactory.CreateManyToManyField(mtmModel.Item2, mtmModel.Item3);
+                    fieldFactory.CreateManyToManyField(mtmModel.Item1, mtmModel.Item2);
                 }
 
-                if (modeChecker.IsOtmRelationNeeded(relations[mtmModel.Item3.RootModel], output, relationsMode))
+                if (modeChecker.IsOtmRelationNeeded(relations[mtmModel.Item2.RootModel], relationsMode))
                 {
-                    fieldFactory.CreateManyToManyField(mtmModel.Item3, mtmModel.Item2);
+                    fieldFactory.CreateManyToManyField(mtmModel.Item2, mtmModel.Item1);
                 }
             }
-
-            return output;
         }
     }
 }

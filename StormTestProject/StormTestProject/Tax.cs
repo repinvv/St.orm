@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.tax")]
+    [Table("model.tax")]
     public partial class Tax
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("tax_id", Order = 1)]
         public int TaxId { get;set; }
 

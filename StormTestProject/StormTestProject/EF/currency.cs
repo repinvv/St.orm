@@ -25,8 +25,10 @@ namespace StormTestProject.EF
         [StringLength(10)]
         public string currency_code { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual ICollection<policy> policy { get; set; }

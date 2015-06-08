@@ -14,7 +14,7 @@
         private readonly InitializersGenerator initializersGenerator;
 
         public ContextGenerator(IStringGenerator stringGenerator,
-            UsingsGenerator usingsGenerator, 
+            UsingsGenerator usingsGenerator,
             NameCreator nameCreator,
             InitializersGenerator initializersGenerator)
         {
@@ -52,7 +52,7 @@
         {
             stringGenerator.AppendLine("public " + contextName + "() : base(\"name=" + contextName + "\") { }");
             stringGenerator.AppendLine();
-            foreach (var model in models)
+            foreach (var model in models.Where(x => !x.IsManyToManyLink))
             {
                 stringGenerator.AppendLine("public virtual DbSet<" + model.Name + "> " + nameCreator.CreatePluralName(model.Name) + " { get; set; }");
                 stringGenerator.AppendLine();
@@ -65,7 +65,9 @@
 
         private void GenerateInitializerCalls(List<Model> models)
         {
-            foreach (var model in models.Where(x => x.RelationFields.Any()))
+            foreach (var model in models
+                .Where(x => !x.IsManyToManyLink)
+                .Where(x => x.RelationFields.Any()))
             {
                 stringGenerator.AppendLine("Initialize" + model.Name + "Relations(modelBuilder);");
             }

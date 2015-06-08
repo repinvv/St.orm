@@ -7,7 +7,7 @@
     {
         public string GetUsing(MappingField arg)
         {
-            return arg.IsCustomType ? arg.CustomTypeNamespace : arg.Type.Namespace;
+            return arg.Type == null ? arg.CustomTypeNamespace : arg.Type.Namespace;
         }
 
         public string GetRelationFieldType(RelationField field)

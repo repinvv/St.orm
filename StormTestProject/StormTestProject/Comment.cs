@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.comment")]
+    [Table("model.comment")]
     public partial class Comment
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("comment_id", Order = 1)]
         public int CommentId { get;set; }
 

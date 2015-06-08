@@ -11,7 +11,7 @@ namespace StormTestProject.EF
     {
         public department()
         {
-            coverage_department = new HashSet<coverage_department>();
+            coverage = new HashSet<coverage>();
         }
 
         [Key]
@@ -21,10 +21,12 @@ namespace StormTestProject.EF
         [StringLength(256)]
         public string name { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
-        public virtual ICollection<coverage_department> coverage_department { get; set; }
+        public virtual ICollection<coverage> coverage { get; set; }
     }
 }

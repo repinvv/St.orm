@@ -13,7 +13,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.country")]
+    [Table("country")]
     public partial class Country
     {
         [Key]

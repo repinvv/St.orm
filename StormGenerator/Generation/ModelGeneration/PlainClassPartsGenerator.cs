@@ -2,20 +2,23 @@
 {
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Generation.CommonGeneration;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
-    internal class ClassPartsGenerator : IModelPartsGenerator
+    internal class PlainClassPartsGenerator : IModelPartsGenerator
     {
+        private readonly TypeNameService nameService;
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
-        private readonly StructPartsGenerator structPartsGenerator;
 
-        public ClassPartsGenerator(UsingsGenerator usingsGenerator, FieldUtility fieldUtility, StructPartsGenerator structPartsGenerator)
+        public PlainClassPartsGenerator(TypeNameService nameService,
+            UsingsGenerator usingsGenerator,
+            FieldUtility fieldUtility)
         {
+            this.nameService = nameService;
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
-            this.structPartsGenerator = structPartsGenerator;
         }
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
@@ -27,36 +30,12 @@
 
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("[Table(\"" + model.DbModel.Id + "\")]");
             stringGenerator.AppendLine("public partial class " + model.Name);
         }
 
-        public void GenerateMappingProperty(MappingField field, IStringGenerator stringGenerator)
+        public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)
         {
-            if (field.DbField.IsPrimaryKey)
-            {
-                stringGenerator.AppendLine("[Key]");
-                if (field.DbField.IsIdentity)
-                {
-                    stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
-                }
-            }
-
-            if (field.Type == typeof(string))
-            {
-                if (!field.DbField.IsNullable)
-                {
-                    stringGenerator.AppendLine("[Required]");
-                }
-
-                if (field.DbField.StringLength > 0)
-                {
-                    stringGenerator.AppendLine("[MaxLength(" + field.DbField.StringLength + ")]");
-                }
-            }
-
-            stringGenerator.AppendLine("[Column(\"" + field.DbField.Name + "\", Order = " + field.DbField.Index + ")]");
-            structPartsGenerator.GenerateMappingProperty(field, stringGenerator);
+            stringGenerator.AppendLine("public " + nameService.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
         }
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)

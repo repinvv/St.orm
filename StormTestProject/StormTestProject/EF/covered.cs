@@ -6,7 +6,7 @@ namespace StormTestProject.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("covered")]
+    [Table("model.covered")]
     public partial class covered
     {
         [Key]
@@ -19,8 +19,10 @@ namespace StormTestProject.EF
 
         public int headcount { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual coverage coverage { get; set; }

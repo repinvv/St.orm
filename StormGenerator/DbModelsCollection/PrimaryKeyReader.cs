@@ -39,8 +39,7 @@
             {
                 var name = r["TABLE_NAME"] as string;
                 var schema = r["TABLE_SCHEMA"] as string;
-                var db = r["TABLE_CATALOG"] as string;
-                var model = modelDict[tableIdCreator.CreateTableId(db, schema, name)];
+                var model = modelDict[tableIdCreator.CreateTableId(schema, name)];
                 var columnName = r["COLUMN_NAME"] as string;
                 model.Fields.First(x => x.Name == columnName).IsPrimaryKey = true;
             };

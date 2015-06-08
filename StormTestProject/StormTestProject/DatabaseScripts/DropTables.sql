@@ -4,21 +4,23 @@ drop table stats.calculation
 drop schema stats
 
 -- complex example
-drop table comment
-drop table covered
-drop table premium
+drop table model.comment
+drop table model.covered
+drop table model.premium
 drop table coverage_eligibility_group
-drop table coverage_department
-drop table tax
-drop table coverage
-drop table policy
+drop table model.coverage_department
+drop table model.tax
+drop table model.coverage
+drop table model.policy
 
-drop sequence comment_seq
-drop sequence covered_seq
-drop sequence premium_seq
-drop sequence tax_seq
-drop sequence coverage_seq
-drop sequence policy_seq
+drop sequence model.comment_seq
+drop sequence model.covered_seq
+drop sequence model.premium_seq
+drop sequence model.tax_seq
+drop sequence model.coverage_seq
+drop sequence model.policy_seq
+
+drop schema model
 
 drop table eligibility_group
 drop table department

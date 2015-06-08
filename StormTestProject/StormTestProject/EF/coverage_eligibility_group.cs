@@ -18,8 +18,10 @@ namespace StormTestProject.EF
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int eligibility_group_id { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual coverage coverage { get; set; }

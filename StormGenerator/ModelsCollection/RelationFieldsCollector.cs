@@ -32,18 +32,18 @@
             }
 
             var relations = relationsCollector.CollectRelations(models);
-            var mtmModels = manyToManyFieldsCollector.CollectManyToManyLinks(relations, relationsMode);
+            manyToManyFieldsCollector.CollectManyToManyLinks(relations, relationsMode);
 
-            foreach (var relation in relations.Where(x => !mtmModels.Contains(x.Key)))
+            foreach (var relation in relations.Where(x => !x.Key.IsManyToManyLink))
             {
-                var groups = relation.Value.GroupBy(x => x.Id).Where(x => !mtmModels.Contains(x.First().Model)).ToList();
+                var groups = relation.Value.GroupBy(x => x.Id).Where(x => !x.First().Model.IsManyToManyLink).ToList();
                 
-                if (modeChecker.IsOtmRelationNeeded(relation.Value, mtmModels, relationsMode))
+                if (modeChecker.IsOtmRelationNeeded(relation.Value, relationsMode))
                 {
                     relation.Key.RelationFields.AddRange(groups.Select(x => fieldFactory.CreateOneToManyField(x.ToList())));
                 }
 
-                if (modeChecker.IsMtoRelationNeeded(relation.Value, mtmModels, relationsMode))
+                if (modeChecker.IsMtoRelationNeeded(relation.Value, relationsMode))
                 {
                     foreach (var group in groups)
                     {

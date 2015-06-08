@@ -13,7 +13,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.stats.calculation_details")]
+    [Table("stats.calculation_details")]
     public partial class CalculationDetails
     {
         [Key]

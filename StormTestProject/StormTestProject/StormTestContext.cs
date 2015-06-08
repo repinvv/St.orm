@@ -15,12 +15,6 @@ namespace StormTestProject
     {
         public StormTestContext() : base("name=StormTestContext") { }
 
-        public virtual DbSet<Calculation> Calculations { get; set; }
-
-        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
-
-        public virtual DbSet<Department> Departments { get; set; }
-
         public virtual DbSet<EligibilityGroup> EligibilityGroups { get; set; }
 
         public virtual DbSet<Currency> Currencies { get; set; }
@@ -33,10 +27,6 @@ namespace StormTestProject
 
         public virtual DbSet<Coverage> Coverages { get; set; }
 
-        public virtual DbSet<CoverageDepartment> CoverageDepartments { get; set; }
-
-        public virtual DbSet<CoverageEligibilityGroup> CoverageEligibilityGroups { get; set; }
-
         public virtual DbSet<Premium> Premiums { get; set; }
 
         public virtual DbSet<Covered> Covereds { get; set; }
@@ -47,32 +37,28 @@ namespace StormTestProject
 
         public virtual DbSet<EmpToDependent> EmpToDependents { get; set; }
 
+        public virtual DbSet<Calculation> Calculations { get; set; }
+
+        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
+
+        public virtual DbSet<Department> Departments { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            InitializeCalculationRelations(modelBuilder);
             InitializeCurrencyRelations(modelBuilder);
             InitializeCountryRelations(modelBuilder);
             InitializePolicyRelations(modelBuilder);
             InitializeCoverageRelations(modelBuilder);
-            InitializeCoverageDepartmentRelations(modelBuilder);
-            InitializeCoverageEligibilityGroupRelations(modelBuilder);
             InitializePremiumRelations(modelBuilder);
             InitializeEmpRelations(modelBuilder);
-        }
-
-        protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Calculation>()
-                .HasMany(x => x.CalculationDetailses)
-                .WithRequired()
-                .HasForeignKey(x => x.CalculationId);
+            InitializeCalculationRelations(modelBuilder);
         }
 
         protected virtual void InitializeCurrencyRelations(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Currency>()
                 .HasMany(x => x.Policies)
-                .WithRequired()
+                .WithOptional()
                 .HasForeignKey(x => x.CurrencyId);
         }
 
@@ -103,17 +89,17 @@ namespace StormTestProject
         protected virtual void InitializeCoverageRelations(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Coverage>()
-                .HasMany(x => x.Departments)
-                .WithMany()
-                .Map(m => m.ToTable("StormTest.dbo.coverage_department")
-                    .MapLeftKey("coverage_id")
-                    .MapRightKey("department_id"));
-            modelBuilder.Entity<Coverage>()
                 .HasMany(x => x.EligibilityGroups)
                 .WithMany()
-                .Map(m => m.ToTable("StormTest.dbo.coverage_eligibility_group")
+                .Map(m => m.ToTable("coverage_eligibility_group", "dbo")
                     .MapLeftKey("coverage_id")
                     .MapRightKey("eligibility_group_id"));
+            modelBuilder.Entity<Coverage>()
+                .HasMany(x => x.Departments)
+                .WithMany()
+                .Map(m => m.ToTable("coverage_department", "model")
+                    .MapLeftKey("coverage_id")
+                    .MapRightKey("department_id"));
             modelBuilder.Entity<Coverage>()
                 .HasMany(x => x.Premiums)
                 .WithRequired()
@@ -145,11 +131,19 @@ namespace StormTestProject
             modelBuilder.Entity<Emp>()
                 .HasMany(x => x.EmpToDependents)
                 .WithRequired()
-                .HasForeignKey(x => new { f1 = x.Ssn, f2 = x.Client });
+                .HasForeignKey(x => new { x.Ssn, x.Client });
             modelBuilder.Entity<Emp>()
                 .HasMany(x => x.EmpToDependents2)
                 .WithRequired()
-                .HasForeignKey(x => new { f1 = x.DepSsn, f2 = x.DepClient });
+                .HasForeignKey(x => new { x.DepSsn, x.DepClient });
+        }
+
+        protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Calculation>()
+                .HasMany(x => x.CalculationDetailses)
+                .WithRequired()
+                .HasForeignKey(x => x.CalculationId);
         }
     }
 }

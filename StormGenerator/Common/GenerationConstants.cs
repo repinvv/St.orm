@@ -25,9 +25,13 @@
         {
             public static readonly string[] MappedClassUsings =
             {
-                "System.ComponentModel.DataAnnotations",
-                "System.ComponentModel.DataAnnotations.Schema",
                 "System.Collections.Generic"
+            };
+
+            public static readonly string[] EfAttributesUsings =
+            {
+                "System.ComponentModel.DataAnnotations",
+                "System.ComponentModel.DataAnnotations.Schema"
             };
 
             public static readonly string[] ContextUsings =

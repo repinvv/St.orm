@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.coverage")]
+    [Table("model.coverage")]
     public partial class Coverage
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
@@ -33,9 +34,9 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual List<Department> Departments { get { return property0; } set { property0 = value; } }
+        public virtual List<EligibilityGroup> EligibilityGroups { get { return property0; } set { property0 = value; } }
 
-        public virtual List<EligibilityGroup> EligibilityGroups { get { return property1; } set { property1 = value; } }
+        public virtual List<Department> Departments { get { return property1; } set { property1 = value; } }
 
         public virtual List<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
@@ -44,8 +45,8 @@ namespace StormTestProject
         #region Private fields
 
         private Coverage clonedFrom;
-        private Department field0;
-        private EligibilityGroup field1;
+        private EligibilityGroup field0;
+        private Department field1;
         private Premium field2;
         private Covered field3;
 
@@ -64,9 +65,9 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<Department> property0 { get;set; }
+        private List<EligibilityGroup> property0 { get;set; }
 
-        private List<EligibilityGroup> property1 { get;set; }
+        private List<Department> property1 { get;set; }
 
         private List<Premium> property2 { get;set; }
 

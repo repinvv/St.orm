@@ -14,6 +14,8 @@
 
         public bool IsIdentity { get; set; }
 
+        public string Sequence { get; set; }
+
         public int StringLength { get; set; }
 
         public int Index { get; set; }

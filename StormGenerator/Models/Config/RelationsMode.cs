@@ -2,8 +2,8 @@
 {
     public enum RelationsMode
     {
-        ConfigOnly = 0,
-        Automatic,
+        ConfigOnly = 1,
+        Automatic = 0,
         All
     }
 }

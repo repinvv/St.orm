@@ -27,16 +27,16 @@
             {
                 var name = r["TABLE_NAME"] as string;
                 var schema = r["TABLE_SCHEMA"] as string;
-                var db = r["TABLE_CATALOG"] as string;
                 return new DbColumn
                        {
-                           TableId = tableIdCreator.CreateTableId(db, schema, name),
+                           TableId = tableIdCreator.CreateTableId(schema, name),
                            Name = r["COLUMN_NAME"] as string,
                            Type = r["DATA_TYPE"] as string,
                            Index = (int)r["ORDINAL_POSITION"],
                            IsNullable = r["IS_NULLABLE"] as string == "YES",
                            StringLength = r["CHARACTER_MAXIMUM_LENGTH"] as int? ?? 0,
                            IsIdentity = (int)r["IsIdentity"] == 1,
+                           Default = r["COLUMN_DEFAULT"] as string,
                            IsComputed = (int)r["IsComputed"] == 1,
                        };
             };

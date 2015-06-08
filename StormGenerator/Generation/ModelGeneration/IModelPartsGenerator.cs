@@ -9,7 +9,7 @@
 
         void GenerateDefinition(Model model, IStringGenerator stringGenerator);
 
-        void GenerateMappingProperty(MappingField field, IStringGenerator stringGenerator);
+        void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator);
 
         void GeneratePrivateFields(Model model, IStringGenerator stringGenerator);
 

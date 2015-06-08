@@ -5,10 +5,10 @@
 
     public interface IStormContext
     {
-        IQueryable<T> Set<T>() where T : class;
+        ////IQueryable<T> Set<T>() where T : class;
 
-        DbConnection Connection { get; }
+        ////DbConnection Connection { get; }
 
-        DbTransaction Transaction { get; }
+        ////DbTransaction Transaction { get; }
     }
 }

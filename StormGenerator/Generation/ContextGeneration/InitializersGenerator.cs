@@ -39,14 +39,14 @@
                 stringGenerator.AppendLine("modelBuilder.Entity<" + model.Name + ">()");
                 stringGenerator.PushIndent();
                 relationIds.Add(field.AssociationId);
-                GenerateManyToManyInit(model, field as ManyToManyField, stringGenerator);
-                GenerateOneToManyInit(model, field as OneToManyField, stringGenerator);
-                GenerateManyToOneInit(model, field as ManyToOneField, stringGenerator);
+                GenerateManyToManyInit(field as ManyToManyField, stringGenerator);
+                GenerateOneToManyInit(field as OneToManyField, stringGenerator);
+                GenerateManyToOneInit(field as ManyToOneField, stringGenerator);
                 stringGenerator.PopIndent();
             }
         }
 
-        private void GenerateManyToOneInit(Model model, ManyToOneField field, IStringGenerator stringGenerator)
+        private void GenerateManyToOneInit(ManyToOneField field, IStringGenerator stringGenerator)
         {
             if (field == null)
             {
@@ -59,11 +59,11 @@
             var reverseField = field.FieldModel.RelationFields.FirstOrDefault(x => x.AssociationId == field.AssociationId);
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".WithMany(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.NearEndFields.Select(x => x.Name).ToArray(), "x");
+            var objectString = objectStringService.CreateObjectString(field.NearEndFields.Select(x => x.Name).ToArray(), "x", false);
             stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
         }
 
-        private void GenerateOneToManyInit(Model model, OneToManyField field, IStringGenerator stringGenerator)
+        private void GenerateOneToManyInit(OneToManyField field, IStringGenerator stringGenerator)
         {
             if (field == null)
             {
@@ -75,11 +75,11 @@
             var required = field.FarEndFields.Any(x => x.DbField.IsNullable) ? "Optional" : "Required";
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".With" + required + "(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.FarEndFields.Select(x => x.Name).ToArray(), "x");
+            var objectString = objectStringService.CreateObjectString(field.FarEndFields.Select(x => x.Name).ToArray(), "x", false);
             stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
         }
 
-        private void GenerateManyToManyInit(Model model, ManyToManyField field, IStringGenerator stringGenerator)
+        private void GenerateManyToManyInit(ManyToManyField field, IStringGenerator stringGenerator)
         {
             if (field == null)
             {
@@ -92,7 +92,8 @@
                 .FirstOrDefault(x => x.MediatorMtoField.AssociationId == field.AssociationId);
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".WithMany(" + reverse + ")");
-            stringGenerator.AppendLine(".Map(m => m.ToTable(\"" + field.MediatorModel.DbModel.Id + "\")");
+            stringGenerator.AppendLine(".Map(m => m.ToTable(\"" + field.MediatorModel.DbModel.Name + "\", \"" +
+                                       field.MediatorModel.DbModel.Schema + "\")");
             stringGenerator.PushIndent();
             var leftKeys = field.FarEndFields.Select(x => "\"" + x.DbField.Name + "\"");
             stringGenerator.AppendLine(".MapLeftKey(" + string.Join(", ", leftKeys) + ")");

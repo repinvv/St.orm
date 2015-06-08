@@ -13,10 +13,11 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("StormTest.dbo.policy")]
+    [Table("model.policy")]
     public partial class Policy
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("policy_id", Order = 1)]
         public int PolicyId { get;set; }
 
@@ -24,7 +25,7 @@ namespace StormTestProject
         public int CountryId { get;set; }
 
         [Column("currency_id", Order = 3)]
-        public int CurrencyId { get;set; }
+        public int? CurrencyId { get;set; }
 
         [Required]
         [MaxLength(256)]

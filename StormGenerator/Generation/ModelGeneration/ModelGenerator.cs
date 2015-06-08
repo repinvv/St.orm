@@ -97,7 +97,7 @@
             {
                 var field = model.MappingFields[index];
                 field.Name = names[index];
-                partGenerator.GenerateMappingProperty(field, stringGenerator);
+                partGenerator.GenerateMappingProperty(model, field, stringGenerator);
                 stringGenerator.AppendLine();
             }
 

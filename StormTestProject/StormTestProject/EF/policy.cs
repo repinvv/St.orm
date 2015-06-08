@@ -6,7 +6,7 @@ namespace StormTestProject.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("policy")]
+    [Table("model.policy")]
     public partial class policy
     {
         public policy()
@@ -22,23 +22,25 @@ namespace StormTestProject.EF
 
         public int country_id { get; set; }
 
-        public int currency_id { get; set; }
+        public int? currency_id { get; set; }
 
         [Required]
         [StringLength(256)]
         public string name { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
-
-        public virtual ICollection<comment> comment { get; set; }
 
         public virtual country country { get; set; }
 
-        public virtual ICollection<coverage> coverage { get; set; }
-
         public virtual currency currency { get; set; }
+
+        public virtual ICollection<comment> comment { get; set; }
+
+        public virtual ICollection<coverage> coverage { get; set; }
 
         public virtual ICollection<tax> tax { get; set; }
     }

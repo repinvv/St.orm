@@ -7,20 +7,20 @@ namespace StormTestProject.EF
 
     public partial class Model1 : DbContext
     {
-        public Model1() : base("name=Model1")
+        public Model1()
+            : base("name=Model1")
         {
         }
 
-        public virtual DbSet<comment> comment { get; set; }
         public virtual DbSet<country> country { get; set; }
-        public virtual DbSet<coverage> coverage { get; set; }
-        public virtual DbSet<coverage_department> coverage_department { get; set; }
         public virtual DbSet<coverage_eligibility_group> coverage_eligibility_group { get; set; }
-        public virtual DbSet<covered> covered { get; set; }
         public virtual DbSet<currency> currency { get; set; }
         public virtual DbSet<department> department { get; set; }
         public virtual DbSet<eligibility_group> eligibility_group { get; set; }
         public virtual DbSet<emp> emp { get; set; }
+        public virtual DbSet<comment> comment { get; set; }
+        public virtual DbSet<coverage> coverage { get; set; }
+        public virtual DbSet<covered> covered { get; set; }
         public virtual DbSet<policy> policy { get; set; }
         public virtual DbSet<premium> premium { get; set; }
         public virtual DbSet<tax> tax { get; set; }
@@ -29,20 +29,24 @@ namespace StormTestProject.EF
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<policy>()
-                .HasRequired(e => e.country)
-                .WithMany()
-                .HasForeignKey(p => new {p.country_id, p.currency_id});
-
-
             modelBuilder.Entity<country>()
                 .HasMany(e => e.policy)
-                .WithRequired()
-
-            modelBuilder.Entity<coverage>()
-                .HasMany(e => e.coverage_department)
-                .WithRequired(e => e.coverage)
+                .WithRequired(e => e.country)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<eligibility_group>()
+                .HasMany(e => e.coverage_eligibility_group)
+                .WithRequired(e => e.eligibility_group)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<emp>()
+                .Property(e => e.ssn)
+                .IsFixedLength();
+
+            modelBuilder.Entity<emp>()
+                .HasMany(e => e.emp1)
+                .WithMany(e => e.emp2)
+                .Map(m => m.ToTable("emp_to_dependent").MapLeftKey(new[] { "ssn", "client" }).MapRightKey(new[] { "dep_ssn", "dep_client" }));
 
             modelBuilder.Entity<coverage>()
                 .HasMany(e => e.coverage_eligibility_group)
@@ -59,29 +63,10 @@ namespace StormTestProject.EF
                 .WithRequired(e => e.coverage)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<currency>()
-                .HasMany(e => e.policy)
-                .WithRequired(e => e.currency)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<department>()
-                .HasMany(e => e.coverage_department)
-                .WithRequired(e => e.department)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<eligibility_group>()
-                .HasMany(e => e.coverage_eligibility_group)
-                .WithRequired(e => e.eligibility_group)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<emp>()
-                .Property(e => e.ssn)
-                .IsFixedLength();
-
-            modelBuilder.Entity<emp>()
-                .HasMany(e => e.emp1)
-                .WithMany(e => e.emp2)
-                .Map(m => m.ToTable("emp_to_dependent").MapLeftKey(new[] { "ssn", "client" }).MapRightKey(new[] { "dep_ssn", "dep_client" }));
+            modelBuilder.Entity<coverage>()
+                .HasMany(e => e.department)
+                .WithMany(e => e.coverage)
+                .Map(m => m.ToTable("coverage_department", "model").MapLeftKey("coverage_id").MapRightKey("department_id"));
 
             modelBuilder.Entity<policy>()
                 .HasMany(e => e.coverage)

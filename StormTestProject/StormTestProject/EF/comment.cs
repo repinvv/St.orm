@@ -6,7 +6,7 @@ namespace StormTestProject.EF
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("comment")]
+    [Table("model.comment")]
     public partial class comment
     {
         [Key]
@@ -24,8 +24,10 @@ namespace StormTestProject.EF
 
         public int author_user_id { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime created { get; set; }
 
+        [Column(TypeName = "datetime2")]
         public DateTime updated { get; set; }
 
         public virtual policy policy { get; set; }
