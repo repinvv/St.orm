@@ -19,7 +19,9 @@
 
         public void GenerateInitializers(List<Model> models, IStringGenerator stringGenerator)
         {
-            foreach (var model in models.Where(x => x.RelationFields.Any()))
+            foreach (var model in models
+                .Where(x => !x.IsManyToManyLink)
+                .Where(x => x.RelationFields.Any()))
             {
                 stringGenerator.AppendLine();
                 stringGenerator.AppendLine("protected virtual void Initialize" + model.Name + "Relations(DbModelBuilder modelBuilder)");

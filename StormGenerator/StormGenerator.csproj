@@ -55,6 +55,7 @@
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\CommonGeneration\ObjectStringService.cs" />
+    <Compile Include="Generation\ContextGeneration\ContextExtensionGenerator.cs" />
     <Compile Include="Generation\ContextGeneration\ContextGenerator.cs" />
     <Compile Include="Generation\ContextGeneration\InitializersGenerator.cs" />
     <Compile Include="Generation\Generator.cs" />

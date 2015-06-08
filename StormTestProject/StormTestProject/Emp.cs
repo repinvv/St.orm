@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("emp")]
     public partial class Emp
@@ -28,9 +30,9 @@ namespace StormTestProject
         [Column("client", Order = 2)]
         public string Client { get;set; }
 
-        public virtual List<EmpToDependent> EmpToDependents { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<EmpToDependent> EmpToDependents { get { return property0; } set { property0 = value; } }
 
-        public virtual List<EmpToDependent> EmpToDependents2 { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<EmpToDependent> EmpToDependents2 { get { return property1; } set { property1 = value; } }
 
         #region Private fields
 
@@ -53,9 +55,9 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<EmpToDependent> property0 { get;set; }
+        private ICollection<EmpToDependent> property0 { get;set; }
 
-        private List<EmpToDependent> property1 { get;set; }
+        private ICollection<EmpToDependent> property1 { get;set; }
 
         #endregion
     }

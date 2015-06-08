@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("model.policy")]
     public partial class Policy
@@ -38,11 +40,11 @@ namespace StormTestProject
         [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
-        public virtual List<Tax> Taxes { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<Tax> Taxes { get { return property0; } set { property0 = value; } }
 
-        public virtual List<Coverage> Coverages { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Coverage> Coverages { get { return property1; } set { property1 = value; } }
 
-        public virtual List<Comment> Comments { get { return property2; } set { property2 = value; } }
+        public virtual ICollection<Comment> Comments { get { return property2; } set { property2 = value; } }
 
         #region Private fields
 
@@ -66,11 +68,11 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<Tax> property0 { get;set; }
+        private ICollection<Tax> property0 { get;set; }
 
-        private List<Coverage> property1 { get;set; }
+        private ICollection<Coverage> property1 { get;set; }
 
-        private List<Comment> property2 { get;set; }
+        private ICollection<Comment> property2 { get;set; }
 
         #endregion
     }

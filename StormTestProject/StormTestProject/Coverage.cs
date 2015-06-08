@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("model.coverage")]
     public partial class Coverage
@@ -34,13 +36,13 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual List<EligibilityGroup> EligibilityGroups { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property0; } set { property0 = value; } }
 
-        public virtual List<Department> Departments { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Department> Departments { get { return property1; } set { property1 = value; } }
 
-        public virtual List<Premium> Premiums { get { return property2; } set { property2 = value; } }
+        public virtual ICollection<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
-        public virtual List<Covered> Covereds { get { return property3; } set { property3 = value; } }
+        public virtual ICollection<Covered> Covereds { get { return property3; } set { property3 = value; } }
 
         #region Private fields
 
@@ -65,13 +67,13 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<EligibilityGroup> property0 { get;set; }
+        private ICollection<EligibilityGroup> property0 { get;set; }
 
-        private List<Department> property1 { get;set; }
+        private ICollection<Department> property1 { get;set; }
 
-        private List<Premium> property2 { get;set; }
+        private ICollection<Premium> property2 { get;set; }
 
-        private List<Covered> property3 { get;set; }
+        private ICollection<Covered> property3 { get;set; }
 
         #endregion
     }

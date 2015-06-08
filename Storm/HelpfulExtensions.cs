@@ -7,8 +7,8 @@
     public static class HelpfulExtensions
     {
         /// <summary>
-        /// This method exists because of weak syntax of "out".
-        /// It forces you to write pretty simple operation in 2 lines of code 
+        /// This method exists because of bogus syntax of "out".
+        /// It forces you to write bulky code for simple operation
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -40,9 +40,9 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static List<T> AsList<T>(this IEnumerable<T> input)
+        public static IList<T> AsList<T>(this IEnumerable<T> input)
         {
-            return input as List<T> ?? input.ToList();
+            return input as IList<T> ?? input.ToList();
         }
     }
 }

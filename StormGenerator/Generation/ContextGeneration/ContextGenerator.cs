@@ -44,7 +44,7 @@
         {
             usingsGenerator.GenerateUsings(stringGenerator, GenerationConstants.ModelGeneration.ContextUsings);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public partial class " + contextName + " : DbContext, IStormContext");
+            stringGenerator.AppendLine("public partial class " + contextName + " : DbContext");
             stringGenerator.Braces(() => GenerateClassContents(models, contextName));
         }
 

@@ -10,6 +10,8 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using St.Orm;
 
     public partial class CoverageEligibilityGroup
     {

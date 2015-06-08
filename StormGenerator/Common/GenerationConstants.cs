@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.Common
 {
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal static class GenerationConstants
@@ -25,7 +26,9 @@
         {
             public static readonly string[] MappedClassUsings =
             {
-                "System.Collections.Generic"
+                "System.Collections.Generic",
+                "System.Linq",
+                typeof(HelpfulExtensions).Namespace
             };
 
             public static readonly string[] EfAttributesUsings =

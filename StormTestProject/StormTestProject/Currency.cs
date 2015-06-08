@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("currency")]
     public partial class Currency
@@ -37,7 +39,7 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual List<Policy> Policies { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<Policy> Policies { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
@@ -59,7 +61,7 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<Policy> property0 { get;set; }
+        private ICollection<Policy> property0 { get;set; }
 
         #endregion
     }

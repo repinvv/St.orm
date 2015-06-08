@@ -11,7 +11,7 @@ namespace StormTestProject
     using System.Data.Entity;
     using St.Orm.Interfaces;
 
-    public partial class StormTestContext : DbContext, IStormContext
+    public partial class StormTestContext : DbContext
     {
         public StormTestContext() : base("name=StormTestContext") { }
 
@@ -108,14 +108,6 @@ namespace StormTestProject
                 .HasMany(x => x.Covereds)
                 .WithRequired()
                 .HasForeignKey(x => x.CoverageId);
-        }
-
-        protected virtual void InitializeCoverageDepartmentRelations(DbModelBuilder modelBuilder)
-        {
-        }
-
-        protected virtual void InitializeCoverageEligibilityGroupRelations(DbModelBuilder modelBuilder)
-        {
         }
 
         protected virtual void InitializePremiumRelations(DbModelBuilder modelBuilder)

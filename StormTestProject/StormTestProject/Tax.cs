@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("model.tax")]
     public partial class Tax

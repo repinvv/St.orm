@@ -106,8 +106,9 @@
             {
                 var field = model.RelationFields[index];
                 field.Name = names[index];
-                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name 
-                    + " { get { return property" + index + "; } set { property" + index + " = value; } }");
+                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name
+                                           + " { get { return property" + index + "; } set { property" + index 
+                                           + " = value; } }");
                 stringGenerator.AppendLine();
             }
 

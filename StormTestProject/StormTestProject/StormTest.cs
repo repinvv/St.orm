@@ -9,7 +9,6 @@ namespace StormTestProject
         [TestMethod]
         public void test()
         {
-
             var context = new StormTestContext();
             using (var trans = context.Database.BeginTransaction())
             {

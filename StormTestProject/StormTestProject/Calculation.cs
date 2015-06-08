@@ -12,6 +12,8 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using St.Orm;
 
     [Table("stats.calculation")]
     public partial class Calculation
@@ -27,7 +29,7 @@ namespace StormTestProject
         [Column("due_date", Order = 3)]
         public DateTime? DueDate { get;set; }
 
-        public virtual List<CalculationDetails> CalculationDetailses { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<CalculationDetails> CalculationDetailses { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
@@ -49,7 +51,7 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private List<CalculationDetails> property0 { get;set; }
+        private ICollection<CalculationDetails> property0 { get;set; }
 
         #endregion
     }
