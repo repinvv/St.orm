@@ -24,6 +24,8 @@
 
         public static class ModelGeneration
         {
+            public const string RepositorySuffix = "DalRepository";
+
             public static readonly string[] MappedClassUsings =
             {
                 "System.Collections.Generic",

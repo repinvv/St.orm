@@ -40,18 +40,18 @@ namespace StormTestProject
         [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Tax> Taxes { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<Comment> Comments { get { return property0; } set { property0 = value; } }
 
-        public virtual ICollection<Coverage> Coverages { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Tax> Taxes { get { return property1; } set { property1 = value; } }
 
-        public virtual ICollection<Comment> Comments { get { return property2; } set { property2 = value; } }
+        public virtual ICollection<Coverage> Coverages { get { return property2; } set { property2 = value; } }
 
         #region Private fields
 
         private Policy clonedFrom;
-        private Tax field0;
-        private Coverage field1;
-        private Comment field2;
+        private Comment field0;
+        private Tax field1;
+        private Coverage field2;
 
         #endregion
 
@@ -68,11 +68,11 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private ICollection<Tax> property0 { get;set; }
+        private ICollection<Comment> property0 { get;set; }
 
-        private ICollection<Coverage> property1 { get;set; }
+        private ICollection<Tax> property1 { get;set; }
 
-        private ICollection<Comment> property2 { get;set; }
+        private ICollection<Coverage> property2 { get;set; }
 
         #endregion
     }

@@ -7,8 +7,9 @@
     using System.Web.Script.Serialization;
     using StormGenerator.Common;
     using StormGenerator.DbModelsCollection;
-    using StormGenerator.Generation.ContextGeneration;
     using StormGenerator.Generation.ModelGeneration;
+    using StormGenerator.Generation.RepositoryGeneration;
+    using StormGenerator.Generation.StaticFilesGeneration;
     using StormGenerator.Models.Config;
     using StormGenerator.ModelsCollection;
 
@@ -17,20 +18,23 @@
         private readonly DbModelsCollector dbmodelsCollector;
         private readonly ModelsCollector modelsCollector;
         private readonly ModelGenerator modelGenerator;
-        private readonly ContextGenerator contextGenerator;
+        private readonly StaticFilesGenerator staticFilesGenerator;
         private readonly NameNormalizer nameNormalizer;
+        private readonly RepositoryGenerator repositoryGenerator;
 
         public Generator(DbModelsCollector dbmodelsCollector,
             ModelsCollector modelsCollector, 
             ModelGenerator modelGenerator,
-            ContextGenerator contextGenerator,
-            NameNormalizer nameNormalizer)
+            StaticFilesGenerator staticFilesGenerator,
+            NameNormalizer nameNormalizer,
+            RepositoryGenerator repositoryGenerator)
         {
             this.dbmodelsCollector = dbmodelsCollector;
             this.modelsCollector = modelsCollector;
             this.modelGenerator = modelGenerator;
-            this.contextGenerator = contextGenerator;
+            this.staticFilesGenerator = staticFilesGenerator;
             this.nameNormalizer = nameNormalizer;
+            this.repositoryGenerator = repositoryGenerator;
         }
 
         public List<GeneratedFile> Generate(Options options)
@@ -53,11 +57,9 @@
 
             var output = new List<GeneratedFile>();
 
-            output.AddRange(models.Select(x => modelGenerator.GenerateModel(x, options.OutputNamespace)));
-            output.Add(contextGenerator.GenerateContext(models, options.ContextName, options.OutputNamespace));
-
-            output.ForEach(x => x.Name = x.Name + ".cs");
-            output.ForEach(x => x.Content = GenerationConstants.GenerationMark + Environment.NewLine + x.Content);
+            output.AddRange(models.Select(x => modelGenerator.GenerateModel(x, options)));
+            output.AddRange(models.Select(x => repositoryGenerator.GenerateRepository(x, options)));
+            output.AddRange(staticFilesGenerator.GenerateStaticFiles(models, options));
             return output;
         }
     }

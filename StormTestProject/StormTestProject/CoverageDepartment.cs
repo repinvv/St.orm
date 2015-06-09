@@ -19,6 +19,10 @@ namespace StormTestProject
 
         public int DepartmentId { get;set; }
 
+        public DateTime Created { get;set; }
+
+        public DateTime Updated { get;set; }
+
         public virtual Department Department { get { return property0; } set { property0 = value; } }
 
         #region Private fields

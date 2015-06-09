@@ -85,21 +85,6 @@
     <Compile Include="Department.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EF\calculation.cs" />
-    <Compile Include="EF\calculation_details.cs" />
-    <Compile Include="EF\comment.cs" />
-    <Compile Include="EF\country.cs" />
-    <Compile Include="EF\coverage.cs" />
-    <Compile Include="EF\coverage_eligibility_group.cs" />
-    <Compile Include="EF\covered.cs" />
-    <Compile Include="EF\currency.cs" />
-    <Compile Include="EF\department.cs" />
-    <Compile Include="EF\eligibility_group.cs" />
-    <Compile Include="EF\emp.cs" />
-    <Compile Include="EF\Model1.cs" />
-    <Compile Include="EF\policy.cs" />
-    <Compile Include="EF\premium.cs" />
-    <Compile Include="EF\tax.cs" />
     <Compile Include="EligibilityGroup.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

@@ -55,9 +55,11 @@
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\CommonGeneration\ObjectStringService.cs" />
-    <Compile Include="Generation\ContextGeneration\ContextExtensionGenerator.cs" />
-    <Compile Include="Generation\ContextGeneration\ContextGenerator.cs" />
-    <Compile Include="Generation\ContextGeneration\InitializersGenerator.cs" />
+    <Compile Include="Generation\FileGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\RepositoryGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextExtensionGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializersGenerator.cs" />
     <Compile Include="Generation\Generator.cs" />
     <Compile Include="Generation\ModelGeneration\AttributedClassPartsGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\FieldUtility.cs" />
@@ -66,6 +68,8 @@
     <Compile Include="Generation\ModelGeneration\ModelGeneratorFactory.cs" />
     <Compile Include="Generation\ModelGeneration\PlainClassPartsGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\StructPartsGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\IStaticFileGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\StaticFilesGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />

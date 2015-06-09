@@ -3,52 +3,45 @@
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Generation.StaticFilesGeneration;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
-    internal class ContextGenerator
+    internal class ContextGenerator : IStaticFileGenerator
     {
-        private readonly IStringGenerator stringGenerator;
         private readonly UsingsGenerator usingsGenerator;
         private readonly NameCreator nameCreator;
         private readonly InitializersGenerator initializersGenerator;
 
-        public ContextGenerator(IStringGenerator stringGenerator,
-            UsingsGenerator usingsGenerator,
+        public ContextGenerator(UsingsGenerator usingsGenerator,
             NameCreator nameCreator,
             InitializersGenerator initializersGenerator)
         {
-            this.stringGenerator = stringGenerator;
             this.usingsGenerator = usingsGenerator;
             this.nameCreator = nameCreator;
             this.initializersGenerator = initializersGenerator;
         }
 
-        public GeneratedFile GenerateContext(List<Model> models, string contextName, string outputNamespace)
+        public string GetName(Options options)
         {
-            return new GeneratedFile
-                   {
-                       Name = contextName,
-                       Content = GenerateContent(models, contextName, outputNamespace)
-                   };
+            return options.ContextName;
         }
 
-        private string GenerateContent(List<Model> models, string contextName, string outputNamespace)
+        public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("namespace " + outputNamespace);
-            stringGenerator.Braces(() => GenerateContextClass(models, contextName));
-            return stringGenerator.ToString();
+            stringGenerator.AppendLine("namespace " + options.OutputNamespace);
+            stringGenerator.Braces(() => GenerateContextClass(models, options.ContextName, stringGenerator));
         }
 
-        private void GenerateContextClass(List<Model> models, string contextName)
+        private void GenerateContextClass(List<Model> models, string contextName, IStringGenerator stringGenerator)
         {
             usingsGenerator.GenerateUsings(stringGenerator, GenerationConstants.ModelGeneration.ContextUsings);
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public partial class " + contextName + " : DbContext");
-            stringGenerator.Braces(() => GenerateClassContents(models, contextName));
+            stringGenerator.Braces(() => GenerateClassContents(models, contextName, stringGenerator));
         }
 
-        private void GenerateClassContents(List<Model> models, string contextName)
+        private void GenerateClassContents(List<Model> models, string contextName, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public " + contextName + "() : base(\"name=" + contextName + "\") { }");
             stringGenerator.AppendLine();
@@ -59,11 +52,11 @@
             }
 
             stringGenerator.AppendLine("protected override void OnModelCreating(DbModelBuilder modelBuilder)");
-            stringGenerator.Braces(() => GenerateInitializerCalls(models));
+            stringGenerator.Braces(() => GenerateInitializerCalls(models, stringGenerator));
             initializersGenerator.GenerateInitializers(models, stringGenerator);
         }
 
-        private void GenerateInitializerCalls(List<Model> models)
+        private void GenerateInitializerCalls(List<Model> models, IStringGenerator stringGenerator)
         {
             foreach (var model in models
                 .Where(x => !x.IsManyToManyLink)

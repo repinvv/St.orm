@@ -9,63 +9,52 @@
 
     internal class ModelGenerator
     {
-        private readonly IStringGenerator stringGenerator;
         private readonly ModelPartsGeneratorFactory modelPartsGeneratorFactory;
         private readonly FieldUtility fieldUtility;
         private readonly NameNormalizer nameNormalizer;
+        private readonly FileGenerator fileGenerator;
 
-        public ModelGenerator(IStringGenerator stringGenerator, 
-            ModelPartsGeneratorFactory modelPartsGeneratorFactory,
+        public ModelGenerator(ModelPartsGeneratorFactory modelPartsGeneratorFactory,
             FieldUtility fieldUtility,
-            NameNormalizer nameNormalizer)
+            NameNormalizer nameNormalizer,
+            FileGenerator fileGenerator)
         {
-            this.stringGenerator = stringGenerator;
             this.modelPartsGeneratorFactory = modelPartsGeneratorFactory;
             this.fieldUtility = fieldUtility;
             this.nameNormalizer = nameNormalizer;
+            this.fileGenerator = fileGenerator;
         }
 
-        public GeneratedFile GenerateModel(Model model, string outputNamespace)
+        public GeneratedFile GenerateModel(Model model, Options options)
         {
-            return new GeneratedFile
-                   {
-                       Name = model.Name,
-                       Content = GenerateModelContent(model, outputNamespace)
-                   };
+            return fileGenerator.GenerateFile(model.Name, options, stringGenerator => GenerateModelDefinition(model, stringGenerator));
         }
 
-        private string GenerateModelContent(Model model, string outputNamespace)
+        private void GenerateModelDefinition(Model model, IStringGenerator stringGenerator)
         {
             if (model.IsStruct && model.RelationFields.Any())
             {
                 throw new Exception("Struct types can't have navigation properties.");
             }
 
-            stringGenerator.AppendLine("namespace " + outputNamespace);
-            stringGenerator.Braces(() => GenerateModelDefinition(model));
-            return stringGenerator.ToString();
-        }
-
-        private void GenerateModelDefinition(Model model)
-        {
             var partGenerator = modelPartsGeneratorFactory.GetPartsGenerator(model);
             partGenerator.GenerateUsings(model, stringGenerator);
             stringGenerator.AppendLine();
             partGenerator.GenerateDefinition(model, stringGenerator);
-            stringGenerator.Braces(() => GenerateContents(model, partGenerator));
+            stringGenerator.Braces(() => GenerateContents(model, partGenerator, stringGenerator));
         }
 
-        private void GenerateContents(Model model, IModelPartsGenerator partGenerator)
+        private void GenerateContents(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
-            GenerateProperties(model, partGenerator);
-            GeneratePrivateFields(model, partGenerator);
+            GenerateProperties(model, partGenerator, stringGenerator);
+            GeneratePrivateFields(model, partGenerator, stringGenerator);
             stringGenerator.AppendLine();
-            GenerateConstructors(model, partGenerator);
+            GenerateConstructors(model, partGenerator, stringGenerator);
             stringGenerator.AppendLine();
-            GenerateLazyProperties(model);
+            GenerateLazyProperties(model, stringGenerator);
         }
 
-        private void GenerateLazyProperties(Model model)
+        private void GenerateLazyProperties(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("#region Lazy properties");
             stringGenerator.AppendLine();
@@ -79,7 +68,7 @@
             stringGenerator.AppendLine("#endregion");
         }
 
-        private void GenerateConstructors(Model model, IModelPartsGenerator partGenerator)
+        private void GenerateConstructors(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("#region Constructors");
             stringGenerator.AppendLine();
@@ -88,7 +77,7 @@
             stringGenerator.AppendLine("#endregion");
         }
 
-        private void GenerateProperties(Model model, IModelPartsGenerator partGenerator)
+        private void GenerateProperties(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
             // stringGenerator.AppendLine("#region Properties");
             // stringGenerator.AppendLine();
@@ -115,7 +104,7 @@
             // stringGenerator.AppendLine("#endregion");
         }
 
-        private void GeneratePrivateFields(Model model, IModelPartsGenerator partGenerator)
+        private void GeneratePrivateFields(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("#region Private fields");
             stringGenerator.AppendLine();
