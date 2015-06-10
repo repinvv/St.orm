@@ -3,19 +3,22 @@
     using System.Collections.Generic;
     using System.Linq;
     using St.Orm.Interfaces;
-    using St.Orm.Interfaces.Internal;
     using St.Orm.Parameters;
 
     internal static class StormGetImplementation
     {
-        public static List<TDal> GetEntities<TDal>(IQueryable query, IStormContext context, LoadParameter[] parameters) where TDal : IDalEntity
+        public static List<TDal> GetEntities<TDal>(IQueryable<TDal> query, IStormContext context, LoadParameter[] parameters)
         {
             var parametersDictionary = parameters.ToDictionary(x => x.Key, x => x.Value);
-            var loadService = new LoadService<TDal>(parametersDictionary, context);
-            var repo = RepositoryStorage.GetRepository<TDal>();
+            var repo = context.Storage.GetDalRepository<TDal>();
+            var loadService = new LoadService<TDal>(parametersDictionary, context, repo.RelationPropertiesCount());
             var items = repo.Materialize(query, loadService);
             var result = new List<TDal>(items.Count);
-            result.AddRange(items.Select(x => (x as IAmClonable<TDal>).Clone()));
+            foreach (var item in items)
+            {
+                result.Add(repo.Clone(item));
+            }
+
             return result;
         }
     }

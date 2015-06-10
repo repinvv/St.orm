@@ -29,16 +29,10 @@
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("namespace " + options.OutputNamespace);
-            stringGenerator.Braces(() => GenerateContextClass(models, options.ContextName, stringGenerator));
-        }
-
-        private void GenerateContextClass(List<Model> models, string contextName, IStringGenerator stringGenerator)
-        {
             usingsGenerator.GenerateUsings(stringGenerator, GenerationConstants.ModelGeneration.ContextUsings);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public partial class " + contextName + " : DbContext");
-            stringGenerator.Braces(() => GenerateClassContents(models, contextName, stringGenerator));
+            stringGenerator.AppendLine("public partial class " + options.ContextName + " : DbContext");
+            stringGenerator.Braces(() => GenerateClassContents(models, options.ContextName, stringGenerator));
         }
 
         private void GenerateClassContents(List<Model> models, string contextName, IStringGenerator stringGenerator)

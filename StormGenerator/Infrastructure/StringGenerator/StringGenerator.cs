@@ -10,14 +10,14 @@
         private StringBuilder builder = new StringBuilder();
         private int indentCount = 0;
 
-        public void PushIndent()
+        public void PushIndent(int amount = 1)
         {
-            indentCount += 1;
+            indentCount += amount;
         }
 
-        public void PopIndent()
+        public void PopIndent(int amount = 1)
         {
-            indentCount -= 1;
+            indentCount -= amount;
             if (indentCount < 0)
             {
                 throw new Exception("Indent error");

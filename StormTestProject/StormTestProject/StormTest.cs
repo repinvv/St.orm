@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace StormTestProject
 {
+    using global::StormTestProject.StormTestProject;
+
     [TestClass]
     public class StormTest
     {

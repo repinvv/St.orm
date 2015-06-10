@@ -11,12 +11,14 @@
         private readonly IStaticFileGenerator[] generators;
 
         public StaticFilesGenerator(FileGenerator fileGenerator,
-            ContextGenerator contextGenerator)
+            ContextGenerator contextGenerator,
+            DalRepositoryStorageGenerator dalRepositoryStorageGenerator)
         {
             this.fileGenerator = fileGenerator;
             generators = new IStaticFileGenerator[]
                          {
-                             contextGenerator
+                             contextGenerator,
+                             dalRepositoryStorageGenerator
                          };
         }
 

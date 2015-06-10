@@ -8,14 +8,9 @@
 
     public static class Storm
     {
-        public static IGetByQuery<TDb> ByQuery<TDb>(IQueryable<TDb> query)
+        public static List<TDal> GetEntities<TDal>(IQueryable<TDal> query, IStormContext context, params LoadParameter[] parameters)
         {
-            return new GetByQuery<TDb>(query);
-        }
-
-        public static List<TDal> GetEntities<TDal, TDb>(IQueryable<TDb> query, IStormContext context, params LoadParameter[] parameters) where TDal : IDalEntity<TDb>
-        {
-            return StormGetImplementation.GetEntities<TDal>(query, context, parameters);
+            return StormGetImplementation.GetEntities(query, context, parameters);
         }
     }
 }

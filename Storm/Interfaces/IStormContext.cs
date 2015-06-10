@@ -1,11 +1,12 @@
 ﻿namespace St.Orm.Interfaces
 {
-    using System.Data.Common;
     using System.Linq;
 
     public interface IStormContext
     {
-        ////IQueryable<T> Set<T>() where T : class;
+        IQueryable<T> DbSet<T>() where T : class;
+
+        IDalRepositoryStorage Storage { get; }
 
         ////DbConnection Connection { get; }
 

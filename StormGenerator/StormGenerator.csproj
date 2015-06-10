@@ -68,6 +68,7 @@
     <Compile Include="Generation\ModelGeneration\ModelGeneratorFactory.cs" />
     <Compile Include="Generation\ModelGeneration\PlainClassPartsGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\StructPartsGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\DalRepositoryStorageGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\IStaticFileGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\StaticFilesGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />

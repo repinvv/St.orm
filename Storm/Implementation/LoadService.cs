@@ -4,52 +4,41 @@
     using System.Collections.Generic;
     using System.Linq;
     using St.Orm.Interfaces;
-    using St.Orm.Interfaces.Internal;
 
     internal class LoadService<TDal> : ILoadService<TDal>
-        where TDal : IDalEntity
     {
         private readonly IStormContext context;
         private readonly object[] fields;
         private readonly Dictionary<Type, object> inheritedServices = new Dictionary<Type, object>();
 
-        public LoadService(Dictionary<object, object> parametersDictionary, IStormContext context)
+        public LoadService(Dictionary<object, object> parametersDictionary, IStormContext context, int relationPropertiesCount)
         {
             Parameters = parametersDictionary;
             this.context = context;
-            fields = new object[RepositoryStorage.GetRepository<TDal>().RelationPropertiesCount()];
+            fields = new object[relationPropertiesCount];
         }
 
         public Dictionary<object, object> Parameters { get; private set; }
 
         public IStormContext Context { get { return context; } }
 
-        public ILoadService<TInherited> ForType<TInherited>() where TInherited : IDalEntity
-        {
-            object output;
-            if (inheritedServices.TryGetValue(typeof(TInherited), out output))
-            {
-                return output as ILoadService<TInherited>;
-            }
-
-            var inherited = new LoadService<TInherited>(Parameters, context);
-            inheritedServices.Add(typeof(TInherited), inherited);
-            return inherited;
-        }
-
         private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda)
-            where TField : IDalEntity
         {
             if (fields[propertyIndex] != null)
             {
                 return fields[propertyIndex] as Dictionary<TIndex, List<TField>>;
             }
-
-            var items = new Dictionary<TIndex, List<TField>>();
+            
+            var repo = context.Storage.GetDalRepository<TField>();
+            var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationPropertiesCount()));
+            var items = CreateDictionary(indexLambda, materialized);
             fields[propertyIndex] = items;
-            var materialized = RepositoryStorage
-                .GetRepository<TField>()
-                .Materialize(query(), new LoadService<TField>(Parameters, context));
+            return items;
+        }
+
+        private Dictionary<TIndex, List<TField>> CreateDictionary<TField, TIndex>(Func<TField, TIndex> indexLambda, List<TField> materialized)
+        {
+            var items = new Dictionary<TIndex, List<TField>>();
             foreach (var entity in materialized)
             {
                 List<TField> list;
@@ -66,14 +55,12 @@
             return items;
         }
 
-        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex key) 
-            where TField : IDalEntity
+        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex key)
         {
             return key == null ? new List<TField>() : GetItemsDictionary(propertyIndex, query, indexLambda)[key];
         }
 
         public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex? key)
-            where TField : IDalEntity
             where TIndex : struct
         {
             return key.HasValue ? GetItemsDictionary(propertyIndex, query, indexLambda)[key.Value] : new List<TField>();

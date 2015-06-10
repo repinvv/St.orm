@@ -40,20 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HelpfulExtensions.cs" />
-    <Compile Include="Implementation\GetByQuery.cs" />
     <Compile Include="Implementation\LoadService.cs" />
-    <Compile Include="Implementation\RepositoryStorage.cs" />
-    <Compile Include="Interfaces\IDalEntityGeneric.cs" />
-    <Compile Include="Interfaces\IDeletable.cs" />
-    <Compile Include="Interfaces\Internal\IAmClonable.cs" />
-    <Compile Include="Interfaces\Internal\IDalRepository.cs" />
+    <Compile Include="Interfaces\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
+    <Compile Include="Interfaces\IDalRepositoryStorage.cs" />
     <Compile Include="Interfaces\IStormContext.cs" />
-    <Compile Include="Interfaces\Internal\ILoadService.cs" />
-    <Compile Include="Interfaces\IWriteable.cs" />
+    <Compile Include="Interfaces\ILoadService.cs" />
     <Compile Include="Storm.cs" />
-    <Compile Include="Interfaces\IGetByQuery.cs" />
-    <Compile Include="Interfaces\IDalEntity.cs" />
     <Compile Include="Parameters\Parameters.cs" />
     <Compile Include="Parameters\LoadParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

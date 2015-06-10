@@ -5,9 +5,9 @@
 
     public interface IStringGenerator
     {
-        void PushIndent();
+        void PushIndent(int amount = 1);
 
-        void PopIndent();
+        void PopIndent(int amount = 1);
 
         void Braces(Action action, bool semicolon = false);
 
