@@ -25,6 +25,7 @@
         public static class ModelGeneration
         {
             public const string RepositorySuffix = "DalRepository";
+            public const string ContextExtensionSuffix = "Extension";
 
             public static readonly string[] MappedClassUsings =
             {

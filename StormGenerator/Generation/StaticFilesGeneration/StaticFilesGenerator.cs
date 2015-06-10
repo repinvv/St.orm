@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Generation.ContextGeneration;
+    using StormGenerator.Generation.StaticFilesGeneration.ContextGeneration;
     using StormGenerator.Models.Pregen;
 
     internal class StaticFilesGenerator
@@ -12,13 +13,15 @@
 
         public StaticFilesGenerator(FileGenerator fileGenerator,
             ContextGenerator contextGenerator,
-            DalRepositoryStorageGenerator dalRepositoryStorageGenerator)
+            DalRepositoryStorageGenerator dalRepositoryStorageGenerator,
+            ContextExtensionGenerator contextExtensionGenerator)
         {
             this.fileGenerator = fileGenerator;
             generators = new IStaticFileGenerator[]
                          {
                              contextGenerator,
-                             dalRepositoryStorageGenerator
+                             dalRepositoryStorageGenerator,
+                             contextExtensionGenerator
                          };
         }
 
