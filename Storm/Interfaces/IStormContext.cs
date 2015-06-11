@@ -4,9 +4,9 @@
 
     public interface IStormContext
     {
-        IQueryable<T> DbSet<T>() where T : class;
+        IQueryable<T> Set<T>() where T : class;
 
-        IDalRepositoryStorage Storage { get; }
+        IDalRepository<T> GetDalRepository<T>();
 
         ////DbConnection Connection { get; }
 

@@ -29,7 +29,7 @@
                 return fields[propertyIndex] as Dictionary<TIndex, List<TField>>;
             }
             
-            var repo = context.Storage.GetDalRepository<TField>();
+            var repo = context.GetDalRepository<TField>();
             var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationPropertiesCount()));
             var items = CreateDictionary(indexLambda, materialized);
             fields[propertyIndex] = items;

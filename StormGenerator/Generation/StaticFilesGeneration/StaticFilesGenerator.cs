@@ -14,14 +14,16 @@
         public StaticFilesGenerator(FileGenerator fileGenerator,
             ContextGenerator contextGenerator,
             DalRepositoryStorageGenerator dalRepositoryStorageGenerator,
-            ContextExtensionGenerator contextExtensionGenerator)
+            ContextExtensionGenerator contextExtensionGenerator,
+            StormCommandsGenerator stormCommandsGenerator)
         {
             this.fileGenerator = fileGenerator;
             generators = new IStaticFileGenerator[]
                          {
                              contextGenerator,
                              dalRepositoryStorageGenerator,
-                             contextExtensionGenerator
+                             contextExtensionGenerator,
+                             stormCommandsGenerator
                          };
         }
 

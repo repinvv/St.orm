@@ -71,6 +71,7 @@
     <Compile Include="Generation\StaticFilesGeneration\DalRepositoryStorageGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\IStaticFileGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\StaticFilesGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\StormCommandsGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />

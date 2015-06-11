@@ -17,17 +17,17 @@
         {
             stringGenerator.AppendLine(@"using System;
     using System.Collections.Generic;
-    using " + typeof(IDalRepositoryStorage).Namespace + @";
+    using " + typeof(IDalRepository<>).Namespace + @";
     
-    internal class DalRepositoryStorage : IDalRepositoryStorage
+    internal static class DalRepositoryStorage
     {
-        private readonly Dictionary<Type, object> repositories 
+        private static readonly Dictionary<Type, object> repositories 
             = new Dictionary<Type, object>");
             stringGenerator.PushIndent(3);
             stringGenerator.Braces(() => GenerateKeyValuePairs(models, stringGenerator), true);
             stringGenerator.PopIndent(3);
             stringGenerator.AppendLine(@"
-        public IDalRepository<T> GetDalRepository<T>()
+        public static IDalRepository<T> GetDalRepository<T>()
         {
             return repositories[typeof(T)] as IDalRepository<T>;
         }

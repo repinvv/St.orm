@@ -12,9 +12,9 @@ namespace StormTestProject
     using System.Collections.Generic;
     using St.Orm.Interfaces;
     
-    internal class DalRepositoryStorage : IDalRepositoryStorage
+    internal static class DalRepositoryStorage
     {
-        private readonly Dictionary<Type, object> repositories 
+        private static readonly Dictionary<Type, object> repositories 
             = new Dictionary<Type, object>
                 {
                     { typeof(Department), new DepartmentDalRepository() },
@@ -33,7 +33,7 @@ namespace StormTestProject
                     { typeof(CoverageDepartment), new CoverageDepartmentDalRepository() },
                 };
     
-        public IDalRepository<T> GetDalRepository<T>()
+        public static IDalRepository<T> GetDalRepository<T>()
         {
             return repositories[typeof(T)] as IDalRepository<T>;
         }

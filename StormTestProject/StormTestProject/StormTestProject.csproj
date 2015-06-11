@@ -109,6 +109,9 @@
     <Compile Include="CurrencyDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="DalRepositoryStorage.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Department.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -133,6 +136,9 @@
     <Compile Include="PremiumDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormCommands.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormEntities.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -141,6 +147,9 @@
     <Compile Include="StormTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StormTestContext.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormTestContextExtension.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Tax.cs">

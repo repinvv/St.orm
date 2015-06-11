@@ -8,29 +8,24 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using St.Orm.Interfaces;
+    using St.Orm;    
+    using St.Orm.Interfaces;    
+    using St.Orm.Parameters;
 
-    public partial class StormTestContext : IStormContext
+    public class StormCommands
     {
-        private StormCommands stormCommands;
+        private readonly IStormContext context;
 
-        IQueryable<T> IStormContext.Set<T>()
+        public StormCommands(IStormContext context)
         {
-            return Set<T>();
+            this.context = context;
         }
 
-        IDalRepository<T> IStormContext.GetDalRepository<T>()
+        public ICollection<T> Get<T>(IQueryable<T> query, params LoadParameter[] parameters)
         {
-            return DalRepositoryStorage.GetDalRepository<T>();
-        }
-
-        public StormCommands Storm
-        {
-            get
-            {
-                return stormCommands = stormCommands ?? new StormCommands(this);
-            }
+            return Storm.GetEntities(query, context, parameters);
         }
     }
 }

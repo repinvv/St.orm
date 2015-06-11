@@ -43,7 +43,6 @@
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Interfaces\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
-    <Compile Include="Interfaces\IDalRepositoryStorage.cs" />
     <Compile Include="Interfaces\IStormContext.cs" />
     <Compile Include="Interfaces\ILoadService.cs" />
     <Compile Include="Storm.cs" />

@@ -20,18 +20,23 @@
 
     public partial class " + options.ContextName + @" : IStormContext
     {
-        private IDalRepositoryStorage storage;
+        private StormCommands stormCommands;
 
-        public IQueryable<T> DbSet<T>() where T : class
+        IQueryable<T> IStormContext.Set<T>()
         {
             return Set<T>();
         }
 
-        public virtual IDalRepositoryStorage Storage
+        IDalRepository<T> IStormContext.GetDalRepository<T>()
+        {
+            return DalRepositoryStorage.GetDalRepository<T>();
+        }
+
+        public StormCommands Storm
         {
             get
             {
-                return storage = storage ?? new DalRepositoryStorage();
+                return stormCommands = stormCommands ?? new StormCommands(this);
             }
         }
     }");
