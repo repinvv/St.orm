@@ -22,14 +22,14 @@
 
         public IStormContext Context { get { return context; } }
 
-        private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda)
+        private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
         {
             if (fields[propertyIndex] != null)
             {
                 return fields[propertyIndex] as Dictionary<TIndex, List<TField>>;
             }
             
-            var repo = context.GetDalRepository<TField>();
+            var repo = context.GetDalRepository<TField, TQuery>();
             var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationPropertiesCount()));
             var items = CreateDictionary(indexLambda, materialized);
             fields[propertyIndex] = items;
@@ -55,12 +55,12 @@
             return items;
         }
 
-        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex key)
+        public List<TField> GetProperty<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex key)
         {
             return key == null ? new List<TField>() : GetItemsDictionary(propertyIndex, query, indexLambda)[key];
         }
 
-        public List<TField> GetProperty<TField, TIndex>(int propertyIndex, Func<IQueryable> query, Func<TField, TIndex> indexLambda, TIndex? key)
+        public List<TField> GetProperty<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex? key)
             where TIndex : struct
         {
             return key.HasValue ? GetItemsDictionary(propertyIndex, query, indexLambda)[key.Value] : new List<TField>();

@@ -6,7 +6,7 @@
     {
         IQueryable<T> Set<T>() where T : class;
 
-        IDalRepository<T> GetDalRepository<T>();
+        IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>();
 
         ////DbConnection Connection { get; }
 

@@ -36,9 +36,9 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Department> Departments { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property0; } set { property0 = value; } }
 
-        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Department> Departments { get { return property1; } set { property1 = value; } }
 
         public virtual ICollection<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
@@ -47,8 +47,8 @@ namespace StormTestProject
         #region Private fields
 
         private Coverage clonedFrom;
-        private Department field0;
-        private EligibilityGroup field1;
+        private EligibilityGroup field0;
+        private Department field1;
         private Premium field2;
         private Covered field3;
 
@@ -67,9 +67,9 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private ICollection<Department> property0 { get;set; }
+        private ICollection<EligibilityGroup> property0 { get;set; }
 
-        private ICollection<EligibilityGroup> property1 { get;set; }
+        private ICollection<Department> property1 { get;set; }
 
         private ICollection<Premium> property2 { get;set; }
 

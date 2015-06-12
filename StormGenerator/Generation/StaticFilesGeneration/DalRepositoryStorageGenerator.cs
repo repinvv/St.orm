@@ -17,7 +17,7 @@
         {
             stringGenerator.AppendLine(@"using System;
     using System.Collections.Generic;
-    using " + typeof(IDalRepository<>).Namespace + @";
+    using " + typeof(IDalRepository<,>).Namespace + @";
     
     internal static class DalRepositoryStorage
     {
