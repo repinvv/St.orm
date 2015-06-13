@@ -30,7 +30,7 @@
             }
             
             var repo = context.GetDalRepository<TField, TQuery>();
-            var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationPropertiesCount()));
+            var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationsCount()));
             var items = CreateDictionary(indexLambda, materialized);
             fields[propertyIndex] = items;
             return items;

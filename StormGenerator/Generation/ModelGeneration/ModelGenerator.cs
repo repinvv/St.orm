@@ -25,12 +25,12 @@
             this.fileGenerator = fileGenerator;
         }
 
-        public GeneratedFile GenerateModel(Model model, Options options)
+        public GeneratedFile GenerateModel(Model model, Model parent, Options options)
         {
-            return fileGenerator.GenerateFile(model.Name, options, stringGenerator => GenerateModelDefinition(model, stringGenerator));
+            return fileGenerator.GenerateFile(model.Name, options, stringGenerator => GenerateModelDefinition(model, parent, stringGenerator));
         }
 
-        private void GenerateModelDefinition(Model model, IStringGenerator stringGenerator)
+        private void GenerateModelDefinition(Model model, Model parent, IStringGenerator stringGenerator)
         {
             if (model.IsStruct && model.RelationFields.Any())
             {
@@ -41,20 +41,20 @@
             partGenerator.GenerateUsings(model, stringGenerator);
             stringGenerator.AppendLine();
             partGenerator.GenerateDefinition(model, stringGenerator);
-            stringGenerator.Braces(() => GenerateContents(model, partGenerator, stringGenerator));
+            stringGenerator.Braces(() => GenerateContents(model, parent, partGenerator, stringGenerator));
         }
 
-        private void GenerateContents(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
+        private void GenerateContents(Model model, Model parent, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
             GenerateProperties(model, partGenerator, stringGenerator);
             GeneratePrivateFields(model, partGenerator, stringGenerator);
             stringGenerator.AppendLine();
             GenerateConstructors(model, partGenerator, stringGenerator);
             stringGenerator.AppendLine();
-            GenerateLazyProperties(model, stringGenerator);
+            GenerateLazyProperties(model, parent, stringGenerator);
         }
 
-        private void GenerateLazyProperties(Model model, IStringGenerator stringGenerator)
+        private void GenerateLazyProperties(Model model, Model parent, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("#region Lazy properties");
             stringGenerator.AppendLine();

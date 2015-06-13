@@ -35,7 +35,8 @@
                        Name = nameCreator.CreateCamelCaseName(arg.Name),
                        DbModel = arg,
                        MappingFields = arg.Fields.OrderBy(x => x.Index).Select(CreateMappingField).ToList(),
-                       RelationFields = new List<RelationField>()
+                       RelationFields = new List<RelationField>(),
+                       ChildModels = new List<Model>()
                    };
         }
 

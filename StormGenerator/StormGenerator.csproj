@@ -56,7 +56,13 @@
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\CommonGeneration\ObjectStringService.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
+    <Compile Include="Generation\ModelsCollectionService.cs" />
+    <Compile Include="Generation\ModelIterator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\IMethodGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\RelationsCountGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\RepositoryConstructorGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\RepositoryMethodsGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextExtensionGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializersGenerator.cs" />

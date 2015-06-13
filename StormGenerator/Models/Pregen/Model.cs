@@ -20,6 +20,8 @@
 
         public bool IsManyToManyLink { get; set; }
 
+        public List<Model> ChildModels { get; set; }
+
         public override string ToString()
         {
             return "Model: " + Name;

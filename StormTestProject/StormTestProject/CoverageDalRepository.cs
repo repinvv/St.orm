@@ -8,7 +8,23 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
-    internal class CoverageDalRepository
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using St.Orm.Interfaces;
+
+    internal class CoverageDalRepository : IDalRepository<Coverage, Coverage>
     {
+        private readonly IDalRepositoryExtension<Coverage> extension;
+
+        public CalculationDalRepository(IDalRepositoryExtension<Coverage> extension)
+        {
+            this.extension = extension;
+        }
+
+        public int RelationPropertiesCount()
+        {
+            return extension.RelationsCount() ?? 4;
+        }
     }
 }

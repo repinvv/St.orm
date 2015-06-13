@@ -39,10 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyRepositoryExtension.cs" />
     <Compile Include="HelpfulExtensions.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Interfaces\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
+    <Compile Include="Interfaces\IDalRepositoryExtension.cs" />
     <Compile Include="Interfaces\IStormContext.cs" />
     <Compile Include="Interfaces\ILoadService.cs" />
     <Compile Include="Storm.cs" />

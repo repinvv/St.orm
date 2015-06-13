@@ -27,6 +27,13 @@
             public const string RepositorySuffix = "DalRepository";
             public const string ContextExtensionSuffix = "Extension";
 
+            public static readonly string[] RepositoryUsings =
+            {
+                "System.Collections.Generic",
+                "System.Linq",
+                typeof(IDalRepository<,>).Namespace
+            };
+
             public static readonly string[] MappedClassUsings =
             {
                 "System.Collections.Generic",

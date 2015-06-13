@@ -5,7 +5,7 @@
 
     public interface IDalRepository<TDal, TQuery>
     {
-        int RelationPropertiesCount();
+        int RelationsCount();
 
         TDal Clone(TDal item);
 

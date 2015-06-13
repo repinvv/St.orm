@@ -8,7 +8,23 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
-    internal class CountryDalRepository
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using St.Orm.Interfaces;
+
+    internal class CountryDalRepository : IDalRepository<Country, Country>
     {
+        private readonly IDalRepositoryExtension<Country> extension;
+
+        public CalculationDalRepository(IDalRepositoryExtension<Country> extension)
+        {
+            this.extension = extension;
+        }
+
+        public int RelationPropertiesCount()
+        {
+            return extension.RelationsCount() ?? 1;
+        }
     }
 }

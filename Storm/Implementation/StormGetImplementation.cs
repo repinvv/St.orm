@@ -11,7 +11,7 @@
         {
             var parametersDictionary = parameters.ToDictionary(x => x.Key, x => x.Value);
             var repo = context.GetDalRepository<TDal, TDal>();
-            var loadService = new LoadService<TDal>(parametersDictionary, context, repo.RelationPropertiesCount());
+            var loadService = new LoadService<TDal>(parametersDictionary, context, repo.RelationsCount());
             var items = repo.Materialize(query, loadService);
             var result = new List<TDal>(items.Count);
             foreach (var item in items)

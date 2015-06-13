@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.Generation.StaticFilesGeneration
 {
+    using System;
     using System.Collections.Generic;
     using St.Orm.Interfaces;
     using StormGenerator.Common;
@@ -8,6 +9,13 @@
 
     internal class DalRepositoryStorageGenerator : IStaticFileGenerator
     {
+        private readonly ModelIterator modelIterator;
+
+        public DalRepositoryStorageGenerator(ModelIterator modelIterator)
+        {
+            this.modelIterator = modelIterator;
+        }
+
         public string GetName(Options options)
         {
             return "DalRepositoryStorage";
@@ -27,20 +35,20 @@
             stringGenerator.Braces(() => GenerateKeyValuePairs(models, stringGenerator), true);
             stringGenerator.PopIndent(3);
             stringGenerator.AppendLine(@"
-        public static IDalRepository<T> GetDalRepository<T>()
+        public static IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()
         {
-            return repositories[typeof(T)] as IDalRepository<T>;
+            return repositories[typeof(TDal)] as IDalRepository<TDal, TQuery>;
         }
     }");
         }
 
         private void GenerateKeyValuePairs(List<Model> models, IStringGenerator stringGenerator)
         {
-            foreach (var model in models)
-            {
-                stringGenerator.AppendLine("{ typeof(" + model.Name + "), new " + model.Name
-                                           + GenerationConstants.ModelGeneration.RepositorySuffix + "() },");
-            }
+            Action<Model, Model> action =
+                (model, parent) => stringGenerator
+                    .AppendLine("{ typeof(" + model.Name + "), new " + model.Name
+                                + GenerationConstants.ModelGeneration.RepositorySuffix + "() },");
+            modelIterator.ForAllModels(models, action);
         }
     }
 }

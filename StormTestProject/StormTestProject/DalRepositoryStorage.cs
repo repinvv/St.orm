@@ -34,7 +34,7 @@ namespace StormTestProject
                     { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
                     { typeof(Department), new DepartmentDalRepository() },
                 };
-
+    
         public static IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()
         {
             return repositories[typeof(TDal)] as IDalRepository<TDal, TQuery>;

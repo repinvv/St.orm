@@ -8,7 +8,23 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
-    internal class EmpToDependentDalRepository
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using St.Orm.Interfaces;
+
+    internal class EmpToDependentDalRepository : IDalRepository<EmpToDependent, EmpToDependent>
     {
+        private readonly IDalRepositoryExtension<EmpToDependent> extension;
+
+        public CalculationDalRepository(IDalRepositoryExtension<EmpToDependent> extension)
+        {
+            this.extension = extension;
+        }
+
+        public int RelationPropertiesCount()
+        {
+            return extension.RelationsCount() ?? 0;
+        }
     }
 }

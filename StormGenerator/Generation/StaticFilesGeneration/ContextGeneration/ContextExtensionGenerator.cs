@@ -27,9 +27,9 @@
             return Set<T>();
         }
 
-        IDalRepository<T> IStormContext.GetDalRepository<T>()
+        IDalRepository<TDal, TQuery> IStormContext.GetDalRepository<TDal, TQuery>()
         {
-            return DalRepositoryStorage.GetDalRepository<T>();
+            return DalRepositoryStorage.GetDalRepository<TDal, TQuery>();
         }
 
         public StormCommands Storm

@@ -8,7 +8,23 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
-    internal class PremiumDalRepository
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using St.Orm.Interfaces;
+
+    internal class PremiumDalRepository : IDalRepository<Premium, Premium>
     {
+        private readonly IDalRepositoryExtension<Premium> extension;
+
+        public CalculationDalRepository(IDalRepositoryExtension<Premium> extension)
+        {
+            this.extension = extension;
+        }
+
+        public int RelationPropertiesCount()
+        {
+            return extension.RelationsCount() ?? 1;
+        }
     }
 }
