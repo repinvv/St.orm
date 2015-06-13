@@ -10,21 +10,50 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class CalculationDetailsDalRepository : IDalRepository<CalculationDetails, CalculationDetails>
     {
-        private readonly IDalRepositoryExtension<CalculationDetails> extension;
+        private IDalRepositoryExtension<CalculationDetails> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<CalculationDetails> extension)
+        public CalculationDetailsDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<CalculationDetails>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<CalculationDetails> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public CalculationDetails Clone(CalculationDetails source)
+        {
+            var clone = new CalculationDetails(source)
+            {
+                CalculationDetailsId = source.CalculationDetailsId,
+                CalculationId = source.CalculationId,
+                Year = source.Year,
+                Month = source.Month,
+                Value = source.Value,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public CalculationDetails Create(IDataReader reader)
+        {
+        }
+
+        public List<CalculationDetails> Materialize(IQueryable<CalculationDetails> query, ILoadService loadService)
+        {
         }
     }
 }

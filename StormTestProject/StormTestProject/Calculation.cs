@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("stats.calculation")]
     public partial class Calculation
@@ -33,7 +34,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Calculation clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Calculation clonedFrom;
         private CalculationDetails field0;
 
         #endregion
@@ -43,9 +45,23 @@ namespace StormTestProject
         public Calculation(Calculation clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Calculation() { }
+        public Calculation(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Calculation()
+        {
+            CalculationDetailses = new HashSet<CalculationDetails>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

@@ -10,21 +10,51 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class CoveredDalRepository : IDalRepository<Covered, Covered>
     {
-        private readonly IDalRepositoryExtension<Covered> extension;
+        private IDalRepositoryExtension<Covered> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Covered> extension)
+        public CoveredDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Covered>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Covered> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public Covered Clone(Covered source)
+        {
+            var clone = new Covered(source)
+            {
+                CoveredId = source.CoveredId,
+                CoveredType = source.CoveredType,
+                CoverageId = source.CoverageId,
+                Headcount = source.Headcount,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Covered Create(IDataReader reader)
+        {
+        }
+
+        public List<Covered> Materialize(IQueryable<Covered> query, ILoadService loadService)
+        {
         }
     }
 }

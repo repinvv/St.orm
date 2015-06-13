@@ -16,6 +16,8 @@
 
         public bool IsStruct { get; set; }
 
+        public bool IsInherited { get; set; }
+
         public bool IsReadonly { get; set; }
 
         public bool IsManyToManyLink { get; set; }

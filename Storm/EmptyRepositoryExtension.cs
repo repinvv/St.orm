@@ -4,9 +4,12 @@
 
     public class EmptyRepositoryExtension<TDal> : IDalRepositoryExtension<TDal>
     {
-        public int? RelationsCount()
+        public virtual int? RelationsCount()
         {
             return null;
         }
+
+        public virtual void ExtendClone(TDal output, TDal source)
+        { }
     }
 }

@@ -12,6 +12,7 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     public partial class CoverageEligibilityGroup
     {
@@ -27,7 +28,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private CoverageEligibilityGroup clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly CoverageEligibilityGroup clonedFrom;
         private EligibilityGroup field0;
 
         #endregion
@@ -37,9 +39,22 @@ namespace StormTestProject
         public CoverageEligibilityGroup(CoverageEligibilityGroup clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public CoverageEligibilityGroup() { }
+        public CoverageEligibilityGroup(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public CoverageEligibilityGroup()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

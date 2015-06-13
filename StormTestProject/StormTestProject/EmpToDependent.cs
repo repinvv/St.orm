@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("emp_to_dependent")]
     public partial class EmpToDependent
@@ -44,7 +45,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private EmpToDependent clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly EmpToDependent clonedFrom;
 
         #endregion
 
@@ -53,9 +55,22 @@ namespace StormTestProject
         public EmpToDependent(EmpToDependent clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public EmpToDependent() { }
+        public EmpToDependent(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public EmpToDependent()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

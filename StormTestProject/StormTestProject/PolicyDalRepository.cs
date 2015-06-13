@@ -10,21 +10,51 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class PolicyDalRepository : IDalRepository<Policy, Policy>
     {
-        private readonly IDalRepositoryExtension<Policy> extension;
+        private IDalRepositoryExtension<Policy> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Policy> extension)
+        public PolicyDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Policy>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Policy> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 3;
+        }
+
+        public Policy Clone(Policy source)
+        {
+            var clone = new Policy(source)
+            {
+                PolicyId = source.PolicyId,
+                CountryId = source.CountryId,
+                CurrencyId = source.CurrencyId,
+                Name = source.Name,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Policy Create(IDataReader reader)
+        {
+        }
+
+        public List<Policy> Materialize(IQueryable<Policy> query, ILoadService loadService)
+        {
         }
     }
 }

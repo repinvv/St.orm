@@ -10,21 +10,49 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class EmpToDependentDalRepository : IDalRepository<EmpToDependent, EmpToDependent>
     {
-        private readonly IDalRepositoryExtension<EmpToDependent> extension;
+        private IDalRepositoryExtension<EmpToDependent> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<EmpToDependent> extension)
+        public EmpToDependentDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<EmpToDependent>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<EmpToDependent> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public EmpToDependent Clone(EmpToDependent source)
+        {
+            var clone = new EmpToDependent(source)
+            {
+                Ssn = source.Ssn,
+                Client = source.Client,
+                DepSsn = source.DepSsn,
+                DepClient = source.DepClient,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public EmpToDependent Create(IDataReader reader)
+        {
+        }
+
+        public List<EmpToDependent> Materialize(IQueryable<EmpToDependent> query, ILoadService loadService)
+        {
         }
     }
 }

@@ -10,21 +10,50 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class TaxDalRepository : IDalRepository<Tax, Tax>
     {
-        private readonly IDalRepositoryExtension<Tax> extension;
+        private IDalRepositoryExtension<Tax> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Tax> extension)
+        public TaxDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Tax>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Tax> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public Tax Clone(Tax source)
+        {
+            var clone = new Tax(source)
+            {
+                TaxId = source.TaxId,
+                PolicyId = source.PolicyId,
+                Amount = source.Amount,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Tax Create(IDataReader reader)
+        {
+        }
+
+        public List<Tax> Materialize(IQueryable<Tax> query, ILoadService loadService)
+        {
         }
     }
 }

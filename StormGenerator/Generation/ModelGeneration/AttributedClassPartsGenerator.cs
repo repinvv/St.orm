@@ -25,7 +25,7 @@
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
             var usings = model.MappingFields.Select(fieldUtility.GetUsing)
-                              .Concat(GenerationConstants.ModelGeneration.MappedClassUsings)
+                              .Concat(GenerationConstants.ModelGeneration.ModelClassUsings)
                               .Concat(GenerationConstants.ModelGeneration.EfAttributesUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
         }

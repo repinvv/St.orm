@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.policy")]
     public partial class Policy
@@ -48,7 +49,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Policy clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Policy clonedFrom;
         private Tax field0;
         private Coverage field1;
         private Comment field2;
@@ -60,9 +62,25 @@ namespace StormTestProject
         public Policy(Policy clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Policy() { }
+        public Policy(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Policy()
+        {
+            Taxes = new HashSet<Tax>();
+            Coverages = new HashSet<Coverage>();
+            Comments = new HashSet<Comment>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

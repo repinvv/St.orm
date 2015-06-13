@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public interface ILoadService<TDal>
+    public interface ILoadService
     {
         Dictionary<object, object> Parameters { get; }
 

@@ -10,21 +10,50 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class CurrencyDalRepository : IDalRepository<Currency, Currency>
     {
-        private readonly IDalRepositoryExtension<Currency> extension;
+        private IDalRepositoryExtension<Currency> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Currency> extension)
+        public CurrencyDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Currency>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Currency> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 1;
+        }
+
+        public Currency Clone(Currency source)
+        {
+            var clone = new Currency(source)
+            {
+                CurrencyId = source.CurrencyId,
+                Name = source.Name,
+                CurrencyCode = source.CurrencyCode,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Currency Create(IDataReader reader)
+        {
+        }
+
+        public List<Currency> Materialize(IQueryable<Currency> query, ILoadService loadService)
+        {
         }
     }
 }

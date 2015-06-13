@@ -24,7 +24,7 @@
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
             var usings = model.MappingFields.Select(fieldUtility.GetUsing)
-                              .Concat(GenerationConstants.ModelGeneration.MappedClassUsings);
+                              .Concat(GenerationConstants.ModelGeneration.ModelClassUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
         }
 
@@ -40,15 +40,33 @@
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private " + model.Name + " clonedFrom;");
+            stringGenerator.AppendLine("private readonly ILoadService loadService;");
+            stringGenerator.AppendLine("private readonly " + model.Name + " clonedFrom;");
         }
 
         public void GenerateConstructors(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public " + model.Name + "(" + model.Name + " clonedFrom)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("this.clonedFrom = clonedFrom;"));
+            stringGenerator.Braces(() =>
+            {
+                stringGenerator.AppendLine("this.clonedFrom = clonedFrom;");
+                stringGenerator.AppendLine("this.loadService = clonedFrom.GetLoadService();");
+            });
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public " + model.Name + "() { }");
+            stringGenerator.AppendLine("public " + model.Name + "(ILoadService loadService)");
+            stringGenerator.Braces(() => stringGenerator.AppendLine("this.loadService = loadService;"));
+            stringGenerator.AppendLine();
+            stringGenerator.AppendLine("public " + model.Name + "()");
+            stringGenerator.Braces(() =>
+            {
+                foreach (var field in model.RelationFields.Where(x => x.IsList))
+                {
+                    stringGenerator.AppendLine(field.Name + " = new HashSet<" + field.FieldModel.Name + ">();");
+                }
+            });
+            stringGenerator.AppendLine();
+            stringGenerator.AppendLine("public ILoadService GetLoadService()");
+            stringGenerator.Braces(() => stringGenerator.AppendLine("return loadService;"));
         }
     }
 }

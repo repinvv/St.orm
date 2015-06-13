@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("country")]
     public partial class Country
@@ -43,7 +44,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Country clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Country clonedFrom;
         private Policy field0;
 
         #endregion
@@ -53,9 +55,23 @@ namespace StormTestProject
         public Country(Country clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Country() { }
+        public Country(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Country()
+        {
+            Policies = new HashSet<Policy>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

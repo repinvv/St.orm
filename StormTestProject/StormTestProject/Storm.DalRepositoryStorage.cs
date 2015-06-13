@@ -10,6 +10,7 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using St.Orm;
     using St.Orm.Interfaces;
     
     internal static class DalRepositoryStorage

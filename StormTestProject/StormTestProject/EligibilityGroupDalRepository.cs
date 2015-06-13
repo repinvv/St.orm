@@ -10,21 +10,49 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class EligibilityGroupDalRepository : IDalRepository<EligibilityGroup, EligibilityGroup>
     {
-        private readonly IDalRepositoryExtension<EligibilityGroup> extension;
+        private IDalRepositoryExtension<EligibilityGroup> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<EligibilityGroup> extension)
+        public EligibilityGroupDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<EligibilityGroup>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<EligibilityGroup> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public EligibilityGroup Clone(EligibilityGroup source)
+        {
+            var clone = new EligibilityGroup(source)
+            {
+                EligibilityGroupId = source.EligibilityGroupId,
+                Name = source.Name,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public EligibilityGroup Create(IDataReader reader)
+        {
+        }
+
+        public List<EligibilityGroup> Materialize(IQueryable<EligibilityGroup> query, ILoadService loadService)
+        {
         }
     }
 }

@@ -11,7 +11,7 @@
     {
         public string GetName(Options options)
         {
-            return "StormCommands";
+            return "Storm.Commands";
         }
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)

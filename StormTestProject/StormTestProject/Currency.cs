@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("currency")]
     public partial class Currency
@@ -43,7 +44,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Currency clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Currency clonedFrom;
         private Policy field0;
 
         #endregion
@@ -53,9 +55,23 @@ namespace StormTestProject
         public Currency(Currency clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Currency() { }
+        public Currency(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Currency()
+        {
+            Policies = new HashSet<Policy>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

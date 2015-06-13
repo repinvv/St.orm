@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("emp")]
     public partial class Emp
@@ -36,7 +37,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Emp clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Emp clonedFrom;
         private EmpToDependent field0;
         private EmpToDependent field1;
 
@@ -47,9 +49,24 @@ namespace StormTestProject
         public Emp(Emp clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Emp() { }
+        public Emp(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Emp()
+        {
+            EmpToDependents = new HashSet<EmpToDependent>();
+            EmpToDependents2 = new HashSet<EmpToDependent>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

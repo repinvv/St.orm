@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.tax")]
     public partial class Tax
@@ -37,7 +38,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Tax clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Tax clonedFrom;
 
         #endregion
 
@@ -46,9 +48,22 @@ namespace StormTestProject
         public Tax(Tax clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Tax() { }
+        public Tax(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Tax()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

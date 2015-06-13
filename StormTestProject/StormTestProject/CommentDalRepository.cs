@@ -10,21 +10,53 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class CommentDalRepository : IDalRepository<Comment, Comment>
     {
-        private readonly IDalRepositoryExtension<Comment> extension;
+        private IDalRepositoryExtension<Comment> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Comment> extension)
+        public CommentDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Comment>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Comment> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 0;
+        }
+
+        public Comment Clone(Comment source)
+        {
+            var clone = new Comment(source)
+            {
+                CommentId = source.CommentId,
+                CommentType = source.CommentType,
+                PolicyId = source.PolicyId,
+                PremiumId = source.PremiumId,
+                CommentText = source.CommentText,
+                AuthorUserId = source.AuthorUserId,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Comment Create(IDataReader reader)
+        {
+        }
+
+        public List<Comment> Materialize(IQueryable<Comment> query, ILoadService loadService)
+        {
         }
     }
 }

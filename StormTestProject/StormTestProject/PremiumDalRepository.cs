@@ -10,21 +10,51 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class PremiumDalRepository : IDalRepository<Premium, Premium>
     {
-        private readonly IDalRepositoryExtension<Premium> extension;
+        private IDalRepositoryExtension<Premium> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Premium> extension)
+        public PremiumDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Premium>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Premium> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 1;
+        }
+
+        public Premium Clone(Premium source)
+        {
+            var clone = new Premium(source)
+            {
+                PremiumId = source.PremiumId,
+                PremiumType = source.PremiumType,
+                CoverageId = source.CoverageId,
+                Amount = source.Amount,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Premium Create(IDataReader reader)
+        {
+        }
+
+        public List<Premium> Materialize(IQueryable<Premium> query, ILoadService loadService)
+        {
         }
     }
 }

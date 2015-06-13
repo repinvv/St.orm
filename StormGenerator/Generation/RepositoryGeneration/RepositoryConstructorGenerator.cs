@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration
 {
+    using StormGenerator.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -7,10 +8,11 @@
     {
         public void GenerateConstructor(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private readonly IDalRepositoryExtension<" + model.Name + "> extension;");
+            stringGenerator.AppendLine("private IDalRepositoryExtension<" + model.Name + "> extension;");
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public CalculationDalRepository(IDalRepositoryExtension<" + model.Name + "> extension)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("this.extension = extension;"));
+            stringGenerator.AppendLine("public " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
+                                       + "()");
+            stringGenerator.Braces(() => stringGenerator.AppendLine("extension = new EmptyRepositoryExtension<" + model.Name + ">();"));
         }
     }
 }

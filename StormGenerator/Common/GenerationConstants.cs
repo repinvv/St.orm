@@ -31,13 +31,16 @@
             {
                 "System.Collections.Generic",
                 "System.Linq",
+                "System.Data",
+                typeof(EmptyRepositoryExtension<>).Namespace,
                 typeof(IDalRepository<,>).Namespace
             };
 
-            public static readonly string[] MappedClassUsings =
+            public static readonly string[] ModelClassUsings =
             {
                 "System.Collections.Generic",
                 "System.Linq",
+                typeof(ILoadService).Namespace,
                 typeof(HelpfulExtensions).Namespace
             };
 

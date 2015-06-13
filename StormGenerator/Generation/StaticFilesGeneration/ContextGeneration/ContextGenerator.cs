@@ -24,7 +24,7 @@
 
         public string GetName(Options options)
         {
-            return options.ContextName;
+            return "Storm." + options.ContextName;
         }
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)

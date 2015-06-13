@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.coverage")]
     public partial class Coverage
@@ -46,7 +47,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Coverage clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Coverage clonedFrom;
         private EligibilityGroup field0;
         private Department field1;
         private Premium field2;
@@ -59,9 +61,26 @@ namespace StormTestProject
         public Coverage(Coverage clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Coverage() { }
+        public Coverage(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Coverage()
+        {
+            EligibilityGroups = new HashSet<EligibilityGroup>();
+            Departments = new HashSet<Department>();
+            Premiums = new HashSet<Premium>();
+            Covereds = new HashSet<Covered>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

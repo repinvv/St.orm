@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("department")]
     public partial class Department
@@ -36,7 +37,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Department clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Department clonedFrom;
 
         #endregion
 
@@ -45,9 +47,22 @@ namespace StormTestProject
         public Department(Department clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Department() { }
+        public Department(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Department()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

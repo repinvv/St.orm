@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using St.Orm;
     using St.Orm.Interfaces;
     using StormGenerator.Common;
     using StormGenerator.Infrastructure.StringGenerator;
@@ -18,13 +19,14 @@
 
         public string GetName(Options options)
         {
-            return "DalRepositoryStorage";
+            return "Storm.DalRepositoryStorage";
         }
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine(@"using System;
     using System.Collections.Generic;
+    using " + typeof(EmptyRepositoryExtension<>).Namespace + @";
     using " + typeof(IDalRepository<,>).Namespace + @";
     
     internal static class DalRepositoryStorage

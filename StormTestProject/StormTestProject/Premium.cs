@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.premium")]
     public partial class Premium
@@ -42,7 +43,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Premium clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Premium clonedFrom;
         private Comment field0;
 
         #endregion
@@ -52,9 +54,23 @@ namespace StormTestProject
         public Premium(Premium clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Premium() { }
+        public Premium(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Premium()
+        {
+            Comments = new HashSet<Comment>();
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

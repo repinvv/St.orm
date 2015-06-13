@@ -5,7 +5,7 @@
     using System.Linq;
     using St.Orm.Interfaces;
 
-    internal class LoadService<TDal> : ILoadService<TDal>
+    internal class LoadService : ILoadService
     {
         private readonly IStormContext context;
         private readonly object[] fields;
@@ -30,7 +30,7 @@
             }
             
             var repo = context.GetDalRepository<TField, TQuery>();
-            var materialized = repo.Materialize(query(), new LoadService<TField>(Parameters, context, repo.RelationsCount()));
+            var materialized = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount()));
             var items = CreateDictionary(indexLambda, materialized);
             fields[propertyIndex] = items;
             return items;

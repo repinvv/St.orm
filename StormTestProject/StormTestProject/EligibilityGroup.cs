@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("eligibility_group")]
     public partial class EligibilityGroup
@@ -36,7 +37,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private EligibilityGroup clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly EligibilityGroup clonedFrom;
 
         #endregion
 
@@ -45,9 +47,22 @@ namespace StormTestProject
         public EligibilityGroup(EligibilityGroup clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public EligibilityGroup() { }
+        public EligibilityGroup(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public EligibilityGroup()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

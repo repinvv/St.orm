@@ -10,7 +10,7 @@
     {
         public string GetName(Options options)
         {
-            return options.ContextName + GenerationConstants.ModelGeneration.ContextExtensionSuffix;
+            return "Storm." + options.ContextName + GenerationConstants.ModelGeneration.ContextExtensionSuffix;
         }
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)

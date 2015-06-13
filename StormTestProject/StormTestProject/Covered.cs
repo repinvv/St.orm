@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.covered")]
     public partial class Covered
@@ -40,7 +41,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Covered clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Covered clonedFrom;
 
         #endregion
 
@@ -49,9 +51,22 @@ namespace StormTestProject
         public Covered(Covered clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Covered() { }
+        public Covered(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Covered()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

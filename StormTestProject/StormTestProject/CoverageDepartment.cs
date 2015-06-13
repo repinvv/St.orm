@@ -12,6 +12,7 @@ namespace StormTestProject
     using System.Collections.Generic;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     public partial class CoverageDepartment
     {
@@ -23,7 +24,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private CoverageDepartment clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly CoverageDepartment clonedFrom;
         private Department field0;
 
         #endregion
@@ -33,9 +35,22 @@ namespace StormTestProject
         public CoverageDepartment(CoverageDepartment clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public CoverageDepartment() { }
+        public CoverageDepartment(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public CoverageDepartment()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 

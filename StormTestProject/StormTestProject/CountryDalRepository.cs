@@ -10,21 +10,50 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
+    using St.Orm;
     using St.Orm.Interfaces;
 
     internal class CountryDalRepository : IDalRepository<Country, Country>
     {
-        private readonly IDalRepositoryExtension<Country> extension;
+        private IDalRepositoryExtension<Country> extension;
 
-        public CalculationDalRepository(IDalRepositoryExtension<Country> extension)
+        public CountryDalRepository()
+        {
+            extension = new EmptyRepositoryExtension<Country>();
+        }
+
+        public void SetExtension(IDalRepositoryExtension<Country> extension)
         {
             this.extension = extension;
         }
 
-        public int RelationPropertiesCount()
+        public int RelationsCount()
         {
             return extension.RelationsCount() ?? 1;
+        }
+
+        public Country Clone(Country source)
+        {
+            var clone = new Country(source)
+            {
+                CountryId = source.CountryId,
+                Name = source.Name,
+                CountryCode = source.CountryCode,
+                Created = source.Created,
+                Updated = source.Updated,
+            };
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
+        public Country Create(IDataReader reader)
+        {
+        }
+
+        public List<Country> Materialize(IQueryable<Country> query, ILoadService loadService)
+        {
         }
     }
 }

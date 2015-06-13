@@ -14,6 +14,7 @@ namespace StormTestProject
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Interfaces;
 
     [Table("model.comment")]
     public partial class Comment
@@ -47,7 +48,8 @@ namespace StormTestProject
 
         #region Private fields
 
-        private Comment clonedFrom;
+        private readonly ILoadService loadService;
+        private readonly Comment clonedFrom;
 
         #endregion
 
@@ -56,9 +58,22 @@ namespace StormTestProject
         public Comment(Comment clonedFrom)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Comment() { }
+        public Comment(ILoadService loadService)
+        {
+            this.loadService = loadService;
+        }
+
+        public Comment()
+        {
+        }
+
+        public ILoadService GetLoadService()
+        {
+            return loadService;
+        }
 
         #endregion
 
