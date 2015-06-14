@@ -3,15 +3,10 @@
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
-    internal abstract class MethodGenerator
+    internal interface IMethodGenerator
     {
-        public virtual bool IsNeeded(Model model)
-        {
-            return true;
-        }
+        void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator);
 
-        public abstract void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator);
-
-        public abstract void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator);
+        void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator);
     }
 }

@@ -1,40 +1,22 @@
-﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration
+﻿namespace StormGenerator.Generation.RepositoryGeneration
 {
-    using System.Linq;
+    using StormGenerator.Generation.RepositoryGeneration.MethodsCollections;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
     internal class RepositoryMethodsGenerator
     {
-        private readonly MethodGenerator[] generators;
+        private readonly MethodsCollectionFactory methodsCollectionFactory;
 
-        public RepositoryMethodsGenerator(SetExtensionGenerator setExtensionGenerator,
-            RelationsCountGenerator relationsCountGenerator,
-            CreateGenerator createGenerator,
-            FullCreateGenerator fullCreateGenerator,
-            CloneGenerator cloneGenerator,
-            MaterializeGenerator materializeGenerator)
+        public RepositoryMethodsGenerator(MethodsCollectionFactory methodsCollectionFactory)
         {
-            generators = new MethodGenerator[]
-                         {
-                             setExtensionGenerator,
-                             relationsCountGenerator,
-                             cloneGenerator,
-                             createGenerator,
-                             fullCreateGenerator,
-                             materializeGenerator
-                         };
+            this.methodsCollectionFactory = methodsCollectionFactory;
         }
 
         public void GenerateMethods(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            foreach (var generator in generators)
+            foreach (var generator in methodsCollectionFactory.GetRepositoryMethods(model))
             {
-                if (!generator.IsNeeded(model))
-                {
-                    continue;
-                }
-
                 stringGenerator.AppendLine();
                 generator.GenerateSignature(model, parent, stringGenerator);
                 stringGenerator.Braces(() => generator.GenerateMethod(model, parent, stringGenerator));

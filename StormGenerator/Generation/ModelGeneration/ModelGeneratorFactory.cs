@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Generation.ModelGeneration.PropertyGeneration
+﻿namespace StormGenerator.Generation.ModelGeneration
 {
     using StormGenerator.Models.Pregen;
 

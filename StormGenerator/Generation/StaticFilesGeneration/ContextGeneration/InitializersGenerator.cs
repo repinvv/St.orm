@@ -1,8 +1,8 @@
-﻿namespace StormGenerator.Generation.ContextGeneration
+﻿namespace StormGenerator.Generation.StaticFilesGeneration.ContextGeneration
 {
     using System.Collections.Generic;
     using System.Linq;
-    using StormGenerator.Generation.CommonGeneration;
+    using StormGenerator.Generation.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
     using StormGenerator.Models.Pregen.Relation;

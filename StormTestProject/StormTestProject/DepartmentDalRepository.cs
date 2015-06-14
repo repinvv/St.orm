@@ -47,12 +47,26 @@ namespace StormTestProject
             return clone;
         }
 
-        public Department Create(IDataReader reader)
+        public Department Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Department(loadService)
+            {
+                DepartmentId = reader.GetInt32(0),
+                Name = reader[1] as string,
+                Created = reader.GetDateTime(2),
+                Updated = reader.GetDateTime(3),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Department> Materialize(IQueryable<Department> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Department>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿namespace StormGenerator.Generation.CommonGeneration
+﻿namespace StormGenerator.Generation.Common
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class TypeNameService
+    internal class TypeService
     {
         private static readonly Dictionary<Type, string> TypeAliases = new Dictionary<Type, string>
                                                                        {
@@ -29,7 +29,7 @@
             return IsNullable(type) ? (GetTypeAliasName(GenArgument(type)) + "?") : GetTypeAliasName(type);
         }
 
-        private bool IsNullable(Type type)
+        public bool IsNullable(Type type)
         {
             return IsDefinedGeneric(type, typeof(Nullable<>));
         }

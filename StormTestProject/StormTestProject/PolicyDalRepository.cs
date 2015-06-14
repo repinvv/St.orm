@@ -49,12 +49,28 @@ namespace StormTestProject
             return clone;
         }
 
-        public Policy Create(IDataReader reader)
+        public Policy Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Policy(loadService)
+            {
+                PolicyId = reader.GetInt32(0),
+                CountryId = reader.GetInt32(1),
+                CurrencyId = reader[2] as int?,
+                Name = reader[3] as string,
+                Created = reader.GetDateTime(4),
+                Updated = reader.GetDateTime(5),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Policy> Materialize(IQueryable<Policy> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Policy>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

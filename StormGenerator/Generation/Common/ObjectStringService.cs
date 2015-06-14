@@ -1,7 +1,5 @@
-﻿namespace StormGenerator.Generation.CommonGeneration
+﻿namespace StormGenerator.Generation.Common
 {
-    using System;
-
     internal class ObjectStringService
     {
         public string CreateObjectString(string[] keys, string accessor, bool replaceFieldNames = true)

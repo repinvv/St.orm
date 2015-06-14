@@ -47,12 +47,26 @@ namespace StormTestProject
             return clone;
         }
 
-        public EligibilityGroup Create(IDataReader reader)
+        public EligibilityGroup Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new EligibilityGroup(loadService)
+            {
+                EligibilityGroupId = reader.GetInt32(0),
+                Name = reader[1] as string,
+                Created = reader.GetDateTime(2),
+                Updated = reader.GetDateTime(3),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<EligibilityGroup> Materialize(IQueryable<EligibilityGroup> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<EligibilityGroup>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

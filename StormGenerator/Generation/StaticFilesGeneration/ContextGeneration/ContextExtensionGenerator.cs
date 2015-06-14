@@ -15,7 +15,8 @@
 
         public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine(@"using System.Linq;
+            stringGenerator.AppendLine(@"using System.Data.Common;
+    using System.Linq;
     using " + typeof(IStormContext).Namespace + @";
 
     public partial class " + options.ContextName + @" : IStormContext
@@ -39,6 +40,10 @@
                 return stormCommands = stormCommands ?? new StormCommands(this);
             }
         }
+
+        public DbConnection Connection { get { return Database.Connection; } }
+
+        public DbTransaction Transaction { get { return Database.CurrentTransaction.UnderlyingTransaction; } }
     }");
         }
     }

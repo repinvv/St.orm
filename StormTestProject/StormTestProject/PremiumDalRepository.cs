@@ -49,12 +49,28 @@ namespace StormTestProject
             return clone;
         }
 
-        public Premium Create(IDataReader reader)
+        public Premium Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Premium(loadService)
+            {
+                PremiumId = reader.GetInt32(0),
+                PremiumType = reader.GetInt32(1),
+                CoverageId = reader.GetInt32(2),
+                Amount = reader.GetDecimal(3),
+                Created = reader.GetDateTime(4),
+                Updated = reader.GetDateTime(5),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Premium> Materialize(IQueryable<Premium> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Premium>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

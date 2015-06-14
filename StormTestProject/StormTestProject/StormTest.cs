@@ -37,6 +37,9 @@ namespace StormTestProject
 
                 context.Policies.Add(policy);
                 context.SaveChanges();
+                var query = context.Set<Policy>();
+
+                var result = context.Storm.Get(query);
 
                 Assert.AreEqual(trans, context.Database.CurrentTransaction);
             }

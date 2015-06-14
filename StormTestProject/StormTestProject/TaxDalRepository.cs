@@ -48,12 +48,27 @@ namespace StormTestProject
             return clone;
         }
 
-        public Tax Create(IDataReader reader)
+        public Tax Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Tax(loadService)
+            {
+                TaxId = reader.GetInt32(0),
+                PolicyId = reader.GetInt32(1),
+                Amount = reader.GetDecimal(2),
+                Created = reader.GetDateTime(3),
+                Updated = reader.GetDateTime(4),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Tax> Materialize(IQueryable<Tax> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Tax>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

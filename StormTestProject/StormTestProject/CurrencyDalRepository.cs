@@ -48,12 +48,27 @@ namespace StormTestProject
             return clone;
         }
 
-        public Currency Create(IDataReader reader)
+        public Currency Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Currency(loadService)
+            {
+                CurrencyId = reader.GetInt32(0),
+                Name = reader[1] as string,
+                CurrencyCode = reader[2] as string,
+                Created = reader.GetDateTime(3),
+                Updated = reader.GetDateTime(4),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Currency> Materialize(IQueryable<Currency> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Currency>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

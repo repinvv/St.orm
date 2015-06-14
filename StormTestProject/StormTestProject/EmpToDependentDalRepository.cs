@@ -47,12 +47,26 @@ namespace StormTestProject
             return clone;
         }
 
-        public EmpToDependent Create(IDataReader reader)
+        public EmpToDependent Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new EmpToDependent(loadService)
+            {
+                Ssn = reader[0] as string,
+                Client = reader[1] as string,
+                DepSsn = reader[2] as string,
+                DepClient = reader[3] as string,
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<EmpToDependent> Materialize(IQueryable<EmpToDependent> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<EmpToDependent>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

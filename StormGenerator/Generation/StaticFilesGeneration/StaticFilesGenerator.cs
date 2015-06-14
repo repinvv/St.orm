@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using StormGenerator.Generation.ContextGeneration;
     using StormGenerator.Generation.StaticFilesGeneration.ContextGeneration;
     using StormGenerator.Models.Pregen;
 
@@ -15,7 +14,9 @@
             ContextGenerator contextGenerator,
             DalRepositoryStorageGenerator dalRepositoryStorageGenerator,
             ContextExtensionGenerator contextExtensionGenerator,
-            StormCommandsGenerator stormCommandsGenerator)
+            StormCommandsGenerator stormCommandsGenerator,
+            AdoCommandsGenerator adoCommandsGenerator,
+            ConnectionHandlerGenerator connectionHandlerGenerator)
         {
             this.fileGenerator = fileGenerator;
             generators = new IStaticFileGenerator[]
@@ -23,7 +24,9 @@
                              contextGenerator,
                              dalRepositoryStorageGenerator,
                              contextExtensionGenerator,
-                             stormCommandsGenerator
+                             stormCommandsGenerator,
+                             adoCommandsGenerator,
+                             connectionHandlerGenerator
                          };
         }
 

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Generation.Common;
     using StormGenerator.Models.Config;
     using StormGenerator.Models.Config.Db;
     using StormGenerator.Models.Pregen;

@@ -54,10 +54,16 @@
     <Compile Include="DbModelsCollection\Reader.cs" />
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
-    <Compile Include="Generation\CommonGeneration\ObjectStringService.cs" />
+    <Compile Include="Generation\Common\ObjectStringService.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
     <Compile Include="Generation\ModelsCollectionService.cs" />
     <Compile Include="Generation\ModelIterator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\BaseClassMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\PlainClassMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\Common\MaterializerLineGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\InheritedClassMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\IMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\StructureMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\CloneGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\CreateGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\FullCreateGenerator.cs" />
@@ -67,7 +73,10 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\SetExtensionGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryConstructorGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\MethodsCollectionFactory.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryMethodsGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\AdoCommandsGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ConnectionHandlerGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextExtensionGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializersGenerator.cs" />
@@ -87,7 +96,7 @@
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
-    <Compile Include="ModelsCollection\FieldTypeService.cs" />
+    <Compile Include="Generation\Common\FieldTypeService.cs" />
     <Compile Include="ModelsCollection\ManyToManyFieldsCollector.cs" />
     <Compile Include="ModelsCollection\ModelsCollector.cs" />
     <Compile Include="Common\NameCreator.cs" />
@@ -105,7 +114,7 @@
     <Compile Include="Options.cs" />
     <Compile Include="Models\Config\RelationsMode.cs" />
     <Compile Include="StormGeneration.cs" />
-    <Compile Include="Generation\CommonGeneration\TypeNameService.cs" />
+    <Compile Include="Generation\Common\TypeService.cs" />
     <Compile Include="Models\Config\Db\DbField.cs" />
     <Compile Include="Models\Config\Db\DbModel.cs" />
     <Compile Include="Models\Pregen\Relation\RelationField.cs" />

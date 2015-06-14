@@ -1,5 +1,6 @@
 ﻿namespace St.Orm.Interfaces
 {
+    using System.Data.Common;
     using System.Linq;
 
     public interface IStormContext
@@ -8,8 +9,8 @@
 
         IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>();
 
-        ////DbConnection Connection { get; }
+        DbConnection Connection { get; }
 
-        ////DbTransaction Transaction { get; }
+        DbTransaction Transaction { get; }
     }
 }

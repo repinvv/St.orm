@@ -3,15 +3,24 @@
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
-    internal class MaterializeGenerator : MethodGenerator
+    internal class MaterializeGenerator : IMethodGenerator
     {
-        public override void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public List<" + model.Name + "> Materialize(IQueryable<" + parent.Name
                 + "> query, ILoadService loadService)");
         }
 
-        public override void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
-        { }
+        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        {
+            stringGenerator.AppendLine("var context = loadService.Context;");
+            var method = model.IsInherited ? "FullCreate" : "Create";
+            stringGenerator.AppendLine("return AdoCommands.Materialize(query as IQueryable<" + parent.Name + ">,");
+            stringGenerator.PushIndent();
+            stringGenerator.AppendLine("reader => " + method + "(reader, loadService),");
+            stringGenerator.AppendLine("context.Connection,");
+            stringGenerator.AppendLine("context.Transaction);");
+            stringGenerator.PopIndent();
+        }
     }
 }

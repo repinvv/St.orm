@@ -48,12 +48,27 @@ namespace StormTestProject
             return clone;
         }
 
-        public Coverage Create(IDataReader reader)
+        public Coverage Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Coverage(loadService)
+            {
+                CoverageId = reader.GetInt32(0),
+                PolicyId = reader.GetInt32(1),
+                Comment = reader[2] as string,
+                Created = reader.GetDateTime(3),
+                Updated = reader.GetDateTime(4),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Coverage> Materialize(IQueryable<Coverage> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Coverage>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

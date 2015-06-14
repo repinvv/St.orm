@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Generation.ContextGeneration
+﻿namespace StormGenerator.Generation.StaticFilesGeneration.ContextGeneration
 {
     using System.Collections.Generic;
     using System.Linq;

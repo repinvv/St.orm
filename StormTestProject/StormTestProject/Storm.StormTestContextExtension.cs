@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject
 {
+    using System.Data.Common;
     using System.Linq;
     using St.Orm.Interfaces;
 
@@ -32,5 +33,9 @@ namespace StormTestProject
                 return stormCommands = stormCommands ?? new StormCommands(this);
             }
         }
+
+        public DbConnection Connection { get { return Database.Connection; } }
+
+        public DbTransaction Transaction { get { return Database.CurrentTransaction.UnderlyingTransaction; } }
     }
 }

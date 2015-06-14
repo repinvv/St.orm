@@ -48,12 +48,27 @@ namespace StormTestProject
             return clone;
         }
 
-        public Country Create(IDataReader reader)
+        public Country Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new Country(loadService)
+            {
+                CountryId = reader.GetInt32(0),
+                Name = reader[1] as string,
+                CountryCode = reader[2] as string,
+                Created = reader.GetDateTime(3),
+                Updated = reader.GetDateTime(4),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<Country> Materialize(IQueryable<Country> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<Country>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

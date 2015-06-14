@@ -2,21 +2,21 @@
 {
     using System.Linq;
     using StormGenerator.Common;
-    using StormGenerator.Generation.CommonGeneration;
+    using StormGenerator.Generation.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
     internal class PlainClassPartsGenerator : IModelPartsGenerator
     {
-        private readonly TypeNameService nameService;
+        private readonly TypeService service;
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
 
-        public PlainClassPartsGenerator(TypeNameService nameService,
+        public PlainClassPartsGenerator(TypeService service,
             UsingsGenerator usingsGenerator,
             FieldUtility fieldUtility)
         {
-            this.nameService = nameService;
+            this.service = service;
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
         }
@@ -35,7 +35,7 @@
 
         public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public " + nameService.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
+            stringGenerator.AppendLine("public " + service.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
         }
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)

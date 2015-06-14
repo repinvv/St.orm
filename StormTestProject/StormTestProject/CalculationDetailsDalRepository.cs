@@ -48,12 +48,27 @@ namespace StormTestProject
             return clone;
         }
 
-        public CalculationDetails Create(IDataReader reader)
+        public CalculationDetails Create(IDataReader reader, ILoadService loadService)
         {
+            var entity = new CalculationDetails(loadService)
+            {
+                CalculationDetailsId = reader.GetGuid(0),
+                CalculationId = reader.GetGuid(1),
+                Year = reader.GetInt32(2),
+                Month = reader.GetInt32(3),
+                Value = reader.GetDecimal(4),
+            };
+            extension.ExtendCreate(entity, reader);
+            return entity;
         }
 
         public List<CalculationDetails> Materialize(IQueryable<CalculationDetails> query, ILoadService loadService)
         {
+            var context = loadService.Context;
+            return AdoCommands.Materialize(query as IQueryable<CalculationDetails>,
+                reader => Create(reader, loadService),
+                context.Connection,
+                context.Transaction);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.ModelsCollection
+﻿namespace StormGenerator.Generation.Common
 {
     using System;
     using System.Collections.Generic;

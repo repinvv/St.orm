@@ -145,7 +145,13 @@
     <Compile Include="PremiumDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Storm.AdoCommands.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Storm.Commands.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Storm.ConnectionHandler.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Storm.DalRepositoryStorage.cs">
