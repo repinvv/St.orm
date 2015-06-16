@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.premium")]
-    public partial class Premium
+    public partial class Premium : ICloneable<Premium>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -43,7 +43,9 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        IQueryable<Premium> sourceQuery;
         private readonly Premium clonedFrom;
         private Comment field0;
 
@@ -51,15 +53,17 @@ namespace StormTestProject
 
         #region Constructors
 
-        public Premium(Premium clonedFrom)
+        public Premium(Premium clonedFrom, IQueryable<Premium> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Premium(ILoadService loadService)
+        public Premium(IQueryable<Premium> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Premium()
@@ -67,9 +71,31 @@ namespace StormTestProject
             Comments = new HashSet<Comment>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Premium ICloneable<Premium>.Clone()
         {
-            return loadService;
+            return new Premium(this, sourceQuery, loadService)
+            {
+                PremiumId = PremiumId,
+                PremiumType = PremiumType,
+                CoverageId = CoverageId,
+                Amount = Amount,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Premium ICloneable<Premium>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Premium>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
@@ -77,6 +103,7 @@ namespace StormTestProject
         #region Lazy properties
 
         private ICollection<Comment> property0 { get;set; }
+
 
         #endregion
     }

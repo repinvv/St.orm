@@ -36,21 +36,14 @@ namespace StormTestProject
 
         public CalculationDetails Clone(CalculationDetails source)
         {
-            var clone = new CalculationDetails(source)
-            {
-                CalculationDetailsId = source.CalculationDetailsId,
-                CalculationId = source.CalculationId,
-                Year = source.Year,
-                Month = source.Month,
-                Value = source.Value,
-            };
+            var clone = (source as ICloneable<CalculationDetails>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public CalculationDetails Create(IDataReader reader, ILoadService loadService)
+        public CalculationDetails Create(IDataReader reader, IQueryable<CalculationDetails> query, ILoadService loadService)
         {
-            var entity = new CalculationDetails(loadService)
+            var entity = new CalculationDetails(query, loadService)
             {
                 CalculationDetailsId = reader.GetGuid(0),
                 CalculationId = reader.GetGuid(1),
@@ -65,8 +58,8 @@ namespace StormTestProject
         public List<CalculationDetails> Materialize(IQueryable<CalculationDetails> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<CalculationDetails>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

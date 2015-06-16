@@ -36,21 +36,19 @@ namespace StormTestProject
 
         public CoverageDepartment Clone(CoverageDepartment source)
         {
-            var clone = new CoverageDepartment(source)
-            {
-                CoverageId = source.CoverageId,
-                DepartmentId = source.DepartmentId,
-            };
+            var clone = (source as ICloneable<CoverageDepartment>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public CoverageDepartment Create(IDataReader reader, ILoadService loadService)
+        public CoverageDepartment Create(IDataReader reader, IQueryable<CoverageDepartment> query, ILoadService loadService)
         {
-            var entity = new CoverageDepartment(loadService)
+            var entity = new CoverageDepartment(query, loadService)
             {
                 CoverageId = reader.GetInt32(0),
                 DepartmentId = reader.GetInt32(1),
+                Created = reader.GetDateTime(2),
+                Updated = reader.GetDateTime(3),
             };
             extension.ExtendCreate(entity, reader);
             return entity;
@@ -59,8 +57,8 @@ namespace StormTestProject
         public List<CoverageDepartment> Materialize(IQueryable<CoverageDepartment> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<CoverageDepartment>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

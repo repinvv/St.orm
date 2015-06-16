@@ -36,22 +36,14 @@ namespace StormTestProject
 
         public Premium Clone(Premium source)
         {
-            var clone = new Premium(source)
-            {
-                PremiumId = source.PremiumId,
-                PremiumType = source.PremiumType,
-                CoverageId = source.CoverageId,
-                Amount = source.Amount,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Premium>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Premium Create(IDataReader reader, ILoadService loadService)
+        public Premium Create(IDataReader reader, IQueryable<Premium> query, ILoadService loadService)
         {
-            var entity = new Premium(loadService)
+            var entity = new Premium(query, loadService)
             {
                 PremiumId = reader.GetInt32(0),
                 PremiumType = reader.GetInt32(1),
@@ -67,8 +59,8 @@ namespace StormTestProject
         public List<Premium> Materialize(IQueryable<Premium> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Premium>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

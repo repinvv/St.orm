@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("stats.calculation_details")]
-    public partial class CalculationDetails
+    public partial class CalculationDetails : ICloneable<CalculationDetails>
     {
         [Key]
         [Column("calculation_details_id", Order = 1)]
@@ -37,31 +37,56 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<CalculationDetails> sourceQuery;
         private readonly CalculationDetails clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public CalculationDetails(CalculationDetails clonedFrom)
+        public CalculationDetails(CalculationDetails clonedFrom, IQueryable<CalculationDetails> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public CalculationDetails(ILoadService loadService)
+        public CalculationDetails(IQueryable<CalculationDetails> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public CalculationDetails()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        CalculationDetails ICloneable<CalculationDetails>.Clone()
         {
-            return loadService;
+            return new CalculationDetails(this, sourceQuery, loadService)
+            {
+                CalculationDetailsId = CalculationDetailsId,
+                CalculationId = CalculationId,
+                Year = Year,
+                Month = Month,
+                Value = Value,
+            };
+        }
+
+        CalculationDetails ICloneable<CalculationDetails>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<CalculationDetails>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

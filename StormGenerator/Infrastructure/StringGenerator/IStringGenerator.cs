@@ -18,5 +18,7 @@
         void AppendLinesIndented(List<string> lines);
 
         void AppendLines(List<string> lines);
+
+        void Region(string regionName, Action action);
     }
 }

@@ -4,7 +4,7 @@
     using StormGenerator.Models.Config.Db;
     using StormGenerator.Models.Pregen.Relation;
 
-    internal class Model
+    internal class Model : Switcheable
     {
         public string Name { get; set; }
 

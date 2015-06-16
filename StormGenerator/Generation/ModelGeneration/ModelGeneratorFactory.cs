@@ -24,11 +24,6 @@
                 return structPartsGenerator;
             }
 
-            if (model.IsManyToManyLink)
-            {
-                return plainClassPartsGenerator;
-            }
-
             return attributedClassPartsGenerator;
         }
     }

@@ -24,7 +24,7 @@
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
-            var usings = model.MappingFields.Select(fieldUtility.GetUsing)
+            var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing)
                               .Concat(GenerationConstants.ModelGeneration.ModelClassUsings)
                               .Concat(GenerationConstants.ModelGeneration.EfAttributesUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
@@ -45,7 +45,7 @@
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
-                else if (integerTypes.Contains(field.Type) && model.MappingFields.Count(x => x.DbField.IsPrimaryKey) == 1)
+                else if (integerTypes.Contains(field.Type) && model.MappingFields.ActiveCount(x => x.DbField.IsPrimaryKey) == 1)
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.None)]");
                 }
@@ -68,14 +68,19 @@
             plainClassPartsGenerator.GenerateMappingProperty(model, field, stringGenerator);
         }
 
-        public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
+        public void GeneratePrivateFields(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            plainClassPartsGenerator.GeneratePrivateFields(model, stringGenerator);
+            plainClassPartsGenerator.GeneratePrivateFields(model, parent, stringGenerator);
         }
 
-        public void GenerateConstructors(Model model, IStringGenerator stringGenerator)
+        public void GenerateConstructors(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            plainClassPartsGenerator.GenerateConstructors(model, stringGenerator);
+            plainClassPartsGenerator.GenerateConstructors(model, parent, stringGenerator);
+        }
+
+        public void GenerateCloneableMembers(Model model, IStringGenerator stringGenerator)
+        {
+            plainClassPartsGenerator.GenerateCloneableMembers(model, stringGenerator);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.covered")]
-    public partial class Covered
+    public partial class Covered : ICloneable<Covered>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -41,31 +41,57 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<Covered> sourceQuery;
         private readonly Covered clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public Covered(Covered clonedFrom)
+        public Covered(Covered clonedFrom, IQueryable<Covered> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Covered(ILoadService loadService)
+        public Covered(IQueryable<Covered> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Covered()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Covered ICloneable<Covered>.Clone()
         {
-            return loadService;
+            return new Covered(this, sourceQuery, loadService)
+            {
+                CoveredId = CoveredId,
+                CoveredType = CoveredType,
+                CoverageId = CoverageId,
+                Headcount = Headcount,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Covered ICloneable<Covered>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Covered>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

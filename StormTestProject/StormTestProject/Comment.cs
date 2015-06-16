@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.comment")]
-    public partial class Comment
+    public partial class Comment : ICloneable<Comment>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -48,31 +48,59 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<Comment> sourceQuery;
         private readonly Comment clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public Comment(Comment clonedFrom)
+        public Comment(Comment clonedFrom, IQueryable<Comment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Comment(ILoadService loadService)
+        public Comment(IQueryable<Comment> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Comment()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Comment ICloneable<Comment>.Clone()
         {
-            return loadService;
+            return new Comment(this, sourceQuery, loadService)
+            {
+                CommentId = CommentId,
+                CommentType = CommentType,
+                PolicyId = PolicyId,
+                PremiumId = PremiumId,
+                CommentText = CommentText,
+                AuthorUserId = AuthorUserId,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Comment ICloneable<Comment>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Comment>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

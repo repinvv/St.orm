@@ -12,7 +12,7 @@
 
         TDal Clone(TDal item);
 
-        TDal Create(IDataReader reader, ILoadService loadService);
+        TDal Create(IDataReader reader, IQueryable<TQuery> query, ILoadService loadService);
 
         List<TDal> Materialize(IQueryable<TQuery> query, ILoadService loadService);
     }

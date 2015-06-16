@@ -10,25 +10,36 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
     using St.Orm.Interfaces;
 
-    public partial class CoverageEligibilityGroup
+    [Table("coverage_eligibility_group")]
+    public partial class CoverageEligibilityGroup : ICloneable<CoverageEligibilityGroup>
     {
+        [Key]
+        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
+        [Key]
+        [Column("eligibility_group_id", Order = 2)]
         public int EligibilityGroupId { get;set; }
 
+        [Column("created", Order = 3)]
         public DateTime Created { get;set; }
 
+        [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
         public virtual EligibilityGroup EligibilityGroup { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        IQueryable<CoverageEligibilityGroup> sourceQuery;
         private readonly CoverageEligibilityGroup clonedFrom;
         private EligibilityGroup field0;
 
@@ -36,24 +47,46 @@ namespace StormTestProject
 
         #region Constructors
 
-        public CoverageEligibilityGroup(CoverageEligibilityGroup clonedFrom)
+        public CoverageEligibilityGroup(CoverageEligibilityGroup clonedFrom, IQueryable<CoverageEligibilityGroup> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public CoverageEligibilityGroup(ILoadService loadService)
+        public CoverageEligibilityGroup(IQueryable<CoverageEligibilityGroup> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public CoverageEligibilityGroup()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        CoverageEligibilityGroup ICloneable<CoverageEligibilityGroup>.Clone()
         {
-            return loadService;
+            return new CoverageEligibilityGroup(this, sourceQuery, loadService)
+            {
+                CoverageId = CoverageId,
+                EligibilityGroupId = EligibilityGroupId,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        CoverageEligibilityGroup ICloneable<CoverageEligibilityGroup>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<CoverageEligibilityGroup>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
@@ -61,6 +94,7 @@ namespace StormTestProject
         #region Lazy properties
 
         private EligibilityGroup property0 { get;set; }
+
 
         #endregion
     }

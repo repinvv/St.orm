@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.coverage")]
-    public partial class Coverage
+    public partial class Coverage : ICloneable<Coverage>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -37,9 +37,9 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<Department> Departments { get { return property0; } set { property0 = value; } }
 
-        public virtual ICollection<Department> Departments { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property1; } set { property1 = value; } }
 
         public virtual ICollection<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
@@ -47,10 +47,12 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[4];
         private readonly ILoadService loadService;
+        IQueryable<Coverage> sourceQuery;
         private readonly Coverage clonedFrom;
-        private EligibilityGroup field0;
-        private Department field1;
+        private Department field0;
+        private EligibilityGroup field1;
         private Premium field2;
         private Covered field3;
 
@@ -58,41 +60,65 @@ namespace StormTestProject
 
         #region Constructors
 
-        public Coverage(Coverage clonedFrom)
+        public Coverage(Coverage clonedFrom, IQueryable<Coverage> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Coverage(ILoadService loadService)
+        public Coverage(IQueryable<Coverage> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Coverage()
         {
-            EligibilityGroups = new HashSet<EligibilityGroup>();
             Departments = new HashSet<Department>();
+            EligibilityGroups = new HashSet<EligibilityGroup>();
             Premiums = new HashSet<Premium>();
             Covereds = new HashSet<Covered>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Coverage ICloneable<Coverage>.Clone()
         {
-            return loadService;
+            return new Coverage(this, sourceQuery, loadService)
+            {
+                CoverageId = CoverageId,
+                PolicyId = PolicyId,
+                Comment = Comment,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Coverage ICloneable<Coverage>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Coverage>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
 
         #region Lazy properties
 
-        private ICollection<EligibilityGroup> property0 { get;set; }
+        private ICollection<Department> property0 { get;set; }
 
-        private ICollection<Department> property1 { get;set; }
+        private ICollection<EligibilityGroup> property1 { get;set; }
 
         private ICollection<Premium> property2 { get;set; }
 
         private ICollection<Covered> property3 { get;set; }
+
 
         #endregion
     }

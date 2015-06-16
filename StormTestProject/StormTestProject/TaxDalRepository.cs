@@ -36,21 +36,14 @@ namespace StormTestProject
 
         public Tax Clone(Tax source)
         {
-            var clone = new Tax(source)
-            {
-                TaxId = source.TaxId,
-                PolicyId = source.PolicyId,
-                Amount = source.Amount,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Tax>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Tax Create(IDataReader reader, ILoadService loadService)
+        public Tax Create(IDataReader reader, IQueryable<Tax> query, ILoadService loadService)
         {
-            var entity = new Tax(loadService)
+            var entity = new Tax(query, loadService)
             {
                 TaxId = reader.GetInt32(0),
                 PolicyId = reader.GetInt32(1),
@@ -65,8 +58,8 @@ namespace StormTestProject
         public List<Tax> Materialize(IQueryable<Tax> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Tax>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

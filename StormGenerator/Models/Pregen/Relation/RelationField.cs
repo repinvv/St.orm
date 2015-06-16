@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    internal abstract class RelationField
+    internal abstract class RelationField : Switcheable
     {
         public string Name { get; set; }
 

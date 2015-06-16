@@ -22,7 +22,7 @@
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
-            var usings = model.MappingFields.Select(fieldUtility.GetUsing);
+            var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
         }
 
@@ -36,10 +36,13 @@
             classPartsGenerator.GenerateMappingProperty(model, field, stringGenerator);
         }
 
-        public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
+        public void GeneratePrivateFields(Model model, Model parent, IStringGenerator stringGenerator)
         { }
 
-        public void GenerateConstructors(Model model, IStringGenerator stringGenerator)
+        public void GenerateConstructors(Model model, Model parent, IStringGenerator stringGenerator)
+        { }
+
+        public void GenerateCloneableMembers(Model model, IStringGenerator stringGenerator)
         { }
     }
 }

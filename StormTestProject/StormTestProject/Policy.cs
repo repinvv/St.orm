@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.policy")]
-    public partial class Policy
+    public partial class Policy : ICloneable<Policy>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -41,56 +41,83 @@ namespace StormTestProject
         [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Tax> Taxes { get { return property0; } set { property0 = value; } }
+        public virtual ICollection<Comment> Comments { get { return property0; } set { property0 = value; } }
 
-        public virtual ICollection<Coverage> Coverages { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Tax> Taxes { get { return property1; } set { property1 = value; } }
 
-        public virtual ICollection<Comment> Comments { get { return property2; } set { property2 = value; } }
+        public virtual ICollection<Coverage> Coverages { get { return property2; } set { property2 = value; } }
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[3];
         private readonly ILoadService loadService;
+        IQueryable<Policy> sourceQuery;
         private readonly Policy clonedFrom;
-        private Tax field0;
-        private Coverage field1;
-        private Comment field2;
+        private Comment field0;
+        private Tax field1;
+        private Coverage field2;
 
         #endregion
 
         #region Constructors
 
-        public Policy(Policy clonedFrom)
+        public Policy(Policy clonedFrom, IQueryable<Policy> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Policy(ILoadService loadService)
+        public Policy(IQueryable<Policy> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Policy()
         {
+            Comments = new HashSet<Comment>();
             Taxes = new HashSet<Tax>();
             Coverages = new HashSet<Coverage>();
-            Comments = new HashSet<Comment>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Policy ICloneable<Policy>.Clone()
         {
-            return loadService;
+            return new Policy(this, sourceQuery, loadService)
+            {
+                PolicyId = PolicyId,
+                CountryId = CountryId,
+                CurrencyId = CurrencyId,
+                Name = Name,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Policy ICloneable<Policy>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Policy>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
 
         #region Lazy properties
 
-        private ICollection<Tax> property0 { get;set; }
+        private ICollection<Comment> property0 { get;set; }
 
-        private ICollection<Coverage> property1 { get;set; }
+        private ICollection<Tax> property1 { get;set; }
 
-        private ICollection<Comment> property2 { get;set; }
+        private ICollection<Coverage> property2 { get;set; }
+
 
         #endregion
     }

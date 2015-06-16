@@ -11,8 +11,10 @@
 
         void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator);
 
-        void GeneratePrivateFields(Model model, IStringGenerator stringGenerator);
+        void GeneratePrivateFields(Model model, Model parent, IStringGenerator stringGenerator);
 
-        void GenerateConstructors(Model model, IStringGenerator stringGenerator);
+        void GenerateConstructors(Model model, Model parent, IStringGenerator stringGenerator);
+
+        void GenerateCloneableMembers(Model model, IStringGenerator stringGenerator);
     }
 }

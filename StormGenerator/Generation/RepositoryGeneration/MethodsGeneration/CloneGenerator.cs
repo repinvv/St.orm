@@ -12,18 +12,9 @@
 
         public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("var clone = new " + model.Name + "(source)");
-            stringGenerator.Braces(() => GenerateFields(model, parent, stringGenerator), true);
+            stringGenerator.AppendLine("var clone = (source as ICloneable<" + model.Name + ">).Clone();");
             stringGenerator.AppendLine("extension.ExtendClone(clone, source);");
             stringGenerator.AppendLine("return clone;");
-        }
-
-        private void GenerateFields(Model model, Model parent, IStringGenerator stringGenerator)
-        {
-            foreach (var field in model.MappingFields)
-            {
-                stringGenerator.AppendLine(field.Name + " = source." + field.Name + ",");
-            }
         }
     }
 }

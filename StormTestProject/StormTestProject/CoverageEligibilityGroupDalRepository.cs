@@ -36,20 +36,14 @@ namespace StormTestProject
 
         public CoverageEligibilityGroup Clone(CoverageEligibilityGroup source)
         {
-            var clone = new CoverageEligibilityGroup(source)
-            {
-                CoverageId = source.CoverageId,
-                EligibilityGroupId = source.EligibilityGroupId,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<CoverageEligibilityGroup>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public CoverageEligibilityGroup Create(IDataReader reader, ILoadService loadService)
+        public CoverageEligibilityGroup Create(IDataReader reader, IQueryable<CoverageEligibilityGroup> query, ILoadService loadService)
         {
-            var entity = new CoverageEligibilityGroup(loadService)
+            var entity = new CoverageEligibilityGroup(query, loadService)
             {
                 CoverageId = reader.GetInt32(0),
                 EligibilityGroupId = reader.GetInt32(1),
@@ -63,8 +57,8 @@ namespace StormTestProject
         public List<CoverageEligibilityGroup> Materialize(IQueryable<CoverageEligibilityGroup> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<CoverageEligibilityGroup>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

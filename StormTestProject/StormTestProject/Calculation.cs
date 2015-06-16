@@ -36,20 +36,22 @@ namespace StormTestProject
 
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
-        private readonly IQueryable<Calculation> sourceQuery;
+        IQueryable<Calculation> sourceQuery;
         private readonly Calculation clonedFrom;
-        private ICollection<CalculationDetails> field0;
+        private CalculationDetails field0;
 
         #endregion
 
         #region Constructors
 
-        public Calculation(Calculation clonedFrom, ILoadService loadService, IQueryable<Calculation> sourceQuery)
+        public Calculation(Calculation clonedFrom, IQueryable<Calculation> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Calculation(ILoadService loadService, IQueryable<Calculation> sourceQuery)
+        public Calculation(IQueryable<Calculation> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
@@ -66,7 +68,12 @@ namespace StormTestProject
 
         Calculation ICloneable<Calculation>.Clone()
         {
-            return new Calculation(this, loadService, sourceQuery);
+            return new Calculation(this, sourceQuery, loadService)
+            {
+                CalculationId = CalculationId,
+                Name = Name,
+                DueDate = DueDate,
+            };
         }
 
         Calculation ICloneable<Calculation>.ClonedFrom()
@@ -83,40 +90,8 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private ICollection<CalculationDetails> property0
-        {
-            get
-            {
-                if (materialized[0])
-                {
-                    return field0;
-                }
-                Func<IQueryable> query = () =>
-                {
-                    return loadService.Context.Set<model_run_param>()
-                        .Join(sourceQuery, x => x.model_run_details_id, y => y.model_run_details_id, (x, y) => x);
-                };
+        private ICollection<CalculationDetails> property0 { get;set; }
 
-                var items = loadService.GetProperty<DalModelRunParameter, int>(0, query, x => x.ModelRunDetailsId, Id);
-                clonedFrom.Parameters = items;
-                field0 = new List<DalModelRunParameter>(items.Count);
-                DalModelRunParameter item;
-                field0.AddRange(items);
-                for (int i = 0; i < field0.Count; i++)
-                {
-                    item = field0[i];
-                    item.StoreSource(items, i);
-                    field0[i] = item;
-                }
-
-                materialized[0] = true;
-                return field0;
-            }
-            set
-            {
-                
-            }
-        }
 
         #endregion
     }

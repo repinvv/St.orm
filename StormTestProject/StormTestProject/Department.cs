@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("department")]
-    public partial class Department
+    public partial class Department : ICloneable<Department>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -37,31 +37,55 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<Department> sourceQuery;
         private readonly Department clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public Department(Department clonedFrom)
+        public Department(Department clonedFrom, IQueryable<Department> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Department(ILoadService loadService)
+        public Department(IQueryable<Department> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Department()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Department ICloneable<Department>.Clone()
         {
-            return loadService;
+            return new Department(this, sourceQuery, loadService)
+            {
+                DepartmentId = DepartmentId,
+                Name = Name,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Department ICloneable<Department>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Department>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

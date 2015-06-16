@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("currency")]
-    public partial class Currency
+    public partial class Currency : ICloneable<Currency>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -44,7 +44,9 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        IQueryable<Currency> sourceQuery;
         private readonly Currency clonedFrom;
         private Policy field0;
 
@@ -52,15 +54,17 @@ namespace StormTestProject
 
         #region Constructors
 
-        public Currency(Currency clonedFrom)
+        public Currency(Currency clonedFrom, IQueryable<Currency> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Currency(ILoadService loadService)
+        public Currency(IQueryable<Currency> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Currency()
@@ -68,9 +72,30 @@ namespace StormTestProject
             Policies = new HashSet<Policy>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Currency ICloneable<Currency>.Clone()
         {
-            return loadService;
+            return new Currency(this, sourceQuery, loadService)
+            {
+                CurrencyId = CurrencyId,
+                Name = Name,
+                CurrencyCode = CurrencyCode,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Currency ICloneable<Currency>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Currency>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
@@ -78,6 +103,7 @@ namespace StormTestProject
         #region Lazy properties
 
         private ICollection<Policy> property0 { get;set; }
+
 
         #endregion
     }

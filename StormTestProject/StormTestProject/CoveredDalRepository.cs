@@ -36,22 +36,14 @@ namespace StormTestProject
 
         public Covered Clone(Covered source)
         {
-            var clone = new Covered(source)
-            {
-                CoveredId = source.CoveredId,
-                CoveredType = source.CoveredType,
-                CoverageId = source.CoverageId,
-                Headcount = source.Headcount,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Covered>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Covered Create(IDataReader reader, ILoadService loadService)
+        public Covered Create(IDataReader reader, IQueryable<Covered> query, ILoadService loadService)
         {
-            var entity = new Covered(loadService)
+            var entity = new Covered(query, loadService)
             {
                 CoveredId = reader.GetInt32(0),
                 CoveredType = reader.GetInt32(1),
@@ -67,8 +59,8 @@ namespace StormTestProject
         public List<Covered> Materialize(IQueryable<Covered> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Covered>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

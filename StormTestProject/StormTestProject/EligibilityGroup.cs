@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("eligibility_group")]
-    public partial class EligibilityGroup
+    public partial class EligibilityGroup : ICloneable<EligibilityGroup>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -37,31 +37,55 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<EligibilityGroup> sourceQuery;
         private readonly EligibilityGroup clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public EligibilityGroup(EligibilityGroup clonedFrom)
+        public EligibilityGroup(EligibilityGroup clonedFrom, IQueryable<EligibilityGroup> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public EligibilityGroup(ILoadService loadService)
+        public EligibilityGroup(IQueryable<EligibilityGroup> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public EligibilityGroup()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        EligibilityGroup ICloneable<EligibilityGroup>.Clone()
         {
-            return loadService;
+            return new EligibilityGroup(this, sourceQuery, loadService)
+            {
+                EligibilityGroupId = EligibilityGroupId,
+                Name = Name,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        EligibilityGroup ICloneable<EligibilityGroup>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<EligibilityGroup>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

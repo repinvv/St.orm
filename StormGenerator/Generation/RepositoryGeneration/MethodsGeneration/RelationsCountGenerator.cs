@@ -12,7 +12,7 @@
 
         public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("return extension.RelationsCount() ?? " + model.RelationFields.Count + ";");
+            stringGenerator.AppendLine("return extension.RelationsCount() ?? " + model.RelationFields.ActiveCount() + ";");
         }
     }
 }

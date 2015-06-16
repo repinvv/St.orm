@@ -15,9 +15,9 @@
         {
             stringGenerator.AppendLine("var context = loadService.Context;");
             var method = model.IsInherited ? "FullCreate" : "Create";
-            stringGenerator.AppendLine("return AdoCommands.Materialize(query as IQueryable<" + parent.Name + ">,");
+            stringGenerator.AppendLine("return AdoCommands.Materialize(query,");
             stringGenerator.PushIndent();
-            stringGenerator.AppendLine("reader => " + method + "(reader, loadService),");
+            stringGenerator.AppendLine("reader => " + method + "(reader, query, loadService),");
             stringGenerator.AppendLine("context.Connection,");
             stringGenerator.AppendLine("context.Transaction);");
             stringGenerator.PopIndent();

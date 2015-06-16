@@ -36,24 +36,14 @@ namespace StormTestProject
 
         public Comment Clone(Comment source)
         {
-            var clone = new Comment(source)
-            {
-                CommentId = source.CommentId,
-                CommentType = source.CommentType,
-                PolicyId = source.PolicyId,
-                PremiumId = source.PremiumId,
-                CommentText = source.CommentText,
-                AuthorUserId = source.AuthorUserId,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Comment>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Comment Create(IDataReader reader, ILoadService loadService)
+        public Comment Create(IDataReader reader, IQueryable<Comment> query, ILoadService loadService)
         {
-            var entity = new Comment(loadService)
+            var entity = new Comment(query, loadService)
             {
                 CommentId = reader.GetInt32(0),
                 CommentType = reader.GetInt32(1),
@@ -71,8 +61,8 @@ namespace StormTestProject
         public List<Comment> Materialize(IQueryable<Comment> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Comment>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

@@ -36,22 +36,14 @@ namespace StormTestProject
 
         public Policy Clone(Policy source)
         {
-            var clone = new Policy(source)
-            {
-                PolicyId = source.PolicyId,
-                CountryId = source.CountryId,
-                CurrencyId = source.CurrencyId,
-                Name = source.Name,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Policy>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Policy Create(IDataReader reader, ILoadService loadService)
+        public Policy Create(IDataReader reader, IQueryable<Policy> query, ILoadService loadService)
         {
-            var entity = new Policy(loadService)
+            var entity = new Policy(query, loadService)
             {
                 PolicyId = reader.GetInt32(0),
                 CountryId = reader.GetInt32(1),
@@ -67,8 +59,8 @@ namespace StormTestProject
         public List<Policy> Materialize(IQueryable<Policy> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Policy>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

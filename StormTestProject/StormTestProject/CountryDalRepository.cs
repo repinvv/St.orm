@@ -36,21 +36,14 @@ namespace StormTestProject
 
         public Country Clone(Country source)
         {
-            var clone = new Country(source)
-            {
-                CountryId = source.CountryId,
-                Name = source.Name,
-                CountryCode = source.CountryCode,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Country>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Country Create(IDataReader reader, ILoadService loadService)
+        public Country Create(IDataReader reader, IQueryable<Country> query, ILoadService loadService)
         {
-            var entity = new Country(loadService)
+            var entity = new Country(query, loadService)
             {
                 CountryId = reader.GetInt32(0),
                 Name = reader[1] as string,
@@ -65,8 +58,8 @@ namespace StormTestProject
         public List<Country> Materialize(IQueryable<Country> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Country>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

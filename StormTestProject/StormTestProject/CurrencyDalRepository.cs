@@ -36,21 +36,14 @@ namespace StormTestProject
 
         public Currency Clone(Currency source)
         {
-            var clone = new Currency(source)
-            {
-                CurrencyId = source.CurrencyId,
-                Name = source.Name,
-                CurrencyCode = source.CurrencyCode,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Currency>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Currency Create(IDataReader reader, ILoadService loadService)
+        public Currency Create(IDataReader reader, IQueryable<Currency> query, ILoadService loadService)
         {
-            var entity = new Currency(loadService)
+            var entity = new Currency(query, loadService)
             {
                 CurrencyId = reader.GetInt32(0),
                 Name = reader[1] as string,
@@ -65,8 +58,8 @@ namespace StormTestProject
         public List<Currency> Materialize(IQueryable<Currency> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Currency>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }

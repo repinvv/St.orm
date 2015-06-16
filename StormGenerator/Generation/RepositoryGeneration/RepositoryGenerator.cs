@@ -36,7 +36,7 @@
 
         private void GenerateDefinition(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            var usings = model.MappingFields.Select(fieldUtility.GetUsing)
+            var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing)
                               .Concat(GenerationConstants.ModelGeneration.RepositoryUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
             stringGenerator.AppendLine();

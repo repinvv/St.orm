@@ -10,21 +10,36 @@ namespace StormTestProject
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using St.Orm;
     using St.Orm.Interfaces;
 
-    public partial class CoverageDepartment
+    [Table("model.coverage_department")]
+    public partial class CoverageDepartment : ICloneable<CoverageDepartment>
     {
+        [Key]
+        [Column("coverage_id", Order = 1)]
         public int CoverageId { get;set; }
 
+        [Key]
+        [Column("department_id", Order = 2)]
         public int DepartmentId { get;set; }
+
+        [Column("created", Order = 3)]
+        public DateTime Created { get;set; }
+
+        [Column("updated", Order = 4)]
+        public DateTime Updated { get;set; }
 
         public virtual Department Department { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        IQueryable<CoverageDepartment> sourceQuery;
         private readonly CoverageDepartment clonedFrom;
         private Department field0;
 
@@ -32,24 +47,46 @@ namespace StormTestProject
 
         #region Constructors
 
-        public CoverageDepartment(CoverageDepartment clonedFrom)
+        public CoverageDepartment(CoverageDepartment clonedFrom, IQueryable<CoverageDepartment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public CoverageDepartment(ILoadService loadService)
+        public CoverageDepartment(IQueryable<CoverageDepartment> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public CoverageDepartment()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        CoverageDepartment ICloneable<CoverageDepartment>.Clone()
         {
-            return loadService;
+            return new CoverageDepartment(this, sourceQuery, loadService)
+            {
+                CoverageId = CoverageId,
+                DepartmentId = DepartmentId,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        CoverageDepartment ICloneable<CoverageDepartment>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<CoverageDepartment>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
@@ -57,6 +94,7 @@ namespace StormTestProject
         #region Lazy properties
 
         private Department property0 { get;set; }
+
 
         #endregion
     }

@@ -19,9 +19,7 @@
 
         public void GenerateInitializers(List<Model> models, IStringGenerator stringGenerator)
         {
-            foreach (var model in models
-                .Where(x => !x.IsManyToManyLink)
-                .Where(x => x.RelationFields.Any()))
+            foreach (var model in models.Where(x => x.RelationFields.AnyActive()))
             {
                 stringGenerator.AppendLine();
                 stringGenerator.AppendLine("protected virtual void Initialize" + model.Name + "Relations(DbModelBuilder modelBuilder)");
@@ -31,7 +29,8 @@
 
         private void GenerateInitializer(Model model, IStringGenerator stringGenerator)
         {
-            foreach (var field in model.RelationFields)
+            // suppressed mtm's
+            foreach (var field in model.RelationFields.Active().Where(x => x.GetType() != typeof(ManyToManyField)))
             {
                 if (relationIds.Contains(field.AssociationId))
                 {
@@ -55,13 +54,13 @@
                 return;
             }
 
-            var required = field.NearEndFields.Any(x => x.DbField.IsNullable) ? "Optional" : "Required";
+            var required = field.NearEndFields.Active().Any(x => x.DbField.IsNullable) ? "Optional" : "Required";
 
             stringGenerator.AppendLine(".Has" + required + "(x => x." + field.Name + ")");
-            var reverseField = field.FieldModel.RelationFields.FirstOrDefault(x => x.AssociationId == field.AssociationId);
+            var reverseField = field.FieldModel.RelationFields.Active().FirstOrDefault(x => x.AssociationId == field.AssociationId);
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".WithMany(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.NearEndFields.Select(x => x.Name).ToArray(), "x", false);
+            var objectString = objectStringService.CreateObjectString(field.NearEndFields.Active().Select(x => x.Name).ToArray(), "x", false);
             stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
         }
 
@@ -73,11 +72,11 @@
             }
 
             stringGenerator.AppendLine(".HasMany(x => x." + field.Name + ")");
-            var reverseField = field.FieldModel.RelationFields.FirstOrDefault(x => x.AssociationId == field.AssociationId);
-            var required = field.FarEndFields.Any(x => x.DbField.IsNullable) ? "Optional" : "Required";
+            var reverseField = field.FieldModel.RelationFields.Active().FirstOrDefault(x => x.AssociationId == field.AssociationId);
+            var required = field.FarEndFields.Active().Any(x => x.DbField.IsNullable) ? "Optional" : "Required";
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".With" + required + "(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.FarEndFields.Select(x => x.Name).ToArray(), "x", false);
+            var objectString = objectStringService.CreateObjectString(field.FarEndFields.Active().Select(x => x.Name).ToArray(), "x", false);
             stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
         }
 
@@ -90,16 +89,16 @@
 
             relationIds.Add(field.MediatorMtoField.AssociationId);
             stringGenerator.AppendLine(".HasMany(x => x." + field.Name + ")");
-            var reverseField = field.MediatorMtoField.FieldModel.RelationFields.OfType<ManyToManyField>()
+            var reverseField = field.MediatorMtoField.FieldModel.RelationFields.Active().OfType<ManyToManyField>()
                 .FirstOrDefault(x => x.MediatorMtoField.AssociationId == field.AssociationId);
             var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
             stringGenerator.AppendLine(".WithMany(" + reverse + ")");
             stringGenerator.AppendLine(".Map(m => m.ToTable(\"" + field.MediatorModel.DbModel.Name + "\", \"" +
                                        field.MediatorModel.DbModel.Schema + "\")");
             stringGenerator.PushIndent();
-            var leftKeys = field.FarEndFields.Select(x => "\"" + x.DbField.Name + "\"");
+            var leftKeys = field.FarEndFields.Active().Select(x => "\"" + x.DbField.Name + "\"");
             stringGenerator.AppendLine(".MapLeftKey(" + string.Join(", ", leftKeys) + ")");
-            var rightKeys = field.MediatorMtoField.NearEndFields.Select(x => "\"" + x.DbField.Name + "\"");
+            var rightKeys = field.MediatorMtoField.NearEndFields.Active().Select(x => "\"" + x.DbField.Name + "\"");
             stringGenerator.AppendLine(".MapRightKey(" + string.Join(", ", rightKeys) + "));");
             stringGenerator.PopIndent();
         }

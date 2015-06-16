@@ -8,6 +8,7 @@
     internal class StringGenerator : IStringGenerator
     {
         private StringBuilder builder = new StringBuilder();
+        private bool appended;
         private int indentCount = 0;
 
         public void PushIndent(int amount = 1)
@@ -41,6 +42,7 @@
                 builder.Append(' ', indent);
             }
 
+            appended = true;
             builder.AppendLine(line);
         }
 
@@ -67,6 +69,20 @@
             {
                 AppendLine(line);
             }
+        }
+
+        public void Region(string regionName, Action action)
+        {
+            AppendLine("#region " + regionName);
+            AppendLine();
+            appended = false;
+            action();
+            if (appended)
+            {
+                AppendLine();
+            }
+
+            AppendLine("#endregion");
         }
 
         public override string ToString()

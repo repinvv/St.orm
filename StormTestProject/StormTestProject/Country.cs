@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("country")]
-    public partial class Country
+    public partial class Country : ICloneable<Country>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -44,7 +44,9 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        IQueryable<Country> sourceQuery;
         private readonly Country clonedFrom;
         private Policy field0;
 
@@ -52,15 +54,17 @@ namespace StormTestProject
 
         #region Constructors
 
-        public Country(Country clonedFrom)
+        public Country(Country clonedFrom, IQueryable<Country> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Country(ILoadService loadService)
+        public Country(IQueryable<Country> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Country()
@@ -68,9 +72,30 @@ namespace StormTestProject
             Policies = new HashSet<Policy>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Country ICloneable<Country>.Clone()
         {
-            return loadService;
+            return new Country(this, sourceQuery, loadService)
+            {
+                CountryId = CountryId,
+                Name = Name,
+                CountryCode = CountryCode,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Country ICloneable<Country>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Country>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
@@ -78,6 +103,7 @@ namespace StormTestProject
         #region Lazy properties
 
         private ICollection<Policy> property0 { get;set; }
+
 
         #endregion
     }

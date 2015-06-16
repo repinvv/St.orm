@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.tax")]
-    public partial class Tax
+    public partial class Tax : ICloneable<Tax>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -38,31 +38,56 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
+        IQueryable<Tax> sourceQuery;
         private readonly Tax clonedFrom;
 
         #endregion
 
         #region Constructors
 
-        public Tax(Tax clonedFrom)
+        public Tax(Tax clonedFrom, IQueryable<Tax> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
-        public Tax(ILoadService loadService)
+        public Tax(IQueryable<Tax> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Tax()
         {
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Tax ICloneable<Tax>.Clone()
         {
-            return loadService;
+            return new Tax(this, sourceQuery, loadService)
+            {
+                TaxId = TaxId,
+                PolicyId = PolicyId,
+                Amount = Amount,
+                Created = Created,
+                Updated = Updated,
+            };
+        }
+
+        Tax ICloneable<Tax>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Tax>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion

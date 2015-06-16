@@ -36,20 +36,14 @@ namespace StormTestProject
 
         public Department Clone(Department source)
         {
-            var clone = new Department(source)
-            {
-                DepartmentId = source.DepartmentId,
-                Name = source.Name,
-                Created = source.Created,
-                Updated = source.Updated,
-            };
+            var clone = (source as ICloneable<Department>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Department Create(IDataReader reader, ILoadService loadService)
+        public Department Create(IDataReader reader, IQueryable<Department> query, ILoadService loadService)
         {
-            var entity = new Department(loadService)
+            var entity = new Department(query, loadService)
             {
                 DepartmentId = reader.GetInt32(0),
                 Name = reader[1] as string,
@@ -63,8 +57,8 @@ namespace StormTestProject
         public List<Department> Materialize(IQueryable<Department> query, ILoadService loadService)
         {
             var context = loadService.Context;
-            return AdoCommands.Materialize(query as IQueryable<Department>,
-                reader => Create(reader, loadService),
+            return AdoCommands.Materialize(query,
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }
