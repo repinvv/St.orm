@@ -42,6 +42,7 @@
     <Compile Include="EmptyRepositoryExtension.cs" />
     <Compile Include="HelpfulExtensions.cs" />
     <Compile Include="Implementation\LoadService.cs" />
+    <Compile Include="Interfaces\ICloneable.cs" />
     <Compile Include="Interfaces\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
     <Compile Include="Interfaces\IDalRepositoryExtension.cs" />

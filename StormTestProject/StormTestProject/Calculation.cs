@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("stats.calculation")]
-    public partial class Calculation
+    public partial class Calculation : ICloneable<Calculation>
     {
         [Key]
         [Column("calculation_id", Order = 1)]
@@ -34,23 +34,25 @@ namespace StormTestProject
 
         #region Private fields
 
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
+        private readonly IQueryable<Calculation> sourceQuery;
         private readonly Calculation clonedFrom;
-        private CalculationDetails field0;
+        private ICollection<CalculationDetails> field0;
 
         #endregion
 
         #region Constructors
 
-        public Calculation(Calculation clonedFrom)
+        public Calculation(Calculation clonedFrom, ILoadService loadService, IQueryable<Calculation> sourceQuery)
         {
             this.clonedFrom = clonedFrom;
-            this.loadService = clonedFrom.GetLoadService();
         }
 
-        public Calculation(ILoadService loadService)
+        public Calculation(ILoadService loadService, IQueryable<Calculation> sourceQuery)
         {
             this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
         }
 
         public Calculation()
@@ -58,16 +60,63 @@ namespace StormTestProject
             CalculationDetailses = new HashSet<CalculationDetails>();
         }
 
-        public ILoadService GetLoadService()
+        #endregion
+
+        #region ICloneable implementation
+
+        Calculation ICloneable<Calculation>.Clone()
         {
-            return loadService;
+            return new Calculation(this, loadService, sourceQuery);
+        }
+
+        Calculation ICloneable<Calculation>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] ICloneable<Calculation>.GetPopulated()
+        {
+            return populated;
         }
 
         #endregion
 
         #region Lazy properties
 
-        private ICollection<CalculationDetails> property0 { get;set; }
+        private ICollection<CalculationDetails> property0
+        {
+            get
+            {
+                if (materialized[0])
+                {
+                    return field0;
+                }
+                Func<IQueryable> query = () =>
+                {
+                    return loadService.Context.Set<model_run_param>()
+                        .Join(sourceQuery, x => x.model_run_details_id, y => y.model_run_details_id, (x, y) => x);
+                };
+
+                var items = loadService.GetProperty<DalModelRunParameter, int>(0, query, x => x.ModelRunDetailsId, Id);
+                clonedFrom.Parameters = items;
+                field0 = new List<DalModelRunParameter>(items.Count);
+                DalModelRunParameter item;
+                field0.AddRange(items);
+                for (int i = 0; i < field0.Count; i++)
+                {
+                    item = field0[i];
+                    item.StoreSource(items, i);
+                    field0[i] = item;
+                }
+
+                materialized[0] = true;
+                return field0;
+            }
+            set
+            {
+                
+            }
+        }
 
         #endregion
     }

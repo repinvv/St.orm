@@ -46,9 +46,9 @@ namespace StormTestProject
             return clone;
         }
 
-        public Calculation Create(IDataReader reader, ILoadService loadService)
+        public Calculation Create(IDataReader reader, IQueryable<Calculation> query, ILoadService loadService)
         {
-            var entity = new Calculation(loadService)
+            var entity = new Calculation(loadService, query)
             {
                 CalculationId = reader.GetGuid(0),
                 Name = reader[1] as string,
@@ -62,7 +62,7 @@ namespace StormTestProject
         {
             var context = loadService.Context;
             return AdoCommands.Materialize(query as IQueryable<Calculation>,
-                reader => Create(reader, loadService),
+                reader => Create(reader, query, loadService),
                 context.Connection,
                 context.Transaction);
         }
