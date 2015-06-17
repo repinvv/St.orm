@@ -27,8 +27,8 @@ namespace StormTestProject
         [Column("premium_type", Order = 2)]
         public int PremiumType { get;set; }
 
-        [Column("coverage_id", Order = 3)]
-        public int CoverageId { get;set; }
+        [Column("assignment_id", Order = 3)]
+        public int AssignmentId { get;set; }
 
         [Column("amount", Order = 4)]
         public decimal Amount { get;set; }
@@ -81,7 +81,7 @@ namespace StormTestProject
             {
                 PremiumId = PremiumId,
                 PremiumType = PremiumType,
-                CoverageId = CoverageId,
+                AssignmentId = AssignmentId,
                 Amount = Amount,
                 Created = Created,
                 Updated = Updated,
@@ -103,7 +103,6 @@ namespace StormTestProject
         #region Lazy properties
 
         private ICollection<Comment> property0 { get;set; }
-
 
         #endregion
     }

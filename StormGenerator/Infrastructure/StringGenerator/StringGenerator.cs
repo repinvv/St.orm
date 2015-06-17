@@ -9,6 +9,7 @@
     {
         private StringBuilder builder = new StringBuilder();
         private bool appended;
+        private bool emptyAppend;
         private int indentCount = 0;
 
         public void PushIndent(int amount = 1)
@@ -43,11 +44,14 @@
             }
 
             appended = true;
+            emptyAppend = line == string.Empty;
             builder.AppendLine(line);
         }
 
         public void AppendLine()
         {
+            appended = true;
+            emptyAppend = true;
             builder.AppendLine();
         }
 
@@ -77,7 +81,7 @@
             AppendLine();
             appended = false;
             action();
-            if (appended)
+            if (appended && !emptyAppend)
             {
                 AppendLine();
             }

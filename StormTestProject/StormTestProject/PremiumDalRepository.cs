@@ -47,7 +47,7 @@ namespace StormTestProject
             {
                 PremiumId = reader.GetInt32(0),
                 PremiumType = reader.GetInt32(1),
-                CoverageId = reader.GetInt32(2),
+                AssignmentId = reader.GetInt32(2),
                 Amount = reader.GetDecimal(3),
                 Created = reader.GetDateTime(4),
                 Updated = reader.GetDateTime(5),

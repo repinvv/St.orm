@@ -16,13 +16,13 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.coverage")]
-    public partial class Coverage : ICloneable<Coverage>
+    [Table("model.assignment")]
+    public partial class Assignment : ICloneable<Assignment>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Column("coverage_id", Order = 1)]
-        public int CoverageId { get;set; }
+        [Column("assignment_id", Order = 1)]
+        public int AssignmentId { get;set; }
 
         [Column("policy_id", Order = 2)]
         public int PolicyId { get;set; }
@@ -39,7 +39,7 @@ namespace StormTestProject
 
         public virtual ICollection<Department> Departments { get { return property0; } set { property0 = value; } }
 
-        public virtual ICollection<EligibilityGroup> EligibilityGroups { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Eligibility> Eligibilities { get { return property1; } set { property1 = value; } }
 
         public virtual ICollection<Premium> Premiums { get { return property2; } set { property2 = value; } }
 
@@ -49,10 +49,10 @@ namespace StormTestProject
 
         private readonly bool[] populated = new bool[4];
         private readonly ILoadService loadService;
-        IQueryable<Coverage> sourceQuery;
-        private readonly Coverage clonedFrom;
+        IQueryable<Assignment> sourceQuery;
+        private readonly Assignment clonedFrom;
         private Department field0;
-        private EligibilityGroup field1;
+        private Eligibility field1;
         private Premium field2;
         private Covered field3;
 
@@ -60,23 +60,23 @@ namespace StormTestProject
 
         #region Constructors
 
-        public Coverage(Coverage clonedFrom, IQueryable<Coverage> sourceQuery, ILoadService loadService)
+        public Assignment(Assignment clonedFrom, IQueryable<Assignment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public Coverage(IQueryable<Coverage> sourceQuery, ILoadService loadService)
+        public Assignment(IQueryable<Assignment> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public Coverage()
+        public Assignment()
         {
             Departments = new HashSet<Department>();
-            EligibilityGroups = new HashSet<EligibilityGroup>();
+            Eligibilities = new HashSet<Eligibility>();
             Premiums = new HashSet<Premium>();
             Covereds = new HashSet<Covered>();
         }
@@ -85,11 +85,11 @@ namespace StormTestProject
 
         #region ICloneable implementation
 
-        Coverage ICloneable<Coverage>.Clone()
+        Assignment ICloneable<Assignment>.Clone()
         {
-            return new Coverage(this, sourceQuery, loadService)
+            return new Assignment(this, sourceQuery, loadService)
             {
-                CoverageId = CoverageId,
+                AssignmentId = AssignmentId,
                 PolicyId = PolicyId,
                 Comment = Comment,
                 Created = Created,
@@ -97,12 +97,12 @@ namespace StormTestProject
             };
         }
 
-        Coverage ICloneable<Coverage>.ClonedFrom()
+        Assignment ICloneable<Assignment>.ClonedFrom()
         {
             return clonedFrom;
         }
 
-        bool[] ICloneable<Coverage>.GetPopulated()
+        bool[] ICloneable<Assignment>.GetPopulated()
         {
             return populated;
         }
@@ -113,12 +113,11 @@ namespace StormTestProject
 
         private ICollection<Department> property0 { get;set; }
 
-        private ICollection<EligibilityGroup> property1 { get;set; }
+        private ICollection<Eligibility> property1 { get;set; }
 
         private ICollection<Premium> property2 { get;set; }
 
         private ICollection<Covered> property3 { get;set; }
-
 
         #endregion
     }

@@ -27,8 +27,8 @@ namespace StormTestProject
         [Column("covered_type", Order = 2)]
         public int CoveredType { get;set; }
 
-        [Column("coverage_id", Order = 3)]
-        public int CoverageId { get;set; }
+        [Column("assignment_id", Order = 3)]
+        public int AssignmentId { get;set; }
 
         [Column("headcount", Order = 4)]
         public int Headcount { get;set; }
@@ -77,7 +77,7 @@ namespace StormTestProject
             {
                 CoveredId = CoveredId,
                 CoveredType = CoveredType,
-                CoverageId = CoverageId,
+                AssignmentId = AssignmentId,
                 Headcount = Headcount,
                 Created = Created,
                 Updated = Updated,

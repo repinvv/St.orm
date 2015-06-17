@@ -15,47 +15,46 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    internal class CoverageDalRepository : IDalRepository<Coverage, Coverage>
+    internal class AssignmentEligibilityDalRepository : IDalRepository<AssignmentEligibility, AssignmentEligibility>
     {
-        private IDalRepositoryExtension<Coverage> extension;
+        private IDalRepositoryExtension<AssignmentEligibility> extension;
 
-        public CoverageDalRepository()
+        public AssignmentEligibilityDalRepository()
         {
-            extension = new EmptyRepositoryExtension<Coverage>();
+            extension = new EmptyRepositoryExtension<AssignmentEligibility>();
         }
 
-        public void SetExtension(IDalRepositoryExtension<Coverage> extension)
+        public void SetExtension(IDalRepositoryExtension<AssignmentEligibility> extension)
         {
             this.extension = extension;
         }
 
         public int RelationsCount()
         {
-            return extension.RelationsCount() ?? 4;
+            return extension.RelationsCount() ?? 1;
         }
 
-        public Coverage Clone(Coverage source)
+        public AssignmentEligibility Clone(AssignmentEligibility source)
         {
-            var clone = (source as ICloneable<Coverage>).Clone();
+            var clone = (source as ICloneable<AssignmentEligibility>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public Coverage Create(IDataReader reader, IQueryable<Coverage> query, ILoadService loadService)
+        public AssignmentEligibility Create(IDataReader reader, IQueryable<AssignmentEligibility> query, ILoadService loadService)
         {
-            var entity = new Coverage(query, loadService)
+            var entity = new AssignmentEligibility(query, loadService)
             {
-                CoverageId = reader.GetInt32(0),
-                PolicyId = reader.GetInt32(1),
-                Comment = reader[2] as string,
-                Created = reader.GetDateTime(3),
-                Updated = reader.GetDateTime(4),
+                AssignmentId = reader.GetInt32(0),
+                EligibilityId = reader.GetInt32(1),
+                Created = reader.GetDateTime(2),
+                Updated = reader.GetDateTime(3),
             };
             extension.ExtendCreate(entity, reader);
             return entity;
         }
 
-        public List<Coverage> Materialize(IQueryable<Coverage> query, ILoadService loadService)
+        public List<AssignmentEligibility> Materialize(IQueryable<AssignmentEligibility> query, ILoadService loadService)
         {
             var context = loadService.Context;
             return AdoCommands.Materialize(query,

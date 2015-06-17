@@ -15,16 +15,16 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    internal class EligibilityGroupDalRepository : IDalRepository<EligibilityGroup, EligibilityGroup>
+    internal class EligibilityDalRepository : IDalRepository<Eligibility, Eligibility>
     {
-        private IDalRepositoryExtension<EligibilityGroup> extension;
+        private IDalRepositoryExtension<Eligibility> extension;
 
-        public EligibilityGroupDalRepository()
+        public EligibilityDalRepository()
         {
-            extension = new EmptyRepositoryExtension<EligibilityGroup>();
+            extension = new EmptyRepositoryExtension<Eligibility>();
         }
 
-        public void SetExtension(IDalRepositoryExtension<EligibilityGroup> extension)
+        public void SetExtension(IDalRepositoryExtension<Eligibility> extension)
         {
             this.extension = extension;
         }
@@ -34,18 +34,18 @@ namespace StormTestProject
             return extension.RelationsCount() ?? 0;
         }
 
-        public EligibilityGroup Clone(EligibilityGroup source)
+        public Eligibility Clone(Eligibility source)
         {
-            var clone = (source as ICloneable<EligibilityGroup>).Clone();
+            var clone = (source as ICloneable<Eligibility>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public EligibilityGroup Create(IDataReader reader, IQueryable<EligibilityGroup> query, ILoadService loadService)
+        public Eligibility Create(IDataReader reader, IQueryable<Eligibility> query, ILoadService loadService)
         {
-            var entity = new EligibilityGroup(query, loadService)
+            var entity = new Eligibility(query, loadService)
             {
-                EligibilityGroupId = reader.GetInt32(0),
+                EligibilityId = reader.GetInt32(0),
                 Name = reader[1] as string,
                 Created = reader.GetDateTime(2),
                 Updated = reader.GetDateTime(3),
@@ -54,7 +54,7 @@ namespace StormTestProject
             return entity;
         }
 
-        public List<EligibilityGroup> Materialize(IQueryable<EligibilityGroup> query, ILoadService loadService)
+        public List<Eligibility> Materialize(IQueryable<Eligibility> query, ILoadService loadService)
         {
             var context = loadService.Context;
             return AdoCommands.Materialize(query,

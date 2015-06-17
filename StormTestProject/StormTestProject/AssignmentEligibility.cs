@@ -16,18 +16,16 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("eligibility_group")]
-    public partial class EligibilityGroup : ICloneable<EligibilityGroup>
+    [Table("model.assignment_eligibility")]
+    public partial class AssignmentEligibility : ICloneable<AssignmentEligibility>
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("eligibility_group_id", Order = 1)]
-        public int EligibilityGroupId { get;set; }
+        [Column("assignment_id", Order = 1)]
+        public int AssignmentId { get;set; }
 
-        [Required]
-        [MaxLength(256)]
-        [Column("name", Order = 2)]
-        public string Name { get;set; }
+        [Key]
+        [Column("eligibility_id", Order = 2)]
+        public int EligibilityId { get;set; }
 
         [Column("created", Order = 3)]
         public DateTime Created { get;set; }
@@ -35,31 +33,34 @@ namespace StormTestProject
         [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
+        public virtual Eligibility Eligibility { get { return property0; } set { property0 = value; } }
+
         #region Private fields
 
-        private readonly bool[] populated = new bool[0];
+        private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
-        IQueryable<EligibilityGroup> sourceQuery;
-        private readonly EligibilityGroup clonedFrom;
+        IQueryable<AssignmentEligibility> sourceQuery;
+        private readonly AssignmentEligibility clonedFrom;
+        private Eligibility field0;
 
         #endregion
 
         #region Constructors
 
-        public EligibilityGroup(EligibilityGroup clonedFrom, IQueryable<EligibilityGroup> sourceQuery, ILoadService loadService)
+        public AssignmentEligibility(AssignmentEligibility clonedFrom, IQueryable<AssignmentEligibility> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public EligibilityGroup(IQueryable<EligibilityGroup> sourceQuery, ILoadService loadService)
+        public AssignmentEligibility(IQueryable<AssignmentEligibility> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public EligibilityGroup()
+        public AssignmentEligibility()
         {
         }
 
@@ -67,23 +68,23 @@ namespace StormTestProject
 
         #region ICloneable implementation
 
-        EligibilityGroup ICloneable<EligibilityGroup>.Clone()
+        AssignmentEligibility ICloneable<AssignmentEligibility>.Clone()
         {
-            return new EligibilityGroup(this, sourceQuery, loadService)
+            return new AssignmentEligibility(this, sourceQuery, loadService)
             {
-                EligibilityGroupId = EligibilityGroupId,
-                Name = Name,
+                AssignmentId = AssignmentId,
+                EligibilityId = EligibilityId,
                 Created = Created,
                 Updated = Updated,
             };
         }
 
-        EligibilityGroup ICloneable<EligibilityGroup>.ClonedFrom()
+        AssignmentEligibility ICloneable<AssignmentEligibility>.ClonedFrom()
         {
             return clonedFrom;
         }
 
-        bool[] ICloneable<EligibilityGroup>.GetPopulated()
+        bool[] ICloneable<AssignmentEligibility>.GetPopulated()
         {
             return populated;
         }
@@ -91,6 +92,8 @@ namespace StormTestProject
         #endregion
 
         #region Lazy properties
+
+        private Eligibility property0 { get;set; }
 
         #endregion
     }

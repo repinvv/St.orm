@@ -19,19 +19,19 @@ namespace StormTestProject
             = new Dictionary<Type, object>
                 {
                     { typeof(Department), new DepartmentDalRepository() },
-                    { typeof(EligibilityGroup), new EligibilityGroupDalRepository() },
+                    { typeof(Eligibility), new EligibilityDalRepository() },
                     { typeof(Currency), new CurrencyDalRepository() },
                     { typeof(Country), new CountryDalRepository() },
-                    { typeof(CoverageEligibilityGroup), new CoverageEligibilityGroupDalRepository() },
                     { typeof(Calculation), new CalculationDalRepository() },
                     { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
+                    { typeof(Policy), new PolicyDalRepository() },
+                    { typeof(Tax), new TaxDalRepository() },
+                    { typeof(Assignment), new AssignmentDalRepository() },
+                    { typeof(AssignmentDepartment), new AssignmentDepartmentDalRepository() },
+                    { typeof(AssignmentEligibility), new AssignmentEligibilityDalRepository() },
                     { typeof(Premium), new PremiumDalRepository() },
                     { typeof(Covered), new CoveredDalRepository() },
                     { typeof(Comment), new CommentDalRepository() },
-                    { typeof(Policy), new PolicyDalRepository() },
-                    { typeof(Tax), new TaxDalRepository() },
-                    { typeof(Coverage), new CoverageDalRepository() },
-                    { typeof(CoverageDepartment), new CoverageDepartmentDalRepository() },
                 };
     
         public static IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()

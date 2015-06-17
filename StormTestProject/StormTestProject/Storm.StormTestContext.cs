@@ -17,17 +17,25 @@ namespace StormTestProject
 
         public virtual DbSet<Department> Departments { get; set; }
 
-        public virtual DbSet<EligibilityGroup> EligibilityGroups { get; set; }
+        public virtual DbSet<Eligibility> Eligibilities { get; set; }
 
         public virtual DbSet<Currency> Currencies { get; set; }
 
         public virtual DbSet<Country> Countries { get; set; }
 
-        public virtual DbSet<CoverageEligibilityGroup> CoverageEligibilityGroups { get; set; }
-
         public virtual DbSet<Calculation> Calculations { get; set; }
 
         public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
+
+        public virtual DbSet<Policy> Policies { get; set; }
+
+        public virtual DbSet<Tax> Taxes { get; set; }
+
+        public virtual DbSet<Assignment> Assignments { get; set; }
+
+        public virtual DbSet<AssignmentDepartment> AssignmentDepartments { get; set; }
+
+        public virtual DbSet<AssignmentEligibility> AssignmentEligibilities { get; set; }
 
         public virtual DbSet<Premium> Premiums { get; set; }
 
@@ -35,24 +43,16 @@ namespace StormTestProject
 
         public virtual DbSet<Comment> Comments { get; set; }
 
-        public virtual DbSet<Policy> Policies { get; set; }
-
-        public virtual DbSet<Tax> Taxes { get; set; }
-
-        public virtual DbSet<Coverage> Coverages { get; set; }
-
-        public virtual DbSet<CoverageDepartment> CoverageDepartments { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             InitializeCurrencyRelations(modelBuilder);
             InitializeCountryRelations(modelBuilder);
-            InitializeCoverageEligibilityGroupRelations(modelBuilder);
             InitializeCalculationRelations(modelBuilder);
-            InitializePremiumRelations(modelBuilder);
             InitializePolicyRelations(modelBuilder);
-            InitializeCoverageRelations(modelBuilder);
-            InitializeCoverageDepartmentRelations(modelBuilder);
+            InitializeAssignmentRelations(modelBuilder);
+            InitializeAssignmentDepartmentRelations(modelBuilder);
+            InitializeAssignmentEligibilityRelations(modelBuilder);
+            InitializePremiumRelations(modelBuilder);
         }
 
         protected virtual void InitializeCurrencyRelations(DbModelBuilder modelBuilder)
@@ -71,14 +71,6 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CountryId);
         }
 
-        protected virtual void InitializeCoverageEligibilityGroupRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CoverageEligibilityGroup>()
-                .HasRequired(x => x.EligibilityGroup)
-                .WithMany()
-                .HasForeignKey(x => x.EligibilityGroupId);
-        }
-
         protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Calculation>()
@@ -87,48 +79,56 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CalculationId);
         }
 
+        protected virtual void InitializePolicyRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Policy>()
+                .HasMany(x => x.Taxes)
+                .WithRequired()
+                .HasForeignKey(x => x.PolicyId);
+            modelBuilder.Entity<Policy>()
+                .HasMany(x => x.Assignments)
+                .WithRequired()
+                .HasForeignKey(x => x.PolicyId);
+            modelBuilder.Entity<Policy>()
+                .HasMany(x => x.Comments)
+                .WithOptional()
+                .HasForeignKey(x => x.PolicyId);
+        }
+
+        protected virtual void InitializeAssignmentRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Assignment>()
+                .HasMany(x => x.Premiums)
+                .WithRequired()
+                .HasForeignKey(x => x.AssignmentId);
+            modelBuilder.Entity<Assignment>()
+                .HasMany(x => x.Covereds)
+                .WithRequired()
+                .HasForeignKey(x => x.AssignmentId);
+        }
+
+        protected virtual void InitializeAssignmentDepartmentRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AssignmentDepartment>()
+                .HasRequired(x => x.Department)
+                .WithMany()
+                .HasForeignKey(x => x.DepartmentId);
+        }
+
+        protected virtual void InitializeAssignmentEligibilityRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AssignmentEligibility>()
+                .HasRequired(x => x.Eligibility)
+                .WithMany()
+                .HasForeignKey(x => x.EligibilityId);
+        }
+
         protected virtual void InitializePremiumRelations(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Premium>()
                 .HasMany(x => x.Comments)
                 .WithOptional()
                 .HasForeignKey(x => x.PremiumId);
-        }
-
-        protected virtual void InitializePolicyRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Policy>()
-                .HasMany(x => x.Comments)
-                .WithOptional()
-                .HasForeignKey(x => x.PolicyId);
-            modelBuilder.Entity<Policy>()
-                .HasMany(x => x.Taxes)
-                .WithRequired()
-                .HasForeignKey(x => x.PolicyId);
-            modelBuilder.Entity<Policy>()
-                .HasMany(x => x.Coverages)
-                .WithRequired()
-                .HasForeignKey(x => x.PolicyId);
-        }
-
-        protected virtual void InitializeCoverageRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Coverage>()
-                .HasMany(x => x.Premiums)
-                .WithRequired()
-                .HasForeignKey(x => x.CoverageId);
-            modelBuilder.Entity<Coverage>()
-                .HasMany(x => x.Covereds)
-                .WithRequired()
-                .HasForeignKey(x => x.CoverageId);
-        }
-
-        protected virtual void InitializeCoverageDepartmentRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CoverageDepartment>()
-                .HasRequired(x => x.Department)
-                .WithMany()
-                .HasForeignKey(x => x.DepartmentId);
         }
     }
 }

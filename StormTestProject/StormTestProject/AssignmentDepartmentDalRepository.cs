@@ -15,16 +15,16 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    internal class CoverageEligibilityGroupDalRepository : IDalRepository<CoverageEligibilityGroup, CoverageEligibilityGroup>
+    internal class AssignmentDepartmentDalRepository : IDalRepository<AssignmentDepartment, AssignmentDepartment>
     {
-        private IDalRepositoryExtension<CoverageEligibilityGroup> extension;
+        private IDalRepositoryExtension<AssignmentDepartment> extension;
 
-        public CoverageEligibilityGroupDalRepository()
+        public AssignmentDepartmentDalRepository()
         {
-            extension = new EmptyRepositoryExtension<CoverageEligibilityGroup>();
+            extension = new EmptyRepositoryExtension<AssignmentDepartment>();
         }
 
-        public void SetExtension(IDalRepositoryExtension<CoverageEligibilityGroup> extension)
+        public void SetExtension(IDalRepositoryExtension<AssignmentDepartment> extension)
         {
             this.extension = extension;
         }
@@ -34,19 +34,19 @@ namespace StormTestProject
             return extension.RelationsCount() ?? 1;
         }
 
-        public CoverageEligibilityGroup Clone(CoverageEligibilityGroup source)
+        public AssignmentDepartment Clone(AssignmentDepartment source)
         {
-            var clone = (source as ICloneable<CoverageEligibilityGroup>).Clone();
+            var clone = (source as ICloneable<AssignmentDepartment>).Clone();
             extension.ExtendClone(clone, source);
             return clone;
         }
 
-        public CoverageEligibilityGroup Create(IDataReader reader, IQueryable<CoverageEligibilityGroup> query, ILoadService loadService)
+        public AssignmentDepartment Create(IDataReader reader, IQueryable<AssignmentDepartment> query, ILoadService loadService)
         {
-            var entity = new CoverageEligibilityGroup(query, loadService)
+            var entity = new AssignmentDepartment(query, loadService)
             {
-                CoverageId = reader.GetInt32(0),
-                EligibilityGroupId = reader.GetInt32(1),
+                AssignmentId = reader.GetInt32(0),
+                DepartmentId = reader.GetInt32(1),
                 Created = reader.GetDateTime(2),
                 Updated = reader.GetDateTime(3),
             };
@@ -54,7 +54,7 @@ namespace StormTestProject
             return entity;
         }
 
-        public List<CoverageEligibilityGroup> Materialize(IQueryable<CoverageEligibilityGroup> query, ILoadService loadService)
+        public List<AssignmentDepartment> Materialize(IQueryable<AssignmentDepartment> query, ILoadService loadService)
         {
             var context = loadService.Context;
             return AdoCommands.Materialize(query,

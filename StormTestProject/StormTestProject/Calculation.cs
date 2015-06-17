@@ -92,7 +92,6 @@ namespace StormTestProject
 
         private ICollection<CalculationDetails> property0 { get;set; }
 
-
         #endregion
     }
 }

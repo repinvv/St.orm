@@ -37,13 +37,13 @@ CREATE TABLE department
 )
 GO
 
-CREATE TABLE eligibility_group
+CREATE TABLE eligibility
 (
-  eligibility_group_id int IDENTITY(1,1) not null,  
+  eligibility_id int IDENTITY(1,1) not null,  
   name nvarchar(256) not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
-  CONSTRAINT pk_eligibility_group PRIMARY KEY CLUSTERED (eligibility_group_id ASC)
+  CONSTRAINT pk_eligibility PRIMARY KEY CLUSTERED (eligibility_id ASC)
 )
 GO
 
@@ -101,40 +101,40 @@ CREATE TABLE model.tax
 )
 GO
 
-CREATE SEQUENCE model.coverage_seq as int START WITH 1 MINVALUE 1;
-CREATE TABLE model.coverage
+CREATE SEQUENCE model.assignment_seq as int START WITH 1 MINVALUE 1;
+CREATE TABLE model.assignment
 (
-  coverage_id int not null default(NEXT VALUE FOR model.coverage_seq),  
+  assignment_id int not null default(NEXT VALUE FOR model.assignment_seq),  
   policy_id int not null,
   comment nvarchar(256),
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
-  CONSTRAINT pk_coverage PRIMARY KEY CLUSTERED (coverage_id ASC),
-  CONSTRAINT fk_coverage1 FOREIGN KEY (policy_id) REFERENCES model.policy (policy_id)
+  CONSTRAINT pk_assignment PRIMARY KEY CLUSTERED (assignment_id ASC),
+  CONSTRAINT fk_assignment1 FOREIGN KEY (policy_id) REFERENCES model.policy (policy_id)
 )
 GO
 
-CREATE TABLE model.coverage_department
+CREATE TABLE model.assignment_department
 (
-  coverage_id int not null,  
+  assignment_id int not null,  
   department_id int not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
-  CONSTRAINT pk_coverage_department PRIMARY KEY CLUSTERED (coverage_id ASC, department_id ASC),
-  CONSTRAINT fk_coverage_department1 FOREIGN KEY (coverage_id) REFERENCES model.coverage (coverage_id),
-  CONSTRAINT fk_coverage_department2 FOREIGN KEY (department_id) REFERENCES department (department_id),
+  CONSTRAINT pk_assignment_department PRIMARY KEY CLUSTERED (assignment_id ASC, department_id ASC),
+  CONSTRAINT fk_assignment_department1 FOREIGN KEY (assignment_id) REFERENCES model.assignment (assignment_id),
+  CONSTRAINT fk_assignment_department2 FOREIGN KEY (department_id) REFERENCES department (department_id),
 )
 GO
 
-CREATE TABLE coverage_eligibility_group
+CREATE TABLE model.assignment_eligibility
 (
-  coverage_id int not null,  
-  eligibility_group_id int not null,
+  assignment_id int not null,  
+  eligibility_id int not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
-  CONSTRAINT pk_coverage_eligibility_group PRIMARY KEY CLUSTERED (coverage_id ASC, eligibility_group_id ASC),
-  CONSTRAINT fk_coverage_eligibility_group1 FOREIGN KEY (coverage_id) REFERENCES model.coverage (coverage_id),
-  CONSTRAINT fk_coverage_eligibility_group2 FOREIGN KEY (eligibility_group_id) REFERENCES eligibility_group (eligibility_group_id),
+  CONSTRAINT pk_assignment_eligibility PRIMARY KEY CLUSTERED (assignment_id ASC, eligibility_id ASC),
+  CONSTRAINT fk_assignment_eligibility1 FOREIGN KEY (assignment_id) REFERENCES model.assignment (assignment_id),
+  CONSTRAINT fk_assignment_eligibility2 FOREIGN KEY (eligibility_id) REFERENCES eligibility (eligibility_id),
 )
 GO
 
@@ -143,12 +143,12 @@ CREATE TABLE model.premium
 (
   premium_id int not null default(NEXT VALUE FOR model.premium_seq),  
   premium_type int not null,
-  coverage_id int not null,
+  assignment_id int not null,
   amount decimal not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
   CONSTRAINT pk_premium PRIMARY KEY CLUSTERED (premium_id ASC),
-  CONSTRAINT fk_premium1 FOREIGN KEY (coverage_id) REFERENCES model.coverage (coverage_id)
+  CONSTRAINT fk_premium1 FOREIGN KEY (assignment_id) REFERENCES model.assignment (assignment_id)
 )
 GO
 
@@ -157,12 +157,12 @@ CREATE TABLE model.covered
 (
   covered_id int not null default(NEXT VALUE FOR model.covered_seq),  
   covered_type int not null,
-  coverage_id int not null,
+  assignment_id int not null,
   headcount int not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
   CONSTRAINT pk_covered PRIMARY KEY CLUSTERED (covered_id ASC),
-  CONSTRAINT fk_covered1 FOREIGN KEY (coverage_id) REFERENCES model.coverage (coverage_id)
+  CONSTRAINT fk_covered1 FOREIGN KEY (assignment_id) REFERENCES model.assignment (assignment_id)
 )
 GO
 

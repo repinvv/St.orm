@@ -104,7 +104,6 @@ namespace StormTestProject
 
         private ICollection<Policy> property0 { get;set; }
 
-
         #endregion
     }
 }

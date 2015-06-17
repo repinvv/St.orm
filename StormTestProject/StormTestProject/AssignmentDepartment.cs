@@ -16,16 +16,16 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("coverage_eligibility_group")]
-    public partial class CoverageEligibilityGroup : ICloneable<CoverageEligibilityGroup>
+    [Table("model.assignment_department")]
+    public partial class AssignmentDepartment : ICloneable<AssignmentDepartment>
     {
         [Key]
-        [Column("coverage_id", Order = 1)]
-        public int CoverageId { get;set; }
+        [Column("assignment_id", Order = 1)]
+        public int AssignmentId { get;set; }
 
         [Key]
-        [Column("eligibility_group_id", Order = 2)]
-        public int EligibilityGroupId { get;set; }
+        [Column("department_id", Order = 2)]
+        public int DepartmentId { get;set; }
 
         [Column("created", Order = 3)]
         public DateTime Created { get;set; }
@@ -33,34 +33,34 @@ namespace StormTestProject
         [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
-        public virtual EligibilityGroup EligibilityGroup { get { return property0; } set { property0 = value; } }
+        public virtual Department Department { get { return property0; } set { property0 = value; } }
 
         #region Private fields
 
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
-        IQueryable<CoverageEligibilityGroup> sourceQuery;
-        private readonly CoverageEligibilityGroup clonedFrom;
-        private EligibilityGroup field0;
+        IQueryable<AssignmentDepartment> sourceQuery;
+        private readonly AssignmentDepartment clonedFrom;
+        private Department field0;
 
         #endregion
 
         #region Constructors
 
-        public CoverageEligibilityGroup(CoverageEligibilityGroup clonedFrom, IQueryable<CoverageEligibilityGroup> sourceQuery, ILoadService loadService)
+        public AssignmentDepartment(AssignmentDepartment clonedFrom, IQueryable<AssignmentDepartment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public CoverageEligibilityGroup(IQueryable<CoverageEligibilityGroup> sourceQuery, ILoadService loadService)
+        public AssignmentDepartment(IQueryable<AssignmentDepartment> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
         }
 
-        public CoverageEligibilityGroup()
+        public AssignmentDepartment()
         {
         }
 
@@ -68,23 +68,23 @@ namespace StormTestProject
 
         #region ICloneable implementation
 
-        CoverageEligibilityGroup ICloneable<CoverageEligibilityGroup>.Clone()
+        AssignmentDepartment ICloneable<AssignmentDepartment>.Clone()
         {
-            return new CoverageEligibilityGroup(this, sourceQuery, loadService)
+            return new AssignmentDepartment(this, sourceQuery, loadService)
             {
-                CoverageId = CoverageId,
-                EligibilityGroupId = EligibilityGroupId,
+                AssignmentId = AssignmentId,
+                DepartmentId = DepartmentId,
                 Created = Created,
                 Updated = Updated,
             };
         }
 
-        CoverageEligibilityGroup ICloneable<CoverageEligibilityGroup>.ClonedFrom()
+        AssignmentDepartment ICloneable<AssignmentDepartment>.ClonedFrom()
         {
             return clonedFrom;
         }
 
-        bool[] ICloneable<CoverageEligibilityGroup>.GetPopulated()
+        bool[] ICloneable<AssignmentDepartment>.GetPopulated()
         {
             return populated;
         }
@@ -93,8 +93,7 @@ namespace StormTestProject
 
         #region Lazy properties
 
-        private EligibilityGroup property0 { get;set; }
-
+        private Department property0 { get;set; }
 
         #endregion
     }

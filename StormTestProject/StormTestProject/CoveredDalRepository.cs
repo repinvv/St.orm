@@ -47,7 +47,7 @@ namespace StormTestProject
             {
                 CoveredId = reader.GetInt32(0),
                 CoveredType = reader.GetInt32(1),
-                CoverageId = reader.GetInt32(2),
+                AssignmentId = reader.GetInt32(2),
                 Headcount = reader.GetInt32(3),
                 Created = reader.GetDateTime(4),
                 Updated = reader.GetDateTime(5),
