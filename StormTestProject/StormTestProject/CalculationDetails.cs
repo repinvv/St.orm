@@ -35,6 +35,10 @@ namespace StormTestProject
         [Column("value", Order = 5)]
         public decimal Value { get;set; }
 
+        #region Navigation properties
+
+        #endregion
+
         #region Private fields
 
         private readonly bool[] populated = new bool[0];
@@ -88,10 +92,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
 
         #endregion
     }

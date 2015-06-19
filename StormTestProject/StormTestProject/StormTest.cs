@@ -13,9 +13,11 @@ namespace StormTestProject
             using (var trans = context.Database.BeginTransaction())
             {
                 var country = new Country { Name = "Russia", CountryCode = "ru" };
+                var country2 = new Country { Name = "England", CountryCode = "uk" };
                 var currency = new Currency { Name = "Dollar", CurrencyCode = "usd" };
                 var department = new Department { Name = "dept1" };
                 context.Countries.Add(country);
+                context.Countries.Add(country2);
                 context.Currencies.Add(currency);
                 // context.Departments.Add(department);
                 context.SaveChanges();
@@ -26,13 +28,6 @@ namespace StormTestProject
                     Name = "my policy",
                     CountryId = country.CountryId,
                     CurrencyId = currency.CurrencyId,
-                    Coverages = new List<Coverage>
-                    {
-                        new Coverage
-                        {
-                            Departments = new List<Department> {department}
-                        }
-                    }
                 };
 
                 context.Policies.Add(policy);

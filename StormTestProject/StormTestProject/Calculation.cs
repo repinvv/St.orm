@@ -30,7 +30,26 @@ namespace StormTestProject
         [Column("due_date", Order = 3)]
         public DateTime? DueDate { get;set; }
 
-        public virtual ICollection<CalculationDetails> CalculationDetailses { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
+
+        public virtual ICollection<CalculationDetails> CalculationDetailses
+        {
+            get
+            {
+                #region property population
+
+                return field0;
+
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
@@ -38,7 +57,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Calculation> sourceQuery;
         private readonly Calculation clonedFrom;
-        private CalculationDetails field0;
+        private ICollection<CalculationDetails> field0;
 
         #endregion
 
@@ -85,12 +104,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private ICollection<CalculationDetails> property0 { get;set; }
 
         #endregion
     }

@@ -40,7 +40,26 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Policy> Policies { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
+
+        public virtual ICollection<Policy> Policies
+        {
+            get
+            {
+                #region property population
+
+                return field0;
+
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
@@ -48,7 +67,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Country> sourceQuery;
         private readonly Country clonedFrom;
-        private Policy field0;
+        private ICollection<Policy> field0;
 
         #endregion
 
@@ -97,12 +116,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private ICollection<Policy> property0 { get;set; }
 
         #endregion
     }

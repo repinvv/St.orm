@@ -37,13 +37,77 @@ namespace StormTestProject
         [Column("updated", Order = 5)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Department> Departments { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
 
-        public virtual ICollection<Eligibility> Eligibilities { get { return property1; } set { property1 = value; } }
+        public virtual ICollection<Department> Departments
+        {
+            get
+            {
+                #region property population
 
-        public virtual ICollection<Premium> Premiums { get { return property2; } set { property2 = value; } }
+                return field0;
 
-        public virtual ICollection<Covered> Covereds { get { return property3; } set { property3 = value; } }
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        public virtual ICollection<Eligibility> Eligibilities
+        {
+            get
+            {
+                #region property population
+
+                return field1;
+
+                #endregion
+            }
+            set
+            {
+                field1 = value;
+                populated[1] = true;
+            }
+        }
+
+        public virtual ICollection<Premium> Premiums
+        {
+            get
+            {
+                #region property population
+
+                return field2;
+
+                #endregion
+            }
+            set
+            {
+                field2 = value;
+                populated[2] = true;
+            }
+        }
+
+        public virtual ICollection<Covered> Covereds
+        {
+            get
+            {
+                #region property population
+
+                return field3;
+
+                #endregion
+            }
+            set
+            {
+                field3 = value;
+                populated[3] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
@@ -51,10 +115,10 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Assignment> sourceQuery;
         private readonly Assignment clonedFrom;
-        private Department field0;
-        private Eligibility field1;
-        private Premium field2;
-        private Covered field3;
+        private ICollection<Department> field0;
+        private ICollection<Eligibility> field1;
+        private ICollection<Premium> field2;
+        private ICollection<Covered> field3;
 
         #endregion
 
@@ -106,18 +170,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private ICollection<Department> property0 { get;set; }
-
-        private ICollection<Eligibility> property1 { get;set; }
-
-        private ICollection<Premium> property2 { get;set; }
-
-        private ICollection<Covered> property3 { get;set; }
 
         #endregion
     }

@@ -55,6 +55,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assignment.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssignmentDalRepository.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssignmentDepartment.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssignmentDepartmentDalRepository.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssignmentEligibility.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AssignmentEligibilityDalRepository.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Calculation.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -79,24 +97,6 @@
     <Compile Include="CountryDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Coverage.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CoverageDalRepository.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CoverageDepartment.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CoverageDepartmentDalRepository.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CoverageEligibilityGroup.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CoverageEligibilityGroupDalRepository.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Covered.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -115,10 +115,10 @@
     <Compile Include="DepartmentDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EligibilityGroup.cs">
+    <Compile Include="Eligibility.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EligibilityGroupDalRepository.cs">
+    <Compile Include="EligibilityDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Policy.cs">

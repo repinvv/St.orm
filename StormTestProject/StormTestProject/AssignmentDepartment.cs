@@ -33,7 +33,26 @@ namespace StormTestProject
         [Column("updated", Order = 4)]
         public DateTime Updated { get;set; }
 
-        public virtual Department Department { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
+
+        public virtual Department Department
+        {
+            get
+            {
+                #region property population
+
+                return field0;
+
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
@@ -88,12 +107,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private Department property0 { get;set; }
 
         #endregion
     }

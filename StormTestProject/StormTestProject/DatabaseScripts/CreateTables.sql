@@ -77,8 +77,8 @@ CREATE SEQUENCE model.policy_seq as int START WITH 1 MINVALUE 1;
 CREATE TABLE model.policy
 (
   policy_id int not null default(next value for model.policy_seq),  
-  country_id int not null,
-  currency_id int null,
+  country_id int null,
+  currency_id int not null,
   name nvarchar(256) not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),

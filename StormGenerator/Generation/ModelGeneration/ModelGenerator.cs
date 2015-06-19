@@ -5,6 +5,7 @@
     using StormGenerator.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
+    using StormGenerator.Models.Pregen.Relation;
 
     internal class ModelGenerator
     {
@@ -46,24 +47,43 @@
         private void GenerateContents(Model model, Model parent, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
             GenerateProperties(model, partGenerator, stringGenerator);
+            stringGenerator.Region("Navigation properties", () => GenerateLazyProperties(model, parent, stringGenerator));
+            stringGenerator.AppendLine();
             stringGenerator.Region("Private fields", () => GeneratePrivateFields(model, parent, partGenerator, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.Region("Constructors", () => partGenerator.GenerateConstructors(model, parent, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.Region("ICloneable implementation", () => partGenerator.GenerateCloneableMembers(model, stringGenerator));
-            stringGenerator.AppendLine();
-            stringGenerator.Region("Lazy properties", () => GenerateLazyProperties(model, parent, stringGenerator));
         }
 
         private void GenerateLazyProperties(Model model, Model parent, IStringGenerator stringGenerator)
         {
-            var fields = model.RelationFields.Active();
-            for (int index = 0; index < fields.Count; index++)
+            var relationFields = model.RelationFields.Active();
+            var names = nameNormalizer.NormalizeNames(relationFields.Select(x => x.Name).ToList());
+            for (int index = 0; index < relationFields.Count; index++)
             {
-                var field = fields[index];
-                stringGenerator.AppendLine("private " + fieldUtility.GetRelationFieldType(field) + " property" + index + " { get;set; }");
+                var field = relationFields[index];
+                field.Name = names[index];
+
+                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name);
+                stringGenerator.Braces(() =>
+                {
+                    stringGenerator.AppendLine("get");
+                    stringGenerator.Braces(() => GenerateGetForProperty(field, index, model, parent, stringGenerator));
+                    stringGenerator.AppendLine("set");
+                    stringGenerator.Braces(() =>
+                    {
+                        stringGenerator.AppendLine("field" + index + " = value;");
+                        stringGenerator.AppendLine("populated[" + index + "] = true;");
+                    });
+                });
                 stringGenerator.AppendLine();
             }
+        }
+
+        private void GenerateGetForProperty(RelationField field, int index, Model model, Model parent, IStringGenerator stringGenerator)
+        {
+            stringGenerator.Region("property population", () => stringGenerator.AppendLine("return field" + index + ";"));
         }
 
         private void GenerateProperties(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
@@ -77,18 +97,6 @@
                 partGenerator.GenerateMappingProperty(model, field, stringGenerator);
                 stringGenerator.AppendLine();
             }
-
-            var relationFields = model.RelationFields.Active();
-            names = nameNormalizer.NormalizeNames(relationFields.Select(x => x.Name).ToList());
-            for (int index = 0; index < relationFields.Count; index++)
-            {
-                var field = relationFields[index];
-                field.Name = names[index];
-                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name
-                                           + " { get { return property" + index + "; } set { property" + index 
-                                           + " = value; } }");
-                stringGenerator.AppendLine();
-            }
         }
 
         private void GeneratePrivateFields(Model model, Model parent, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
@@ -98,7 +106,7 @@
             for (int index = 0; index < fields.Count; index++)
             {
                 var field = fields[index];
-                stringGenerator.AppendLine("private " + field.FieldModel.Name + " field" + index + ";");
+                stringGenerator.AppendLine("private " + fieldUtility.GetRelationFieldType(field) + " field" + index + ";");
             }
         }
     }

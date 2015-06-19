@@ -46,6 +46,10 @@ namespace StormTestProject
         [Column("updated", Order = 8)]
         public DateTime Updated { get;set; }
 
+        #region Navigation properties
+
+        #endregion
+
         #region Private fields
 
         private readonly bool[] populated = new bool[0];
@@ -102,10 +106,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
 
         #endregion
     }

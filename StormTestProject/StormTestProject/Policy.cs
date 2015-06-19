@@ -25,10 +25,10 @@ namespace StormTestProject
         public int PolicyId { get;set; }
 
         [Column("country_id", Order = 2)]
-        public int CountryId { get;set; }
+        public int? CountryId { get;set; }
 
         [Column("currency_id", Order = 3)]
-        public int? CurrencyId { get;set; }
+        public int CurrencyId { get;set; }
 
         [Required]
         [MaxLength(256)]
@@ -41,21 +41,88 @@ namespace StormTestProject
         [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Tax> Taxes { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
 
-        public virtual ICollection<Assignment> Assignments { get { return property1; } set { property1 = value; } }
+        public virtual Country Country
+        {
+            get
+            {
+                #region property population
 
-        public virtual ICollection<Comment> Comments { get { return property2; } set { property2 = value; } }
+                return field0;
+
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        public virtual ICollection<Tax> Taxes
+        {
+            get
+            {
+                #region property population
+
+                return field1;
+
+                #endregion
+            }
+            set
+            {
+                field1 = value;
+                populated[1] = true;
+            }
+        }
+
+        public virtual ICollection<Assignment> Assignments
+        {
+            get
+            {
+                #region property population
+
+                return field2;
+
+                #endregion
+            }
+            set
+            {
+                field2 = value;
+                populated[2] = true;
+            }
+        }
+
+        public virtual ICollection<Comment> Comments
+        {
+            get
+            {
+                #region property population
+
+                return field3;
+
+                #endregion
+            }
+            set
+            {
+                field3 = value;
+                populated[3] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
-        private readonly bool[] populated = new bool[3];
+        private readonly bool[] populated = new bool[4];
         private readonly ILoadService loadService;
         IQueryable<Policy> sourceQuery;
         private readonly Policy clonedFrom;
-        private Tax field0;
-        private Assignment field1;
-        private Comment field2;
+        private Country field0;
+        private ICollection<Tax> field1;
+        private ICollection<Assignment> field2;
+        private ICollection<Comment> field3;
 
         #endregion
 
@@ -107,16 +174,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private ICollection<Tax> property0 { get;set; }
-
-        private ICollection<Assignment> property1 { get;set; }
-
-        private ICollection<Comment> property2 { get;set; }
 
         #endregion
     }

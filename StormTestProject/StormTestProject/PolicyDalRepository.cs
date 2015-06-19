@@ -31,7 +31,7 @@ namespace StormTestProject
 
         public int RelationsCount()
         {
-            return extension.RelationsCount() ?? 3;
+            return extension.RelationsCount() ?? 4;
         }
 
         public Policy Clone(Policy source)
@@ -46,8 +46,8 @@ namespace StormTestProject
             var entity = new Policy(query, loadService)
             {
                 PolicyId = reader.GetInt32(0),
-                CountryId = reader.GetInt32(1),
-                CurrencyId = reader[2] as int?,
+                CountryId = reader[1] as int?,
+                CurrencyId = reader.GetInt32(2),
                 Name = reader[3] as string,
                 Created = reader.GetDateTime(4),
                 Updated = reader.GetDateTime(5),

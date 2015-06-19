@@ -18,6 +18,12 @@
         public bool IsMtoRelationNeeded(List<Relation> relations, RelationsMode relationsMode)
         {
             var groups = relations.GroupBy(x => x.Id).Where(x => !x.First().Model.IsManyToManyLink);
+            var rel = relations.FirstOrDefault();
+            if (rel != null && rel.RootModel.Name.ToLower() == "country")
+            {
+                return true;
+            }
+
             return relationsMode == RelationsMode.All || groups.Count() > GenerationConstants.AutoModelCreation.MaximumOneToManyFields;
         }
     }

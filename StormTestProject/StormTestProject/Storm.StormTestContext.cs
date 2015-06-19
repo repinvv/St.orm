@@ -59,7 +59,7 @@ namespace StormTestProject
         {
             modelBuilder.Entity<Currency>()
                 .HasMany(x => x.Policies)
-                .WithOptional()
+                .WithRequired()
                 .HasForeignKey(x => x.CurrencyId);
         }
 
@@ -67,7 +67,7 @@ namespace StormTestProject
         {
             modelBuilder.Entity<Country>()
                 .HasMany(x => x.Policies)
-                .WithRequired()
+                .WithOptional(x => x.Country)
                 .HasForeignKey(x => x.CountryId);
         }
 

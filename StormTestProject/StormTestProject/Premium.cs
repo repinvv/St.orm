@@ -39,7 +39,26 @@ namespace StormTestProject
         [Column("updated", Order = 6)]
         public DateTime Updated { get;set; }
 
-        public virtual ICollection<Comment> Comments { get { return property0; } set { property0 = value; } }
+        #region Navigation properties
+
+        public virtual ICollection<Comment> Comments
+        {
+            get
+            {
+                #region property population
+
+                return field0;
+
+                #endregion
+            }
+            set
+            {
+                field0 = value;
+                populated[0] = true;
+            }
+        }
+
+        #endregion
 
         #region Private fields
 
@@ -47,7 +66,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Premium> sourceQuery;
         private readonly Premium clonedFrom;
-        private Comment field0;
+        private ICollection<Comment> field0;
 
         #endregion
 
@@ -97,12 +116,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
-        #endregion
-
-        #region Lazy properties
-
-        private ICollection<Comment> property0 { get;set; }
 
         #endregion
     }
