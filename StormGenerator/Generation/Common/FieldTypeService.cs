@@ -50,7 +50,7 @@
                     ? typeof(Nullable<>).MakeGenericType(fieldType)
                     : fieldType;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.Error.WriteLine("type " + type + " is not supported.");
                 return typeof(object);

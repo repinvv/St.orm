@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
 
-    internal abstract class RelationField : Switcheable
+    internal abstract class RelationField : ModelBase
     {
-        public string Name { get; set; }
-
         public string AssociationId { get; set; }
 
         public Model FieldModel { get; set; }

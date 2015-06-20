@@ -47,6 +47,7 @@
     <Compile Include="DbModelsCollection\DbColumn.cs" />
     <Compile Include="DbModelsCollection\DbConnectionCreator.cs" />
     <Compile Include="DbModelsCollection\DbFieldsCollector.cs" />
+    <Compile Include="DbModelsCollection\Sequencer.cs" />
     <Compile Include="DbModelsCollection\TableIdCreator.cs" />
     <Compile Include="DbModelsCollection\DbModelsCollector.cs" />
     <Compile Include="DbModelsCollection\ForeignKeyReader.cs" />
@@ -111,7 +112,7 @@
     <Compile Include="Models\Pregen\Relation\ManyToOneField.cs" />
     <Compile Include="Models\Pregen\Relation\OneToManyField.cs" />
     <Compile Include="Models\Pregen\Relation\Relation.cs" />
-    <Compile Include="Models\Pregen\Switcheable.cs" />
+    <Compile Include="Models\Pregen\ModelBase.cs" />
     <Compile Include="Models\Pregen\SwitcheableExtension.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Models\Config\RelationsMode.cs" />

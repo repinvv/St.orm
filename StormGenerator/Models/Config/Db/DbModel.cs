@@ -12,6 +12,8 @@
 
         public bool IsView { get; set; }
 
+        public string Sequence { get; set; }
+
         public List<DbField> Fields { get; set; }
     }
 }

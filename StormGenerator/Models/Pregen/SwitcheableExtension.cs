@@ -6,22 +6,22 @@
 
     internal static class SwitcheableExtension
     {
-        public static List<T> Active<T>(this IEnumerable<T> source) where T : Switcheable
+        public static List<T> Active<T>(this IEnumerable<T> source) where T : ModelBase
         {
             return source.Where(x => x.Enabled).ToList();
         }
 
-        public static bool AnyActive<T>(this IEnumerable<T> source) where T : Switcheable
+        public static bool AnyActive<T>(this IEnumerable<T> source) where T : ModelBase
         {
             return source.Any(x => x.Enabled);
         }
 
-        public static int ActiveCount<T>(this IEnumerable<T> source) where T : Switcheable
+        public static int ActiveCount<T>(this IEnumerable<T> source) where T : ModelBase
         {
             return source.Count(x => x.Enabled);
         }
 
-        public static int ActiveCount<T>(this IEnumerable<T> source, Func<T, bool> predicate) where T : Switcheable
+        public static int ActiveCount<T>(this IEnumerable<T> source, Func<T, bool> predicate) where T : ModelBase
         {
             return source.Where(x => x.Enabled).Count(predicate);
         }

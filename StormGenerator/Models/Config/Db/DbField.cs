@@ -14,7 +14,7 @@
 
         public bool IsIdentity { get; set; }
 
-        public string Sequence { get; set; }
+        public string Default { get; set; }
 
         public int StringLength { get; set; }
 

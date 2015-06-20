@@ -3,10 +3,8 @@
     using System;
     using StormGenerator.Models.Config.Db;
 
-    internal class MappingField : Switcheable
+    internal class MappingField : ModelBase
     {
-        public string Name { get; set; }
-
         public Type Type { get; set; }
 
         public string CustomTypeName { get; set; }

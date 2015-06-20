@@ -4,10 +4,8 @@
     using StormGenerator.Models.Config.Db;
     using StormGenerator.Models.Pregen.Relation;
 
-    internal class Model : Switcheable
+    internal class Model : ModelBase
     {
-        public string Name { get; set; }
-
         public DbModel DbModel { get; set; }
 
         public List<MappingField> MappingFields { get; set; }
