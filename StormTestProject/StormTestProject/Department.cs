@@ -36,20 +36,16 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Department> sourceQuery;
         private readonly Department clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public Department(Department clonedFrom, IQueryable<Department> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -66,11 +62,9 @@ namespace StormTestProject
         public Department()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Department ICloneable<Department>.Clone()
         {
             return new Department(this, sourceQuery, loadService)
@@ -91,7 +85,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

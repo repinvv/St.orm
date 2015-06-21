@@ -31,38 +31,43 @@ namespace StormTestProject
         public DateTime? DueDate { get;set; }
 
         #region Navigation properties
-
         public virtual ICollection<CalculationDetails> CalculationDetailses
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                Func<IQueryable<CalculationDetails>> query = () =>
+                {
+                    return loadService.Context.Set<CalculationDetails>()
+                        .Join(sourceQuery, x => x.CalculationId, x => x.CalculationId, (x, y) => x);
+                };
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
         IQueryable<Calculation> sourceQuery;
         private readonly Calculation clonedFrom;
         private ICollection<CalculationDetails> field0;
-
         #endregion
 
         #region Constructors
-
         public Calculation(Calculation clonedFrom, IQueryable<Calculation> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -80,11 +85,9 @@ namespace StormTestProject
         {
             CalculationDetailses = new HashSet<CalculationDetails>();
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Calculation ICloneable<Calculation>.Clone()
         {
             return new Calculation(this, sourceQuery, loadService)
@@ -104,7 +107,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

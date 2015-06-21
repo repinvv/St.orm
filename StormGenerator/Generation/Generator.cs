@@ -31,8 +31,8 @@
         {
             var models = modelsCollectionService.CollectModels(options);
             var output = new List<GeneratedFile>();
-            modelIterator.ForAllModels(models, (model, parent) => output.Add(modelGenerator.GenerateModel(model, parent, options)));
-            modelIterator.ForAllModels(models, (model, parent) => output.Add(repositoryGenerator.GenerateRepository(model, parent, options)));
+            modelIterator.ForAllModels(models, model => output.Add(modelGenerator.GenerateModel(model, options)));
+            modelIterator.ForAllModels(models, model => output.Add(repositoryGenerator.GenerateRepository(model, options)));
             output.AddRange(staticFilesGenerator.GenerateStaticFiles(models, options));
             return output;
         }        

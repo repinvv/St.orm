@@ -38,79 +38,103 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual ICollection<Department> Departments
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Eligibility> Eligibilities
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[1])
+                {
+                    return field1;
+                }
 
+                populated[1] = true;
                 return field1;
-
-                #endregion
             }
             set
             {
                 field1 = value;
                 populated[1] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Premium> Premiums
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[2])
+                {
+                    return field2;
+                }
 
+                Func<IQueryable<Premium>> query = () =>
+                {
+                    return loadService.Context.Set<Premium>()
+                        .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
+                };
+                populated[2] = true;
                 return field2;
-
-                #endregion
             }
             set
             {
                 field2 = value;
                 populated[2] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Covered> Covereds
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[3])
+                {
+                    return field3;
+                }
 
+                Func<IQueryable<Covered>> query = () =>
+                {
+                    return loadService.Context.Set<Covered>()
+                        .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
+                };
+                populated[3] = true;
                 return field3;
-
-                #endregion
             }
             set
             {
                 field3 = value;
                 populated[3] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[4];
         private readonly ILoadService loadService;
         IQueryable<Assignment> sourceQuery;
@@ -119,11 +143,9 @@ namespace StormTestProject
         private ICollection<Eligibility> field1;
         private ICollection<Premium> field2;
         private ICollection<Covered> field3;
-
         #endregion
 
         #region Constructors
-
         public Assignment(Assignment clonedFrom, IQueryable<Assignment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -144,11 +166,9 @@ namespace StormTestProject
             Premiums = new HashSet<Premium>();
             Covereds = new HashSet<Covered>();
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Assignment ICloneable<Assignment>.Clone()
         {
             return new Assignment(this, sourceQuery, loadService)
@@ -170,7 +190,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

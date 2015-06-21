@@ -36,10 +36,10 @@
             classPartsGenerator.GenerateMappingProperty(model, field, stringGenerator);
         }
 
-        public void GeneratePrivateFields(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
         { }
 
-        public void GenerateConstructors(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateConstructors(Model model, IStringGenerator stringGenerator)
         { }
 
         public void GenerateCloneableMembers(Model model, IStringGenerator stringGenerator)

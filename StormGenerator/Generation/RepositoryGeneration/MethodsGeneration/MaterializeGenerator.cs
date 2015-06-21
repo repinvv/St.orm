@@ -5,13 +5,13 @@
 
     internal class MaterializeGenerator : IMethodGenerator
     {
-        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public List<" + model.Name + "> Materialize(IQueryable<" + parent.Name
+            stringGenerator.AppendLine("public List<" + model.Name + "> Materialize(IQueryable<" + model.Parent.Name
                 + "> query, ILoadService loadService)");
         }
 
-        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("var context = loadService.Context;");
             var method = model.IsInherited ? "FullCreate" : "Create";

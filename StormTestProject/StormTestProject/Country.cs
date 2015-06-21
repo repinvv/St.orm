@@ -41,38 +41,43 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual ICollection<Policy> Policies
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                Func<IQueryable<Policy>> query = () =>
+                {
+                    return loadService.Context.Set<Policy>()
+                        .Join(sourceQuery, x => x.CountryId.Value, x => x.CountryId, (x, y) => x);
+                };
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
         IQueryable<Country> sourceQuery;
         private readonly Country clonedFrom;
         private ICollection<Policy> field0;
-
         #endregion
 
         #region Constructors
-
         public Country(Country clonedFrom, IQueryable<Country> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -90,11 +95,9 @@ namespace StormTestProject
         {
             Policies = new HashSet<Policy>();
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Country ICloneable<Country>.Clone()
         {
             return new Country(this, sourceQuery, loadService)
@@ -116,7 +119,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

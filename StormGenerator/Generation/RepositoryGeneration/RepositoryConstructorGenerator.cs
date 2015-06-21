@@ -6,7 +6,7 @@
 
     internal class RepositoryConstructorGenerator
     {
-        public void GenerateConstructor(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateConstructor(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("private IDalRepositoryExtension<" + model.Name + "> extension;");
             stringGenerator.AppendLine();

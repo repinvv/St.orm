@@ -40,38 +40,43 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual ICollection<Comment> Comments
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                Func<IQueryable<Comment>> query = () =>
+                {
+                    return loadService.Context.Set<Comment>()
+                        .Join(sourceQuery, x => x.PremiumId.Value, x => x.PremiumId, (x, y) => x);
+                };
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
         IQueryable<Premium> sourceQuery;
         private readonly Premium clonedFrom;
         private ICollection<Comment> field0;
-
         #endregion
 
         #region Constructors
-
         public Premium(Premium clonedFrom, IQueryable<Premium> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -89,11 +94,9 @@ namespace StormTestProject
         {
             Comments = new HashSet<Comment>();
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Premium ICloneable<Premium>.Clone()
         {
             return new Premium(this, sourceQuery, loadService)
@@ -116,7 +119,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

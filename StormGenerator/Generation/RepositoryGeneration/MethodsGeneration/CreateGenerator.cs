@@ -16,21 +16,21 @@
             this.fieldTypeService = fieldTypeService;
         }
 
-        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public " + model.Name + " Create(IDataReader reader, IQueryable<"
-                                       + parent.Name + "> query, ILoadService loadService)");
+                                       + model.Parent.Name + "> query, ILoadService loadService)");
         }
 
-        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("var entity = new " + model.Name + "(query, loadService)");
-            stringGenerator.Braces(() => GenerateFields(model, parent, stringGenerator), true);
+            stringGenerator.Braces(() => GenerateFields(model, stringGenerator), true);
             stringGenerator.AppendLine("extension.ExtendCreate(entity, reader);");
             stringGenerator.AppendLine("return entity;");
         }
 
-        private void GenerateFields(Model model, Model parent, IStringGenerator stringGenerator)
+        private void GenerateFields(Model model, IStringGenerator stringGenerator)
         {
             foreach (var field in model.MappingFields.Active())
             {

@@ -31,7 +31,7 @@
 
         private Model CreateModel(DbModel arg)
         {
-            return new Model
+            var model = new Model
                    {
                        Name = nameCreator.CreateCamelCaseName(arg.Name),
                        DbModel = arg,
@@ -39,6 +39,8 @@
                        RelationFields = new List<RelationField>(),
                        ChildModels = new List<Model>()
                    };
+            model.Parent = model;
+            return model;
         }
 
         private MappingField CreateMappingField(DbField field)

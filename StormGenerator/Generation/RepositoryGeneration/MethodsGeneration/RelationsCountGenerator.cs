@@ -5,12 +5,12 @@
 
     internal class RelationsCountGenerator : IMethodGenerator
     {
-        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public int RelationsCount()");
         }
 
-        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("return extension.RelationsCount() ?? " + model.RelationFields.ActiveCount() + ";");
         }

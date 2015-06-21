@@ -13,13 +13,13 @@
             this.methodsCollectionFactory = methodsCollectionFactory;
         }
 
-        public void GenerateMethods(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethods(Model model, IStringGenerator stringGenerator)
         {
             foreach (var generator in methodsCollectionFactory.GetRepositoryMethods(model))
             {
                 stringGenerator.AppendLine();
-                generator.GenerateSignature(model, parent, stringGenerator);
-                stringGenerator.Braces(() => generator.GenerateMethod(model, parent, stringGenerator));
+                generator.GenerateSignature(model, stringGenerator);
+                stringGenerator.Braces(() => generator.GenerateMethod(model, stringGenerator));
             }
         }
     }

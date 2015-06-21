@@ -46,8 +46,8 @@
 
         private void GenerateKeyValuePairs(List<Model> models, IStringGenerator stringGenerator)
         {
-            Action<Model, Model> action =
-                (model, parent) => stringGenerator
+            Action<Model> action =
+                model => stringGenerator
                     .AppendLine("{ typeof(" + model.Name + "), new " + model.Name
                                 + GenerationConstants.ModelGeneration.RepositorySuffix + "() },");
             modelIterator.ForAllModels(models, action);

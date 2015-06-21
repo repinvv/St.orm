@@ -34,38 +34,38 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual Department Department
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
         IQueryable<AssignmentDepartment> sourceQuery;
         private readonly AssignmentDepartment clonedFrom;
         private Department field0;
-
         #endregion
 
         #region Constructors
-
         public AssignmentDepartment(AssignmentDepartment clonedFrom, IQueryable<AssignmentDepartment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -82,11 +82,9 @@ namespace StormTestProject
         public AssignmentDepartment()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         AssignmentDepartment ICloneable<AssignmentDepartment>.Clone()
         {
             return new AssignmentDepartment(this, sourceQuery, loadService)
@@ -107,7 +105,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

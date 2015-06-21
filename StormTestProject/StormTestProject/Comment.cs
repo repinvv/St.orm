@@ -47,20 +47,16 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Comment> sourceQuery;
         private readonly Comment clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public Comment(Comment clonedFrom, IQueryable<Comment> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -77,11 +73,9 @@ namespace StormTestProject
         public Comment()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Comment ICloneable<Comment>.Clone()
         {
             return new Comment(this, sourceQuery, loadService)
@@ -106,7 +100,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

@@ -5,12 +5,12 @@
 
     internal class FullCreateGenerator : IMethodGenerator
     {
-        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("private " + model.Name + " FullCreate(IDataReader reader)");
         }
 
-        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         { }
     }
 }

@@ -1,20 +1,27 @@
 ﻿namespace StormGenerator.Generation.Common
 {
+    using System.Collections.Generic;
+
     internal class ObjectStringService
     {
-        public string CreateObjectString(string[] keys, string accessor, bool replaceFieldNames = true)
+        public string CreateObjectString(IList<string> keys, string accessor = null, bool replaceFieldNames = true)
         {
-            if (keys.Length == 1)
+            if (accessor != null)
             {
-                return accessor + "." + keys[0];
+                accessor += ".";
+            }
+
+            if (keys.Count == 1)
+            {
+                return accessor + keys[0];
             }
 
             var output = "new { ";
-            for (int n = 0; n < keys.Length; n++)
+            for (int n = 0; n < keys.Count; n++)
             {
                 var fieldName = replaceFieldNames ? "f" + (n + 1) + " = " : string.Empty;
-                output += fieldName + accessor + "." + keys[n];
-                if (n < keys.Length - 1)
+                output += fieldName + accessor + keys[n];
+                if (n < keys.Count - 1)
                 {
                     output += ", ";
                 }

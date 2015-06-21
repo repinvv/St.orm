@@ -5,12 +5,12 @@
 
     internal class CloneGenerator : IMethodGenerator
     {
-        public void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public " + model.Name + " Clone(" + model.Name + " source)");
         }
 
-        public void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("var clone = (source as ICloneable<" + model.Name + ">).Clone();");
             stringGenerator.AppendLine("extension.ExtendClone(clone, source);");

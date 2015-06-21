@@ -34,38 +34,38 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual Eligibility Eligibility
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[1];
         private readonly ILoadService loadService;
         IQueryable<AssignmentEligibility> sourceQuery;
         private readonly AssignmentEligibility clonedFrom;
         private Eligibility field0;
-
         #endregion
 
         #region Constructors
-
         public AssignmentEligibility(AssignmentEligibility clonedFrom, IQueryable<AssignmentEligibility> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -82,11 +82,9 @@ namespace StormTestProject
         public AssignmentEligibility()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         AssignmentEligibility ICloneable<AssignmentEligibility>.Clone()
         {
             return new AssignmentEligibility(this, sourceQuery, loadService)
@@ -107,7 +105,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

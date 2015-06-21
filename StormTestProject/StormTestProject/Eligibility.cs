@@ -36,20 +36,16 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Eligibility> sourceQuery;
         private readonly Eligibility clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public Eligibility(Eligibility clonedFrom, IQueryable<Eligibility> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -66,11 +62,9 @@ namespace StormTestProject
         public Eligibility()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Eligibility ICloneable<Eligibility>.Clone()
         {
             return new Eligibility(this, sourceQuery, loadService)
@@ -91,7 +85,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

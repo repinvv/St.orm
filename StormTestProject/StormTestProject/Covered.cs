@@ -40,20 +40,16 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Covered> sourceQuery;
         private readonly Covered clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public Covered(Covered clonedFrom, IQueryable<Covered> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -70,11 +66,9 @@ namespace StormTestProject
         public Covered()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Covered ICloneable<Covered>.Clone()
         {
             return new Covered(this, sourceQuery, loadService)
@@ -97,7 +91,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

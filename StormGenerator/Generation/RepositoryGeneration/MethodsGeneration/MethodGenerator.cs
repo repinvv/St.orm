@@ -5,8 +5,8 @@
 
     internal interface IMethodGenerator
     {
-        void GenerateSignature(Model model, Model parent, IStringGenerator stringGenerator);
+        void GenerateSignature(Model model, IStringGenerator stringGenerator);
 
-        void GenerateMethod(Model model, Model parent, IStringGenerator stringGenerator);
+        void GenerateMethod(Model model, IStringGenerator stringGenerator);
     }
 }

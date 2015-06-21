@@ -6,6 +6,8 @@
 
     internal class Model : ModelBase
     {
+        public Model Parent { get; set; }
+
         public DbModel DbModel { get; set; }
 
         public List<MappingField> MappingFields { get; set; }

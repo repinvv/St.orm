@@ -57,6 +57,11 @@
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Common\ObjectStringService.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\LazyGeneration\JoinGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\LazyGeneration\LazyGetGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\LazyGeneration\ManyToManyLazyGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\LazyGeneration\ManyToOneLazyGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\LazyGeneration\OneToManyLazyGenerator.cs" />
     <Compile Include="Generation\ModelsCollectionService.cs" />
     <Compile Include="Generation\ModelIterator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\BaseClassMethodsCollection.cs" />
@@ -134,9 +139,7 @@
       <Name>Storm</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Generation\ModelGeneration\LazyGeneration\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\Project.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

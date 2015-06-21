@@ -36,20 +36,16 @@ namespace StormTestProject
         public decimal Value { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<CalculationDetails> sourceQuery;
         private readonly CalculationDetails clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public CalculationDetails(CalculationDetails clonedFrom, IQueryable<CalculationDetails> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -66,11 +62,9 @@ namespace StormTestProject
         public CalculationDetails()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         CalculationDetails ICloneable<CalculationDetails>.Clone()
         {
             return new CalculationDetails(this, sourceQuery, loadService)
@@ -92,7 +86,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

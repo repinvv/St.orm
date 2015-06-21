@@ -28,27 +28,27 @@
             this.repositoryConstructorGenerator = repositoryConstructorGenerator;
         }
 
-        public GeneratedFile GenerateRepository(Model model, Model parent, Options options)
+        public GeneratedFile GenerateRepository(Model model, Options options)
         {
             var name = model.Name + GenerationConstants.ModelGeneration.RepositorySuffix;
-            return fileGenerator.GenerateFile(name, options, stringGenerator => GenerateDefinition(model, parent, stringGenerator));
+            return fileGenerator.GenerateFile(name, options, stringGenerator => GenerateDefinition(model, stringGenerator));
         }
 
-        private void GenerateDefinition(Model model, Model parent, IStringGenerator stringGenerator)
+        private void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
             var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing)
                               .Concat(GenerationConstants.ModelGeneration.RepositoryUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("internal class " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
-                                       + " : IDalRepository<" + model.Name + ", " + parent.Name + ">");
-            stringGenerator.Braces(() => GenerateRepositoryContent(model, parent, stringGenerator));
+                                       + " : IDalRepository<" + model.Name + ", " + model.Parent.Name + ">");
+            stringGenerator.Braces(() => GenerateRepositoryContent(model, stringGenerator));
         }
 
-        private void GenerateRepositoryContent(Model model, Model parent, IStringGenerator stringGenerator)
+        private void GenerateRepositoryContent(Model model, IStringGenerator stringGenerator)
         {
-            repositoryConstructorGenerator.GenerateConstructor(model, parent, stringGenerator);
-            repositoryMethodsGenerator.GenerateMethods(model, parent, stringGenerator);
+            repositoryConstructorGenerator.GenerateConstructor(model, stringGenerator);
+            repositoryMethodsGenerator.GenerateMethods(model, stringGenerator);
         }
     }
 }

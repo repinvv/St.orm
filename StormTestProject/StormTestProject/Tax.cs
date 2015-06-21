@@ -37,20 +37,16 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Tax> sourceQuery;
         private readonly Tax clonedFrom;
-
         #endregion
 
         #region Constructors
-
         public Tax(Tax clonedFrom, IQueryable<Tax> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -67,11 +63,9 @@ namespace StormTestProject
         public Tax()
         {
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Tax ICloneable<Tax>.Clone()
         {
             return new Tax(this, sourceQuery, loadService)
@@ -93,7 +87,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }

@@ -39,24 +39,24 @@
             stringGenerator.AppendLine("public " + service.GetTypeName(field.Type) + " " + field.Name + " { get;set; }");
         }
 
-        public void GeneratePrivateFields(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("private readonly bool[] populated = new bool[" + model.RelationFields.ActiveCount() + "];");
             stringGenerator.AppendLine("private readonly ILoadService loadService;");
-            stringGenerator.AppendLine("IQueryable<" + parent.Name + "> sourceQuery;");
+            stringGenerator.AppendLine("IQueryable<" + model.Parent.Name + "> sourceQuery;");
             stringGenerator.AppendLine("private readonly " + model.Name + " clonedFrom;");
         }
 
-        public void GenerateConstructors(Model model, Model parent, IStringGenerator stringGenerator)
+        public void GenerateConstructors(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public " + model.Name + "(" + model.Name + " clonedFrom, IQueryable<" + parent.Name + "> sourceQuery, ILoadService loadService)");
+            stringGenerator.AppendLine("public " + model.Name + "(" + model.Name + " clonedFrom, IQueryable<" + model.Parent.Name + "> sourceQuery, ILoadService loadService)");
             stringGenerator.Braces(() =>
             {
                 stringGenerator.AppendLine("this.clonedFrom = clonedFrom;");
                 GenerateConstructorAssignments(stringGenerator);
             });
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public " + model.Name + "(IQueryable<" + parent.Name + "> sourceQuery, ILoadService loadService)");
+            stringGenerator.AppendLine("public " + model.Name + "(IQueryable<" + model.Parent.Name + "> sourceQuery, ILoadService loadService)");
             stringGenerator.Braces(() => GenerateConstructorAssignments(stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public " + model.Name + "()");

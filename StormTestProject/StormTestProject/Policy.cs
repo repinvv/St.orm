@@ -42,79 +42,111 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-
         public virtual Country Country
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[0])
+                {
+                    return field0;
+                }
 
+                populated[0] = true;
                 return field0;
-
-                #endregion
             }
             set
             {
                 field0 = value;
                 populated[0] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Tax> Taxes
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[1])
+                {
+                    return field1;
+                }
 
+                Func<IQueryable<Tax>> query = () =>
+                {
+                    return loadService.Context.Set<Tax>()
+                        .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
+                };
+
+                var items = loadService.GetProperty<Tax, Tax, int>(0, query, x => x.PolicyId, PolicyId);
+
+                populated[1] = true;
                 return field1;
-
-                #endregion
             }
             set
             {
                 field1 = value;
                 populated[1] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Assignment> Assignments
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[2])
+                {
+                    return field2;
+                }
 
+                Func<IQueryable<Assignment>> query = () =>
+                {
+                    return loadService.Context.Set<Assignment>()
+                        .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
+                };
+                populated[2] = true;
                 return field2;
-
-                #endregion
             }
             set
             {
                 field2 = value;
                 populated[2] = true;
             }
+            #endregion
         }
 
         public virtual ICollection<Comment> Comments
         {
+            #region implementation
             get
             {
-                #region property population
+                if(populated[3])
+                {
+                    return field3;
+                }
 
+                Func<IQueryable<Comment>> query = () =>
+                {
+                    return loadService.Context.Set<Comment>()
+                        .Join(sourceQuery, x => x.PolicyId.Value, x => x.PolicyId, (x, y) => x);
+                };
+                populated[3] = true;
                 return field3;
-
-                #endregion
             }
             set
             {
                 field3 = value;
                 populated[3] = true;
             }
+            #endregion
         }
 
         #endregion
 
         #region Private fields
-
         private readonly bool[] populated = new bool[4];
         private readonly ILoadService loadService;
         IQueryable<Policy> sourceQuery;
@@ -123,11 +155,9 @@ namespace StormTestProject
         private ICollection<Tax> field1;
         private ICollection<Assignment> field2;
         private ICollection<Comment> field3;
-
         #endregion
 
         #region Constructors
-
         public Policy(Policy clonedFrom, IQueryable<Policy> sourceQuery, ILoadService loadService)
         {
             this.clonedFrom = clonedFrom;
@@ -147,11 +177,9 @@ namespace StormTestProject
             Assignments = new HashSet<Assignment>();
             Comments = new HashSet<Comment>();
         }
-
         #endregion
 
         #region ICloneable implementation
-
         Policy ICloneable<Policy>.Clone()
         {
             return new Policy(this, sourceQuery, loadService)
@@ -174,7 +202,6 @@ namespace StormTestProject
         {
             return populated;
         }
-
         #endregion
     }
 }
