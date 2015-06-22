@@ -41,7 +41,7 @@
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private readonly bool[] populated = new bool[" + model.RelationFields.ActiveCount() + "];");
+            stringGenerator.AppendLine("private readonly bool[] populated;");
             stringGenerator.AppendLine("private readonly ILoadService loadService;");
             stringGenerator.AppendLine("IQueryable<" + model.Parent.Name + "> sourceQuery;");
             stringGenerator.AppendLine("private readonly " + model.Name + " clonedFrom;");
@@ -62,17 +62,23 @@
             stringGenerator.AppendLine("public " + model.Name + "()");
             stringGenerator.Braces(() =>
             {
-                foreach (var field in model.RelationFields.Active().Where(x => x.IsList))
+                var fields = model.RelationFields.Active();
+                for (int index = 0; index < fields.Count; index++)
                 {
-                    stringGenerator.AppendLine(field.Name + " = new HashSet<" + field.FieldModel.Name + ">();");
+                    var field = fields[index];
+                    if (field.IsList)
+                    {
+                        stringGenerator.AppendLine("field" + index + " = new HashSet<" + field.FieldModel.Name + ">();");
+                    }
                 }
             });
         }
 
-        private static void GenerateConstructorAssignments(IStringGenerator stringGenerator)
+        private static void GenerateConstructorAssignments(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("this.loadService = loadService;");
             stringGenerator.AppendLine("this.sourceQuery = sourceQuery;");
+            stringGenerator.AppendLine("populated = new bool[" + model.RelationFields.ActiveCount() + "];");
         }
 
         public void GenerateCloneableMembers(Model model, IStringGenerator stringGenerator)

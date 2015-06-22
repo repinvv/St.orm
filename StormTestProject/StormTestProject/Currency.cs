@@ -46,7 +46,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
                 }
@@ -56,6 +56,22 @@ namespace StormTestProject
                     return loadService.Context.Set<Policy>()
                         .Join(sourceQuery, x => x.CurrencyId, x => x.CurrencyId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Policy, Policy, int>(0, query, x => x.CurrencyId, CurrencyId);
+                if (clonedFrom == null)
+                {
+                    field0 = items;
+                }
+                else
+                {
+                    clonedFrom.Policies = items;
+                    field0 = new List<Policy>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Policy, Policy>();
+                    foreach(var item in items)
+                    {
+                        field0.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[0] = true;
                 return field0;
             }

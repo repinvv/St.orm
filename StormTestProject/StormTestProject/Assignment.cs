@@ -43,9 +43,32 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
+                }
+
+                Func<IQueryable<AssignmentDepartment>> query = () =>
+                {
+                    return loadService.Context.Set<AssignmentDepartment>()
+                        .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
+                };
+                var items = loadService.GetProperty<AssignmentDepartment, AssignmentDepartment, int>(0, query, x => x.AssignmentId, AssignmentId)
+                    .Select(x => x.Department)
+                    .ToList();
+                if (clonedFrom == null)
+                {
+                    field0 = items;
+                }
+                else
+                {
+                    clonedFrom.Departments = items;
+                    field0 = new List<Department>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Department, Department>();
+                    foreach(var item in items)
+                    {
+                        field0.Add(repo.Clone(item));
+                    }
                 }
 
                 populated[0] = true;
@@ -64,9 +87,32 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[1])
+                if(populated[1] || loadService == null)
                 {
                     return field1;
+                }
+
+                Func<IQueryable<AssignmentEligibility>> query = () =>
+                {
+                    return loadService.Context.Set<AssignmentEligibility>()
+                        .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
+                };
+                var items = loadService.GetProperty<AssignmentEligibility, AssignmentEligibility, int>(1, query, x => x.AssignmentId, AssignmentId)
+                    .Select(x => x.Eligibility)
+                    .ToList();
+                if (clonedFrom == null)
+                {
+                    field1 = items;
+                }
+                else
+                {
+                    clonedFrom.Eligibilities = items;
+                    field1 = new List<Eligibility>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Eligibility, Eligibility>();
+                    foreach(var item in items)
+                    {
+                        field1.Add(repo.Clone(item));
+                    }
                 }
 
                 populated[1] = true;
@@ -85,7 +131,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[2])
+                if(populated[2] || loadService == null)
                 {
                     return field2;
                 }
@@ -95,6 +141,22 @@ namespace StormTestProject
                     return loadService.Context.Set<Premium>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Premium, Premium, int>(2, query, x => x.AssignmentId, AssignmentId);
+                if (clonedFrom == null)
+                {
+                    field2 = items;
+                }
+                else
+                {
+                    clonedFrom.Premiums = items;
+                    field2 = new List<Premium>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Premium, Premium>();
+                    foreach(var item in items)
+                    {
+                        field2.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[2] = true;
                 return field2;
             }
@@ -111,7 +173,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[3])
+                if(populated[3] || loadService == null)
                 {
                     return field3;
                 }
@@ -121,6 +183,22 @@ namespace StormTestProject
                     return loadService.Context.Set<Covered>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Covered, Covered, int>(3, query, x => x.AssignmentId, AssignmentId);
+                if (clonedFrom == null)
+                {
+                    field3 = items;
+                }
+                else
+                {
+                    clonedFrom.Covereds = items;
+                    field3 = new List<Covered>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Covered, Covered>();
+                    foreach(var item in items)
+                    {
+                        field3.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[3] = true;
                 return field3;
             }

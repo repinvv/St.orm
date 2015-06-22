@@ -36,7 +36,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
                 }
@@ -46,6 +46,22 @@ namespace StormTestProject
                     return loadService.Context.Set<CalculationDetails>()
                         .Join(sourceQuery, x => x.CalculationId, x => x.CalculationId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<CalculationDetails, CalculationDetails, Guid>(0, query, x => x.CalculationId, CalculationId);
+                if (clonedFrom == null)
+                {
+                    field0 = items;
+                }
+                else
+                {
+                    clonedFrom.CalculationDetailses = items;
+                    field0 = new List<CalculationDetails>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<CalculationDetails, CalculationDetails>();
+                    foreach(var item in items)
+                    {
+                        field0.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[0] = true;
                 return field0;
             }

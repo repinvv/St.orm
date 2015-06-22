@@ -15,10 +15,6 @@ namespace StormTestProject
     {
         public StormTestContext() : base("name=StormTestContext") { }
 
-        public virtual DbSet<Calculation> Calculations { get; set; }
-
-        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
-
         public virtual DbSet<Department> Departments { get; set; }
 
         public virtual DbSet<Eligibility> Eligibilities { get; set; }
@@ -26,6 +22,10 @@ namespace StormTestProject
         public virtual DbSet<Currency> Currencies { get; set; }
 
         public virtual DbSet<Country> Countries { get; set; }
+
+        public virtual DbSet<Calculation> Calculations { get; set; }
+
+        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
 
         public virtual DbSet<Policy> Policies { get; set; }
 
@@ -45,22 +45,14 @@ namespace StormTestProject
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            InitializeCalculationRelations(modelBuilder);
             InitializeCurrencyRelations(modelBuilder);
             InitializeCountryRelations(modelBuilder);
+            InitializeCalculationRelations(modelBuilder);
             InitializePolicyRelations(modelBuilder);
             InitializeAssignmentRelations(modelBuilder);
             InitializeAssignmentDepartmentRelations(modelBuilder);
             InitializeAssignmentEligibilityRelations(modelBuilder);
             InitializePremiumRelations(modelBuilder);
-        }
-
-        protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Calculation>()
-                .HasMany(x => x.CalculationDetailses)
-                .WithRequired()
-                .HasForeignKey(x => x.CalculationId);
         }
 
         protected virtual void InitializeCurrencyRelations(DbModelBuilder modelBuilder)
@@ -77,6 +69,14 @@ namespace StormTestProject
                 .HasMany(x => x.Policies)
                 .WithOptional(x => x.Country)
                 .HasForeignKey(x => x.CountryId);
+        }
+
+        protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Calculation>()
+                .HasMany(x => x.CalculationDetailses)
+                .WithRequired()
+                .HasForeignKey(x => x.CalculationId);
         }
 
         protected virtual void InitializePolicyRelations(DbModelBuilder modelBuilder)

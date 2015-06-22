@@ -39,9 +39,26 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
+                }
+
+                Func<IQueryable<Department>> query = () =>
+                {
+                    return loadService.Context.Set<Department>()
+                        .Join(sourceQuery, x => x.DepartmentId, x => x.DepartmentId, (x, y) => x);
+                };
+                var items = loadService.GetProperty<Department, Department, int>(0, query, x => x.DepartmentId, DepartmentId);
+                var item = items.FirstOrDefault();
+                if (clonedFrom == null)
+                {
+                    field0 = item;
+                }
+                else
+                {
+                    clonedFrom.Department = item;
+                    field0 = loadService.Context.GetDalRepository<Department, Department>().Clone(item);
                 }
 
                 populated[0] = true;

@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace StormTestProject
 {
+    using System.Linq;
+
     [TestClass]
     public class StormTest
     {
@@ -24,17 +26,20 @@ namespace StormTestProject
 
 
                 var policy = new Policy
-                {
-                    Name = "my policy",
-                    CountryId = country.CountryId,
-                    CurrencyId = currency.CurrencyId,
-                };
+                                 {
+                                     Name = "my policy",
+                                     CountryId = country.CountryId,
+                                     CurrencyId = currency.CurrencyId,
+                                     Taxes = new List<Tax> { new Tax { Amount = (decimal)10.2 } }
+                                 };
 
                 context.Policies.Add(policy);
                 context.SaveChanges();
                 var query = context.Set<Policy>();
 
-                var result = context.Storm.Get(query);
+                var result = context.Storm.Get(query).First();
+                var resultCountry = result.Country;
+                var taxes = result.Taxes;
 
                 Assert.AreEqual(trans, context.Database.CurrentTransaction);
             }

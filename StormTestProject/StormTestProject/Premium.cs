@@ -45,7 +45,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
                 }
@@ -53,8 +53,24 @@ namespace StormTestProject
                 Func<IQueryable<Comment>> query = () =>
                 {
                     return loadService.Context.Set<Comment>()
-                        .Join(sourceQuery, x => x.PremiumId.Value, x => x.PremiumId, (x, y) => x);
+                        .Join(sourceQuery, x => x.PremiumId, x => x.PremiumId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Comment, Comment, int?>(0, query, x => x.PremiumId, PremiumId);
+                if (clonedFrom == null)
+                {
+                    field0 = items;
+                }
+                else
+                {
+                    clonedFrom.Comments = items;
+                    field0 = new List<Comment>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Comment, Comment>();
+                    foreach(var item in items)
+                    {
+                        field0.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[0] = true;
                 return field0;
             }

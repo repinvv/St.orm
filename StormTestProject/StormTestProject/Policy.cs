@@ -47,9 +47,26 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[0])
+                if(populated[0] || loadService == null)
                 {
                     return field0;
+                }
+
+                Func<IQueryable<Country>> query = () =>
+                {
+                    return loadService.Context.Set<Country>()
+                        .Join(sourceQuery, x => x.CountryId, x => x.CountryId, (x, y) => x);
+                };
+                var items = loadService.GetProperty<Country, Country, int>(0, query, x => x.CountryId, CountryId);
+                var item = items.FirstOrDefault();
+                if (clonedFrom == null)
+                {
+                    field0 = item;
+                }
+                else
+                {
+                    clonedFrom.Country = item;
+                    field0 = loadService.Context.GetDalRepository<Country, Country>().Clone(item);
                 }
 
                 populated[0] = true;
@@ -68,7 +85,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[1])
+                if(populated[1] || loadService == null)
                 {
                     return field1;
                 }
@@ -78,8 +95,21 @@ namespace StormTestProject
                     return loadService.Context.Set<Tax>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-
-                var items = loadService.GetProperty<Tax, Tax, int>(0, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetProperty<Tax, Tax, int>(1, query, x => x.PolicyId, PolicyId);
+                if (clonedFrom == null)
+                {
+                    field1 = items;
+                }
+                else
+                {
+                    clonedFrom.Taxes = items;
+                    field1 = new List<Tax>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Tax, Tax>();
+                    foreach(var item in items)
+                    {
+                        field1.Add(repo.Clone(item));
+                    }
+                }
 
                 populated[1] = true;
                 return field1;
@@ -97,7 +127,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[2])
+                if(populated[2] || loadService == null)
                 {
                     return field2;
                 }
@@ -107,6 +137,22 @@ namespace StormTestProject
                     return loadService.Context.Set<Assignment>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Assignment, Assignment, int>(2, query, x => x.PolicyId, PolicyId);
+                if (clonedFrom == null)
+                {
+                    field2 = items;
+                }
+                else
+                {
+                    clonedFrom.Assignments = items;
+                    field2 = new List<Assignment>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Assignment, Assignment>();
+                    foreach(var item in items)
+                    {
+                        field2.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[2] = true;
                 return field2;
             }
@@ -123,7 +169,7 @@ namespace StormTestProject
             #region implementation
             get
             {
-                if(populated[3])
+                if(populated[3] || loadService == null)
                 {
                     return field3;
                 }
@@ -131,8 +177,24 @@ namespace StormTestProject
                 Func<IQueryable<Comment>> query = () =>
                 {
                     return loadService.Context.Set<Comment>()
-                        .Join(sourceQuery, x => x.PolicyId.Value, x => x.PolicyId, (x, y) => x);
+                        .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
+                var items = loadService.GetProperty<Comment, Comment, int?>(3, query, x => x.PolicyId, PolicyId);
+                if (clonedFrom == null)
+                {
+                    field3 = items;
+                }
+                else
+                {
+                    clonedFrom.Comments = items;
+                    field3 = new List<Comment>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Comment, Comment>();
+                    foreach(var item in items)
+                    {
+                        field3.Add(repo.Clone(item));
+                    }
+                }
+
                 populated[3] = true;
                 return field3;
             }
