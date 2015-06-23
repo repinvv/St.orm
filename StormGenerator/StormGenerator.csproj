@@ -118,7 +118,7 @@
     <Compile Include="Models\Pregen\Relation\OneToManyField.cs" />
     <Compile Include="Models\Pregen\Relation\Relation.cs" />
     <Compile Include="Models\Pregen\ModelBase.cs" />
-    <Compile Include="Models\Pregen\SwitcheableExtension.cs" />
+    <Compile Include="Models\Pregen\ModelBaseExtension.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Models\Config\RelationsMode.cs" />
     <Compile Include="StormGeneration.cs" />
