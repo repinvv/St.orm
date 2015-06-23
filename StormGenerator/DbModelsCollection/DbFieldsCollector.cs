@@ -35,7 +35,9 @@
                        IsNullable = column.IsNullable,
                        IsReadonly = column.IsComputed,
                        Index = column.Index,
-                       StringLength = column.StringLength,
+                       Length = column.Length,
+                       Precision = column.Precision,
+                       Scale = column.Scale,
                        Associations = new List<DbAssociation>()
                    };
         }

@@ -43,7 +43,13 @@
 
         public DbConnection Connection { get { return Database.Connection; } }
 
-        public DbTransaction Transaction { get { return Database.CurrentTransaction.UnderlyingTransaction; } }
+        public DbTransaction Transaction
+        {
+            get
+            {
+                return Database.CurrentTransaction != null ? Database.CurrentTransaction.UnderlyingTransaction : null;
+            }
+        }
     }");
         }
     }

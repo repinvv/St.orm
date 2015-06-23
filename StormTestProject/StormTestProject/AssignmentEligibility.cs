@@ -75,7 +75,7 @@ namespace StormTestProject
         #endregion
 
         #region Private fields
-        private readonly bool[] populated = new bool[1];
+        private readonly bool[] populated;
         private readonly ILoadService loadService;
         IQueryable<AssignmentEligibility> sourceQuery;
         private readonly AssignmentEligibility clonedFrom;
@@ -88,16 +88,19 @@ namespace StormTestProject
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[1];
         }
 
         public AssignmentEligibility(IQueryable<AssignmentEligibility> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[1];
         }
 
         public AssignmentEligibility()
         {
+            populated = new bool[]{true};
         }
         #endregion
 

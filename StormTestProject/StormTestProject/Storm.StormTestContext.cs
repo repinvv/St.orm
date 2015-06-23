@@ -45,17 +45,19 @@ namespace StormTestProject
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            InitializeCurrencyRelations(modelBuilder);
-            InitializeCountryRelations(modelBuilder);
-            InitializeCalculationRelations(modelBuilder);
-            InitializePolicyRelations(modelBuilder);
-            InitializeAssignmentRelations(modelBuilder);
-            InitializeAssignmentDepartmentRelations(modelBuilder);
-            InitializeAssignmentEligibilityRelations(modelBuilder);
-            InitializePremiumRelations(modelBuilder);
+            InitializeCurrencyFields(modelBuilder);
+            InitializeCountryFields(modelBuilder);
+            InitializeCalculationFields(modelBuilder);
+            InitializeCalculationDetailsFields(modelBuilder);
+            InitializePolicyFields(modelBuilder);
+            InitializeTaxFields(modelBuilder);
+            InitializeAssignmentFields(modelBuilder);
+            InitializeAssignmentDepartmentFields(modelBuilder);
+            InitializeAssignmentEligibilityFields(modelBuilder);
+            InitializePremiumFields(modelBuilder);
         }
 
-        protected virtual void InitializeCurrencyRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeCurrencyFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Currency>()
                 .HasMany(x => x.Policies)
@@ -63,7 +65,7 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CurrencyId);
         }
 
-        protected virtual void InitializeCountryRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeCountryFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Country>()
                 .HasMany(x => x.Policies)
@@ -71,7 +73,7 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CountryId);
         }
 
-        protected virtual void InitializeCalculationRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeCalculationFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Calculation>()
                 .HasMany(x => x.CalculationDetailses)
@@ -79,7 +81,14 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CalculationId);
         }
 
-        protected virtual void InitializePolicyRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeCalculationDetailsFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CalculationDetails>()
+                .Property(e => e.Value)
+                .HasPrecision(18, 2);
+        }
+
+        protected virtual void InitializePolicyFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Policy>()
                 .HasMany(x => x.Taxes)
@@ -95,8 +104,19 @@ namespace StormTestProject
                 .HasForeignKey(x => x.PolicyId);
         }
 
-        protected virtual void InitializeAssignmentRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeTaxFields(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tax>()
+                .Property(e => e.Amount)
+                .HasPrecision(18, 2);
+        }
+
+        protected virtual void InitializeAssignmentFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Assignment>()
+                .Ignore(x => x.Departments);
+            modelBuilder.Entity<Assignment>()
+                .Ignore(x => x.Eligibilities);
             modelBuilder.Entity<Assignment>()
                 .HasMany(x => x.Premiums)
                 .WithRequired()
@@ -107,7 +127,7 @@ namespace StormTestProject
                 .HasForeignKey(x => x.AssignmentId);
         }
 
-        protected virtual void InitializeAssignmentDepartmentRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeAssignmentDepartmentFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AssignmentDepartment>()
                 .HasRequired(x => x.Department)
@@ -115,7 +135,7 @@ namespace StormTestProject
                 .HasForeignKey(x => x.DepartmentId);
         }
 
-        protected virtual void InitializeAssignmentEligibilityRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializeAssignmentEligibilityFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AssignmentEligibility>()
                 .HasRequired(x => x.Eligibility)
@@ -123,12 +143,15 @@ namespace StormTestProject
                 .HasForeignKey(x => x.EligibilityId);
         }
 
-        protected virtual void InitializePremiumRelations(DbModelBuilder modelBuilder)
+        protected virtual void InitializePremiumFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Premium>()
                 .HasMany(x => x.Comments)
                 .WithOptional()
                 .HasForeignKey(x => x.PremiumId);
+            modelBuilder.Entity<Premium>()
+                .Property(e => e.Amount)
+                .HasPrecision(18, 2);
         }
     }
 }

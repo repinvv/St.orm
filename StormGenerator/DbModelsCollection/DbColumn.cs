@@ -12,12 +12,16 @@
 
         public bool IsNullable { get; set; }
 
-        public int StringLength { get; set; }
-
         public bool IsIdentity { get; set; }
 
         public bool IsComputed { get; set; }
 
         public string Default { get; set; }
+
+        public int Length { get; set; }
+
+        public int Precision { get; set; }
+
+        public int Scale { get; set; }
     }
 }

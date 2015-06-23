@@ -16,11 +16,15 @@
 
         public string Default { get; set; }
 
-        public int StringLength { get; set; }
-
         public int Index { get; set; }
 
         public bool IsReadonly { get; set; }
+
+        public int Length { get; set; }
+
+        public int Precision { get; set; }
+
+        public int Scale { get; set; }
 
         public List<DbAssociation> Associations { get; set; }
     }

@@ -50,7 +50,6 @@ namespace StormTestProject
         #endregion
 
         #region Private fields
-        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Comment> sourceQuery;
         private readonly Comment clonedFrom;
@@ -98,7 +97,7 @@ namespace StormTestProject
 
         bool[] ICloneable<Comment>.GetPopulated()
         {
-            return populated;
+            return null;
         }
         #endregion
     }

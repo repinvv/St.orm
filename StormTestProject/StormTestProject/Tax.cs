@@ -40,7 +40,6 @@ namespace StormTestProject
         #endregion
 
         #region Private fields
-        private readonly bool[] populated = new bool[0];
         private readonly ILoadService loadService;
         IQueryable<Tax> sourceQuery;
         private readonly Tax clonedFrom;
@@ -85,7 +84,7 @@ namespace StormTestProject
 
         bool[] ICloneable<Tax>.GetPopulated()
         {
-            return populated;
+            return null;
         }
         #endregion
     }

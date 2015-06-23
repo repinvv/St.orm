@@ -34,10 +34,12 @@
                            Type = r["DATA_TYPE"] as string,
                            Index = (int)r["ORDINAL_POSITION"],
                            IsNullable = r["IS_NULLABLE"] as string == "YES",
-                           StringLength = r["CHARACTER_MAXIMUM_LENGTH"] as int? ?? 0,
                            IsIdentity = (int)r["IsIdentity"] == 1,
                            Default = r["COLUMN_DEFAULT"] as string,
                            IsComputed = (int)r["IsComputed"] == 1,
+                           Length = r["CHARACTER_MAXIMUM_LENGTH"] as int? ?? 0,
+                           Precision = r["NUMERIC_PRECISION"] as byte? ?? 0,
+                           Scale = r["NUMERIC_SCALE"] as int? ?? 0
                        };
             };
             return reader.Read(connection, Query, func);

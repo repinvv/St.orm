@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.Common
 {
+    using System;
     using St.Orm;
     using St.Orm.Interfaces;
 
@@ -26,6 +27,8 @@
         {
             public const string RepositorySuffix = "DalRepository";
             public const string ContextExtensionSuffix = "Extension";
+
+            public static readonly Type[] DottedTypes = { typeof(decimal), typeof(double), typeof(float) };
 
             public static readonly string[] RepositoryUsings =
             {

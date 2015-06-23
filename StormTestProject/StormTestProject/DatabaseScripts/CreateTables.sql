@@ -17,7 +17,7 @@ CREATE TABLE stats.calculation_details
   calculation_id UNIQUEIDENTIFIER not null,
   year int not null,
   month int not null,
-  value decimal not null,
+  value decimal(18,2) not null,
   CONSTRAINT pk_calculation_details PRIMARY KEY (calculation_details_id),
   CONSTRAINT fk_calculation_details1 FOREIGN KEY (calculation_id) REFERENCES stats.calculation (calculation_id)
 )
@@ -93,7 +93,7 @@ CREATE TABLE model.tax
 (
   tax_id int not null default(NEXT VALUE FOR model.tax_seq),  
   policy_id int not null,
-  amount decimal not null,
+  amount decimal(18,2) not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
   CONSTRAINT pk_tax PRIMARY KEY CLUSTERED (tax_id ASC),
@@ -144,7 +144,7 @@ CREATE TABLE model.premium
   premium_id int not null default(NEXT VALUE FOR model.premium_seq),  
   premium_type int not null,
   assignment_id int not null,
-  amount decimal not null,
+  amount decimal(18,2) not null,
   created datetime2 not null DEFAULT GETDATE(),
   updated datetime2 not null DEFAULT GETDATE(),
   CONSTRAINT pk_premium PRIMARY KEY CLUSTERED (premium_id ASC),

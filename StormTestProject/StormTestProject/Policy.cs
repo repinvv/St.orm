@@ -209,7 +209,7 @@ namespace StormTestProject
         #endregion
 
         #region Private fields
-        private readonly bool[] populated = new bool[4];
+        private readonly bool[] populated;
         private readonly ILoadService loadService;
         IQueryable<Policy> sourceQuery;
         private readonly Policy clonedFrom;
@@ -225,19 +225,22 @@ namespace StormTestProject
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[4];
         }
 
         public Policy(IQueryable<Policy> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[4];
         }
 
         public Policy()
         {
-            Taxes = new HashSet<Tax>();
-            Assignments = new HashSet<Assignment>();
-            Comments = new HashSet<Comment>();
+            field1 = new HashSet<Tax>();
+            field2 = new HashSet<Assignment>();
+            field3 = new HashSet<Comment>();
+            populated = new bool[]{true, true, true, true};
         }
         #endregion
 

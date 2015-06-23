@@ -21,7 +21,7 @@ namespace StormTestProject
                 context.Countries.Add(country);
                 context.Countries.Add(country2);
                 context.Currencies.Add(currency);
-                // context.Departments.Add(department);
+                context.Departments.Add(department);
                 context.SaveChanges();
 
 
@@ -30,18 +30,27 @@ namespace StormTestProject
                                      Name = "my policy",
                                      CountryId = country.CountryId,
                                      CurrencyId = currency.CurrencyId,
+                                     Assignments = new List<Assignment>
+                                                       {
+                                                           new Assignment
+                                                               {
+                                                                   Comment = "SomeComment"
+                                                               }
+                                                       },
                                      Taxes = new List<Tax> { new Tax { Amount = (decimal)10.2 } }
                                  };
 
                 context.Policies.Add(policy);
+                context.SaveChanges();
+                context.AssignmentDepartments.Add(new AssignmentDepartment { DepartmentId = department.DepartmentId });
                 context.SaveChanges();
                 var query = context.Set<Policy>();
 
                 var result = context.Storm.Get(query).First();
                 var resultCountry = result.Country;
                 var taxes = result.Taxes;
-
-                Assert.AreEqual(trans, context.Database.CurrentTransaction);
+                var assignment = result.Assignments.First();
+                var resultDepartment = assignment.Departments.First();
             }
         }
     }

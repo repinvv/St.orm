@@ -52,9 +52,9 @@
 
         private void GenerateInitializerCalls(List<Model> models, IStringGenerator stringGenerator)
         {
-            foreach (var model in models.Where(x => x.RelationFields.AnyActive()))
+            foreach (var model in models.Where(initializersGenerator.NeedsInitializer))
             {
-                stringGenerator.AppendLine("Initialize" + model.Name + "Relations(modelBuilder);");
+                stringGenerator.AppendLine("Initialize" + model.Name + "Fields(modelBuilder);");
             }
         }
     }

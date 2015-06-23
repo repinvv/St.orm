@@ -58,9 +58,9 @@
                     stringGenerator.AppendLine("[Required]");
                 }
 
-                if (field.DbField.StringLength > 0)
+                if (field.DbField.Length > 0)
                 {
-                    stringGenerator.AppendLine("[MaxLength(" + field.DbField.StringLength + ")]");
+                    stringGenerator.AppendLine("[MaxLength(" + field.DbField.Length + ")]");
                 }
             }
 

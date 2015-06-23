@@ -86,7 +86,7 @@ namespace StormTestProject
         #endregion
 
         #region Private fields
-        private readonly bool[] populated = new bool[1];
+        private readonly bool[] populated;
         private readonly ILoadService loadService;
         IQueryable<Country> sourceQuery;
         private readonly Country clonedFrom;
@@ -99,17 +99,20 @@ namespace StormTestProject
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[1];
         }
 
         public Country(IQueryable<Country> sourceQuery, ILoadService loadService)
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
+            populated = new bool[1];
         }
 
         public Country()
         {
-            Policies = new HashSet<Policy>();
+            field0 = new HashSet<Policy>();
+            populated = new bool[]{true};
         }
         #endregion
 
