@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.tax")]
-    public partial class Tax : ICloneable<Tax>
+    public partial class Tax : ICloneable<Tax>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

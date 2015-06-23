@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("eligibility")]
-    public partial class Eligibility : ICloneable<Eligibility>
+    public partial class Eligibility : ICloneable<Eligibility>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

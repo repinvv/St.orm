@@ -63,5 +63,11 @@ namespace StormTestProject
                 context.Connection,
                 context.Transaction);
         }
+
+        public IQueryable<Assignment> GetByIdQuery(object id, IStormContext context)
+        {
+            var key = (int)id;
+            return context.Set<Assignment>().Where(x => x.AssignmentId == key);
+        }
     }
 }

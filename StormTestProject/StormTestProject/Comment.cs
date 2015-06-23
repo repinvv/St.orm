@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.comment")]
-    public partial class Comment : ICloneable<Comment>
+    public partial class Comment : ICloneable<Comment>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

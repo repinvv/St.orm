@@ -15,5 +15,7 @@
         TDal Create(IDataReader reader, IQueryable<TQuery> query, ILoadService loadService);
 
         List<TDal> Materialize(IQueryable<TQuery> query, ILoadService loadService);
+
+        IQueryable<TQuery> GetByIdQuery(object id, IStormContext context);
     }
 }

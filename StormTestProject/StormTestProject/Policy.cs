@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.policy")]
-    public partial class Policy : ICloneable<Policy>
+    public partial class Policy : ICloneable<Policy>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

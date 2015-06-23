@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.assignment")]
-    public partial class Assignment : ICloneable<Assignment>
+    public partial class Assignment : ICloneable<Assignment>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

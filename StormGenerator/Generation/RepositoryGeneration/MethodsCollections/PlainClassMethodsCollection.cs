@@ -10,7 +10,8 @@
             RelationsCountGenerator relationsCountGenerator,
             CreateGenerator createGenerator,
             CloneGenerator cloneGenerator,
-            MaterializeGenerator materializeGenerator)
+            MaterializeGenerator materializeGenerator,
+            GetByIdQueryGenerator getByIdQueryGenerator)
         {
             generators = new IMethodGenerator[]
                          {
@@ -18,7 +19,8 @@
                              relationsCountGenerator,
                              cloneGenerator,
                              createGenerator,
-                             materializeGenerator
+                             materializeGenerator,
+                             getByIdQueryGenerator
                          };
         }
 

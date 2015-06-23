@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.covered")]
-    public partial class Covered : ICloneable<Covered>
+    public partial class Covered : ICloneable<Covered>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

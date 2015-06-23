@@ -7,7 +7,7 @@
 
     internal static class StormGetImplementation
     {
-        public static List<TDal> GetEntities<TDal>(IQueryable<TDal> query, IStormContext context, LoadParameter[] parameters)
+        public static List<TDal> Get<TDal>(IQueryable<TDal> query, IStormContext context, LoadParameter[] parameters)
         {
             var parametersDictionary = parameters.ToDictionary(x => x.Key, x => x.Value);
             var repo = context.GetDalRepository<TDal, TDal>();

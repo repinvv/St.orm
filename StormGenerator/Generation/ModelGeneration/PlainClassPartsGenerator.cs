@@ -1,6 +1,5 @@
 ﻿namespace StormGenerator.Generation.ModelGeneration
 {
-    using System;
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Generation.Common;
@@ -31,7 +30,8 @@
 
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public partial class " + model.Name + " : ICloneable<" + model.Name + ">");
+            var haveId = model.Parent.MappingFields.Count(x => x.DbField.IsPrimaryKey) == 1 ? ", IHaveId" : string.Empty;
+            stringGenerator.AppendLine("public partial class " + model.Name + " : ICloneable<" + model.Name + ">" + haveId);
         }
 
         public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)

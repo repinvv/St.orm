@@ -33,7 +33,12 @@
 
         public ICollection<T> Get<T>(IQueryable<T> query, params LoadParameter[] parameters)
         {
-            return Storm.GetEntities(query, context, parameters);
+            return Storm.Get(query, context, parameters);
+        }
+
+        public T GetById<T>(object id, params LoadParameter[] parameters) where T : IHaveId
+        {
+            return Storm.GetById<T>(id, context, parameters);
         }
     }");
         }
