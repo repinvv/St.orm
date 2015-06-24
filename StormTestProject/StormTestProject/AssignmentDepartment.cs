@@ -49,8 +49,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Department>()
                         .Join(sourceQuery, x => x.DepartmentId, x => x.DepartmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Department, Department, int>(0, query, x => x.DepartmentId, DepartmentId);
-                var item = items.FirstOrDefault();
+                var item = loadService.GetSingle<Department, Department, int>(0, query, x => x.DepartmentId, DepartmentId);
                 if (clonedFrom == null)
                 {
                     field0 = item;

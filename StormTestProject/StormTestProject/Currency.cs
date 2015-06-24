@@ -56,7 +56,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Policy>()
                         .Join(sourceQuery, x => x.CurrencyId, x => x.CurrencyId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Policy, Policy, int>(0, query, x => x.CurrencyId, CurrencyId);
+                var items = loadService.GetList<Policy, Policy, int>(0, query, x => x.CurrencyId, CurrencyId);
                 if (clonedFrom == null)
                 {
                     field0 = items;

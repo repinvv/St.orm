@@ -55,7 +55,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Comment>()
                         .Join(sourceQuery, x => x.PremiumId, x => x.PremiumId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Comment, Comment, int?>(0, query, x => x.PremiumId, PremiumId);
+                var items = loadService.GetList<Comment, Comment, int?>(0, query, x => x.PremiumId, PremiumId);
                 if (clonedFrom == null)
                 {
                     field0 = items;

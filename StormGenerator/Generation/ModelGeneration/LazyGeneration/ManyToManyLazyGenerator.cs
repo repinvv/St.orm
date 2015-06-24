@@ -17,7 +17,7 @@
         {
             stringGenerator.AppendLine("Func<IQueryable<" + field.MediatorModel.Parent.Name + ">> query = () =>");
             stringGenerator.Braces(() => GenerateJoin(field, model, stringGenerator), true);
-            joinGenerator.GenerateGetItems(field.MediatorModel, index, field.FarEndFields, field.NearEndFields, stringGenerator, false);
+            joinGenerator.GenerateGetItems(field.MediatorModel, index, field.FarEndFields, field.NearEndFields, stringGenerator, false, field.IsList);
             stringGenerator.PushIndent();
             stringGenerator.AppendLine(".Select(x => x." + field.MediatorMtoField.Name + ")");
             stringGenerator.AppendLine(".ToList();");

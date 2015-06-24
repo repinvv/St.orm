@@ -49,8 +49,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Eligibility>()
                         .Join(sourceQuery, x => x.EligibilityId, x => x.EligibilityId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Eligibility, Eligibility, int>(0, query, x => x.EligibilityId, EligibilityId);
-                var item = items.FirstOrDefault();
+                var item = loadService.GetSingle<Eligibility, Eligibility, int>(0, query, x => x.EligibilityId, EligibilityId);
                 if (clonedFrom == null)
                 {
                     field0 = item;

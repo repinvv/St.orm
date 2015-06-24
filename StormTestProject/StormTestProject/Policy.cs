@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Policy : ICloneable<Policy>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("policy_id", Order = 1)]
         public int PolicyId { get;set; }
 
@@ -57,8 +57,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Country>()
                         .Join(sourceQuery, x => x.CountryId, x => x.CountryId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Country, Country, int>(0, query, x => x.CountryId, CountryId);
-                var item = items.FirstOrDefault();
+                var item = loadService.GetSingle<Country, Country, int>(0, query, x => x.CountryId, CountryId);
                 if (clonedFrom == null)
                 {
                     field0 = item;
@@ -95,7 +94,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Tax>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Tax, Tax, int>(1, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Tax, Tax, int>(1, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field1 = items;
@@ -137,7 +136,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Assignment>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Assignment, Assignment, int>(2, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Assignment, Assignment, int>(2, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field2 = items;
@@ -179,7 +178,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Comment>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Comment, Comment, int?>(3, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Comment, Comment, int?>(3, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field3 = items;

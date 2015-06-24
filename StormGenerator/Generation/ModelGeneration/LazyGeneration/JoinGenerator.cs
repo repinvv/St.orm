@@ -54,13 +54,16 @@
             return output;
         }
 
-        public void GenerateGetItems(Model fieldModel, int index, List<MappingField> farEndFields, List<MappingField> nearEndFields, IStringGenerator stringGenerator, bool semicolon)
+        public void GenerateGetItems(Model fieldModel, int index, List<MappingField> farEndFields, List<MappingField> nearEndFields, IStringGenerator stringGenerator, bool semicolon, bool isList)
         {
             var farend = GetFields(farEndFields, nearEndFields, true);
             var nearend = GetFields(nearEndFields, farEndFields, true);
             var keyType = farEndFields.Count == 1 ? typeService.GetTypeName(farEndFields[0].Type) : "object";
-            var first = "var items = loadService.GetProperty<" + fieldModel.Name
-                        + ", " + fieldModel.Parent.Name + ", " + keyType + ">(" + index + ",";
+            var start = isList
+                ? "var items = loadService.GetList<"
+                : "var item = loadService.GetSingle<";
+            var first = start + fieldModel.Name + ", " + fieldModel.Parent.Name +
+                        ", " + keyType + ">(" + index + ",";
             var second = "query,";
             var third = "x => " + objectStringService.CreateObjectString(farend, "x") + ",";
             var fourth = objectStringService.CreateObjectString(nearend) + ")" + (semicolon ? ";" : string.Empty);

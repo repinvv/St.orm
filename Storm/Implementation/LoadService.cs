@@ -22,48 +22,64 @@
 
         public IStormContext Context { get { return context; } }
 
-        private Dictionary<TIndex, List<TField>> GetItemsDictionary<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
+        private ILookup<TIndex, TField> GetLookup<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
         {
             if (fields[propertyIndex] != null)
             {
-                return fields[propertyIndex] as Dictionary<TIndex, List<TField>>;
+                return fields[propertyIndex] as Lookup<TIndex, TField>;
             }
-            
+
             var repo = context.GetDalRepository<TField, TQuery>();
-            var materialized = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount()));
-            var items = CreateDictionary(indexLambda, materialized);
+            var items = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount())).ToLookup(indexLambda);
             fields[propertyIndex] = items;
             return items;
         }
 
-        private Dictionary<TIndex, List<TField>> CreateDictionary<TField, TIndex>(Func<TField, TIndex> indexLambda, List<TField> materialized)
+        // will need many2many test with lots of entities, most likely lookup will remain
+        private IDictionary<TIndex, TField> GetDictionary<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
         {
-            var items = new Dictionary<TIndex, List<TField>>();
-            foreach (var entity in materialized)
+            if (fields[propertyIndex] != null)
             {
-                List<TField> list;
-                var itemKey = indexLambda(entity);
-                if (!items.TryGetValue(itemKey, out list))
-                {
-                    list = new List<TField>();
-                    items.Add(itemKey, list);
-                }
-
-                list.Add(entity);
+                return fields[propertyIndex] as IDictionary<TIndex, TField>;
             }
 
-            return items;
+            var repo = context.GetDalRepository<TField, TQuery>();
+            var materialized = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount()));
+            var dict = new Dictionary<TIndex, TField>();
+            foreach (var item in materialized)
+            {
+                var key = indexLambda(item);
+                if (!dict.ContainsKey(key))
+                {
+                    dict.Add(key, item);
+                }
+            }
+
+            fields[propertyIndex] = dict;
+            return dict;
         }
 
-        public List<TField> GetProperty<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex key)
+        public List<TField> GetList<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex key)
         {
-            return key == null ? new List<TField>() : GetItemsDictionary(propertyIndex, query, indexLambda)[key];
+            return key == null ? new List<TField>() : GetLookup(propertyIndex, query, indexLambda)[key].ToList();
         }
 
-        public List<TField> GetProperty<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex? key)
+        public List<TField> GetList<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex? key) where TIndex : struct
+        {
+            return key.HasValue ? GetLookup(propertyIndex, query, indexLambda)[key.Value].ToList() : new List<TField>();
+        }
+
+        public TField GetSingle<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex key)
+            where TField : class
+        {
+            return key == null ? null : GetLookup(propertyIndex, query, indexLambda)[key].FirstOrDefault();
+        }
+
+        public TField GetSingle<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda, TIndex? key)
             where TIndex : struct
+            where TField : class
         {
-            return key.HasValue ? GetItemsDictionary(propertyIndex, query, indexLambda)[key.Value] : new List<TField>();
+            return key.HasValue ? GetLookup(propertyIndex, query, indexLambda)[key.Value].FirstOrDefault() : null;
         }
     }
 }

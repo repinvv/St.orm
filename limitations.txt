@@ -1,1 +1,2 @@
-1. Can't disable or change type of primary key fields
+1. Can't disable or change type of primary key fields.
+2. Can't do many2one or many2many to structure type.

@@ -24,7 +24,7 @@
             stringGenerator.AppendLine("if(populated[" + index + "] || loadService == null)");
             stringGenerator.Braces(() => stringGenerator.AppendLine("return field" + index + ";"));
             stringGenerator.AppendLine();
-
+            
             var otm = field as OneToManyField;
             if (otm != null)
             {
@@ -75,7 +75,6 @@
 
         private void GenerateSingle(RelationField field, int index, Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("var item = items.FirstOrDefault();");
             stringGenerator.AppendLine("if (clonedFrom == null)");
             stringGenerator.Braces(() => stringGenerator.AppendLine("field" + index + " = item;"));
             stringGenerator.AppendLine("else");

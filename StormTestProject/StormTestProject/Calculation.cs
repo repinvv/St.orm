@@ -46,7 +46,7 @@ namespace StormTestProject
                     return loadService.Context.Set<CalculationDetails>()
                         .Join(sourceQuery, x => x.CalculationId, x => x.CalculationId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<CalculationDetails, CalculationDetails, Guid>(0, query, x => x.CalculationId, CalculationId);
+                var items = loadService.GetList<CalculationDetails, CalculationDetails, Guid>(0, query, x => x.CalculationId, CalculationId);
                 if (clonedFrom == null)
                 {
                     field0 = items;

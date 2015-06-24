@@ -17,7 +17,7 @@
         {
             stringGenerator.AppendLine("Func<IQueryable<" + field.FieldModel.Parent.Name + ">> query = () =>");
             stringGenerator.Braces(() => GenerateJoin(field, model, stringGenerator), true);
-            joinGenerator.GenerateGetItems(field.FieldModel, index, field.FarEndFields, field.NearEndFields, stringGenerator, true);
+            joinGenerator.GenerateGetItems(field.FieldModel, index, field.FarEndFields, field.NearEndFields, stringGenerator, true, field.IsList);
         }
 
         private void GenerateJoin(ManyToOneField field, Model model, IStringGenerator stringGenerator)

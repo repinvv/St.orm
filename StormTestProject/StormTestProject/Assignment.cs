@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Assignment : ICloneable<Assignment>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("assignment_id", Order = 1)]
         public int AssignmentId { get;set; }
 
@@ -53,7 +53,7 @@ namespace StormTestProject
                     return loadService.Context.Set<AssignmentDepartment>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<AssignmentDepartment, AssignmentDepartment, int>(0, query, x => x.AssignmentId, AssignmentId)
+                var items = loadService.GetList<AssignmentDepartment, AssignmentDepartment, int>(0, query, x => x.AssignmentId, AssignmentId)
                     .Select(x => x.Department)
                     .ToList();
                 if (clonedFrom == null)
@@ -97,7 +97,7 @@ namespace StormTestProject
                     return loadService.Context.Set<AssignmentEligibility>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<AssignmentEligibility, AssignmentEligibility, int>(1, query, x => x.AssignmentId, AssignmentId)
+                var items = loadService.GetList<AssignmentEligibility, AssignmentEligibility, int>(1, query, x => x.AssignmentId, AssignmentId)
                     .Select(x => x.Eligibility)
                     .ToList();
                 if (clonedFrom == null)
@@ -141,7 +141,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Premium>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Premium, Premium, int>(2, query, x => x.AssignmentId, AssignmentId);
+                var items = loadService.GetList<Premium, Premium, int>(2, query, x => x.AssignmentId, AssignmentId);
                 if (clonedFrom == null)
                 {
                     field2 = items;
@@ -183,7 +183,7 @@ namespace StormTestProject
                     return loadService.Context.Set<Covered>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Covered, Covered, int>(3, query, x => x.AssignmentId, AssignmentId);
+                var items = loadService.GetList<Covered, Covered, int>(3, query, x => x.AssignmentId, AssignmentId);
                 if (clonedFrom == null)
                 {
                     field3 = items;

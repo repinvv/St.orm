@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Tax : ICloneable<Tax>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("tax_id", Order = 1)]
         public int TaxId { get;set; }
 
