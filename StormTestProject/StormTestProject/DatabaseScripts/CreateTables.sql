@@ -73,10 +73,9 @@ CREATE SCHEMA model
 GO
 
 -- target entities
-CREATE SEQUENCE model.policy_seq as int START WITH 1 MINVALUE 1;
 CREATE TABLE model.policy
 (
-  policy_id int not null default(next value for model.policy_seq),  
+  policy_id int IDENTITY(1,1) not null,  
   country_id int null,
   currency_id int not null,
   name nvarchar(256) not null,
@@ -88,10 +87,9 @@ CREATE TABLE model.policy
 )
 GO
 
-CREATE SEQUENCE model.tax_seq as int START WITH 1 MINVALUE 1;
 CREATE TABLE model.tax
 (
-  tax_id int not null default(NEXT VALUE FOR model.tax_seq),  
+  tax_id int IDENTITY(1,1) not null,  
   policy_id int not null,
   amount decimal(18,2) not null,
   created datetime2 not null DEFAULT GETDATE(),
@@ -101,10 +99,9 @@ CREATE TABLE model.tax
 )
 GO
 
-CREATE SEQUENCE model.assignment_seq as int START WITH 1 MINVALUE 1;
 CREATE TABLE model.assignment
 (
-  assignment_id int not null default(NEXT VALUE FOR model.assignment_seq),  
+  assignment_id int IDENTITY(1,1) not null,  
   policy_id int not null,
   comment nvarchar(256),
   created datetime2 not null DEFAULT GETDATE(),
@@ -166,10 +163,9 @@ CREATE TABLE model.covered
 )
 GO
 
-CREATE SEQUENCE model.comment_seq as int START WITH 1 MINVALUE 1;
 CREATE TABLE model.comment
 (
-  comment_id int not null default(NEXT VALUE FOR model.comment_seq),  
+  comment_id int IDENTITY(1,1) not null,  
   comment_type int not null,
   policy_id int null,
   premium_id int null,

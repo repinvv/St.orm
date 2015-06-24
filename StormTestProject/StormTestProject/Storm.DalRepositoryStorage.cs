@@ -24,14 +24,14 @@ namespace StormTestProject
                     { typeof(Country), new CountryDalRepository() },
                     { typeof(Calculation), new CalculationDalRepository() },
                     { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
+                    { typeof(Covered), new CoveredDalRepository() },
+                    { typeof(Comment), new CommentDalRepository() },
                     { typeof(Policy), new PolicyDalRepository() },
                     { typeof(Tax), new TaxDalRepository() },
                     { typeof(Assignment), new AssignmentDalRepository() },
                     { typeof(AssignmentDepartment), new AssignmentDepartmentDalRepository() },
                     { typeof(AssignmentEligibility), new AssignmentEligibilityDalRepository() },
                     { typeof(Premium), new PremiumDalRepository() },
-                    { typeof(Covered), new CoveredDalRepository() },
-                    { typeof(Comment), new CommentDalRepository() },
                 };
     
         public static IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()

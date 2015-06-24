@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace StormTestProject
 {
+    using System.Data.Entity;
+    using System.Diagnostics;
     using System.Linq;
 
     [TestClass]
@@ -15,42 +17,98 @@ namespace StormTestProject
             using (var trans = context.Database.BeginTransaction())
             {
                 var country = new Country { Name = "Russia", CountryCode = "ru" };
-                var country2 = new Country { Name = "England", CountryCode = "uk" };
                 var currency = new Currency { Name = "Dollar", CurrencyCode = "usd" };
-                var department = new Department { Name = "dept1" };
                 context.Countries.Add(country);
-                context.Countries.Add(country2);
                 context.Currencies.Add(currency);
-                context.Departments.Add(department);
                 context.SaveChanges();
-
 
                 var policy = new Policy
                                  {
                                      Name = "my policy",
                                      CountryId = country.CountryId,
                                      CurrencyId = currency.CurrencyId,
-                                     Assignments = new List<Assignment>
-                                                       {
-                                                           new Assignment
-                                                               {
-                                                                   Comment = "SomeComment"
-                                                               }
-                                                       },
-                                     Taxes = new List<Tax> { new Tax { Amount = (decimal)10.2 } }
+                                     Assignments =
+                                         new List<Assignment>
+                                             {
+                                                 new Assignment(),
+                                                 new Assignment(),
+                                                 new Assignment(),
+                                                 new Assignment(),
+                                                 new Assignment(),
+                                             },
+                                     Taxes =
+                                         new List<Tax>
+                                             {
+                                                 new Tax { Amount = (decimal)10.1 },
+                                                 new Tax { Amount = (decimal)10.2 },
+                                                 new Tax { Amount = (decimal)10.3 },
+                                                 new Tax { Amount = (decimal)10.4 },
+                                                 new Tax { Amount = (decimal)10.5 },
+                                             },
+                                     Comments =
+                                         new List<Comment>
+                                             {
+                                                 new Comment { CommentText = "comment1" },
+                                                 new Comment { CommentText = "comment2" },
+                                                 new Comment { CommentText = "comment3" },
+                                                 new Comment { CommentText = "comment4" },
+                                                 new Comment { CommentText = "comment5" },
+                                             }
                                  };
 
                 context.Policies.Add(policy);
                 context.SaveChanges();
-                context.AssignmentDepartments.Add(new AssignmentDepartment { DepartmentId = department.DepartmentId });
-                context.SaveChanges();
-                var query = context.Set<Policy>();
 
-                var result = context.Storm.Get(query).First();
-                var resultCountry = result.Country;
-                var taxes = result.Taxes;
-                var assignment = result.Assignments.First();
-                var resultDepartment = assignment.Departments.First();
+                var watch = Stopwatch.StartNew();
+                var query1 = from p in context.Policies
+                             join a in context.Assignments on p.PolicyId equals a.PolicyId
+                             join t in context.Taxes on p.PolicyId equals t.PolicyId
+                             join c in context.Comments on p.PolicyId equals c.PolicyId
+                             select new {p, a, t, c};
+
+                
+                var result1 = query1.AsNoTracking().ToList();
+                Debug.WriteLine("cartesian count " + result1.Count);
+                watch.Stop();
+                Debug.WriteLine("cartesian " + watch.Elapsed);
+
+                watch = Stopwatch.StartNew();
+                var policies = context.Policies.AsNoTracking().ToList();
+                var assignments = context.Policies.SelectMany(x => x.Assignments).AsNoTracking().ToList();
+                var taxes = context.Policies.SelectMany(x => x.Taxes).AsNoTracking().ToList();
+                var comments = context.Policies.SelectMany(x => x.Comments).AsNoTracking().ToList();
+                watch.Stop();
+                Debug.WriteLine("p count " + policies.Count);
+                Debug.WriteLine("a count " + assignments.Count);
+                Debug.WriteLine("t count " + taxes.Count);
+                Debug.WriteLine("c count " + comments.Count);
+                Debug.WriteLine("regular " + watch.Elapsed);
+
+
+                watch = Stopwatch.StartNew();
+                query1 = from p in context.Policies
+                             join a in context.Assignments on p.PolicyId equals a.PolicyId
+                             join t in context.Taxes on p.PolicyId equals t.PolicyId
+                             join c in context.Comments on p.PolicyId equals c.PolicyId
+                             select new { p, a, t, c };
+
+
+                result1 = query1.AsNoTracking().ToList();
+                Debug.WriteLine("cartesian count " + result1.Count);
+                watch.Stop();
+                Debug.WriteLine("cartesian " + watch.Elapsed);
+
+                watch = Stopwatch.StartNew();
+                policies = context.Policies.AsNoTracking().ToList();
+                assignments = context.Policies.SelectMany(x => x.Assignments).AsNoTracking().ToList();
+                taxes = context.Policies.SelectMany(x => x.Taxes).AsNoTracking().ToList();
+                comments = context.Policies.SelectMany(x => x.Comments).AsNoTracking().ToList();
+                watch.Stop();
+                Debug.WriteLine("p count " + policies.Count);
+                Debug.WriteLine("a count " + assignments.Count);
+                Debug.WriteLine("t count " + taxes.Count);
+                Debug.WriteLine("c count " + comments.Count);
+                Debug.WriteLine("regular " + watch.Elapsed);
             }
         }
     }

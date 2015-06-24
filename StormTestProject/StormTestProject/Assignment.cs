@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Assignment : ICloneable<Assignment>
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("assignment_id", Order = 1)]
         public int AssignmentId { get;set; }
 
@@ -126,7 +126,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Premium> Premiums
+        public virtual ICollection<Covered> Covereds
         {
             #region implementation
             get
@@ -136,21 +136,21 @@ namespace StormTestProject
                     return field2;
                 }
 
-                Func<IQueryable<Premium>> query = () =>
+                Func<IQueryable<Covered>> query = () =>
                 {
-                    return loadService.Context.Set<Premium>()
+                    return loadService.Context.Set<Covered>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Premium, Premium, int>(2, query, x => x.AssignmentId, AssignmentId);
+                var items = loadService.GetProperty<Covered, Covered, int>(2, query, x => x.AssignmentId, AssignmentId);
                 if (clonedFrom == null)
                 {
                     field2 = items;
                 }
                 else
                 {
-                    clonedFrom.Premiums = items;
-                    field2 = new List<Premium>(items.Count);
-                    var repo = loadService.Context.GetDalRepository<Premium, Premium>();
+                    clonedFrom.Covereds = items;
+                    field2 = new List<Covered>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Covered, Covered>();
                     foreach(var item in items)
                     {
                         field2.Add(repo.Clone(item));
@@ -168,7 +168,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Covered> Covereds
+        public virtual ICollection<Premium> Premiums
         {
             #region implementation
             get
@@ -178,21 +178,21 @@ namespace StormTestProject
                     return field3;
                 }
 
-                Func<IQueryable<Covered>> query = () =>
+                Func<IQueryable<Premium>> query = () =>
                 {
-                    return loadService.Context.Set<Covered>()
+                    return loadService.Context.Set<Premium>()
                         .Join(sourceQuery, x => x.AssignmentId, x => x.AssignmentId, (x, y) => x);
                 };
-                var items = loadService.GetProperty<Covered, Covered, int>(3, query, x => x.AssignmentId, AssignmentId);
+                var items = loadService.GetProperty<Premium, Premium, int>(3, query, x => x.AssignmentId, AssignmentId);
                 if (clonedFrom == null)
                 {
                     field3 = items;
                 }
                 else
                 {
-                    clonedFrom.Covereds = items;
-                    field3 = new List<Covered>(items.Count);
-                    var repo = loadService.Context.GetDalRepository<Covered, Covered>();
+                    clonedFrom.Premiums = items;
+                    field3 = new List<Premium>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Premium, Premium>();
                     foreach(var item in items)
                     {
                         field3.Add(repo.Clone(item));
@@ -219,8 +219,8 @@ namespace StormTestProject
         private readonly Assignment clonedFrom;
         private ICollection<Department> field0;
         private ICollection<Eligibility> field1;
-        private ICollection<Premium> field2;
-        private ICollection<Covered> field3;
+        private ICollection<Covered> field2;
+        private ICollection<Premium> field3;
         #endregion
 
         #region Constructors
@@ -243,8 +243,8 @@ namespace StormTestProject
         {
             field0 = new HashSet<Department>();
             field1 = new HashSet<Eligibility>();
-            field2 = new HashSet<Premium>();
-            field3 = new HashSet<Covered>();
+            field2 = new HashSet<Covered>();
+            field3 = new HashSet<Premium>();
             populated = new bool[]{true, true, true, true};
         }
         #endregion

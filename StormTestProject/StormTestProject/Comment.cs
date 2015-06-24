@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Comment : ICloneable<Comment>
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("comment_id", Order = 1)]
         public int CommentId { get;set; }
 
