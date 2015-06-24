@@ -73,6 +73,7 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\CloneGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\CreateGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\FullCreateGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\GetByIdQueryGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MaterializeGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MethodGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\RelationsCountGenerator.cs" />

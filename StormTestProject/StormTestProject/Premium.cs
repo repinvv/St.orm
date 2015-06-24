@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.premium")]
-    public partial class Premium : ICloneable<Premium>
+    public partial class Premium : ICloneable<Premium>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

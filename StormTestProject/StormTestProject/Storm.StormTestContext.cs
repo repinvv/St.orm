@@ -27,10 +27,6 @@ namespace StormTestProject
 
         public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
 
-        public virtual DbSet<Covered> Covereds { get; set; }
-
-        public virtual DbSet<Comment> Comments { get; set; }
-
         public virtual DbSet<Policy> Policies { get; set; }
 
         public virtual DbSet<Tax> Taxes { get; set; }
@@ -42,6 +38,10 @@ namespace StormTestProject
         public virtual DbSet<AssignmentEligibility> AssignmentEligibilities { get; set; }
 
         public virtual DbSet<Premium> Premiums { get; set; }
+
+        public virtual DbSet<Covered> Covereds { get; set; }
+
+        public virtual DbSet<Comment> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -91,16 +91,16 @@ namespace StormTestProject
         protected virtual void InitializePolicyFields(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Policy>()
-                .HasMany(x => x.Comments)
-                .WithOptional()
-                .HasForeignKey(x => x.PolicyId);
-            modelBuilder.Entity<Policy>()
                 .HasMany(x => x.Taxes)
                 .WithRequired()
                 .HasForeignKey(x => x.PolicyId);
             modelBuilder.Entity<Policy>()
                 .HasMany(x => x.Assignments)
                 .WithRequired()
+                .HasForeignKey(x => x.PolicyId);
+            modelBuilder.Entity<Policy>()
+                .HasMany(x => x.Comments)
+                .WithOptional()
                 .HasForeignKey(x => x.PolicyId);
         }
 
@@ -118,11 +118,11 @@ namespace StormTestProject
             modelBuilder.Entity<Assignment>()
                 .Ignore(x => x.Eligibilities);
             modelBuilder.Entity<Assignment>()
-                .HasMany(x => x.Covereds)
+                .HasMany(x => x.Premiums)
                 .WithRequired()
                 .HasForeignKey(x => x.AssignmentId);
             modelBuilder.Entity<Assignment>()
-                .HasMany(x => x.Premiums)
+                .HasMany(x => x.Covereds)
                 .WithRequired()
                 .HasForeignKey(x => x.AssignmentId);
         }

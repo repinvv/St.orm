@@ -62,5 +62,10 @@ namespace StormTestProject
                 context.Connection,
                 context.Transaction);
         }
+
+        public IQueryable<AssignmentDepartment> GetByIdQuery(object id, IStormContext context)
+        {
+            throw new Exception("Get by id is only available for entities with single primary key field.");
+        }
     }
 }
