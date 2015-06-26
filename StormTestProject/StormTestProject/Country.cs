@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("country")]
-    public partial class Country : ICloneable<Country>, IHaveId
+    public partial class Country : ICloneable<Country>, IEquatable<Country>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -137,6 +137,41 @@ namespace StormTestProject
         bool[] ICloneable<Country>.GetPopulated()
         {
             return populated;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Country);
+        }
+
+        public bool Equals(Country other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return CountryId == other.CountryId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return CountryId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Country left, Country right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Country left, Country right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

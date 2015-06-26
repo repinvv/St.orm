@@ -17,10 +17,10 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.tax")]
-    public partial class Tax : ICloneable<Tax>, IHaveId
+    public partial class Tax : ICloneable<Tax>, IEquatable<Tax>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("tax_id", Order = 1)]
         public int TaxId { get;set; }
 
@@ -85,6 +85,41 @@ namespace StormTestProject
         bool[] ICloneable<Tax>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Tax);
+        }
+
+        public bool Equals(Tax other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return TaxId == other.TaxId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return TaxId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Tax left, Tax right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Tax left, Tax right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

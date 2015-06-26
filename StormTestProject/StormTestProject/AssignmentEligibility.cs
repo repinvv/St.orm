@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.assignment_eligibility")]
-    public partial class AssignmentEligibility : ICloneable<AssignmentEligibility>
+    public partial class AssignmentEligibility : ICloneable<AssignmentEligibility>, IEquatable<AssignmentEligibility>
     {
         [Key]
         [Column("assignment_id", Order = 1)]
@@ -123,6 +123,43 @@ namespace StormTestProject
         bool[] ICloneable<AssignmentEligibility>.GetPopulated()
         {
             return populated;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as AssignmentEligibility);
+        }
+
+        public bool Equals(AssignmentEligibility other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            bool equal = AssignmentId == other.AssignmentId;
+            return equal && EligibilityId == other.EligibilityId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = AssignmentId.GetHashCode();
+                return (hash * 397) ^ EligibilityId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(AssignmentEligibility left, AssignmentEligibility right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(AssignmentEligibility left, AssignmentEligibility right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

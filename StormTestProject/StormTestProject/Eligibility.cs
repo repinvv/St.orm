@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("eligibility")]
-    public partial class Eligibility : ICloneable<Eligibility>, IHaveId
+    public partial class Eligibility : ICloneable<Eligibility>, IEquatable<Eligibility>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -83,6 +83,41 @@ namespace StormTestProject
         bool[] ICloneable<Eligibility>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Eligibility);
+        }
+
+        public bool Equals(Eligibility other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return EligibilityId == other.EligibilityId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return EligibilityId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Eligibility left, Eligibility right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Eligibility left, Eligibility right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

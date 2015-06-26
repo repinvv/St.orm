@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.covered")]
-    public partial class Covered : ICloneable<Covered>, IHaveId
+    public partial class Covered : ICloneable<Covered>, IEquatable<Covered>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -89,6 +89,41 @@ namespace StormTestProject
         bool[] ICloneable<Covered>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Covered);
+        }
+
+        public bool Equals(Covered other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return CoveredId == other.CoveredId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return CoveredId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Covered left, Covered right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Covered left, Covered right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

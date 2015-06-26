@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("department")]
-    public partial class Department : ICloneable<Department>, IHaveId
+    public partial class Department : ICloneable<Department>, IEquatable<Department>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -83,6 +83,41 @@ namespace StormTestProject
         bool[] ICloneable<Department>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Department);
+        }
+
+        public bool Equals(Department other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return DepartmentId == other.DepartmentId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return DepartmentId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Department left, Department right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Department left, Department right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

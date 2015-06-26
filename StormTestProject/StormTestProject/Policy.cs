@@ -17,10 +17,10 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.policy")]
-    public partial class Policy : ICloneable<Policy>, IHaveId
+    public partial class Policy : ICloneable<Policy>, IEquatable<Policy>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("policy_id", Order = 1)]
         public int PolicyId { get;set; }
 
@@ -265,6 +265,41 @@ namespace StormTestProject
         bool[] ICloneable<Policy>.GetPopulated()
         {
             return populated;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Policy);
+        }
+
+        public bool Equals(Policy other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return PolicyId == other.PolicyId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return PolicyId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Policy left, Policy right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Policy left, Policy right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

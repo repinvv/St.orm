@@ -31,7 +31,8 @@
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
             var haveId = model.Parent.MappingFields.Count(x => x.DbField.IsPrimaryKey) == 1 ? ", IHaveId" : string.Empty;
-            stringGenerator.AppendLine("public partial class " + model.Name + " : ICloneable<" + model.Name + ">" + haveId);
+            stringGenerator.AppendLine("public partial class " + model.Name + " : ICloneable<" + model.Name +
+                                       ">, IEquatable<" + model.Name + ">" + haveId);
         }
 
         public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)

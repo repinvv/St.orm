@@ -15,18 +15,21 @@
         private readonly NameNormalizer nameNormalizer;
         private readonly FileGenerator fileGenerator;
         private readonly LazyGetGenerator lazyGetGenerator;
+        private readonly EqualityGenerator equalityGenerator;
 
         public ModelGenerator(ModelPartsGeneratorFactory modelPartsGeneratorFactory,
             FieldUtility fieldUtility,
             NameNormalizer nameNormalizer,
             FileGenerator fileGenerator,
-            LazyGetGenerator lazyGetGenerator)
+            LazyGetGenerator lazyGetGenerator,
+            EqualityGenerator equalityGenerator)
         {
             this.modelPartsGeneratorFactory = modelPartsGeneratorFactory;
             this.fieldUtility = fieldUtility;
             this.nameNormalizer = nameNormalizer;
             this.fileGenerator = fileGenerator;
             this.lazyGetGenerator = lazyGetGenerator;
+            this.equalityGenerator = equalityGenerator;
         }
 
         public GeneratedFile GenerateModel(Model model, Options options)
@@ -58,6 +61,8 @@
             stringGenerator.Region("Constructors", () => partGenerator.GenerateConstructors(model, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.Region("ICloneable implementation", () => partGenerator.GenerateCloneableMembers(model, stringGenerator));
+            stringGenerator.AppendLine();
+            stringGenerator.Region("Equality members", () => equalityGenerator.GenerateEqualityMembers(model, stringGenerator));
         }
 
         private void GenerateLazyProperties(Model model, IStringGenerator stringGenerator)

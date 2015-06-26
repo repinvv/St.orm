@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("currency")]
-    public partial class Currency : ICloneable<Currency>, IHaveId
+    public partial class Currency : ICloneable<Currency>, IEquatable<Currency>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -137,6 +137,41 @@ namespace StormTestProject
         bool[] ICloneable<Currency>.GetPopulated()
         {
             return populated;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Currency);
+        }
+
+        public bool Equals(Currency other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return CurrencyId == other.CurrencyId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return CurrencyId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Currency left, Currency right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Currency left, Currency right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

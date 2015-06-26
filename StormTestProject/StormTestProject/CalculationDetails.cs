@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("stats.calculation_details")]
-    public partial class CalculationDetails : ICloneable<CalculationDetails>, IHaveId
+    public partial class CalculationDetails : ICloneable<CalculationDetails>, IEquatable<CalculationDetails>, IHaveId
     {
         [Key]
         [Column("calculation_details_id", Order = 1)]
@@ -84,6 +84,41 @@ namespace StormTestProject
         bool[] ICloneable<CalculationDetails>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as CalculationDetails);
+        }
+
+        public bool Equals(CalculationDetails other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return CalculationDetailsId == other.CalculationDetailsId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return CalculationDetailsId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(CalculationDetails left, CalculationDetails right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(CalculationDetails left, CalculationDetails right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

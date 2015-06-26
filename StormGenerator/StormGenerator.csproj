@@ -57,6 +57,7 @@
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Common\ObjectStringService.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\EqualityGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\LazyGeneration\JoinGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\LazyGeneration\LazyGetGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\LazyGeneration\ManyToManyLazyGenerator.cs" />

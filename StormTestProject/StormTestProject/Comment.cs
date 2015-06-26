@@ -17,10 +17,10 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.comment")]
-    public partial class Comment : ICloneable<Comment>, IHaveId
+    public partial class Comment : ICloneable<Comment>, IEquatable<Comment>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("comment_id", Order = 1)]
         public int CommentId { get;set; }
 
@@ -98,6 +98,41 @@ namespace StormTestProject
         bool[] ICloneable<Comment>.GetPopulated()
         {
             return null;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Comment);
+        }
+
+        public bool Equals(Comment other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return CommentId == other.CommentId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return CommentId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Comment left, Comment right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Comment left, Comment right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }

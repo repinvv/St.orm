@@ -17,7 +17,7 @@ namespace StormTestProject
     using St.Orm.Interfaces;
 
     [Table("model.premium")]
-    public partial class Premium : ICloneable<Premium>, IHaveId
+    public partial class Premium : ICloneable<Premium>, IEquatable<Premium>, IHaveId
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -137,6 +137,41 @@ namespace StormTestProject
         bool[] ICloneable<Premium>.GetPopulated()
         {
             return populated;
+        }
+        #endregion
+
+        #region Equality members
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Premium);
+        }
+
+        public bool Equals(Premium other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            return PremiumId == other.PremiumId;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return PremiumId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(Premium left, Premium right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Premium left, Premium right)
+        {
+            return !Equals(left, right);
         }
         #endregion
     }
