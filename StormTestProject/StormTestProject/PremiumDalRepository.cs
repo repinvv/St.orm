@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public Premium Clone(Premium source)
-        {
-            var clone = (source as ICloneable<Premium>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public Premium Create(IDataReader reader, IQueryable<Premium> query, ILoadService loadService)
@@ -56,6 +49,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Premium Clone(Premium source)
+        {
+            var clone = (source as ICloneable<Premium>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Premium> Materialize(IQueryable<Premium> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -69,6 +69,73 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Premium>().Where(x => x.PremiumId == key);
+        }
+
+        public void Save(Premium entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Premium, Premium>(entity);
+        }
+
+        public void Update(Premium entity, Premium existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Premium, Premium>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Premium, Premium>(entity, existing);
+            }
+        }
+
+        public void Delete(Premium entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Premium, Premium>(entity);
+        }
+
+        public void SaveRelations(Premium entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Premium entity, Premium existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Premium entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Premium entity)
+        {
+        }
+
+        public bool EntityChanged(Premium entity, Premium existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.PremiumType != existing.PremiumType
+                || entity.AssignmentId != existing.AssignmentId
+                || entity.Amount != existing.Amount
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

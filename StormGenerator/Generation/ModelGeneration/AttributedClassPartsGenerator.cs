@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -11,15 +12,18 @@
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
         private readonly PlainClassPartsGenerator plainClassPartsGenerator;
+        private readonly IdentityFinder identityFinder;
         private readonly Type[] integerTypes = { typeof(int), typeof(short), typeof(long) };
 
         public AttributedClassPartsGenerator(UsingsGenerator usingsGenerator, 
             FieldUtility fieldUtility, 
-            PlainClassPartsGenerator plainClassPartsGenerator)
+            PlainClassPartsGenerator plainClassPartsGenerator,
+            IdentityFinder identityFinder)
         {
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
             this.plainClassPartsGenerator = plainClassPartsGenerator;
+            this.identityFinder = identityFinder;
         }
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
@@ -45,7 +49,7 @@
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
-                else if (integerTypes.Contains(field.Type) && model.MappingFields.ActiveCount(x => x.DbField.IsPrimaryKey) == 1)
+                else if (integerTypes.Contains(field.Type) && identityFinder.HasId(model))
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.None)]");
                 }

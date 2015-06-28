@@ -101,10 +101,10 @@
             stringGenerator.Braces(() => GenerateCloneContent(model, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.AppendLine(model.Name + " ICloneable<" + model.Name + ">.ClonedFrom()");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return clonedFrom;"));
+            stringGenerator.Braces("return clonedFrom;");
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("bool[] ICloneable<" + model.Name + ">.GetPopulated()");
-            stringGenerator.Braces(() => stringGenerator.AppendLine(model.RelationFields.AnyActive() ? "return populated;" : "return null;"));
+            stringGenerator.Braces(model.RelationFields.AnyActive() ? "return populated;" : "return null;");
         }
 
         private void GenerateCloneContent(Model model, IStringGenerator stringGenerator)

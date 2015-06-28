@@ -33,6 +33,11 @@
             AppendLine(semicolon ? "};" : "}");
         }
 
+        public void Braces(string line)
+        {
+            Braces(() => AppendLine(line));
+        }
+
         public void AppendLine(string line)
         {
             var indent = indentCount * GenerationConstants.IndentSize;

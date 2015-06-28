@@ -4,12 +4,12 @@
     {
         IStormContext Context { get; }
 
-        void Save<TDal>(TDal entity);
+        void Save<TDal, TQuery>(TDal entity);
 
-        void Update<TDal>(TDal entity, TDal existing);
+        void Update<TDal, TQuery>(TDal entity, TDal existing);
 
-        void NoUpdate<TDal>(TDal entity, TDal existing);
+        void NoUpdate<TDal, TQuery>(TDal entity, TDal existing);
 
-        void Delete<TDal>(TDal entity);
+        void Delete<TDal, TQuery>(TDal entity);
     }
 }

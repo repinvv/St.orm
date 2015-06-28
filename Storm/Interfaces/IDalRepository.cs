@@ -6,7 +6,7 @@
 
     public interface IDalRepository<TDal, TQuery>
     {
-        int RelationsCount();
+        int NavPropsCount();
 
         void SetExtension(IDalRepositoryExtension<TDal> extension);
 
@@ -23,5 +23,11 @@
         void Update(TDal entity, TDal existing, ISavesCollector saves);
 
         void Delete(TDal entity, ISavesCollector saves);
+
+        void SaveRelations(TDal entity, ISavesCollector saves);
+
+        void UpdateRelations(TDal entity, TDal existing, ISavesCollector saves);
+
+        bool EntityChanged(TDal entity, TDal existing);
     }
 }

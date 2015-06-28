@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public Calculation Clone(Calculation source)
-        {
-            var clone = (source as ICloneable<Calculation>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public Calculation Create(IDataReader reader, IQueryable<Calculation> query, ILoadService loadService)
@@ -51,6 +44,13 @@ namespace StormTestProject
             };
             extension.ExtendCreate(entity, reader);
             return entity;
+        }
+
+        public Calculation Clone(Calculation source)
+        {
+            var clone = (source as ICloneable<Calculation>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
         }
 
         public List<Calculation> Materialize(IQueryable<Calculation> query, ILoadService loadService)
@@ -66,6 +66,75 @@ namespace StormTestProject
         {
             var key = (Guid)id;
             return context.Set<Calculation>().Where(x => x.CalculationId == key);
+        }
+
+        public void Save(Calculation entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            if(entity.CalculationId == Guid.Empty)
+            {
+                entity.CalculationId = Guid.NewGuid();
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Calculation, Calculation>(entity);
+        }
+
+        public void Update(Calculation entity, Calculation existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Calculation, Calculation>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Calculation, Calculation>(entity, existing);
+            }
+        }
+
+        public void Delete(Calculation entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Calculation, Calculation>(entity);
+        }
+
+        public void SaveRelations(Calculation entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Calculation entity, Calculation existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Calculation entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Calculation entity)
+        {
+        }
+
+        public bool EntityChanged(Calculation entity, Calculation existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Name != existing.Name
+                || entity.DueDate != existing.DueDate;
         }
     }
 }

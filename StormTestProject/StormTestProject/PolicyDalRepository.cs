@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 4;
-        }
-
-        public Policy Clone(Policy source)
-        {
-            var clone = (source as ICloneable<Policy>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 4;
         }
 
         public Policy Create(IDataReader reader, IQueryable<Policy> query, ILoadService loadService)
@@ -56,6 +49,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Policy Clone(Policy source)
+        {
+            var clone = (source as ICloneable<Policy>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Policy> Materialize(IQueryable<Policy> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -69,6 +69,77 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Policy>().Where(x => x.PolicyId == key);
+        }
+
+        public void Save(Policy entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Policy, Policy>(entity);
+        }
+
+        public void Update(Policy entity, Policy existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Policy, Policy>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Policy, Policy>(entity, existing);
+            }
+        }
+
+        public void Delete(Policy entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Policy, Policy>(entity);
+        }
+
+        public void SaveRelations(Policy entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Policy entity, Policy existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Policy entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Policy entity)
+        {
+            if(entity.Country != null)
+            {
+                entity.CountryId = entity.Country.CountryId;
+            }
+        }
+
+        public bool EntityChanged(Policy entity, Policy existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.CountryId != existing.CountryId
+                || entity.CurrencyId != existing.CurrencyId
+                || entity.Name != existing.Name
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

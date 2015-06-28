@@ -1,27 +1,37 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsCollections
 {
+    using System.Linq;
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
+    using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Regular;
 
     internal class PlainClassMethodsCollection : IMethodsCollection
     {
         private readonly IMethodGenerator[] generators;
 
-        public PlainClassMethodsCollection(SetExtensionGenerator setExtensionGenerator,
-            RelationsCountGenerator relationsCountGenerator,
-            CreateGenerator createGenerator,
-            CloneGenerator cloneGenerator,
-            MaterializeGenerator materializeGenerator,
-            GetByIdQueryGenerator getByIdQueryGenerator)
+        public PlainClassMethodsCollection(CommonMethodsCollection commonMethodsCollection,
+            SaveGenerator saveGenerator,
+            UpdateGenerator updateGenerator,
+            DeleteGenerator deleteGenerator,
+            SaveRelationsGenerator saveRelationsGenerator,
+            UpdateRelationsGenerator updateRelationsGenerator,
+            DeleteRelationsGenerator deleteRelationsGenerator,
+            SetMtoFieldsGenerator setMtoFieldsGenerator,
+            EntityChangedGenerator entityChangedGenerator)
         {
-            generators = new IMethodGenerator[]
-                         {
-                             setExtensionGenerator,
-                             relationsCountGenerator,
-                             cloneGenerator,
-                             createGenerator,
-                             materializeGenerator,
-                             getByIdQueryGenerator
-                         };
+            generators = commonMethodsCollection
+                .GetGeneratorsCollection()
+                .Concat(new IMethodGenerator[]
+                        {
+                            saveGenerator,
+                            updateGenerator,
+                            deleteGenerator,
+                            saveRelationsGenerator,
+                            updateRelationsGenerator,
+                            deleteRelationsGenerator,
+                            setMtoFieldsGenerator,
+                            entityChangedGenerator
+                        })
+                .ToArray();
         }
 
         public IMethodGenerator[] GetGeneratorsCollection()

@@ -11,6 +11,8 @@
 
         void Braces(Action action, bool semicolon = false);
 
+        void Braces(string line);
+
         void AppendLine(string line);
 
         void AppendLine();

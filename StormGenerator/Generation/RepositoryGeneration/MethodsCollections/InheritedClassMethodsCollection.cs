@@ -1,27 +1,22 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsCollections
 {
+    using System.Linq;
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
 
     internal class InheritedClassMethodsCollection : IMethodsCollection
     {
-        private IMethodGenerator[] generators;
+        private readonly IMethodGenerator[] generators;
 
-        public InheritedClassMethodsCollection(SetExtensionGenerator setExtensionGenerator,
-            RelationsCountGenerator relationsCountGenerator,
-            CreateGenerator createGenerator,
-            FullCreateGenerator fullCreateGenerator,
-            CloneGenerator cloneGenerator,
-            MaterializeGenerator materializeGenerator)
+        public InheritedClassMethodsCollection(CommonMethodsCollection commonMethodsCollection,
+            FullCreateGenerator fullCreateGenerator)
         {
-            generators = new IMethodGenerator[]
-                         {
-                             setExtensionGenerator,
-                             relationsCountGenerator,
-                             cloneGenerator,
-                             createGenerator,
-                             fullCreateGenerator,
-                             materializeGenerator
-                         };
+            generators = commonMethodsCollection
+                .GetGeneratorsCollection()
+                .Concat(new IMethodGenerator[]
+                        {
+                            fullCreateGenerator
+                        })
+                .ToArray();
         }
 
         public IMethodGenerator[] GetGeneratorsCollection()

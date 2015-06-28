@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public AssignmentDepartment Clone(AssignmentDepartment source)
-        {
-            var clone = (source as ICloneable<AssignmentDepartment>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public AssignmentDepartment Create(IDataReader reader, IQueryable<AssignmentDepartment> query, ILoadService loadService)
@@ -54,6 +47,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public AssignmentDepartment Clone(AssignmentDepartment source)
+        {
+            var clone = (source as ICloneable<AssignmentDepartment>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<AssignmentDepartment> Materialize(IQueryable<AssignmentDepartment> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -66,6 +66,74 @@ namespace StormTestProject
         public IQueryable<AssignmentDepartment> GetByIdQuery(object id, IStormContext context)
         {
             throw new Exception("Get by id is only available for entities with single primary key field.");
+        }
+
+        public void Save(AssignmentDepartment entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<AssignmentDepartment, AssignmentDepartment>(entity);
+        }
+
+        public void Update(AssignmentDepartment entity, AssignmentDepartment existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<AssignmentDepartment, AssignmentDepartment>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<AssignmentDepartment, AssignmentDepartment>(entity, existing);
+            }
+        }
+
+        public void Delete(AssignmentDepartment entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<AssignmentDepartment, AssignmentDepartment>(entity);
+        }
+
+        public void SaveRelations(AssignmentDepartment entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(AssignmentDepartment entity, AssignmentDepartment existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(AssignmentDepartment entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(AssignmentDepartment entity)
+        {
+            if(entity.Department != null)
+            {
+                entity.DepartmentId = entity.Department.DepartmentId;
+            }
+        }
+
+        public bool EntityChanged(AssignmentDepartment entity, AssignmentDepartment existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

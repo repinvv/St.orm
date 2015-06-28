@@ -11,7 +11,7 @@
         {
             var keyFields = model.MappingFields.Where(x => x.DbField.IsPrimaryKey).ToList();
             stringGenerator.AppendLine("public override bool Equals(object obj)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return Equals(obj as " + model.Name + ");"));
+            stringGenerator.Braces("return Equals(obj as " + model.Name + ");");
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public bool Equals(" + model.Name + " other)");
             stringGenerator.Braces(() => GenerateEquals(keyFields, stringGenerator));
@@ -20,10 +20,10 @@
             stringGenerator.Braces(() => GenerateGetHashCode(keyFields, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public static bool operator ==(" + model.Name + " left, " + model.Name + " right)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return Equals(left, right);"));
+            stringGenerator.Braces("return Equals(left, right);");
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public static bool operator !=(" + model.Name + " left, " + model.Name + " right)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return !Equals(left, right);"));
+            stringGenerator.Braces("return !Equals(left, right);");
         }
 
         private void GenerateGetHashCode(List<MappingField> keyFields, IStringGenerator stringGenerator)
@@ -65,7 +65,7 @@
         private void GenerateEquals(List<MappingField> keyFields, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("if (ReferenceEquals(null, other))");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return false;"));
+            stringGenerator.Braces("return false;");
             stringGenerator.AppendLine();
 
             if (!keyFields.Any())

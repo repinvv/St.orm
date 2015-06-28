@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 0;
-        }
-
-        public Tax Clone(Tax source)
-        {
-            var clone = (source as ICloneable<Tax>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 0;
         }
 
         public Tax Create(IDataReader reader, IQueryable<Tax> query, ILoadService loadService)
@@ -55,6 +48,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Tax Clone(Tax source)
+        {
+            var clone = (source as ICloneable<Tax>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Tax> Materialize(IQueryable<Tax> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -68,6 +68,72 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Tax>().Where(x => x.TaxId == key);
+        }
+
+        public void Save(Tax entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Tax, Tax>(entity);
+        }
+
+        public void Update(Tax entity, Tax existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Tax, Tax>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Tax, Tax>(entity, existing);
+            }
+        }
+
+        public void Delete(Tax entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Tax, Tax>(entity);
+        }
+
+        public void SaveRelations(Tax entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Tax entity, Tax existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Tax entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Tax entity)
+        {
+        }
+
+        public bool EntityChanged(Tax entity, Tax existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.PolicyId != existing.PolicyId
+                || entity.Amount != existing.Amount
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

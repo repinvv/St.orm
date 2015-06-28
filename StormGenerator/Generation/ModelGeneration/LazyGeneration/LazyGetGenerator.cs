@@ -22,7 +22,7 @@
         public void GenerateLazyGet(RelationField field, int index, Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("if(populated[" + index + "] || loadService == null)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("return field" + index + ";"));
+            stringGenerator.Braces("return field" + index + ";");
             stringGenerator.AppendLine();
             
             var otm = field as OneToManyField;
@@ -60,7 +60,7 @@
         private void GenerateList(RelationField field, int index, Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("if (clonedFrom == null)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("field" + index + " = items;"));
+            stringGenerator.Braces("field" + index + " = items;");
             stringGenerator.AppendLine("else");
             stringGenerator.Braces(() => 
             {
@@ -69,14 +69,14 @@
                 stringGenerator.AppendLine("var repo = loadService.Context.GetDalRepository<" + field.FieldModel.Name + ", " 
                     + field.FieldModel.Parent.Name + ">();");
                 stringGenerator.AppendLine("foreach(var item in items)");
-                stringGenerator.Braces(() => stringGenerator.AppendLine("field" + index + ".Add(repo.Clone(item));"));
+                stringGenerator.Braces("field" + index + ".Add(repo.Clone(item));");
             });
         }
 
         private void GenerateSingle(RelationField field, int index, Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("if (clonedFrom == null)");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("field" + index + " = item;"));
+            stringGenerator.Braces("field" + index + " = item;");
             stringGenerator.AppendLine("else");
             stringGenerator.Braces(() =>
             {

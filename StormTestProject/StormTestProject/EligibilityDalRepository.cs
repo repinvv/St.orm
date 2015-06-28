@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 0;
-        }
-
-        public Eligibility Clone(Eligibility source)
-        {
-            var clone = (source as ICloneable<Eligibility>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 0;
         }
 
         public Eligibility Create(IDataReader reader, IQueryable<Eligibility> query, ILoadService loadService)
@@ -54,6 +47,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Eligibility Clone(Eligibility source)
+        {
+            var clone = (source as ICloneable<Eligibility>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Eligibility> Materialize(IQueryable<Eligibility> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -67,6 +67,71 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Eligibility>().Where(x => x.EligibilityId == key);
+        }
+
+        public void Save(Eligibility entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Eligibility, Eligibility>(entity);
+        }
+
+        public void Update(Eligibility entity, Eligibility existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Eligibility, Eligibility>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Eligibility, Eligibility>(entity, existing);
+            }
+        }
+
+        public void Delete(Eligibility entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Eligibility, Eligibility>(entity);
+        }
+
+        public void SaveRelations(Eligibility entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Eligibility entity, Eligibility existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Eligibility entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Eligibility entity)
+        {
+        }
+
+        public bool EntityChanged(Eligibility entity, Eligibility existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Name != existing.Name
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

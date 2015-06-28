@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public Currency Clone(Currency source)
-        {
-            var clone = (source as ICloneable<Currency>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public Currency Create(IDataReader reader, IQueryable<Currency> query, ILoadService loadService)
@@ -55,6 +48,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Currency Clone(Currency source)
+        {
+            var clone = (source as ICloneable<Currency>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Currency> Materialize(IQueryable<Currency> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -68,6 +68,72 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Currency>().Where(x => x.CurrencyId == key);
+        }
+
+        public void Save(Currency entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Currency, Currency>(entity);
+        }
+
+        public void Update(Currency entity, Currency existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Currency, Currency>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Currency, Currency>(entity, existing);
+            }
+        }
+
+        public void Delete(Currency entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Currency, Currency>(entity);
+        }
+
+        public void SaveRelations(Currency entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Currency entity, Currency existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Currency entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Currency entity)
+        {
+        }
+
+        public bool EntityChanged(Currency entity, Currency existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Name != existing.Name
+                || entity.CurrencyCode != existing.CurrencyCode
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

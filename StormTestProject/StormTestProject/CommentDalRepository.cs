@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 0;
-        }
-
-        public Comment Clone(Comment source)
-        {
-            var clone = (source as ICloneable<Comment>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 0;
         }
 
         public Comment Create(IDataReader reader, IQueryable<Comment> query, ILoadService loadService)
@@ -58,6 +51,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Comment Clone(Comment source)
+        {
+            var clone = (source as ICloneable<Comment>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Comment> Materialize(IQueryable<Comment> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -71,6 +71,75 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Comment>().Where(x => x.CommentId == key);
+        }
+
+        public void Save(Comment entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Comment, Comment>(entity);
+        }
+
+        public void Update(Comment entity, Comment existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Comment, Comment>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Comment, Comment>(entity, existing);
+            }
+        }
+
+        public void Delete(Comment entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Comment, Comment>(entity);
+        }
+
+        public void SaveRelations(Comment entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Comment entity, Comment existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Comment entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Comment entity)
+        {
+        }
+
+        public bool EntityChanged(Comment entity, Comment existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.CommentType != existing.CommentType
+                || entity.PolicyId != existing.PolicyId
+                || entity.PremiumId != existing.PremiumId
+                || entity.CommentText != existing.CommentText
+                || entity.AuthorUserId != existing.AuthorUserId
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

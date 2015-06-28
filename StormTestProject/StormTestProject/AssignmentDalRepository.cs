@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 4;
-        }
-
-        public Assignment Clone(Assignment source)
-        {
-            var clone = (source as ICloneable<Assignment>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 4;
         }
 
         public Assignment Create(IDataReader reader, IQueryable<Assignment> query, ILoadService loadService)
@@ -55,6 +48,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Assignment Clone(Assignment source)
+        {
+            var clone = (source as ICloneable<Assignment>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Assignment> Materialize(IQueryable<Assignment> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -68,6 +68,72 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Assignment>().Where(x => x.AssignmentId == key);
+        }
+
+        public void Save(Assignment entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Assignment, Assignment>(entity);
+        }
+
+        public void Update(Assignment entity, Assignment existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Assignment, Assignment>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Assignment, Assignment>(entity, existing);
+            }
+        }
+
+        public void Delete(Assignment entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Assignment, Assignment>(entity);
+        }
+
+        public void SaveRelations(Assignment entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Assignment entity, Assignment existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Assignment entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Assignment entity)
+        {
+        }
+
+        public bool EntityChanged(Assignment entity, Assignment existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.PolicyId != existing.PolicyId
+                || entity.Comment != existing.Comment
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

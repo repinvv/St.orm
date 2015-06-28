@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public Country Clone(Country source)
-        {
-            var clone = (source as ICloneable<Country>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public Country Create(IDataReader reader, IQueryable<Country> query, ILoadService loadService)
@@ -55,6 +48,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Country Clone(Country source)
+        {
+            var clone = (source as ICloneable<Country>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Country> Materialize(IQueryable<Country> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -68,6 +68,72 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Country>().Where(x => x.CountryId == key);
+        }
+
+        public void Save(Country entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Country, Country>(entity);
+        }
+
+        public void Update(Country entity, Country existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Country, Country>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Country, Country>(entity, existing);
+            }
+        }
+
+        public void Delete(Country entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Country, Country>(entity);
+        }
+
+        public void SaveRelations(Country entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Country entity, Country existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Country entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Country entity)
+        {
+        }
+
+        public bool EntityChanged(Country entity, Country existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Name != existing.Name
+                || entity.CountryCode != existing.CountryCode
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

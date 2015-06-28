@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 1;
-        }
-
-        public AssignmentEligibility Clone(AssignmentEligibility source)
-        {
-            var clone = (source as ICloneable<AssignmentEligibility>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 1;
         }
 
         public AssignmentEligibility Create(IDataReader reader, IQueryable<AssignmentEligibility> query, ILoadService loadService)
@@ -54,6 +47,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public AssignmentEligibility Clone(AssignmentEligibility source)
+        {
+            var clone = (source as ICloneable<AssignmentEligibility>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<AssignmentEligibility> Materialize(IQueryable<AssignmentEligibility> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -66,6 +66,74 @@ namespace StormTestProject
         public IQueryable<AssignmentEligibility> GetByIdQuery(object id, IStormContext context)
         {
             throw new Exception("Get by id is only available for entities with single primary key field.");
+        }
+
+        public void Save(AssignmentEligibility entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<AssignmentEligibility, AssignmentEligibility>(entity);
+        }
+
+        public void Update(AssignmentEligibility entity, AssignmentEligibility existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<AssignmentEligibility, AssignmentEligibility>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<AssignmentEligibility, AssignmentEligibility>(entity, existing);
+            }
+        }
+
+        public void Delete(AssignmentEligibility entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<AssignmentEligibility, AssignmentEligibility>(entity);
+        }
+
+        public void SaveRelations(AssignmentEligibility entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(AssignmentEligibility entity, AssignmentEligibility existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(AssignmentEligibility entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(AssignmentEligibility entity)
+        {
+            if(entity.Eligibility != null)
+            {
+                entity.EligibilityId = entity.Eligibility.EligibilityId;
+            }
+        }
+
+        public bool EntityChanged(AssignmentEligibility entity, AssignmentEligibility existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

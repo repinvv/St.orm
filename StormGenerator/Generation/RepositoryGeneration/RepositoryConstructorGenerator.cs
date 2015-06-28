@@ -12,7 +12,7 @@
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
                                        + "()");
-            stringGenerator.Braces(() => stringGenerator.AppendLine("extension = new EmptyRepositoryExtension<" + model.Name + ">();"));
+            stringGenerator.Braces("extension = new EmptyRepositoryExtension<" + model.Name + ">();");
         }
     }
 }

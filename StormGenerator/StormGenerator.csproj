@@ -65,7 +65,9 @@
     <Compile Include="Generation\ModelGeneration\LazyGeneration\OneToManyLazyGenerator.cs" />
     <Compile Include="Generation\ModelsCollectionService.cs" />
     <Compile Include="Generation\ModelIterator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\Common\IdentityFinder.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\BaseClassMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\CommonMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\PlainClassMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\Common\MaterializerLineGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\InheritedClassMethodsCollection.cs" />
@@ -77,6 +79,14 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\GetByIdQueryGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MaterializeGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MethodGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\EntityChangedGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\SaveGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\SaveRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\SetMtoFieldsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\UpdateGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\UpdateRelationsGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\RelationsCountGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\SetExtensionGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryConstructorGenerator.cs" />

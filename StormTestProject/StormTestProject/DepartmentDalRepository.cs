@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 0;
-        }
-
-        public Department Clone(Department source)
-        {
-            var clone = (source as ICloneable<Department>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 0;
         }
 
         public Department Create(IDataReader reader, IQueryable<Department> query, ILoadService loadService)
@@ -54,6 +47,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Department Clone(Department source)
+        {
+            var clone = (source as ICloneable<Department>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Department> Materialize(IQueryable<Department> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -67,6 +67,71 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Department>().Where(x => x.DepartmentId == key);
+        }
+
+        public void Save(Department entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Department, Department>(entity);
+        }
+
+        public void Update(Department entity, Department existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Department, Department>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Department, Department>(entity, existing);
+            }
+        }
+
+        public void Delete(Department entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Department, Department>(entity);
+        }
+
+        public void SaveRelations(Department entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Department entity, Department existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Department entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Department entity)
+        {
+        }
+
+        public bool EntityChanged(Department entity, Department existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.Name != existing.Name
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }

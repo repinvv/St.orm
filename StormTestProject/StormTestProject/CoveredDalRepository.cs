@@ -29,16 +29,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int RelationsCount()
+        public int NavPropsCount()
         {
-            return extension.RelationsCount() ?? 0;
-        }
-
-        public Covered Clone(Covered source)
-        {
-            var clone = (source as ICloneable<Covered>).Clone();
-            extension.ExtendClone(clone, source);
-            return clone;
+            return extension.NavPropsCount() ?? 0;
         }
 
         public Covered Create(IDataReader reader, IQueryable<Covered> query, ILoadService loadService)
@@ -56,6 +49,13 @@ namespace StormTestProject
             return entity;
         }
 
+        public Covered Clone(Covered source)
+        {
+            var clone = (source as ICloneable<Covered>).Clone();
+            extension.ExtendClone(clone, source);
+            return clone;
+        }
+
         public List<Covered> Materialize(IQueryable<Covered> query, ILoadService loadService)
         {
             var context = loadService.Context;
@@ -69,6 +69,73 @@ namespace StormTestProject
         {
             var key = (int)id;
             return context.Set<Covered>().Where(x => x.CoveredId == key);
+        }
+
+        public void Save(Covered entity, ISavesCollector saves)
+        {
+            if(!extension.PreSave(entity))
+            {
+                return;
+            }
+
+            SetMtoFields(entity);
+            saves.Save<Covered, Covered>(entity);
+        }
+
+        public void Update(Covered entity, Covered existing, ISavesCollector saves)
+        {
+            if(!extension.PreUpdate(entity, existing))
+            {
+                Delete(entity, saves);
+                return;
+            }
+
+            SetMtoFields(entity);
+            if (EntityChanged(entity, existing))
+            {
+                saves.Update<Covered, Covered>(entity, existing);
+            }
+            else
+            {
+                saves.NoUpdate<Covered, Covered>(entity, existing);
+            }
+        }
+
+        public void Delete(Covered entity, ISavesCollector saves)
+        {
+            if(!extension.PreDelete(entity))
+            {
+                return;
+            }
+
+            DeleteRelations(entity, saves);
+            saves.Delete<Covered, Covered>(entity);
+        }
+
+        public void SaveRelations(Covered entity, ISavesCollector saves)
+        {
+        }
+
+        public void UpdateRelations(Covered entity, Covered existing, ISavesCollector saves)
+        {
+        }
+
+        private void DeleteRelations(Covered entity, ISavesCollector saves)
+        {
+        }
+
+        private void SetMtoFields(Covered entity)
+        {
+        }
+
+        public bool EntityChanged(Covered entity, Covered existing)
+        {
+            return extension.ExtendEntityChanged(entity, existing)
+                || entity.CoveredType != existing.CoveredType
+                || entity.AssignmentId != existing.AssignmentId
+                || entity.Headcount != existing.Headcount
+                || entity.Created != existing.Created
+                || entity.Updated != existing.Updated;
         }
     }
 }
