@@ -20,35 +20,83 @@
             return StormGetImplementation.Get(query, context, parameters).SingleOrDefault();
         }
 
-        public static void Save<T>(ICollection<T> entities, IStormContext context)
+        public static void Save<TDal>(TDal entity, IStormContext context)
         {
-            if (entities == null)
+            if (entity == null)
             {
-                throw new ArgumentException("entities");
+                throw new ArgumentException("entity");
             }
 
-            var saves = new SavesCollector();
-            var list = entities.AsList();
-            var existing = new List<T>(entities.Count);
-            foreach (var entity in entities)
-            {
-                existing.Add((entity as ICloneable<T>).ClonedFrom());
-            }
-                
-            saveService.UpdateEntities(list, existing, saves, null);
-            saves.Commit(context);
+            var saves = new SavesCollector(context);
+            var existing = (entity as ICloneable<TDal>).ClonedFrom();
+            SaveService.Update<TDal, TDal>(entity, existing, saves);
+            saves.Commit();
         }
 
-        public static void SaveEntities<T>(ICollection<T> entities, ICollection<T> existing, IStormContext context)
+        public static void Save<TDal>(ICollection<TDal> entities, IStormContext context)
         {
             if (entities == null)
             {
                 throw new ArgumentException("entities");
             }
 
-            var saves = new SavesCollector();
-            saveService.UpdateEntities(entities.AsList(), existing.AsList(), saves, null);
-            saves.Commit(context);
+            var saves = new SavesCollector(context);
+            var existing = new List<TDal>(entities.Count);
+            foreach (var entity in entities)
+            {
+                existing.Add((entity as ICloneable<TDal>).ClonedFrom());
+            }
+                
+            SaveService.Update<TDal, TDal>(entities, existing, saves);
+            saves.Commit();
+        }
+
+        public static void Save<TDal>(ICollection<TDal> entities, ICollection<TDal> existing, IStormContext context)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentException("entities");
+            }
+
+            var saves = new SavesCollector(context);
+            if (existing == null)
+            {
+                SaveService.Save<TDal, TDal>(entities, saves);
+            }
+            else
+            {
+                SaveService.Update<TDal, TDal>(entities, existing, saves);
+            }
+
+            saves.Commit();
+        }
+
+        public static void Delete<TDal>(TDal entity, IStormContext context)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentException("entity");
+            }
+
+            var saves = new SavesCollector(context);
+            SaveService.Delete<TDal, TDal>(entity, saves);
+            saves.Commit();
+        }
+
+        public static void Delete<TDal>(ICollection<TDal> entities, IStormContext context)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentException("entities");
+            }
+
+            var saves = new SavesCollector(context);
+            foreach (var entity in entities)
+            {
+                SaveService.Delete<TDal, TDal>(entity, saves);
+            }
+
+            saves.Commit();
         }
     }
 }
