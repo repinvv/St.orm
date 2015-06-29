@@ -114,6 +114,32 @@ namespace StormTestProject
 
         public void SaveRelations(Assignment entity, ISavesCollector saves)
         {
+            if(entity.Departments != null)
+            {
+                foreach(var item in entity.Departments)
+                {
+                    var mediator = new AssignmentDepartment
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        DepartmentId = item.DepartmentId
+                    };
+                    saves.Save<AssignmentDepartment, AssignmentDepartment>(mediator);
+                }
+            }
+
+            if(entity.Eligibilities != null)
+            {
+                foreach(var item in entity.Eligibilities)
+                {
+                    var mediator = new AssignmentEligibility
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        EligibilityId = item.EligibilityId
+                    };
+                    saves.Save<AssignmentEligibility, AssignmentEligibility>(mediator);
+                }
+            }
+
             if (entity.Premiums != null)
             {
                 foreach (var field in entity.Premiums)
@@ -180,6 +206,7 @@ namespace StormTestProject
         private void DeleteRelations(Assignment entity, ISavesCollector saves)
         {
             SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
+            SaveService.Delete<Covered, Covered>(entity.Covereds, saves);
         }
 
         private void SetMtoFields(Assignment entity)

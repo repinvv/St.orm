@@ -1,19 +1,19 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Regular
 {
     using System;
-    using System.Linq;
     using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
-    using StormGenerator.Models.Pregen.Relation;
 
     internal class SaveGenerator : IMethodGenerator
     {
         private readonly IdentityFinder identityFinder;
+        private readonly Generics generics;
 
-        public SaveGenerator(IdentityFinder identityFinder)
+        public SaveGenerator(IdentityFinder identityFinder, Generics generics)
         {
             this.identityFinder = identityFinder;
+            this.generics = generics;
         }
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
@@ -38,7 +38,7 @@
             });
 
             stringGenerator.AppendLine("SetMtoFields(entity);");
-            stringGenerator.AppendLine("saves.Save<" + model.Name + ", " + model.Parent.Name + ">(entity);");
+            stringGenerator.AppendLine("saves.Save" + generics.Line(model) + "(entity);");
         }
     }
 }

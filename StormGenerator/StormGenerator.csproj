@@ -65,6 +65,7 @@
     <Compile Include="Generation\ModelGeneration\LazyGeneration\OneToManyLazyGenerator.cs" />
     <Compile Include="Generation\ModelsCollectionService.cs" />
     <Compile Include="Generation\ModelIterator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\Common\Generics.cs" />
     <Compile Include="Generation\RepositoryGeneration\Common\IdentityFinder.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\BaseClassMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\CommonMethodsCollection.cs" />

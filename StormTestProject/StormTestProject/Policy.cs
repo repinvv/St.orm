@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Policy : ICloneable<Policy>, IEquatable<Policy>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("policy_id", Order = 1)]
         public int PolicyId { get;set; }
 

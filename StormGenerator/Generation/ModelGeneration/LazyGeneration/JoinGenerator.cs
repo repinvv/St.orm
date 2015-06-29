@@ -1,6 +1,5 @@
 ﻿namespace StormGenerator.Generation.ModelGeneration.LazyGeneration
 {
-    using System;
     using System.Collections.Generic;
     using StormGenerator.Generation.Common;
     using StormGenerator.Infrastructure.StringGenerator;

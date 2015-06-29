@@ -3,7 +3,7 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Generation.ModelGeneration;
-    using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
+    using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -14,18 +14,21 @@
         private readonly FieldUtility fieldUtility;
         private readonly RepositoryMethodsGenerator repositoryMethodsGenerator;
         private readonly RepositoryConstructorGenerator repositoryConstructorGenerator;
+        private readonly Generics generics;
 
         public RepositoryGenerator(FileGenerator fileGenerator,
             UsingsGenerator usingsGenerator, 
             FieldUtility fieldUtility,
             RepositoryMethodsGenerator repositoryMethodsGenerator, 
-            RepositoryConstructorGenerator repositoryConstructorGenerator)
+            RepositoryConstructorGenerator repositoryConstructorGenerator,
+            Generics generics)
         {
             this.fileGenerator = fileGenerator;
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
             this.repositoryMethodsGenerator = repositoryMethodsGenerator;
             this.repositoryConstructorGenerator = repositoryConstructorGenerator;
+            this.generics = generics;
         }
 
         public GeneratedFile GenerateRepository(Model model, Options options)
@@ -41,7 +44,7 @@
             usingsGenerator.GenerateUsings(stringGenerator, usings);
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("internal class " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
-                                       + " : IDalRepository<" + model.Name + ", " + model.Parent.Name + ">");
+                                       + " : IDalRepository" + generics.Line(model));
             stringGenerator.Braces(() => GenerateRepositoryContent(model, stringGenerator));
         }
 

@@ -1,10 +1,18 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Regular
 {
+    using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
     internal class UpdateGenerator : IMethodGenerator
     {
+        private readonly Generics generics;
+
+        public UpdateGenerator(Generics generics)
+        {
+            this.generics = generics;
+        }
+
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine("public void Update(" + model.Name + " entity, " + model.Name + " existing, ISavesCollector saves)");
@@ -21,9 +29,9 @@
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("SetMtoFields(entity);");
             stringGenerator.AppendLine("if (EntityChanged(entity, existing))");
-            stringGenerator.Braces("saves.Update<" + model.Name + ", " + model.Parent.Name + ">(entity, existing);");
+            stringGenerator.Braces("saves.Update" + generics.Line(model) + "(entity, existing);");
             stringGenerator.AppendLine("else");
-            stringGenerator.Braces("saves.NoUpdate<" + model.Name + ", " + model.Parent.Name + ">(entity, existing);");
+            stringGenerator.Braces("saves.NoUpdate" + generics.Line(model) + "(entity, existing);");
         }
     }
 }

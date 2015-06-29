@@ -3,7 +3,6 @@
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Relations;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
-    using StormGenerator.Models.Pregen.Relation;
 
     internal class UpdateRelationsGenerator : IMethodGenerator
     {

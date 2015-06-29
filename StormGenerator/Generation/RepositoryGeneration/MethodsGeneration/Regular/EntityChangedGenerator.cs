@@ -1,6 +1,5 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Regular
 {
-    using System;
     using System.Linq;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;

@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Common;
-    using StormGenerator.Generation.StaticFilesGeneration;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 

@@ -1,29 +1,54 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Relations
 {
+    using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen.Relation;
 
     internal class ManyToManyRelationsGenerator : IRelationsGenerator
     {
+        private readonly Generics generics;
+
+        public ManyToManyRelationsGenerator(Generics generics)
+        {
+            this.generics = generics;
+        }
+
         public void GenerateSaveRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var mtmField = field as ManyToManyField;
-            if (field.IsList)
+            stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
+            stringGenerator.Braces(() =>
             {
-                stringGenerator.AppendLine("foreach(var item in entity." + field.Name + ")");
-                stringGenerator.Braces("saves.Save(" + CreateEntityString(mtmField, "item") + "));");
-            }
-            else
-            {
-                stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
-                stringGenerator.Braces("saves.Save(" + CreateEntityString(mtmField, "entity." + field.Name) + ");");
-            }
+                if (field.IsList)
+                {
+                    stringGenerator.AppendLine("foreach(var item in entity." + field.Name + ")");
+                    stringGenerator.Braces(() => GenerateSave(mtmField, "item", stringGenerator));
+                }
+                else
+                {
+                    GenerateSave(mtmField, "entity." + field.Name, stringGenerator);
+                }
+            });
+            stringGenerator.AppendLine();
         }
 
-        private string CreateEntityString(ManyToManyField field, string accessor)
+        private void GenerateSave(ManyToManyField mtmField, string accessor, IStringGenerator stringGenerator)
         {
-            return "new " + field.MediatorModel.Name + " { " + field.FarEndFields[0].Name + " = " + field.FarEndFields[0].Name
-                + ", " + field.MediatorMtoField.NearEndFields[0].Name + " = " + field.MediatorMtoField.FarEndFields[0].Name + "}";
+            GenerateCreateMediator(mtmField, accessor, stringGenerator);
+            stringGenerator.AppendLine("saves.Save" + generics.Line(mtmField.MediatorModel) + "(mediator);");
+        }
+
+        private void GenerateCreateMediator(ManyToManyField mtmField, string accessor, IStringGenerator stringGenerator)
+        {
+            stringGenerator.AppendLine("var mediator = new " + mtmField.MediatorModel.Name);
+            stringGenerator.Braces(() => GenerateMediatorContent(mtmField, accessor, stringGenerator), true);
+        }
+
+        private void GenerateMediatorContent(ManyToManyField field, string accessor, IStringGenerator stringGenerator)
+        {
+            stringGenerator.AppendLine(field.FarEndFields[0].Name + " = entity." + field.FarEndFields[0].Name + ",");
+            stringGenerator.AppendLine(field.MediatorMtoField.NearEndFields[0].Name + " = " + accessor +
+                                       "." + field.MediatorMtoField.FarEndFields[0].Name);
         }
 
         public void GenerateUpdateRelation(RelationField field, IStringGenerator stringGenerator)

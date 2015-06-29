@@ -1,16 +1,24 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Relations
 {
+    using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen.Relation;
 
     internal class OneToManyRelationsGenerator : IRelationsGenerator
     {
+        private readonly Generics generics;
+
+        public OneToManyRelationsGenerator(Generics generics)
+        {
+            this.generics = generics;
+        }
+
         public void GenerateSaveRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var otmField = field as OneToManyField;
             GeneratePreAssignments(otmField, stringGenerator);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("SaveService.Save<" + field.FieldModel.Name + ", " + field.FieldModel.Parent.Name + ">(entity."
+            stringGenerator.AppendLine("SaveService.Save" + generics.Line(field.FieldModel) + "(entity."
                                        + field.Name + ", saves);");
             stringGenerator.AppendLine();
         }
@@ -20,13 +28,13 @@
             var otmField = field as OneToManyField;
             GeneratePreAssignments(otmField, stringGenerator);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("SaveService.Update<" + field.FieldModel.Name + ", " + field.FieldModel.Parent.Name + ">(entity."
+            stringGenerator.AppendLine("SaveService.Update" + generics.Line(field.FieldModel) + "(entity."
                                        + field.Name + ", existing." + field.Name + ", saves);");
         }
 
         public void GenerateDeleteRelation(RelationField field, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("SaveService.Delete<" + field.FieldModel.Name + ", " + field.FieldModel.Parent.Name + ">(entity."
+            stringGenerator.AppendLine("SaveService.Delete" + generics.Line(field.FieldModel) + "(entity."
                                        + field.Name + ", saves);");
         }
 

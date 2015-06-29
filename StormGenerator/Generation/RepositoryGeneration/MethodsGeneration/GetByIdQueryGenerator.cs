@@ -1,6 +1,5 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration
 {
-    using System.Linq;
     using StormGenerator.Generation.Common;
     using StormGenerator.Generation.RepositoryGeneration.Common;
     using StormGenerator.Infrastructure.StringGenerator;
