@@ -21,9 +21,9 @@
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("SetMtoFields(entity);");
             stringGenerator.AppendLine("if (EntityChanged(entity, existing))");
-            stringGenerator.Braces("saves.Update<" + model.Name + ", " + model.Name + ">(entity, existing);");
+            stringGenerator.Braces("saves.Update<" + model.Name + ", " + model.Parent.Name + ">(entity, existing);");
             stringGenerator.AppendLine("else");
-            stringGenerator.Braces("saves.NoUpdate<" + model.Name + ", " + model.Name + ">(entity, existing);");
+            stringGenerator.Braces("saves.NoUpdate<" + model.Name + ", " + model.Parent.Name + ">(entity, existing);");
         }
     }
 }

@@ -16,7 +16,7 @@
             stringGenerator.Braces("return;");
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("DeleteRelations(entity, saves);");
-            stringGenerator.AppendLine("saves.Delete<" + model.Name + ", " + model.Name + ">(entity);");
+            stringGenerator.AppendLine("saves.Delete<" + model.Name + ", " + model.Parent.Name + ">(entity);");
         }
     }
 }

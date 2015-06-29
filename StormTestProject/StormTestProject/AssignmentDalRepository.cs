@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class AssignmentDalRepository : IDalRepository<Assignment, Assignment>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 4;
+            return extension.RelationsCount() ?? 4;
         }
 
         public Assignment Create(IDataReader reader, IQueryable<Assignment> query, ILoadService loadService)
@@ -113,14 +114,72 @@ namespace StormTestProject
 
         public void SaveRelations(Assignment entity, ISavesCollector saves)
         {
+            if (entity.Premiums != null)
+            {
+                foreach (var field in entity.Premiums)
+                {
+                    field.AssignmentId = entity.AssignmentId;
+                }
+            }
+
+            SaveService.Save<Premium, Premium>(entity.Premiums, saves);
+
+            if (entity.Covereds != null)
+            {
+                foreach (var field in entity.Covereds)
+                {
+                    field.AssignmentId = entity.AssignmentId;
+                }
+            }
+
+            SaveService.Save<Covered, Covered>(entity.Covereds, saves);
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Assignment entity, Assignment existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            if(populated[0])
+            {
+            }
+
+            if(populated[1])
+            {
+            }
+
+            if(populated[2])
+            {
+                if (entity.Premiums != null)
+                {
+                    foreach (var field in entity.Premiums)
+                    {
+                        field.AssignmentId = entity.AssignmentId;
+                    }
+                }
+
+                SaveService.Update<Premium, Premium>(entity.Premiums, existing.Premiums, saves);
+            }
+
+            if(populated[3])
+            {
+                if (entity.Covereds != null)
+                {
+                    foreach (var field in entity.Covereds)
+                    {
+                        field.AssignmentId = entity.AssignmentId;
+                    }
+                }
+
+                SaveService.Update<Covered, Covered>(entity.Covereds, existing.Covereds, saves);
+            }
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Assignment entity, ISavesCollector saves)
         {
+            SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
         }
 
         private void SetMtoFields(Assignment entity)

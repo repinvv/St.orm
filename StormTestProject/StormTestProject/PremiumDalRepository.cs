@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class PremiumDalRepository : IDalRepository<Premium, Premium>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 1;
+            return extension.RelationsCount() ?? 1;
         }
 
         public Premium Create(IDataReader reader, IQueryable<Premium> query, ILoadService loadService)
@@ -114,14 +115,41 @@ namespace StormTestProject
 
         public void SaveRelations(Premium entity, ISavesCollector saves)
         {
+            if (entity.Comments != null)
+            {
+                foreach (var field in entity.Comments)
+                {
+                    field.PremiumId = entity.PremiumId;
+                }
+            }
+
+            SaveService.Save<Comment, Comment>(entity.Comments, saves);
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Premium entity, Premium existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            if(populated[0])
+            {
+                if (entity.Comments != null)
+                {
+                    foreach (var field in entity.Comments)
+                    {
+                        field.PremiumId = entity.PremiumId;
+                    }
+                }
+
+                SaveService.Update<Comment, Comment>(entity.Comments, existing.Comments, saves);
+            }
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Premium entity, ISavesCollector saves)
         {
+            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
         }
 
         private void SetMtoFields(Premium entity)

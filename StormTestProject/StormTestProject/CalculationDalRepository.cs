@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class CalculationDalRepository : IDalRepository<Calculation, Calculation>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 1;
+            return extension.RelationsCount() ?? 1;
         }
 
         public Calculation Create(IDataReader reader, IQueryable<Calculation> query, ILoadService loadService)
@@ -116,14 +117,41 @@ namespace StormTestProject
 
         public void SaveRelations(Calculation entity, ISavesCollector saves)
         {
+            if (entity.CalculationDetailses != null)
+            {
+                foreach (var field in entity.CalculationDetailses)
+                {
+                    field.CalculationId = entity.CalculationId;
+                }
+            }
+
+            SaveService.Save<CalculationDetails, CalculationDetails>(entity.CalculationDetailses, saves);
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Calculation entity, Calculation existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            if(populated[0])
+            {
+                if (entity.CalculationDetailses != null)
+                {
+                    foreach (var field in entity.CalculationDetailses)
+                    {
+                        field.CalculationId = entity.CalculationId;
+                    }
+                }
+
+                SaveService.Update<CalculationDetails, CalculationDetails>(entity.CalculationDetailses, existing.CalculationDetailses, saves);
+            }
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Calculation entity, ISavesCollector saves)
         {
+            SaveService.Delete<CalculationDetails, CalculationDetails>(entity.CalculationDetailses, saves);
         }
 
         private void SetMtoFields(Calculation entity)

@@ -27,7 +27,8 @@
                                      Field = field,
                                      RootField = relmodel.MappingFields.First(x => x.DbField.Name == association.FieldName),
                                      Id = association.ConstraintId,
-                                     Index = association.Index
+                                     Index = association.Index,
+                                     Cascade = association.Cascade
                                  });
                     }
                 }

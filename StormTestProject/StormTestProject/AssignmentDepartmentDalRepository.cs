@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class AssignmentDepartmentDalRepository : IDalRepository<AssignmentDepartment, AssignmentDepartment>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 1;
+            return extension.RelationsCount() ?? 1;
         }
 
         public AssignmentDepartment Create(IDataReader reader, IQueryable<AssignmentDepartment> query, ILoadService loadService)
@@ -111,10 +112,13 @@ namespace StormTestProject
 
         public void SaveRelations(AssignmentDepartment entity, ISavesCollector saves)
         {
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(AssignmentDepartment entity, AssignmentDepartment existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(AssignmentDepartment entity, ISavesCollector saves)

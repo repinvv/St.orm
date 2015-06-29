@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class CurrencyDalRepository : IDalRepository<Currency, Currency>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 1;
+            return extension.RelationsCount() ?? 1;
         }
 
         public Currency Create(IDataReader reader, IQueryable<Currency> query, ILoadService loadService)
@@ -113,14 +114,41 @@ namespace StormTestProject
 
         public void SaveRelations(Currency entity, ISavesCollector saves)
         {
+            if (entity.Policies != null)
+            {
+                foreach (var field in entity.Policies)
+                {
+                    field.CurrencyId = entity.CurrencyId;
+                }
+            }
+
+            SaveService.Save<Policy, Policy>(entity.Policies, saves);
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Currency entity, Currency existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            if(populated[0])
+            {
+                if (entity.Policies != null)
+                {
+                    foreach (var field in entity.Policies)
+                    {
+                        field.CurrencyId = entity.CurrencyId;
+                    }
+                }
+
+                SaveService.Update<Policy, Policy>(entity.Policies, existing.Policies, saves);
+            }
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Currency entity, ISavesCollector saves)
         {
+            SaveService.Delete<Policy, Policy>(entity.Policies, saves);
         }
 
         private void SetMtoFields(Currency entity)

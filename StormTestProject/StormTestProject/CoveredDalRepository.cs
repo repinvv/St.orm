@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class CoveredDalRepository : IDalRepository<Covered, Covered>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 0;
+            return extension.RelationsCount() ?? 0;
         }
 
         public Covered Create(IDataReader reader, IQueryable<Covered> query, ILoadService loadService)
@@ -114,10 +115,13 @@ namespace StormTestProject
 
         public void SaveRelations(Covered entity, ISavesCollector saves)
         {
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Covered entity, Covered existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Covered entity, ISavesCollector saves)

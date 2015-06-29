@@ -15,6 +15,8 @@
 	fk.COLUMN_NAME,
 	rc.CONSTRAINT_SCHEMA,
 	rc.CONSTRAINT_NAME,
+	rc.UPDATE_RULE,
+	rc.DELETE_RULE,
     pk.ORDINAL_POSITION,
 	pk.TABLE_SCHEMA as OTHER_SCHEMA,
 	pk.TABLE_NAME as OTHER_TABLE,
@@ -65,6 +67,7 @@
                                       TableId = tableIdCreator.CreateTableId(schema, name),
                                       FieldName = r["OTHER_COLUMN"] as string,
                                       Index = (int)r["ORDINAL_POSITION"],
+                                      Cascade = "CASCADE".Equals(r["DELETE_RULE"])
                                   };
                 model.Fields.First(x => x.Name == columnName).Associations.Add(association);
             };

@@ -6,7 +6,7 @@
 
     public interface IDalRepository<TDal, TQuery>
     {
-        int NavPropsCount();
+        int RelationsCount();
 
         void SetExtension(IDalRepositoryExtension<TDal> extension);
 

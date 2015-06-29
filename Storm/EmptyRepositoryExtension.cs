@@ -5,7 +5,7 @@
 
     public class EmptyRepositoryExtension<TDal> : IDalRepositoryExtension<TDal>
     {
-        public int? NavPropsCount()
+        public int? RelationsCount()
         {
             return null;
         }
@@ -31,10 +31,10 @@
             return true;
         }
 
-        public void ExtendSaveRelations(TDal entity)
+        public void ExtendSaveRelations(TDal entity, ISavesCollector saves)
         { }
 
-        public void ExtendUpdateRelations(TDal entity, TDal existing)
+        public void ExtendUpdateRelations(TDal entity, TDal existing, ISavesCollector saves)
         { }
 
         public bool ExtendEntityChanged(TDal entity, TDal existing)

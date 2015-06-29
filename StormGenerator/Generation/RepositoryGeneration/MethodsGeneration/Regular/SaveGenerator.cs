@@ -38,7 +38,7 @@
             });
 
             stringGenerator.AppendLine("SetMtoFields(entity);");
-            stringGenerator.AppendLine("saves.Save<" + model.Name + ", " + model.Name + ">(entity);");
+            stringGenerator.AppendLine("saves.Save<" + model.Name + ", " + model.Parent.Name + ">(entity);");
         }
     }
 }

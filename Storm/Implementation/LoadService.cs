@@ -30,7 +30,7 @@
             }
 
             var repo = context.GetDalRepository<TField, TQuery>();
-            var items = repo.Materialize(query(), new LoadService(Parameters, context, repo.NavPropsCount())).ToLookup(indexLambda);
+            var items = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount())).ToLookup(indexLambda);
             fields[propertyIndex] = items;
             return items;
         }
@@ -44,7 +44,7 @@
             }
 
             var repo = context.GetDalRepository<TField, TQuery>();
-            var materialized = repo.Materialize(query(), new LoadService(Parameters, context, repo.NavPropsCount()));
+            var materialized = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount()));
             var dict = new Dictionary<TIndex, TField>();
             foreach (var item in materialized)
             {

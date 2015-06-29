@@ -2,6 +2,7 @@
 {
     using System;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal static class GenerationConstants
@@ -36,7 +37,8 @@
                 "System.Linq",
                 "System.Data",
                 typeof(EmptyRepositoryExtension<>).Namespace,
-                typeof(IDalRepository<,>).Namespace
+                typeof(IDalRepository<,>).Namespace,
+                typeof(SaveService).Namespace
             };
 
             public static readonly string[] ModelClassUsings =

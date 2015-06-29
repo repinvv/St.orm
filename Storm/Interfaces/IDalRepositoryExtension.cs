@@ -5,7 +5,7 @@
     public interface IDalRepositoryExtension<TDal>
     {
         // override this method if you add custom navigation properties
-        int? NavPropsCount();
+        int? RelationsCount();
 
         // extra action for cloning
         void ExtendClone(TDal clone, TDal source);
@@ -26,10 +26,10 @@
         bool PreDelete(TDal entity);
 
         // save entities in custom nav props
-        void ExtendSaveRelations(TDal entity);
+        void ExtendSaveRelations(TDal entity, ISavesCollector saves);
 
         // update entities in custom nav props
-        void ExtendUpdateRelations(TDal entity, TDal existing);
+        void ExtendUpdateRelations(TDal entity, TDal existing, ISavesCollector saves);
 
         // check extra fields
         bool ExtendEntityChanged(TDal entity, TDal existing);

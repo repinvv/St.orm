@@ -24,7 +24,8 @@
                 AssociationId = relations[0].Id,
                 FieldModel = relations[0].RootModel,
                 FarEndFields = relations.Select(x => x.RootField).ToList(),
-                NearEndFields = relations.Select(x => x.Field).ToList()
+                NearEndFields = relations.Select(x => x.Field).ToList(),
+                Cascade = relations[0].Cascade
             };
         }
 
@@ -37,7 +38,8 @@
                 AssociationId = relations[0].Id,
                 FieldModel = relations[0].Model,
                 NearEndFields = relations.Select(x => x.RootField).ToList(),
-                FarEndFields = relations.Select(x => x.Field).ToList()
+                FarEndFields = relations.Select(x => x.Field).ToList(),
+                Cascade = relations[0].Cascade
             };
         }
 
@@ -54,7 +56,8 @@
                                NearEndFields = new List<MappingField> { first.RootField },
                                FarEndFields = new List<MappingField> { first.Field },
                                MediatorModel = first.Model,
-                               MediatorMtoField = mtoField
+                               MediatorMtoField = mtoField,
+                               Cascade = first.Cascade
                            };
             first.RootModel.RelationFields.Add(mtmField);
         }

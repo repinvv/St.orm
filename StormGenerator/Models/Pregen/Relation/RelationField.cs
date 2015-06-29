@@ -4,6 +4,8 @@
 
     internal abstract class RelationField : ModelBase
     {
+        public bool Cascade { get; set; }
+
         public string AssociationId { get; set; }
 
         public Model FieldModel { get; set; }

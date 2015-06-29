@@ -88,6 +88,11 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\UpdateGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\UpdateRelationsGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\RelationsCountGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Relations\EmptyRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Relations\IRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Relations\ManyToManyRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Relations\OneToManyRelationsGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Relations\RelationsGeneratorFactory.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\SetExtensionGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryConstructorGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\RepositoryGenerator.cs" />

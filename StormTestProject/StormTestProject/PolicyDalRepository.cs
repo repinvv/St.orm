@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class PolicyDalRepository : IDalRepository<Policy, Policy>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 4;
+            return extension.RelationsCount() ?? 4;
         }
 
         public Policy Create(IDataReader reader, IQueryable<Policy> query, ILoadService loadService)
@@ -114,14 +115,89 @@ namespace StormTestProject
 
         public void SaveRelations(Policy entity, ISavesCollector saves)
         {
+            if (entity.Taxes != null)
+            {
+                foreach (var field in entity.Taxes)
+                {
+                    field.PolicyId = entity.PolicyId;
+                }
+            }
+
+            SaveService.Save<Tax, Tax>(entity.Taxes, saves);
+
+            if (entity.Assignments != null)
+            {
+                foreach (var field in entity.Assignments)
+                {
+                    field.PolicyId = entity.PolicyId;
+                }
+            }
+
+            SaveService.Save<Assignment, Assignment>(entity.Assignments, saves);
+
+            if (entity.Comments != null)
+            {
+                foreach (var field in entity.Comments)
+                {
+                    field.PolicyId = entity.PolicyId;
+                }
+            }
+
+            SaveService.Save<Comment, Comment>(entity.Comments, saves);
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Policy entity, Policy existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            if(populated[1])
+            {
+                if (entity.Taxes != null)
+                {
+                    foreach (var field in entity.Taxes)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Tax, Tax>(entity.Taxes, existing.Taxes, saves);
+            }
+
+            if(populated[2])
+            {
+                if (entity.Assignments != null)
+                {
+                    foreach (var field in entity.Assignments)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Assignment, Assignment>(entity.Assignments, existing.Assignments, saves);
+            }
+
+            if(populated[3])
+            {
+                if (entity.Comments != null)
+                {
+                    foreach (var field in entity.Comments)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Comment, Comment>(entity.Comments, existing.Comments, saves);
+            }
+
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Policy entity, ISavesCollector saves)
         {
+            SaveService.Delete<Tax, Tax>(entity.Taxes, saves);
+            SaveService.Delete<Assignment, Assignment>(entity.Assignments, saves);
+            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
         }
 
         private void SetMtoFields(Policy entity)

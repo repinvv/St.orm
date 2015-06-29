@@ -17,6 +17,11 @@
             bool first = true;
             foreach (var field in model.RelationFields.OfType<ManyToOneField>())
             {
+                if (!first)
+                {
+                    stringGenerator.AppendLine();
+                }
+
                 stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
                 stringGenerator.Braces(() =>
                 {
@@ -26,11 +31,6 @@
                                                    + field.Name + "." + field.FarEndFields[i].Name + ";");
                     }
                 });
-                if (!first)
-                {
-                    stringGenerator.AppendLine();
-                }
-
                 first = false;
             }
         }

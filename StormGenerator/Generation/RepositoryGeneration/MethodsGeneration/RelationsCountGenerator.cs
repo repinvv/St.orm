@@ -7,12 +7,12 @@
     {
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public int NavPropsCount()");
+            stringGenerator.AppendLine("public int RelationsCount()");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("return extension.NavPropsCount() ?? " + model.RelationFields.ActiveCount() + ";");
+            stringGenerator.AppendLine("return extension.RelationsCount() ?? " + model.RelationFields.ActiveCount() + ";");
         }
     }
 }

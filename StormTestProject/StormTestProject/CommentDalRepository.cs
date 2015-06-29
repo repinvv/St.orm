@@ -13,6 +13,7 @@ namespace StormTestProject
     using System.Data;
     using System.Linq;
     using St.Orm;
+    using St.Orm.Implementation;
     using St.Orm.Interfaces;
 
     internal class CommentDalRepository : IDalRepository<Comment, Comment>
@@ -29,9 +30,9 @@ namespace StormTestProject
             this.extension = extension;
         }
 
-        public int NavPropsCount()
+        public int RelationsCount()
         {
-            return extension.NavPropsCount() ?? 0;
+            return extension.RelationsCount() ?? 0;
         }
 
         public Comment Create(IDataReader reader, IQueryable<Comment> query, ILoadService loadService)
@@ -116,10 +117,13 @@ namespace StormTestProject
 
         public void SaveRelations(Comment entity, ISavesCollector saves)
         {
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         public void UpdateRelations(Comment entity, Comment existing, ISavesCollector saves)
         {
+            var populated = (entity as ICloneable<Policy>).GetPopulated();
+            extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Comment entity, ISavesCollector saves)
