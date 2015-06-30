@@ -20,7 +20,7 @@ namespace StormTestProject
     public partial class Assignment : ICloneable<Assignment>, IEquatable<Assignment>, IHaveId
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("assignment_id", Order = 1)]
         public int AssignmentId { get;set; }
 

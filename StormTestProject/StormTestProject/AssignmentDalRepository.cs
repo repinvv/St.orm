@@ -168,10 +168,54 @@ namespace StormTestProject
             var populated = (entity as ICloneable<Policy>).GetPopulated();
             if(populated[0])
             {
+                var items = entity.Departments ?? new List<Department>();
+                var entitySet = new HashSet<Department>(items);
+                foreach (var item in existing.Departments.Where(x => !entitySet.Contains(x)))
+                {
+                    var mediator = new AssignmentDepartment
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        DepartmentId = item.DepartmentId
+                    };
+                    saves.Delete<AssignmentDepartment, AssignmentDepartment>(mediator);
+                }
+
+                var existingSet = new HashSet<Department>(existing.Departments);
+                foreach (var item in items.Where(x => !existingSet.Contains(x)))
+                {
+                    var mediator = new AssignmentDepartment
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        DepartmentId = item.DepartmentId
+                    };
+                    saves.Save<AssignmentDepartment, AssignmentDepartment>(mediator);
+                }
             }
 
             if(populated[1])
             {
+                var items = entity.Eligibilities ?? new List<Eligibility>();
+                var entitySet = new HashSet<Eligibility>(items);
+                foreach (var item in existing.Eligibilities.Where(x => !entitySet.Contains(x)))
+                {
+                    var mediator = new AssignmentEligibility
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        EligibilityId = item.EligibilityId
+                    };
+                    saves.Delete<AssignmentEligibility, AssignmentEligibility>(mediator);
+                }
+
+                var existingSet = new HashSet<Eligibility>(existing.Eligibilities);
+                foreach (var item in items.Where(x => !existingSet.Contains(x)))
+                {
+                    var mediator = new AssignmentEligibility
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        EligibilityId = item.EligibilityId
+                    };
+                    saves.Save<AssignmentEligibility, AssignmentEligibility>(mediator);
+                }
             }
 
             if(populated[2])
@@ -205,8 +249,33 @@ namespace StormTestProject
 
         private void DeleteRelations(Assignment entity, ISavesCollector saves)
         {
+            if(entity.Departments != null)
+            {
+                foreach(var item in entity.Departments)
+                {
+                    var mediator = new AssignmentDepartment
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        DepartmentId = item.DepartmentId
+                    };
+                    saves.Delete<AssignmentDepartment, AssignmentDepartment>(mediator);
+                }
+            }
+
+            if(entity.Eligibilities != null)
+            {
+                foreach(var item in entity.Eligibilities)
+                {
+                    var mediator = new AssignmentEligibility
+                    {
+                        AssignmentId = entity.AssignmentId,
+                        EligibilityId = item.EligibilityId
+                    };
+                    saves.Delete<AssignmentEligibility, AssignmentEligibility>(mediator);
+                }
+            }
+
             SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
-            SaveService.Delete<Covered, Covered>(entity.Covereds, saves);
         }
 
         private void SetMtoFields(Assignment entity)
