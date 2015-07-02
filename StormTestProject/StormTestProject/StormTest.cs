@@ -59,55 +59,9 @@ namespace StormTestProject
                 context.Policies.Add(policy);
                 context.SaveChanges();
 
-                var watch = Stopwatch.StartNew();
                 var query1 = from p in context.Policies select new { p, t = p.Taxes, c = p.Comments, a = p.Assignments };
                 
                 var result1 = query1.ToList();
-                Debug.WriteLine("joined count " + result1.Count);
-                watch.Stop();
-                Debug.WriteLine("joined " + watch.Elapsed);
-
-                watch = Stopwatch.StartNew();
-                var policies = context.Policies.AsNoTracking().ToList();
-                var assignments = context.Policies.SelectMany(x => x.Assignments).AsNoTracking().ToList();
-                var taxes = context.Policies.SelectMany(x => x.Taxes).AsNoTracking().ToList();
-                var comments = context.Policies.SelectMany(x => x.Comments).AsNoTracking().ToList();
-                watch.Stop();
-                Debug.WriteLine("p count " + policies.Count);
-                Debug.WriteLine("a count " + assignments.Count);
-                Debug.WriteLine("t count " + taxes.Count);
-                Debug.WriteLine("c count " + comments.Count);
-                Debug.WriteLine("regular " + watch.Elapsed);
-
-                watch = Stopwatch.StartNew();
-                var entities = context.Policies.Include(x => x.Assignments).Include(x => x.Taxes).Include(x => x.Comments).ToList();
-                watch.Stop();
-                Debug.WriteLine("include " + watch.Elapsed);
-
-                watch = Stopwatch.StartNew();
-                query1 = from p in context.Policies select new { p, t = p.Taxes, c = p.Comments, a = p.Assignments };
-
-                result1 = query1.ToList();
-                Debug.WriteLine("joined count " + result1.Count);
-                watch.Stop();
-                Debug.WriteLine("joined " + watch.Elapsed);
-
-                watch = Stopwatch.StartNew();
-                policies = context.Policies.AsNoTracking().ToList();
-                assignments = context.Policies.SelectMany(x => x.Assignments).AsNoTracking().ToList();
-                taxes = context.Policies.SelectMany(x => x.Taxes).AsNoTracking().ToList();
-                comments = context.Policies.SelectMany(x => x.Comments).AsNoTracking().ToList();
-                watch.Stop();
-                Debug.WriteLine("p count " + policies.Count);
-                Debug.WriteLine("a count " + assignments.Count);
-                Debug.WriteLine("t count " + taxes.Count);
-                Debug.WriteLine("c count " + comments.Count);
-                Debug.WriteLine("regular " + watch.Elapsed);
-
-                watch = Stopwatch.StartNew();
-                entities = context.Policies.Include(x => x.Assignments).Include(x => x.Taxes).Include(x => x.Comments).ToList();
-                watch.Stop();
-                Debug.WriteLine("include " + watch.Elapsed);
             }
         }
     }

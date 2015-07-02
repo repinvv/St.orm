@@ -41,14 +41,19 @@
   <ItemGroup>
     <Compile Include="EmptyRepositoryExtension.cs" />
     <Compile Include="HelpfulExtensions.cs" />
+    <Compile Include="Implementation\EntityList.cs" />
+    <Compile Include="Implementation\EntityStorage.cs" />
+    <Compile Include="Implementation\IEntityList.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Implementation\SavesCollector.cs" />
     <Compile Include="Implementation\SaveService.cs" />
+    <Compile Include="Interfaces\IAdoOperation.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />
     <Compile Include="Interfaces\IDalRepository.cs" />
     <Compile Include="Implementation\StormGetImplementation.cs" />
     <Compile Include="Interfaces\IDalRepositoryExtension.cs" />
     <Compile Include="Interfaces\IHaveId.cs" />
+    <Compile Include="Interfaces\ISaveRepository.cs" />
     <Compile Include="Interfaces\ISavesCollector.cs" />
     <Compile Include="Interfaces\IStormContext.cs" />
     <Compile Include="Interfaces\ILoadService.cs" />

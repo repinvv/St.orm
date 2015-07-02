@@ -217,5 +217,9 @@ namespace StormTestProject
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
         }
+
+        public IAdoOperation StartInsert()
+        {
+        }
     }
 }

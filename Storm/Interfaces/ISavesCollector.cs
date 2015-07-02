@@ -4,7 +4,7 @@
     {
         IStormContext Context { get; }
 
-        void Save<TDal, TQuery>(TDal entity);
+        void Save<TDal, TQuery>(TDal entity) where TDal : class;
 
         void Update<TDal, TQuery>(TDal entity, TDal existing);
 

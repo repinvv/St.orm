@@ -4,7 +4,7 @@
     using System.Data;
     using System.Linq;
 
-    public interface IDalRepository<TDal, TQuery>
+    public interface IDalRepository<TDal, TQuery> : ISaveRepository
     {
         int RelationsCount();
 
