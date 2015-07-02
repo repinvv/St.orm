@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("country")]
+    [Table("country", Schema = "dbo")]
     public partial class Country : ICloneable<Country>, IEquatable<Country>, IHaveId
     {
         [Key]

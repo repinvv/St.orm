@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("department")]
+    [Table("department", Schema = "dbo")]
     public partial class Department : ICloneable<Department>, IEquatable<Department>, IHaveId
     {
         [Key]

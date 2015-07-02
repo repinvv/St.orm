@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.policy")]
+    [Table("policy", Schema = "model")]
     public partial class Policy : ICloneable<Policy>, IEquatable<Policy>, IHaveId
     {
         [Key]

@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.comment")]
+    [Table("comment", Schema = "model")]
     public partial class Comment : ICloneable<Comment>, IEquatable<Comment>, IHaveId
     {
         [Key]

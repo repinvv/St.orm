@@ -36,7 +36,7 @@
 
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("[Table(\"" + model.DbModel.Id + "\")]");
+            stringGenerator.AppendLine("[Table(\"" + model.DbModel.Name + "\", Schema = \"" + model.DbModel.Schema + "\")]");
             plainClassPartsGenerator.GenerateDefinition(model, stringGenerator);
         }
 

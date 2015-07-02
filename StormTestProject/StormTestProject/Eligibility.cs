@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("eligibility")]
+    [Table("eligibility", Schema = "dbo")]
     public partial class Eligibility : ICloneable<Eligibility>, IEquatable<Eligibility>, IHaveId
     {
         [Key]

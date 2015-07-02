@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.covered")]
+    [Table("covered", Schema = "model")]
     public partial class Covered : ICloneable<Covered>, IEquatable<Covered>, IHaveId
     {
         [Key]

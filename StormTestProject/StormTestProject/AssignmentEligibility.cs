@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.assignment_eligibility")]
+    [Table("assignment_eligibility", Schema = "model")]
     public partial class AssignmentEligibility : ICloneable<AssignmentEligibility>, IEquatable<AssignmentEligibility>
     {
         [Key]

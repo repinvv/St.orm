@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("currency")]
+    [Table("currency", Schema = "dbo")]
     public partial class Currency : ICloneable<Currency>, IEquatable<Currency>, IHaveId
     {
         [Key]

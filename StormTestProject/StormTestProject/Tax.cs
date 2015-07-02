@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.tax")]
+    [Table("tax", Schema = "model")]
     public partial class Tax : ICloneable<Tax>, IEquatable<Tax>, IHaveId
     {
         [Key]

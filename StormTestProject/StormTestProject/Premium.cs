@@ -16,7 +16,7 @@ namespace StormTestProject
     using St.Orm;
     using St.Orm.Interfaces;
 
-    [Table("model.premium")]
+    [Table("premium", Schema = "model")]
     public partial class Premium : ICloneable<Premium>, IEquatable<Premium>, IHaveId
     {
         [Key]
