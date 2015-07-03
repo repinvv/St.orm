@@ -35,11 +35,9 @@
 
         public void Commit()
         {
-            foreach (var group in saves.GetLists().GroupBy(x => x.QueryType).Select(group => group.ToList()))
+            foreach (var group in saves.GetLists())
             {
-                using (var adoOperation = group[0].StartInsert(group.Sum(x => x.Count)))
-                {
-                }
+                group.Insert(Context);
             }
         }
     }

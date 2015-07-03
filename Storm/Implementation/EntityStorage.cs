@@ -13,7 +13,7 @@
             IEntityList list;
             if (!lists.TryGetValue(typeof(TDal), out list))
             {
-                lists[typeof(TDal)] = list = new EntityList<TDal, TQuery>(func());
+                lists[typeof(TDal)] = list = new EntityList<TDal, TQuery>(func);
             }
 
             list.Add(entity);

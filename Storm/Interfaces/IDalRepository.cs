@@ -4,7 +4,7 @@
     using System.Data;
     using System.Linq;
 
-    public interface IDalRepository<TDal, TQuery> : ISaveRepository
+    public interface IDalRepository<TDal, TQuery>
     {
         int RelationsCount();
 
@@ -29,5 +29,7 @@
         void UpdateRelations(TDal entity, TDal existing, ISavesCollector saves);
 
         bool EntityChanged(TDal entity, TDal existing);
+
+        void Insert(IStormContext context, ICollection<TDal> entities);
     }
 }

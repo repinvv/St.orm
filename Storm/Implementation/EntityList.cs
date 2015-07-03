@@ -7,12 +7,12 @@
     internal class EntityList<TDal, TQuery> : IEntityList
         where TDal : class
     {
-        private readonly IDalRepository<TDal, TQuery> repo;
+        private readonly Func<IDalRepository<TDal, TQuery>> repoFunc;
         private readonly List<TDal> list = new List<TDal>();
 
-        public EntityList(IDalRepository<TDal, TQuery> repo)
+        public EntityList(Func<IDalRepository<TDal, TQuery>> repoFunc)
         {
-            this.repo = repo;
+            this.repoFunc = repoFunc;
         }
 
         public void Add(object entity)
@@ -36,9 +36,9 @@
             }
         }
 
-        public IAdoOperation StartInsert(int count)
+        public void Insert(IStormContext context)
         {
-            return repo.StartInsert();
+            repoFunc().Insert(context, list);
         }
     }
 }

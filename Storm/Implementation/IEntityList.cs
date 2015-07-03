@@ -11,6 +11,6 @@
 
         int Count { get; }
 
-        IAdoOperation StartInsert(int count);
+        void Insert(IStormContext context);
     }
 }
