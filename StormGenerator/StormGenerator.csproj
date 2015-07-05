@@ -56,6 +56,7 @@
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Common\ObjectStringService.cs" />
+    <Compile Include="Generation\RepositoryGeneration\Common\SplitRunCount.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\EqualityGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\LazyGeneration\JoinGenerator.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Generation\RepositoryGeneration\Common\IdentityFinder.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\BaseClassMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\CommonMethodsCollection.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsCollections\PersistenceMethodCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\PlainClassMethodsCollection.cs" />
     <Compile Include="Generation\RepositoryGeneration\Common\MaterializerLineGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsCollections\InheritedClassMethodsCollection.cs" />
@@ -80,6 +82,9 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\GetByIdQueryGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MaterializeGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MethodGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\IdentityInsertGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\IdentityRangeInsertGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\InsertMethodGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteRelationsGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\EntityChangedGenerator.cs" />

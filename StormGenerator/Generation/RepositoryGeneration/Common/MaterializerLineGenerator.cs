@@ -32,7 +32,6 @@
 
         public string GenerateMaterializerLine(string readerName, Type type, int index)
         {
-            index--;
             if (typeService.IsNullable(type) || type == typeof(string) || type == typeof(byte[]))
             {
                 return readerName + "[" + index + "] as " + typeService.GetTypeName(type);

@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -144,6 +147,45 @@ namespace StormTestProject
                 || entity.AuthorUserId != existing.AuthorUserId
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
+        }
+
+        public void Insert(IStormContext context, IList<Comment> entities)
+        {
+            using (new ConnectionHandler(context.Connection))
+            {
+                AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 142);
+            }
+        }
+
+        private void RangeInsert(List<Comment> entities, DbConnection connection, DbTransaction transaction)
+        {
+            int i;
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO model.comment");
+            sb.AppendLine("    (comment_type, policy_id, premium_id, comment_text, author_user_id, created, updated");
+            sb.AppendLine("OUTPUT inserted.comment_id");
+            sb.AppendLine("VALUES");
+            sb.AppendLine("    (@parm1i0, @parm2i0, @parm3i0, @parm4i0, @parm5i0, @parm6i0, @parm7i0)");
+            for (i = 1; i < entities.Count; i++)
+            {
+                sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ", @parm4i" + i + ", @parm5i" + i + ", @parm6i" + i + ", @parm7i" + i + ")");
+            }
+
+            var parameters = new List<SqlParameter>(entities.Count*7);
+            for (i = 0; i < entities.Count; i++)
+            {
+                var entity = entities[i];
+                parameters.Add(new SqlParameter("@parm1" + i, entity.CommentType));
+                parameters.Add(new SqlParameter("@parm2" + i, entity.PolicyId));
+                parameters.Add(new SqlParameter("@parm3" + i, entity.PremiumId));
+                parameters.Add(new SqlParameter("@parm4" + i, entity.CommentText));
+                parameters.Add(new SqlParameter("@parm5" + i, entity.AuthorUserId));
+                parameters.Add(new SqlParameter("@parm6" + i, entity.Created));
+                parameters.Add(new SqlParameter("@parm7" + i, entity.Updated));
+            }
+
+            i = 0;
+            AdoCommands.RunCommand(sb.ToString(), parameters.ToArray(), connection, transaction, r => entities[i++].CommentId = r.GetInt32(0));
         }
     }
 }

@@ -15,7 +15,7 @@
             }
         }
 
-        public static void Save<TDal, TQuery>(ICollection<TDal> entities, ISavesCollector saves)
+        public static void Save<TDal, TQuery>(IList<TDal> entities, ISavesCollector saves)
         {
             if (entities == null)
             {
@@ -49,7 +49,7 @@
             }
         }
 
-        public static void Update<TDal, TQuery>(ICollection<TDal> entities, ICollection<TDal> existing, ISavesCollector saves)
+        public static void Update<TDal, TQuery>(IList<TDal> entities, ICollection<TDal> existing, ISavesCollector saves)
         {
             if (entities == null)
             {

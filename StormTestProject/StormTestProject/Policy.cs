@@ -79,7 +79,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Tax> Taxes
+        public virtual IList<Comment> Comments
         {
             #region implementation
             get
@@ -89,21 +89,21 @@ namespace StormTestProject
                     return field1;
                 }
 
-                Func<IQueryable<Tax>> query = () =>
+                Func<IQueryable<Comment>> query = () =>
                 {
-                    return loadService.Context.Set<Tax>()
+                    return loadService.Context.Set<Comment>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetList<Tax, Tax, int>(1, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Comment, Comment, int?>(1, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field1 = items;
                 }
                 else
                 {
-                    clonedFrom.Taxes = items;
-                    field1 = new List<Tax>(items.Count);
-                    var repo = loadService.Context.GetDalRepository<Tax, Tax>();
+                    clonedFrom.Comments = items;
+                    field1 = new List<Comment>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Comment, Comment>();
                     foreach(var item in items)
                     {
                         field1.Add(repo.Clone(item));
@@ -121,7 +121,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Assignment> Assignments
+        public virtual IList<Tax> Taxes
         {
             #region implementation
             get
@@ -131,21 +131,21 @@ namespace StormTestProject
                     return field2;
                 }
 
-                Func<IQueryable<Assignment>> query = () =>
+                Func<IQueryable<Tax>> query = () =>
                 {
-                    return loadService.Context.Set<Assignment>()
+                    return loadService.Context.Set<Tax>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetList<Assignment, Assignment, int>(2, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Tax, Tax, int>(2, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field2 = items;
                 }
                 else
                 {
-                    clonedFrom.Assignments = items;
-                    field2 = new List<Assignment>(items.Count);
-                    var repo = loadService.Context.GetDalRepository<Assignment, Assignment>();
+                    clonedFrom.Taxes = items;
+                    field2 = new List<Tax>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Tax, Tax>();
                     foreach(var item in items)
                     {
                         field2.Add(repo.Clone(item));
@@ -163,7 +163,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Comment> Comments
+        public virtual IList<Assignment> Assignments
         {
             #region implementation
             get
@@ -173,21 +173,21 @@ namespace StormTestProject
                     return field3;
                 }
 
-                Func<IQueryable<Comment>> query = () =>
+                Func<IQueryable<Assignment>> query = () =>
                 {
-                    return loadService.Context.Set<Comment>()
+                    return loadService.Context.Set<Assignment>()
                         .Join(sourceQuery, x => x.PolicyId, x => x.PolicyId, (x, y) => x);
                 };
-                var items = loadService.GetList<Comment, Comment, int?>(3, query, x => x.PolicyId, PolicyId);
+                var items = loadService.GetList<Assignment, Assignment, int>(3, query, x => x.PolicyId, PolicyId);
                 if (clonedFrom == null)
                 {
                     field3 = items;
                 }
                 else
                 {
-                    clonedFrom.Comments = items;
-                    field3 = new List<Comment>(items.Count);
-                    var repo = loadService.Context.GetDalRepository<Comment, Comment>();
+                    clonedFrom.Assignments = items;
+                    field3 = new List<Assignment>(items.Count);
+                    var repo = loadService.Context.GetDalRepository<Assignment, Assignment>();
                     foreach(var item in items)
                     {
                         field3.Add(repo.Clone(item));
@@ -213,9 +213,9 @@ namespace StormTestProject
         IQueryable<Policy> sourceQuery;
         private readonly Policy clonedFrom;
         private Country field0;
-        private ICollection<Tax> field1;
-        private ICollection<Assignment> field2;
-        private ICollection<Comment> field3;
+        private IList<Comment> field1;
+        private IList<Tax> field2;
+        private IList<Assignment> field3;
         #endregion
 
         #region Constructors
@@ -236,9 +236,9 @@ namespace StormTestProject
 
         public Policy()
         {
-            field1 = new HashSet<Tax>();
-            field2 = new HashSet<Assignment>();
-            field3 = new HashSet<Comment>();
+            field1 = new List<Comment>();
+            field2 = new List<Tax>();
+            field3 = new List<Assignment>();
             populated = new bool[]{true, true, true, true};
         }
         #endregion

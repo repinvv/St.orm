@@ -41,7 +41,7 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-        public virtual ICollection<Policy> Policies
+        public virtual IList<Policy> Policies
         {
             #region implementation
             get
@@ -90,7 +90,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Country> sourceQuery;
         private readonly Country clonedFrom;
-        private ICollection<Policy> field0;
+        private IList<Policy> field0;
         #endregion
 
         #region Constructors
@@ -111,7 +111,7 @@ namespace StormTestProject
 
         public Country()
         {
-            field0 = new HashSet<Policy>();
+            field0 = new List<Policy>();
             populated = new bool[]{true};
         }
         #endregion

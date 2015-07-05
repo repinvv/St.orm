@@ -18,20 +18,20 @@ namespace StormTestProject
         private static readonly Dictionary<Type, object> repositories 
             = new Dictionary<Type, object>
                 {
-                    { typeof(Department), new DepartmentDalRepository() },
-                    { typeof(Eligibility), new EligibilityDalRepository() },
-                    { typeof(Currency), new CurrencyDalRepository() },
-                    { typeof(Country), new CountryDalRepository() },
-                    { typeof(Calculation), new CalculationDalRepository() },
-                    { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
-                    { typeof(Policy), new PolicyDalRepository() },
-                    { typeof(Tax), new TaxDalRepository() },
-                    { typeof(Assignment), new AssignmentDalRepository() },
-                    { typeof(AssignmentDepartment), new AssignmentDepartmentDalRepository() },
                     { typeof(AssignmentEligibility), new AssignmentEligibilityDalRepository() },
                     { typeof(Premium), new PremiumDalRepository() },
                     { typeof(Covered), new CoveredDalRepository() },
                     { typeof(Comment), new CommentDalRepository() },
+                    { typeof(Calculation), new CalculationDalRepository() },
+                    { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
+                    { typeof(Department), new DepartmentDalRepository() },
+                    { typeof(Eligibility), new EligibilityDalRepository() },
+                    { typeof(Currency), new CurrencyDalRepository() },
+                    { typeof(Country), new CountryDalRepository() },
+                    { typeof(Policy), new PolicyDalRepository() },
+                    { typeof(Tax), new TaxDalRepository() },
+                    { typeof(Assignment), new AssignmentDalRepository() },
+                    { typeof(AssignmentDepartment), new AssignmentDepartmentDalRepository() },
                 };
     
         public static IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()

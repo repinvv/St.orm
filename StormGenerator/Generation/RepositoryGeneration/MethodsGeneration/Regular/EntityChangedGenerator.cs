@@ -13,7 +13,7 @@
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
-            var fields = model.MappingFields.Where(x => !x.DbField.IsPrimaryKey).Active();
+            var fields = model.MappingFields.Active(x => !x.DbField.IsPrimaryKey);
             var ext = "return extension.ExtendEntityChanged(entity, existing)";
             if (fields.Count == 0)
             {

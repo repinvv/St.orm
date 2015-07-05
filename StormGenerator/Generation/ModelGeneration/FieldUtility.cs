@@ -14,7 +14,7 @@
         {
             if (field.IsList)
             {
-                return "ICollection<" + field.FieldModel.Name + ">";
+                return "IList<" + field.FieldModel.Name + ">";
             }
 
             return field.FieldModel.Name;

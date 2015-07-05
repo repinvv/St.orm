@@ -31,7 +31,7 @@
             this.context = context;
         }
 
-        public ICollection<T> Get<T>(IQueryable<T> query, params LoadParameter[] parameters)
+        public IList<T> Get<T>(IQueryable<T> query, params LoadParameter[] parameters)
         {
             return Storm.Get(query, context, parameters);
         }

@@ -50,5 +50,31 @@ namespace StormTestProject
                 }
             }
         }
+
+        public static void SplitRun<T>(List<T> list, Action<List<T>> action, int batchSize = 1000)
+        {
+            var batchCount = (list.Count / batchSize) + (list.Count % batchSize == 0 ? 0 : 1);
+            var outputSize = (list.Count / batchCount) + (list.Count % batchCount == 0 ? 0 : 1);
+            for (int i = 0; i < list.Count; i += outputSize)
+            {
+                action(list.GetRange(i, Math.Min(outputSize, list.Count - i)));
+            }
+        }
+
+        public static void RunCommand(string request, SqlParameter[] parameters, DbConnection connection, DbTransaction transaction, Action<IDataReader> action)
+        {
+            using (var command = new SqlCommand(request, (SqlConnection)connection))
+            {
+                command.Transaction = (SqlTransaction)transaction;
+                command.Parameters.AddRange(parameters);
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        action(reader);
+                    }
+                }
+            }
+        }
     }
 }

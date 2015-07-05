@@ -41,9 +41,8 @@
   <ItemGroup>
     <Compile Include="EmptyRepositoryExtension.cs" />
     <Compile Include="HelpfulExtensions.cs" />
-    <Compile Include="Implementation\EntityList.cs" />
-    <Compile Include="Implementation\EntityStorage.cs" />
-    <Compile Include="Implementation\IEntityList.cs" />
+    <Compile Include="Implementation\Lists\SaveEntityList.cs" />
+    <Compile Include="Implementation\Lists\IEntityList.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Implementation\SavesCollector.cs" />
     <Compile Include="Implementation\SaveService.cs" />

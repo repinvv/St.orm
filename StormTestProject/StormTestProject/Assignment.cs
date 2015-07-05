@@ -38,7 +38,7 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-        public virtual ICollection<Department> Departments
+        public virtual IList<Department> Departments
         {
             #region implementation
             get
@@ -82,7 +82,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Eligibility> Eligibilities
+        public virtual IList<Eligibility> Eligibilities
         {
             #region implementation
             get
@@ -126,7 +126,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Premium> Premiums
+        public virtual IList<Premium> Premiums
         {
             #region implementation
             get
@@ -168,7 +168,7 @@ namespace StormTestProject
             #endregion
         }
 
-        public virtual ICollection<Covered> Covereds
+        public virtual IList<Covered> Covereds
         {
             #region implementation
             get
@@ -217,10 +217,10 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Assignment> sourceQuery;
         private readonly Assignment clonedFrom;
-        private ICollection<Department> field0;
-        private ICollection<Eligibility> field1;
-        private ICollection<Premium> field2;
-        private ICollection<Covered> field3;
+        private IList<Department> field0;
+        private IList<Eligibility> field1;
+        private IList<Premium> field2;
+        private IList<Covered> field3;
         #endregion
 
         #region Constructors
@@ -241,10 +241,10 @@ namespace StormTestProject
 
         public Assignment()
         {
-            field0 = new HashSet<Department>();
-            field1 = new HashSet<Eligibility>();
-            field2 = new HashSet<Premium>();
-            field3 = new HashSet<Covered>();
+            field0 = new List<Department>();
+            field1 = new List<Eligibility>();
+            field2 = new List<Premium>();
+            field3 = new List<Covered>();
             populated = new bool[]{true, true, true, true};
         }
         #endregion

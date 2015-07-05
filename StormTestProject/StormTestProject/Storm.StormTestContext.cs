@@ -15,6 +15,18 @@ namespace StormTestProject
     {
         public StormTestContext() : base("name=StormTestContext") { }
 
+        public virtual DbSet<AssignmentEligibility> AssignmentEligibilities { get; set; }
+
+        public virtual DbSet<Premium> Premiums { get; set; }
+
+        public virtual DbSet<Covered> Covereds { get; set; }
+
+        public virtual DbSet<Comment> Comments { get; set; }
+
+        public virtual DbSet<Calculation> Calculations { get; set; }
+
+        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
+
         public virtual DbSet<Department> Departments { get; set; }
 
         public virtual DbSet<Eligibility> Eligibilities { get; set; }
@@ -22,10 +34,6 @@ namespace StormTestProject
         public virtual DbSet<Currency> Currencies { get; set; }
 
         public virtual DbSet<Country> Countries { get; set; }
-
-        public virtual DbSet<Calculation> Calculations { get; set; }
-
-        public virtual DbSet<CalculationDetails> CalculationDetailses { get; set; }
 
         public virtual DbSet<Policy> Policies { get; set; }
 
@@ -35,26 +43,52 @@ namespace StormTestProject
 
         public virtual DbSet<AssignmentDepartment> AssignmentDepartments { get; set; }
 
-        public virtual DbSet<AssignmentEligibility> AssignmentEligibilities { get; set; }
-
-        public virtual DbSet<Premium> Premiums { get; set; }
-
-        public virtual DbSet<Covered> Covereds { get; set; }
-
-        public virtual DbSet<Comment> Comments { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            InitializeCurrencyFields(modelBuilder);
-            InitializeCountryFields(modelBuilder);
+            InitializeAssignmentEligibilityFields(modelBuilder);
+            InitializePremiumFields(modelBuilder);
             InitializeCalculationFields(modelBuilder);
             InitializeCalculationDetailsFields(modelBuilder);
+            InitializeCurrencyFields(modelBuilder);
+            InitializeCountryFields(modelBuilder);
             InitializePolicyFields(modelBuilder);
             InitializeTaxFields(modelBuilder);
             InitializeAssignmentFields(modelBuilder);
             InitializeAssignmentDepartmentFields(modelBuilder);
-            InitializeAssignmentEligibilityFields(modelBuilder);
-            InitializePremiumFields(modelBuilder);
+        }
+
+        protected virtual void InitializeAssignmentEligibilityFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AssignmentEligibility>()
+                .HasRequired(x => x.Eligibility)
+                .WithMany()
+                .HasForeignKey(x => x.EligibilityId);
+        }
+
+        protected virtual void InitializePremiumFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Premium>()
+                .HasMany(x => x.Comments)
+                .WithOptional()
+                .HasForeignKey(x => x.PremiumId);
+            modelBuilder.Entity<Premium>()
+                .Property(e => e.Amount)
+                .HasPrecision(18, 2);
+        }
+
+        protected virtual void InitializeCalculationFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Calculation>()
+                .HasMany(x => x.CalculationDetailses)
+                .WithRequired()
+                .HasForeignKey(x => x.CalculationId);
+        }
+
+        protected virtual void InitializeCalculationDetailsFields(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CalculationDetails>()
+                .Property(e => e.Value)
+                .HasPrecision(18, 2);
         }
 
         protected virtual void InitializeCurrencyFields(DbModelBuilder modelBuilder)
@@ -73,23 +107,12 @@ namespace StormTestProject
                 .HasForeignKey(x => x.CountryId);
         }
 
-        protected virtual void InitializeCalculationFields(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Calculation>()
-                .HasMany(x => x.CalculationDetailses)
-                .WithRequired()
-                .HasForeignKey(x => x.CalculationId);
-        }
-
-        protected virtual void InitializeCalculationDetailsFields(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<CalculationDetails>()
-                .Property(e => e.Value)
-                .HasPrecision(18, 2);
-        }
-
         protected virtual void InitializePolicyFields(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Policy>()
+                .HasMany(x => x.Comments)
+                .WithOptional()
+                .HasForeignKey(x => x.PolicyId);
             modelBuilder.Entity<Policy>()
                 .HasMany(x => x.Taxes)
                 .WithRequired()
@@ -97,10 +120,6 @@ namespace StormTestProject
             modelBuilder.Entity<Policy>()
                 .HasMany(x => x.Assignments)
                 .WithRequired()
-                .HasForeignKey(x => x.PolicyId);
-            modelBuilder.Entity<Policy>()
-                .HasMany(x => x.Comments)
-                .WithOptional()
                 .HasForeignKey(x => x.PolicyId);
         }
 
@@ -133,25 +152,6 @@ namespace StormTestProject
                 .HasRequired(x => x.Department)
                 .WithMany()
                 .HasForeignKey(x => x.DepartmentId);
-        }
-
-        protected virtual void InitializeAssignmentEligibilityFields(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<AssignmentEligibility>()
-                .HasRequired(x => x.Eligibility)
-                .WithMany()
-                .HasForeignKey(x => x.EligibilityId);
-        }
-
-        protected virtual void InitializePremiumFields(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Premium>()
-                .HasMany(x => x.Comments)
-                .WithOptional()
-                .HasForeignKey(x => x.PremiumId);
-            modelBuilder.Entity<Premium>()
-                .Property(e => e.Amount)
-                .HasPrecision(18, 2);
         }
     }
 }

@@ -35,7 +35,7 @@
             foreach (var field in model.MappingFields.Active())
             {
                 var type = fieldTypeService.GetFieldType(field.DbField.Type, field.DbField.IsNullable);
-                stringGenerator.AppendLine(field.Name + " = " + materializerLineGenerator.GenerateMaterializerLine("reader", type, field.DbField.Index) + ",");
+                stringGenerator.AppendLine(field.Name + " = " + materializerLineGenerator.GenerateMaterializerLine("reader", type, field.DbField.Index - 1) + ",");
             }
         }
     }

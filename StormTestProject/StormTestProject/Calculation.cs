@@ -31,7 +31,7 @@ namespace StormTestProject
         public DateTime? DueDate { get;set; }
 
         #region Navigation properties
-        public virtual ICollection<CalculationDetails> CalculationDetailses
+        public virtual IList<CalculationDetails> CalculationDetailses
         {
             #region implementation
             get
@@ -80,7 +80,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Calculation> sourceQuery;
         private readonly Calculation clonedFrom;
-        private ICollection<CalculationDetails> field0;
+        private IList<CalculationDetails> field0;
         #endregion
 
         #region Constructors
@@ -101,7 +101,7 @@ namespace StormTestProject
 
         public Calculation()
         {
-            field0 = new HashSet<CalculationDetails>();
+            field0 = new List<CalculationDetails>();
             populated = new bool[]{true};
         }
         #endregion

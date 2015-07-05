@@ -23,7 +23,7 @@
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
-            var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing)
+            var usings = model.MappingFields.ActiveSelect(fieldUtility.GetUsing)
                               .Concat(GenerationConstants.ModelGeneration.ModelClassUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
         }
@@ -42,7 +42,7 @@
 
         public void GeneratePrivateFields(Model model, IStringGenerator stringGenerator)
         {
-            if (model.RelationFields.AnyActive())
+            if (model.RelationFields.ActiveAny())
             {
                 stringGenerator.AppendLine("private readonly bool[] populated;");
             }
@@ -73,12 +73,12 @@
                     var field = fields[index];
                     if (field.IsList)
                     {
-                        stringGenerator.AppendLine("field" + index + " = new HashSet<" + field.FieldModel.Name + ">();");
+                        stringGenerator.AppendLine("field" + index + " = new List<" + field.FieldModel.Name + ">();");
                     }
                 }
 
                 var bools = string.Join(", ", Enumerable.Range(1, model.RelationFields.ActiveCount()).Select(x => "true"));
-                if (model.RelationFields.AnyActive())
+                if (model.RelationFields.ActiveAny())
                 {
                     stringGenerator.AppendLine("populated = new bool[]{" + bools + "};");
                 }
@@ -89,7 +89,7 @@
         {
             stringGenerator.AppendLine("this.loadService = loadService;");
             stringGenerator.AppendLine("this.sourceQuery = sourceQuery;");
-            if (model.RelationFields.AnyActive())
+            if (model.RelationFields.ActiveAny())
             {
                 stringGenerator.AppendLine("populated = new bool[" + model.RelationFields.ActiveCount() + "];");
             }
@@ -104,7 +104,7 @@
             stringGenerator.Braces("return clonedFrom;");
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("bool[] ICloneable<" + model.Name + ">.GetPopulated()");
-            stringGenerator.Braces(model.RelationFields.AnyActive() ? "return populated;" : "return null;");
+            stringGenerator.Braces(model.RelationFields.ActiveAny() ? "return populated;" : "return null;");
         }
 
         private void GenerateCloneContent(Model model, IStringGenerator stringGenerator)

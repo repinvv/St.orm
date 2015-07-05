@@ -40,7 +40,7 @@ namespace StormTestProject
         public DateTime Updated { get;set; }
 
         #region Navigation properties
-        public virtual ICollection<Comment> Comments
+        public virtual IList<Comment> Comments
         {
             #region implementation
             get
@@ -89,7 +89,7 @@ namespace StormTestProject
         private readonly ILoadService loadService;
         IQueryable<Premium> sourceQuery;
         private readonly Premium clonedFrom;
-        private ICollection<Comment> field0;
+        private IList<Comment> field0;
         #endregion
 
         #region Constructors
@@ -110,7 +110,7 @@ namespace StormTestProject
 
         public Premium()
         {
-            field0 = new HashSet<Comment>();
+            field0 = new List<Comment>();
             populated = new bool[]{true};
         }
         #endregion

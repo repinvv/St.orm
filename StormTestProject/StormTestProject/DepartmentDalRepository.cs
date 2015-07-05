@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -136,6 +139,41 @@ namespace StormTestProject
                 || entity.Name != existing.Name
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
+        }
+
+        public void Insert(IStormContext context, IList<Department> entities)
+        {
+            using (new ConnectionHandler(context.Connection))
+            {
+                AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);
+            }
+        }
+
+        private void RangeInsert(List<Department> entities, DbConnection connection, DbTransaction transaction)
+        {
+            int i;
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO department");
+            sb.AppendLine("    (name, created, updated");
+            sb.AppendLine("OUTPUT inserted.department_id");
+            sb.AppendLine("VALUES");
+            sb.AppendLine("    (@parm1i0, @parm2i0, @parm3i0)");
+            for (i = 1; i < entities.Count; i++)
+            {
+                sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ")");
+            }
+
+            var parameters = new List<SqlParameter>(entities.Count*3);
+            for (i = 0; i < entities.Count; i++)
+            {
+                var entity = entities[i];
+                parameters.Add(new SqlParameter("@parm1" + i, entity.Name));
+                parameters.Add(new SqlParameter("@parm2" + i, entity.Created));
+                parameters.Add(new SqlParameter("@parm3" + i, entity.Updated));
+            }
+
+            i = 0;
+            AdoCommands.RunCommand(sb.ToString(), parameters.ToArray(), connection, transaction, r => entities[i++].DepartmentId = r.GetInt32(0));
         }
     }
 }

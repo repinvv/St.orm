@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -138,6 +141,10 @@ namespace StormTestProject
             return extension.ExtendEntityChanged(entity, existing)
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
+        }
+
+        public void Insert(IStormContext context, IList<AssignmentEligibility> entities)
+        {
         }
     }
 }

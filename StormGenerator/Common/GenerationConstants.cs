@@ -36,6 +36,9 @@
                 "System.Collections.Generic",
                 "System.Linq",
                 "System.Data",
+                "System.Data.Common",
+                "System.Text",
+                "System.Data.SqlClient",
                 typeof(EmptyRepositoryExtension<>).Namespace,
                 typeof(IDalRepository<,>).Namespace,
                 typeof(SaveService).Namespace

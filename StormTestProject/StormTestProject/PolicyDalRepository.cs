@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -115,6 +118,16 @@ namespace StormTestProject
 
         public void SaveRelations(Policy entity, ISavesCollector saves)
         {
+            if (entity.Comments != null)
+            {
+                foreach (var field in entity.Comments)
+                {
+                    field.PolicyId = entity.PolicyId;
+                }
+            }
+
+            SaveService.Save<Comment, Comment>(entity.Comments, saves);
+
             if (entity.Taxes != null)
             {
                 foreach (var field in entity.Taxes)
@@ -135,16 +148,6 @@ namespace StormTestProject
 
             SaveService.Save<Assignment, Assignment>(entity.Assignments, saves);
 
-            if (entity.Comments != null)
-            {
-                foreach (var field in entity.Comments)
-                {
-                    field.PolicyId = entity.PolicyId;
-                }
-            }
-
-            SaveService.Save<Comment, Comment>(entity.Comments, saves);
-
             extension.ExtendSaveRelations(entity, saves);
         }
 
@@ -152,32 +155,6 @@ namespace StormTestProject
         {
             var populated = (entity as ICloneable<Policy>).GetPopulated();
             if(populated[1])
-            {
-                if (entity.Taxes != null)
-                {
-                    foreach (var field in entity.Taxes)
-                    {
-                        field.PolicyId = entity.PolicyId;
-                    }
-                }
-
-                SaveService.Update<Tax, Tax>(entity.Taxes, existing.Taxes, saves);
-            }
-
-            if(populated[2])
-            {
-                if (entity.Assignments != null)
-                {
-                    foreach (var field in entity.Assignments)
-                    {
-                        field.PolicyId = entity.PolicyId;
-                    }
-                }
-
-                SaveService.Update<Assignment, Assignment>(entity.Assignments, existing.Assignments, saves);
-            }
-
-            if(populated[3])
             {
                 if (entity.Comments != null)
                 {
@@ -190,14 +167,40 @@ namespace StormTestProject
                 SaveService.Update<Comment, Comment>(entity.Comments, existing.Comments, saves);
             }
 
+            if(populated[2])
+            {
+                if (entity.Taxes != null)
+                {
+                    foreach (var field in entity.Taxes)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Tax, Tax>(entity.Taxes, existing.Taxes, saves);
+            }
+
+            if(populated[3])
+            {
+                if (entity.Assignments != null)
+                {
+                    foreach (var field in entity.Assignments)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Assignment, Assignment>(entity.Assignments, existing.Assignments, saves);
+            }
+
             extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Policy entity, ISavesCollector saves)
         {
+            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
             SaveService.Delete<Tax, Tax>(entity.Taxes, saves);
             SaveService.Delete<Assignment, Assignment>(entity.Assignments, saves);
-            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
         }
 
         private void SetMtoFields(Policy entity)
@@ -216,6 +219,43 @@ namespace StormTestProject
                 || entity.Name != existing.Name
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
+        }
+
+        public void Insert(IStormContext context, IList<Policy> entities)
+        {
+            using (new ConnectionHandler(context.Connection))
+            {
+                AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);
+            }
+        }
+
+        private void RangeInsert(List<Policy> entities, DbConnection connection, DbTransaction transaction)
+        {
+            int i;
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO model.policy");
+            sb.AppendLine("    (country_id, currency_id, name, created, updated");
+            sb.AppendLine("OUTPUT inserted.policy_id");
+            sb.AppendLine("VALUES");
+            sb.AppendLine("    (@parm1i0, @parm2i0, @parm3i0, @parm4i0, @parm5i0)");
+            for (i = 1; i < entities.Count; i++)
+            {
+                sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ", @parm4i" + i + ", @parm5i" + i + ")");
+            }
+
+            var parameters = new List<SqlParameter>(entities.Count*5);
+            for (i = 0; i < entities.Count; i++)
+            {
+                var entity = entities[i];
+                parameters.Add(new SqlParameter("@parm1" + i, entity.CountryId));
+                parameters.Add(new SqlParameter("@parm2" + i, entity.CurrencyId));
+                parameters.Add(new SqlParameter("@parm3" + i, entity.Name));
+                parameters.Add(new SqlParameter("@parm4" + i, entity.Created));
+                parameters.Add(new SqlParameter("@parm5" + i, entity.Updated));
+            }
+
+            i = 0;
+            AdoCommands.RunCommand(sb.ToString(), parameters.ToArray(), connection, transaction, r => entities[i++].PolicyId = r.GetInt32(0));
         }
     }
 }

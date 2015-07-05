@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -143,6 +146,10 @@ namespace StormTestProject
                 || entity.Year != existing.Year
                 || entity.Month != existing.Month
                 || entity.Value != existing.Value;
+        }
+
+        public void Insert(IStormContext context, IList<CalculationDetails> entities)
+        {
         }
     }
 }

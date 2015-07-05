@@ -21,7 +21,7 @@
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
-            foreach (var field in model.RelationFields.Where(x => !x.Cascade).Active())
+            foreach (var field in model.RelationFields.Active(x => !x.Cascade))
             {
                 relationsGeneratorFactory.GetRelationsGenerator(field)
                                          .GenerateDeleteRelation(field, stringGenerator);

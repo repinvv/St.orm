@@ -39,7 +39,7 @@
 
         private void GenerateModelDefinition(Model model, IStringGenerator stringGenerator)
         {
-            if (model.IsStruct && model.RelationFields.AnyActive())
+            if (model.IsStruct && model.RelationFields.ActiveAny())
             {
                 throw new Exception("Struct types can't have navigation properties.");
             }
@@ -96,7 +96,7 @@
 
         private void GenerateProperties(Model model, IModelPartsGenerator partGenerator, IStringGenerator stringGenerator)
         {
-            var names = nameNormalizer.NormalizeNames(model.MappingFields.Active().Select(x => x.Name).ToList());
+            var names = nameNormalizer.NormalizeNames(model.MappingFields.ActiveSelect(x => x.Name).ToList());
             var fields = model.MappingFields.Active();
             for (int index = 0; index < fields.Count; index++)
             {

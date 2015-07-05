@@ -1,6 +1,8 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsCollections
 {
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
+    using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Persistence;
+    using StormGenerator.Models.Pregen;
 
     internal class CommonMethodsCollection : IMethodsCollection
     {
@@ -24,7 +26,7 @@
                          };
         }
 
-        public IMethodGenerator[] GetGeneratorsCollection()
+        public IMethodGenerator[] GetGeneratorsCollection(Model model)
         {
             return generators;
         }

@@ -5,35 +5,35 @@
 
     internal class MethodsCollectionFactory
     {
-        private IMethodGenerator[] structureMethods;
-        private IMethodGenerator[] plainClassMethods;
-        private IMethodGenerator[] baseClassMethods;
-        private IMethodGenerator[] inheritedClassMethods;
+        private readonly StructureMethodsCollection structureMethodsCollection;
+        private readonly PlainClassMethodsCollection plainClassMethodsCollection;
+        private readonly BaseClassMethodsCollection baseClassMethodsCollection;
+        private readonly InheritedClassMethodsCollection inheritedClassMethodsCollection;
 
         public MethodsCollectionFactory(StructureMethodsCollection structureMethodsCollection,
             PlainClassMethodsCollection plainClassMethodsCollection,
             BaseClassMethodsCollection baseClassMethodsCollection,
             InheritedClassMethodsCollection inheritedClassMethodsCollection)
         {
-            structureMethods = structureMethodsCollection.GetGeneratorsCollection();
-            baseClassMethods = baseClassMethodsCollection.GetGeneratorsCollection();
-            inheritedClassMethods = inheritedClassMethodsCollection.GetGeneratorsCollection();
-            plainClassMethods = plainClassMethodsCollection.GetGeneratorsCollection();
+            this.structureMethodsCollection = structureMethodsCollection;
+            this.plainClassMethodsCollection = plainClassMethodsCollection;
+            this.baseClassMethodsCollection = baseClassMethodsCollection;
+            this.inheritedClassMethodsCollection = inheritedClassMethodsCollection;
         }
 
         public IMethodGenerator[] GetRepositoryMethods(Model model)
         {
             if (model.IsStruct)
             {
-                return structureMethods;
+                return structureMethodsCollection.GetGeneratorsCollection(model);
             }
 
             if (model.IsInherited)
             {
-                return inheritedClassMethods;
+                return inheritedClassMethodsCollection.GetGeneratorsCollection(model);
             }
 
-            return plainClassMethods;
+            return plainClassMethodsCollection.GetGeneratorsCollection(model);
         }
     }
 }

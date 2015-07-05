@@ -40,9 +40,9 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static IList<T> AsList<T>(this IEnumerable<T> input)
+        public static List<T> AsList<T>(this IEnumerable<T> input)
         {
-            return input as IList<T> ?? input.ToList();
+            return input as List<T> ?? input.ToList();
         }
     }
 }

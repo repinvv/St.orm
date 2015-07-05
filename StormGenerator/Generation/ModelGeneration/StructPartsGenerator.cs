@@ -1,6 +1,5 @@
 ﻿namespace StormGenerator.Generation.ModelGeneration
 {
-    using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
@@ -22,7 +21,7 @@
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
         {
-            var usings = model.MappingFields.Active().Select(fieldUtility.GetUsing);
+            var usings = model.MappingFields.ActiveSelect(fieldUtility.GetUsing);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
         }
 

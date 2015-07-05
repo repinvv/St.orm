@@ -11,7 +11,10 @@ namespace StormTestProject
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
+    using System.Data.SqlClient;
     using System.Linq;
+    using System.Text;
     using St.Orm;
     using St.Orm.Implementation;
     using St.Orm.Interfaces;
@@ -162,6 +165,42 @@ namespace StormTestProject
                 || entity.CurrencyCode != existing.CurrencyCode
                 || entity.Created != existing.Created
                 || entity.Updated != existing.Updated;
+        }
+
+        public void Insert(IStormContext context, IList<Currency> entities)
+        {
+            using (new ConnectionHandler(context.Connection))
+            {
+                AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);
+            }
+        }
+
+        private void RangeInsert(List<Currency> entities, DbConnection connection, DbTransaction transaction)
+        {
+            int i;
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO currency");
+            sb.AppendLine("    (name, currency_code, created, updated");
+            sb.AppendLine("OUTPUT inserted.currency_id");
+            sb.AppendLine("VALUES");
+            sb.AppendLine("    (@parm1i0, @parm2i0, @parm3i0, @parm4i0)");
+            for (i = 1; i < entities.Count; i++)
+            {
+                sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ", @parm4i" + i + ")");
+            }
+
+            var parameters = new List<SqlParameter>(entities.Count*4);
+            for (i = 0; i < entities.Count; i++)
+            {
+                var entity = entities[i];
+                parameters.Add(new SqlParameter("@parm1" + i, entity.Name));
+                parameters.Add(new SqlParameter("@parm2" + i, entity.CurrencyCode));
+                parameters.Add(new SqlParameter("@parm3" + i, entity.Created));
+                parameters.Add(new SqlParameter("@parm4" + i, entity.Updated));
+            }
+
+            i = 0;
+            AdoCommands.RunCommand(sb.ToString(), parameters.ToArray(), connection, transaction, r => entities[i++].CurrencyId = r.GetInt32(0));
         }
     }
 }

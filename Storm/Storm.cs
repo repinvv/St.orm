@@ -41,13 +41,14 @@
             }
 
             var saves = new SavesCollector(context);
-            var existing = new List<TDal>(entities.Count);
-            foreach (var entity in entities)
+            var list = entities.AsList();
+            var existing = new List<TDal>(list.Count);
+            foreach (var entity in list)
             {
                 existing.Add((entity as ICloneable<TDal>).ClonedFrom());
             }
-                
-            SaveService.Update<TDal, TDal>(entities, existing, saves);
+
+            SaveService.Update<TDal, TDal>(list, existing, saves);
             saves.Commit();
         }
 
@@ -61,11 +62,11 @@
             var saves = new SavesCollector(context);
             if (existing == null)
             {
-                SaveService.Save<TDal, TDal>(entities, saves);
+                SaveService.Save<TDal, TDal>(entities.AsList(), saves);
             }
             else
             {
-                SaveService.Update<TDal, TDal>(entities, existing, saves);
+                SaveService.Update<TDal, TDal>(entities.AsList(), existing, saves);
             }
 
             saves.Commit();

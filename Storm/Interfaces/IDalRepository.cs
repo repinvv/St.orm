@@ -30,6 +30,6 @@
 
         bool EntityChanged(TDal entity, TDal existing);
 
-        void Insert(IStormContext context, ICollection<TDal> entities);
+        void Insert(IStormContext context, IList<TDal> entities);
     }
 }

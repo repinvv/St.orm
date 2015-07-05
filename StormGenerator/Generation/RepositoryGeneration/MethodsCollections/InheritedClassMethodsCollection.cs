@@ -2,26 +2,26 @@
 {
     using System.Linq;
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
+    using StormGenerator.Models.Pregen;
 
     internal class InheritedClassMethodsCollection : IMethodsCollection
     {
+        private readonly CommonMethodsCollection commonMethodsCollection;
         private readonly IMethodGenerator[] generators;
 
         public InheritedClassMethodsCollection(CommonMethodsCollection commonMethodsCollection,
             FullCreateGenerator fullCreateGenerator)
         {
-            generators = commonMethodsCollection
-                .GetGeneratorsCollection()
-                .Concat(new IMethodGenerator[]
-                        {
-                            fullCreateGenerator
-                        })
-                .ToArray();
+            this.commonMethodsCollection = commonMethodsCollection;
+            generators = new IMethodGenerator[]
+                         {
+                             fullCreateGenerator
+                         };
         }
 
-        public IMethodGenerator[] GetGeneratorsCollection()
+        public IMethodGenerator[] GetGeneratorsCollection(Model model)
         {
-            return generators;
+            return commonMethodsCollection.GetGeneratorsCollection(model).Concat(generators).ToArray();
         }
     }
 }

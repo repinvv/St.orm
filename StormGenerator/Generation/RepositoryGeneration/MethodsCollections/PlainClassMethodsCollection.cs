@@ -3,12 +3,16 @@
     using System.Linq;
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration;
     using StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Regular;
+    using StormGenerator.Models.Pregen;
 
     internal class PlainClassMethodsCollection : IMethodsCollection
     {
+        private readonly CommonMethodsCollection commonMethodsCollection;
+        private readonly PersistenceMethodCollection persistenceMethodCollection;
         private readonly IMethodGenerator[] generators;
 
         public PlainClassMethodsCollection(CommonMethodsCollection commonMethodsCollection,
+            PersistenceMethodCollection persistenceMethodCollection,
             SaveGenerator saveGenerator,
             UpdateGenerator updateGenerator,
             DeleteGenerator deleteGenerator,
@@ -18,25 +22,27 @@
             SetMtoFieldsGenerator setMtoFieldsGenerator,
             EntityChangedGenerator entityChangedGenerator)
         {
-            generators = commonMethodsCollection
-                .GetGeneratorsCollection()
-                .Concat(new IMethodGenerator[]
-                        {
-                            saveGenerator,
-                            updateGenerator,
-                            deleteGenerator,
-                            saveRelationsGenerator,
-                            updateRelationsGenerator,
-                            deleteRelationsGenerator,
-                            setMtoFieldsGenerator,
-                            entityChangedGenerator
-                        })
-                .ToArray();
+            this.commonMethodsCollection = commonMethodsCollection;
+            this.persistenceMethodCollection = persistenceMethodCollection;
+            generators = new IMethodGenerator[]
+                         {
+                             saveGenerator,
+                             updateGenerator,
+                             deleteGenerator,
+                             saveRelationsGenerator,
+                             updateRelationsGenerator,
+                             deleteRelationsGenerator,
+                             setMtoFieldsGenerator,
+                             entityChangedGenerator
+                         };
         }
 
-        public IMethodGenerator[] GetGeneratorsCollection()
+        public IMethodGenerator[] GetGeneratorsCollection(Model model)
         {
-            return generators;
+            return commonMethodsCollection.GetGeneratorsCollection(model)
+                .Concat(generators)
+                .Concat(persistenceMethodCollection.GetGeneratorsCollection(model))
+                .ToArray();
         }
     }
 }
