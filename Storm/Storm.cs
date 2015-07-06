@@ -33,6 +33,18 @@
             saves.Commit();
         }
 
+        public static void Save<TDal>(TDal entity, TDal existing, IStormContext context)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentException("entity");
+            }
+
+            var saves = new SavesCollector(context);
+            SaveService.Update<TDal, TDal>(entity, existing, saves);
+            saves.Commit();
+        }
+
         public static void Save<TDal>(ICollection<TDal> entities, IStormContext context)
         {
             if (entities == null)

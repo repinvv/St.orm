@@ -57,121 +57,131 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assignment.cs">
+    <Compile Include="StormModel\Assignment.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssignmentDalRepository.cs">
+    <Compile Include="StormModel\AssignmentDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssignmentDepartment.cs">
+    <Compile Include="StormModel\AssignmentDepartment.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssignmentDepartmentDalRepository.cs">
+    <Compile Include="StormModel\AssignmentDepartmentDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssignmentEligibility.cs">
+    <Compile Include="StormModel\AssignmentEligibility.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssignmentEligibilityDalRepository.cs">
+    <Compile Include="StormModel\AssignmentEligibilityDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Calculation.cs">
+    <Compile Include="StormModel\Calculation.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CalculationDalRepository.cs">
+    <Compile Include="StormModel\CalculationDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CalculationDetails.cs">
+    <Compile Include="StormModel\CalculationDetails.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CalculationDetailsDalRepository.cs">
+    <Compile Include="StormModel\CalculationDetailsDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Comment.cs">
+    <Compile Include="StormModel\Comment.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CommentDalRepository.cs">
+    <Compile Include="StormModel\CommentDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Country.cs">
+    <Compile Include="StormModel\Country.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CountryDalRepository.cs">
+    <Compile Include="StormModel\CountryDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Covered.cs">
+    <Compile Include="StormModel\Covered.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CoveredDalRepository.cs">
+    <Compile Include="StormModel\CoveredDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Currency.cs">
+    <Compile Include="StormModel\Currency.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CurrencyDalRepository.cs">
+    <Compile Include="StormModel\CurrencyDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Department.cs">
+    <Compile Include="StormModel\Department.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="DepartmentDalRepository.cs">
+    <Compile Include="StormModel\DepartmentDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Eligibility.cs">
+    <Compile Include="StormModel\Eligibility.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EligibilityDalRepository.cs">
+    <Compile Include="StormModel\EligibilityDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Policy.cs">
+    <Compile Include="StormModel\Policy.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="PolicyDalRepository.cs">
+    <Compile Include="StormModel\PolicyDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Premium.cs">
+    <Compile Include="Tests\Basic\StormInsertAndReadTest.cs" />
+    <Compile Include="Tests\Helpers\AssignmentHelper.cs" />
+    <Compile Include="Tests\Helpers\CommentHelper.cs" />
+    <Compile Include="Tests\Helpers\CountryHelper.cs" />
+    <Compile Include="Tests\Helpers\CurrencyHelper.cs" />
+    <Compile Include="Tests\Helpers\PolicyHelper.cs" />
+    <Compile Include="StormModel\Premium.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="PremiumDalRepository.cs">
+    <Compile Include="StormModel\PremiumDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.AdoCommands.cs">
+    <Compile Include="StormModel\Storm.AdoCommands.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.Commands.cs">
+    <Compile Include="StormModel\Storm.Commands.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.ConnectionHandler.cs">
+    <Compile Include="StormModel\Storm.ConnectionHandler.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.DalRepositoryStorage.cs">
+    <Compile Include="StormModel\Storm.DalRepositoryStorage.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.StormTestContext.cs">
+    <Compile Include="StormModel\Storm.StormTestContext.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Storm.StormTestContextExtension.cs">
+    <Compile Include="StormModel\Storm.StormTestContextExtension.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="StormEntities.cs">
+    <Compile Include="StormModel\StormEntities.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="StormTest.cs" />
+    <Compile Include="Tests\Basic\StormTestEf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tax.cs">
+    <Compile Include="Tests\Basic\StormTestInsert.cs" />
+    <Compile Include="StormModel\Tax.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="TaxDalRepository.cs">
+    <Compile Include="StormModel\TaxDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tests\Helpers\TaxHelper.cs" />
+    <Compile Include="Tests\Infrastructure\TestConfig.cs" />
+    <Compile Include="Tests\Infrastructure\IoC.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Config.storm" />
+    <None Include="StormModel\Config.storm" />
     <None Include="packages.config" />
-    <None Include="StormEntities.tt">
+    <None Include="StormModel\StormEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StormEntities.cs</LastGenOutput>
     </None>
@@ -185,6 +195,7 @@
     <Content Include="DatabaseScripts\CreateTables.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\Project.Targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

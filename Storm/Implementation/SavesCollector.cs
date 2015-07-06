@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using St.Orm.Implementation.Lists;
     using St.Orm.Interfaces;
 
@@ -33,6 +34,11 @@
 
         public void Commit()
         {
+            if (!saves.Any())
+            {
+                return;
+            }
+
             foreach (var group in saves.Values)
             {
                 group.PersistenceAction(Context);
@@ -44,12 +50,14 @@
             {
                 group.RelationAction(nextTierCollector);
             }
+
+            nextTierCollector.Commit();
         }
 
         private T Get<T>(Dictionary<Type, IEntityList> dict, Type type, Func<T> create) where T : class, IEntityList
         {
             IEntityList list;
-            if (!saves.TryGetValue(type, out list))
+            if (!dict.TryGetValue(type, out list))
             {
                 var save = create();
                 saves[type] = save;

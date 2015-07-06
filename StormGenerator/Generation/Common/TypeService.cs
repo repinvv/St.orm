@@ -34,6 +34,11 @@
             return IsDefinedGeneric(type, typeof(Nullable<>));
         }
 
+        public bool CanBeNull(Type type)
+        {
+            return IsNullable(type) || type == typeof(string) || type == typeof(byte[]);
+        }
+
         private bool IsDefinedGeneric(Type type, Type genType)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == genType;
