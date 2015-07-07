@@ -123,6 +123,7 @@
     <Compile Include="Generation\StaticFilesGeneration\StormCommandsGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
+    <Compile Include="Infrastructure\OptionsService.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
     <Compile Include="Generation\Common\FieldTypeService.cs" />

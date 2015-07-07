@@ -27,6 +27,7 @@
 	{
         OutputNamespace = "StormTestProject.StormModel",
 		ContextName = "StormTestContext",
+		CustomInterfaceForEntities = "IDbEntity",
 	    SettingsFile = currentPath + @"\config.storm",
         ForceLoadDbInfo = true,        
 		ConnectionString = null,

@@ -6,12 +6,12 @@
 
     internal class AdoCommandsGenerator : IStaticFileGenerator
     {
-        public string GetName(Options options)
+        public string GetName()
         {
             return "Storm.AdoCommands";
         }
 
-        public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
+        public void GenerateContent(List<Model> models, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine(@"using System;
     using System.Collections.Generic;

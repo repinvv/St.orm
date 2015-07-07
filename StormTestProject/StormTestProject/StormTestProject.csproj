@@ -123,6 +123,8 @@
     <Compile Include="StormModel\EligibilityDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormModel\IDbEntity.cs" />
+    <Compile Include="StormModel\PersistenceEvents.cs" />
     <Compile Include="StormModel\Policy.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

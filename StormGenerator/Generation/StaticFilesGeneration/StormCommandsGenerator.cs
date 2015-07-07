@@ -9,12 +9,12 @@
 
     internal class StormCommandsGenerator : IStaticFileGenerator
     {
-        public string GetName(Options options)
+        public string GetName()
         {
             return "Storm.Commands";
         }
 
-        public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
+        public void GenerateContent(List<Model> models, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine(@"using System.Collections.Generic;
     using System.Linq;

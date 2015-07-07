@@ -27,9 +27,9 @@
             this.sequencer = sequencer;
         }
 
-        public List<DbModel> GetModels(Options options)
+        public List<DbModel> GetModels()
         {
-            using (var connection = connectionCreator.CreateConnection(options))
+            using (var connection = connectionCreator.CreateConnection())
             {
                 connection.Open();
                 var models = tableReader.ReadTables(connection);

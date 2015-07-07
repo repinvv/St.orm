@@ -8,8 +8,10 @@
     {
         public List<GeneratedFile> Generate(Options options)
         {
-            var generator = new Container().Get<Generator>();
-            return generator.Generate(options);
+            var container = new Container();
+            container.Get<OptionsService>().Options = options;
+            var generator = container.Get<Generator>();
+            return generator.Generate();
         }
     }
 }

@@ -8,6 +8,8 @@
 
         public string SettingsFile { get; set; }
 
+        public string CustomInterfaceForEntities { get; set; }
+
         public bool ForceLoadDbInfo { get; set; }
 
         public string ConnectionString { get; set; }

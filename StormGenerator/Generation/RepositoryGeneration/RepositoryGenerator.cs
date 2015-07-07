@@ -31,10 +31,10 @@
             this.generics = generics;
         }
 
-        public GeneratedFile GenerateRepository(Model model, Options options)
+        public GeneratedFile GenerateRepository(Model model)
         {
             var name = model.Name + GenerationConstants.ModelGeneration.RepositorySuffix;
-            return fileGenerator.GenerateFile(name, options, stringGenerator => GenerateDefinition(model, stringGenerator));
+            return fileGenerator.GenerateFile(name, stringGenerator => GenerateDefinition(model, stringGenerator));
         }
 
         private void GenerateDefinition(Model model, IStringGenerator stringGenerator)

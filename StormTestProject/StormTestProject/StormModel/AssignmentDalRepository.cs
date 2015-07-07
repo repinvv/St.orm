@@ -279,7 +279,6 @@ namespace StormTestProject.StormModel
             }
 
             SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
-            SaveService.Delete<Covered, Covered>(entity.Covereds, saves);
         }
 
         private void SetMtoFields(Assignment entity)
