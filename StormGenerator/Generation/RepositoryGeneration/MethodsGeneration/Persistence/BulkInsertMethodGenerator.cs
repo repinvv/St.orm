@@ -1,17 +1,15 @@
 ﻿namespace StormGenerator.Generation.RepositoryGeneration.MethodsGeneration.Persistence
 {
-    using StormGenerator.Generation.RepositoryGeneration.Common;
+    using System.Linq;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
-    internal class IdentityInsertGenerator : IMethodGenerator
+    internal class BulkInsertMethodGenerator : IMethodGenerator
     {
-        private readonly SplitRunCount splitRunCount;
         private readonly PersistenceEventGenerator persistenceEventGenerator;
 
-        public IdentityInsertGenerator(SplitRunCount splitRunCount, PersistenceEventGenerator persistenceEventGenerator)
+        public BulkInsertMethodGenerator(PersistenceEventGenerator persistenceEventGenerator)
         {
-            this.splitRunCount = splitRunCount;
             this.persistenceEventGenerator = persistenceEventGenerator;
         }
 
@@ -23,8 +21,6 @@
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             persistenceEventGenerator.GeneratePreInsert(model, stringGenerator);
-            stringGenerator.AppendLine("using (new ConnectionHandler(context.Connection))");
-            stringGenerator.Braces("AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), " + splitRunCount.Get(model) + ");");
         }
     }
 }

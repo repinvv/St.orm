@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("policy", Schema = "model")]
-    public partial class Policy : ICloneable<Policy>, IEquatable<Policy>, IHaveId
+    public partial class Policy : ICloneable<Policy>, IEquatable<Policy>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

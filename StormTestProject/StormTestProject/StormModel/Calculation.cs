@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("calculation", Schema = "stats")]
-    public partial class Calculation : ICloneable<Calculation>, IEquatable<Calculation>, IHaveId
+    public partial class Calculation : ICloneable<Calculation>, IEquatable<Calculation>, IHaveId, IDbEntity
     {
         [Key]
         [Column("calculation_id", Order = 1)]

@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("country", Schema = "dbo")]
-    public partial class Country : ICloneable<Country>, IEquatable<Country>, IHaveId
+    public partial class Country : ICloneable<Country>, IEquatable<Country>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

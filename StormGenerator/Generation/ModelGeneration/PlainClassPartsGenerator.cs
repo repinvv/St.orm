@@ -3,6 +3,7 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Generation.Common;
+    using StormGenerator.Infrastructure;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -11,14 +12,17 @@
         private readonly TypeService service;
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
+        private readonly OptionsService options;
 
         public PlainClassPartsGenerator(TypeService service,
             UsingsGenerator usingsGenerator,
-            FieldUtility fieldUtility)
+            FieldUtility fieldUtility,
+            OptionsService options)
         {
             this.service = service;
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
+            this.options = options;
         }
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
@@ -31,8 +35,11 @@
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
             var haveId = model.Parent.MappingFields.Count(x => x.DbField.IsPrimaryKey) == 1 ? ", IHaveId" : string.Empty;
+            var customInterface = string.IsNullOrWhiteSpace(options.Options.CustomInterfaceForEntities)
+                                      ? string.Empty
+                                      : ", " + options.Options.CustomInterfaceForEntities.Trim();
             stringGenerator.AppendLine("public partial class " + model.Name + " : ICloneable<" + model.Name +
-                                       ">, IEquatable<" + model.Name + ">" + haveId);
+                                       ">, IEquatable<" + model.Name + ">" + haveId + customInterface);
         }
 
         public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)

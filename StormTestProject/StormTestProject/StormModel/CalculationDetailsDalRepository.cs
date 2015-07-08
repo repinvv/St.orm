@@ -150,6 +150,11 @@ namespace StormTestProject.StormModel
 
         public void Insert(IStormContext context, IList<CalculationDetails> entities)
         {
+            for (int index = 0; index < entities.Count; index++)
+            {
+                PersistenceEvents.BeforeInsert(entities[index]);
+            }
+
         }
     }
 }

@@ -87,6 +87,8 @@
     <Compile Include="StormModel\CalculationDetailsDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormModel\CalculationDetailsPartial.cs" />
+    <Compile Include="StormModel\CalculationPartial.cs" />
     <Compile Include="StormModel\Comment.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

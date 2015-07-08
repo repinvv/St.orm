@@ -1,6 +1,7 @@
 ﻿namespace StormGenerator.Generation.ModelGeneration
 {
     using StormGenerator.Common;
+    using StormGenerator.Infrastructure;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -9,14 +10,17 @@
         private readonly UsingsGenerator usingsGenerator;
         private readonly FieldUtility fieldUtility;
         private readonly PlainClassPartsGenerator classPartsGenerator;
+        private readonly OptionsService options;
 
         public StructPartsGenerator(UsingsGenerator usingsGenerator, 
             FieldUtility fieldUtility, 
-            PlainClassPartsGenerator classPartsGenerator)
+            PlainClassPartsGenerator classPartsGenerator, 
+            OptionsService options)
         {
             this.usingsGenerator = usingsGenerator;
             this.fieldUtility = fieldUtility;
             this.classPartsGenerator = classPartsGenerator;
+            this.options = options;
         }
 
         public void GenerateUsings(Model model, IStringGenerator stringGenerator)
@@ -27,7 +31,10 @@
 
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public partial struct " + model.Name);
+            var customInterface = string.IsNullOrWhiteSpace(options.Options.CustomInterfaceForEntities)
+                                      ? string.Empty
+                                      : " : " + options.Options.CustomInterfaceForEntities.Trim();
+            stringGenerator.AppendLine("public partial struct " + model.Name + customInterface);
         }
 
         public void GenerateMappingProperty(Model model, MappingField field, IStringGenerator stringGenerator)

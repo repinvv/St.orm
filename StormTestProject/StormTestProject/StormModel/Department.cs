@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("department", Schema = "dbo")]
-    public partial class Department : ICloneable<Department>, IEquatable<Department>, IHaveId
+    public partial class Department : ICloneable<Department>, IEquatable<Department>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

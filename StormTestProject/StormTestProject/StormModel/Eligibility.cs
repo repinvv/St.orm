@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("eligibility", Schema = "dbo")]
-    public partial class Eligibility : ICloneable<Eligibility>, IEquatable<Eligibility>, IHaveId
+    public partial class Eligibility : ICloneable<Eligibility>, IEquatable<Eligibility>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
