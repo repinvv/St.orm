@@ -7,7 +7,7 @@
     using StormTestProject.Tests.Infrastructure;
 
     [TestClass]
-    public class StormTestEf
+    public class EfTest
     {
         [TestMethod]
         public void Ef_InsertsAndReadsWithGeneratedModels()

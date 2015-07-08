@@ -25,44 +25,60 @@
             this.commentHelper = commentHelper;
         }
 
-        public Policy CreatePolicyWith5ChildsEach()
+        public Policy CreatePolicy()
         {
             return new Policy
                    {
                        Name = "my policy",
-                       CountryId = countryHelper.CreateAndSaveCountry()
-                                                .CountryId,
-                       CurrencyId = currencyHelper.CreateAndSaveCurrency()
-                                                  .CurrencyId,
-                       Created = DateTime.Now, Updated = DateTime.Now,
-                       Assignments =
-                           new List<Assignment>
-                           {
-                               assignmentHelper.CreateAssignment(),
-                               assignmentHelper.CreateAssignment(),
-                               assignmentHelper.CreateAssignment(),
-                               assignmentHelper.CreateAssignment(),
-                               assignmentHelper.CreateAssignment(),
-                           },
-                       Taxes =
-                           new List<Tax>
-                           {
-                               taxHelper.CreateTax(),
-                               taxHelper.CreateTax(),
-                               taxHelper.CreateTax(),
-                               taxHelper.CreateTax(),
-                               taxHelper.CreateTax(),
-                           },
-                       Comments =
-                           new List<Comment>
-                           {
-                               commentHelper.CreateComment(),
-                               commentHelper.CreateComment(),
-                               commentHelper.CreateComment(),
-                               commentHelper.CreateComment(),
-                               commentHelper.CreateComment(),
-                           }
+                       CountryId = countryHelper.CreateAndSaveCountry().CountryId,
+                       CurrencyId = currencyHelper.CreateAndSaveCurrency().CurrencyId,
+                       Created = DateTime.Now, 
+                       Updated = DateTime.Now,
                    };
+        }
+
+        public Policy CreatePolicyWith5ChildsEach()
+        {
+            var policy = CreatePolicy();
+            policy.Assignments =
+                new List<Assignment>
+                {
+                    assignmentHelper.CreateAssignment(),
+                    assignmentHelper.CreateAssignment(),
+                    assignmentHelper.CreateAssignment(),
+                    assignmentHelper.CreateAssignment(),
+                    assignmentHelper.CreateAssignment(),
+                };
+            policy.Taxes =
+                new List<Tax>
+                {
+                    taxHelper.CreateTax(),
+                    taxHelper.CreateTax(),
+                    taxHelper.CreateTax(),
+                    taxHelper.CreateTax(),
+                    taxHelper.CreateTax(),
+                };
+            policy.Comments =
+                new List<Comment>
+                {
+                    commentHelper.CreateComment(),
+                    commentHelper.CreateComment(),
+                    commentHelper.CreateComment(),
+                    commentHelper.CreateComment(),
+                    commentHelper.CreateComment(),
+                };
+            return policy;
+        }
+
+        public Policy CreatePolicyWith2Taxes()
+        {
+            var policy = CreatePolicy();
+            policy.Taxes = new List<Tax>
+                           {
+                               taxHelper.CreateTax(),
+                               taxHelper.CreateTax()
+                           };
+            return policy;
         }
     }
 }

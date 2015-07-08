@@ -1,15 +1,14 @@
-﻿namespace StormTestProject.Tests.Basic
+﻿namespace StormTestProject.Tests.Basic.ActualTests
 {
-    using System.Linq;
     using StormTestProject.StormModel;
     using StormTestProject.Tests.Helpers;
 
-    internal class StormInsertAndReadTest
+    internal class ActualInsertTest
     {
         private readonly StormTestContext context;
         private readonly PolicyHelper policyHelper;
 
-        public StormInsertAndReadTest(StormTestContext context, PolicyHelper policyHelper)
+        public ActualInsertTest(StormTestContext context, PolicyHelper policyHelper)
         {
             this.context = context;
             this.policyHelper = policyHelper;

@@ -129,7 +129,8 @@
     <Compile Include="StormModel\PolicyDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Tests\Basic\StormInsertAndReadTest.cs" />
+    <Compile Include="Tests\Basic\ActualTests\ActualInsertTest.cs" />
+    <Compile Include="Tests\Basic\TransactionalLockTest.cs" />
     <Compile Include="Tests\Helpers\AssignmentHelper.cs" />
     <Compile Include="Tests\Helpers\CommentHelper.cs" />
     <Compile Include="Tests\Helpers\CountryHelper.cs" />
@@ -164,9 +165,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Tests\Basic\StormTestEf.cs" />
+    <Compile Include="Tests\Basic\EfTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Basic\StormTestInsert.cs" />
+    <Compile Include="Tests\Basic\InsertTest.cs" />
     <Compile Include="StormModel\Tax.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
