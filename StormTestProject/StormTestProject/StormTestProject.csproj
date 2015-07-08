@@ -87,6 +87,8 @@
     <Compile Include="StormModel\CalculationDetailsDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormModel\CalculationDetailsPartial.cs" />
+    <Compile Include="StormModel\CalculationPartial.cs" />
     <Compile Include="StormModel\Comment.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -123,6 +125,8 @@
     <Compile Include="StormModel\EligibilityDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormModel\IDbEntity.cs" />
+    <Compile Include="StormModel\PersistenceEvents.cs" />
     <Compile Include="StormModel\Policy.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

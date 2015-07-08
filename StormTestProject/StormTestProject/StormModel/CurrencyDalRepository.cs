@@ -169,6 +169,11 @@ namespace StormTestProject.StormModel
 
         public void Insert(IStormContext context, IList<Currency> entities)
         {
+            for (int index = 0; index < entities.Count; index++)
+            {
+                PersistenceEvents.BeforeInsert(entities[index]);
+            }
+
             using (new ConnectionHandler(context.Connection))
             {
                 AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);

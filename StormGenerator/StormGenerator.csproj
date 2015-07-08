@@ -84,7 +84,8 @@
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\MethodGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\IdentityInsertGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\IdentityRangeInsertGenerator.cs" />
-    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\InsertMethodGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\BulkInsertMethodGenerator.cs" />
+    <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Persistence\PersistenceEventGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\DeleteRelationsGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\MethodsGeneration\Regular\EntityChangedGenerator.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Generation\StaticFilesGeneration\StormCommandsGenerator.cs" />
     <Compile Include="Infrastructure\Container.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
+    <Compile Include="Infrastructure\OptionsService.cs" />
     <Compile Include="Infrastructure\StringGenerator\IStringGenerator.cs" />
     <Compile Include="Infrastructure\StringGenerator\StringGenerator.cs" />
     <Compile Include="Generation\Common\FieldTypeService.cs" />

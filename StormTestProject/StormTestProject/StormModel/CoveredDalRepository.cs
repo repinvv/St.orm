@@ -147,6 +147,11 @@ namespace StormTestProject.StormModel
 
         public void Insert(IStormContext context, IList<Covered> entities)
         {
+            for (int index = 0; index < entities.Count; index++)
+            {
+                PersistenceEvents.BeforeInsert(entities[index]);
+            }
+
         }
     }
 }

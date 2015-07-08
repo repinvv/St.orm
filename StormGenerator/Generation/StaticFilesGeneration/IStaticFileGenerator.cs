@@ -6,8 +6,8 @@
 
     internal interface IStaticFileGenerator
     {
-        string GetName(Options options);
+        string GetName();
 
-        void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator);
+        void GenerateContent(List<Model> models, IStringGenerator stringGenerator);
     }
 }

@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("currency", Schema = "dbo")]
-    public partial class Currency : ICloneable<Currency>, IEquatable<Currency>, IHaveId
+    public partial class Currency : ICloneable<Currency>, IEquatable<Currency>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

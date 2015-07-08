@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Common;
+    using StormGenerator.Infrastructure;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
@@ -11,27 +12,30 @@
         private readonly UsingsGenerator usingsGenerator;
         private readonly NameCreator nameCreator;
         private readonly InitializersGenerator initializersGenerator;
+        private readonly OptionsService options;
 
         public ContextGenerator(UsingsGenerator usingsGenerator,
             NameCreator nameCreator,
-            InitializersGenerator initializersGenerator)
+            InitializersGenerator initializersGenerator,
+            OptionsService options)
         {
             this.usingsGenerator = usingsGenerator;
             this.nameCreator = nameCreator;
             this.initializersGenerator = initializersGenerator;
+            this.options = options;
         }
 
-        public string GetName(Options options)
+        public string GetName()
         {
-            return "Storm." + options.ContextName;
+            return "Storm." + options.Options.ContextName;
         }
 
-        public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
+        public void GenerateContent(List<Model> models, IStringGenerator stringGenerator)
         {
             usingsGenerator.GenerateUsings(stringGenerator, GenerationConstants.ModelGeneration.ContextUsings);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public partial class " + options.ContextName + " : DbContext");
-            stringGenerator.Braces(() => GenerateClassContents(models, options.ContextName, stringGenerator));
+            stringGenerator.AppendLine("public partial class " + options.Options.ContextName + " : DbContext");
+            stringGenerator.Braces(() => GenerateClassContents(models, options.Options.ContextName, stringGenerator));
         }
 
         private void GenerateClassContents(List<Model> models, string contextName, IStringGenerator stringGenerator)

@@ -17,7 +17,7 @@ namespace StormTestProject.StormModel
     using St.Orm.Interfaces;
 
     [Table("comment", Schema = "model")]
-    public partial class Comment : ICloneable<Comment>, IEquatable<Comment>, IHaveId
+    public partial class Comment : ICloneable<Comment>, IEquatable<Comment>, IHaveId, IDbEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -10,6 +10,7 @@
         {
             container = new IoC();
             Register(this);
+            container.RegisterSingleton<OptionsService>();
         }
 
         private void Register(object source)

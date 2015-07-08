@@ -26,13 +26,13 @@
             this.modelIterator = modelIterator;
         }
 
-        public List<GeneratedFile> Generate(Options options)
+        public List<GeneratedFile> Generate()
         {
-            var models = modelsCollectionService.CollectModels(options);
+            var models = modelsCollectionService.CollectModels();
             var output = new List<GeneratedFile>();
-            modelIterator.ForAllModels(models, model => output.Add(modelGenerator.GenerateModel(model, options)));
-            modelIterator.ForAllModels(models, model => output.Add(repositoryGenerator.GenerateRepository(model, options)));
-            output.AddRange(staticFilesGenerator.GenerateStaticFiles(models, options));
+            modelIterator.ForAllModels(models, model => output.Add(modelGenerator.GenerateModel(model)));
+            modelIterator.ForAllModels(models, model => output.Add(repositoryGenerator.GenerateRepository(model)));
+            output.AddRange(staticFilesGenerator.GenerateStaticFiles(models));
             return output;
         }        
     }

@@ -279,7 +279,6 @@ namespace StormTestProject.StormModel
             }
 
             SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
-            SaveService.Delete<Covered, Covered>(entity.Covereds, saves);
         }
 
         private void SetMtoFields(Assignment entity)
@@ -297,6 +296,11 @@ namespace StormTestProject.StormModel
 
         public void Insert(IStormContext context, IList<Assignment> entities)
         {
+            for (int index = 0; index < entities.Count; index++)
+            {
+                PersistenceEvents.BeforeInsert(entities[index]);
+            }
+
             using (new ConnectionHandler(context.Connection))
             {
                 AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);

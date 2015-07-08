@@ -118,16 +118,6 @@ namespace StormTestProject.StormModel
 
         public void SaveRelations(Policy entity, ISavesCollector saves)
         {
-            if (entity.Comments != null)
-            {
-                foreach (var field in entity.Comments)
-                {
-                    field.PolicyId = entity.PolicyId;
-                }
-            }
-
-            SaveService.Save<Comment, Comment>(entity.Comments, saves);
-
             if (entity.Taxes != null)
             {
                 foreach (var field in entity.Taxes)
@@ -148,6 +138,16 @@ namespace StormTestProject.StormModel
 
             SaveService.Save<Assignment, Assignment>(entity.Assignments, saves);
 
+            if (entity.Comments != null)
+            {
+                foreach (var field in entity.Comments)
+                {
+                    field.PolicyId = entity.PolicyId;
+                }
+            }
+
+            SaveService.Save<Comment, Comment>(entity.Comments, saves);
+
             extension.ExtendSaveRelations(entity, saves);
         }
 
@@ -155,19 +155,6 @@ namespace StormTestProject.StormModel
         {
             var populated = (entity as ICloneable<Policy>).GetPopulated();
             if(populated[1])
-            {
-                if (entity.Comments != null)
-                {
-                    foreach (var field in entity.Comments)
-                    {
-                        field.PolicyId = entity.PolicyId;
-                    }
-                }
-
-                SaveService.Update<Comment, Comment>(entity.Comments, existing.Comments, saves);
-            }
-
-            if(populated[2])
             {
                 if (entity.Taxes != null)
                 {
@@ -180,7 +167,7 @@ namespace StormTestProject.StormModel
                 SaveService.Update<Tax, Tax>(entity.Taxes, existing.Taxes, saves);
             }
 
-            if(populated[3])
+            if(populated[2])
             {
                 if (entity.Assignments != null)
                 {
@@ -193,14 +180,27 @@ namespace StormTestProject.StormModel
                 SaveService.Update<Assignment, Assignment>(entity.Assignments, existing.Assignments, saves);
             }
 
+            if(populated[3])
+            {
+                if (entity.Comments != null)
+                {
+                    foreach (var field in entity.Comments)
+                    {
+                        field.PolicyId = entity.PolicyId;
+                    }
+                }
+
+                SaveService.Update<Comment, Comment>(entity.Comments, existing.Comments, saves);
+            }
+
             extension.ExtendSaveRelations(entity, saves);
         }
 
         private void DeleteRelations(Policy entity, ISavesCollector saves)
         {
-            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
             SaveService.Delete<Tax, Tax>(entity.Taxes, saves);
             SaveService.Delete<Assignment, Assignment>(entity.Assignments, saves);
+            SaveService.Delete<Comment, Comment>(entity.Comments, saves);
         }
 
         private void SetMtoFields(Policy entity)
@@ -223,6 +223,11 @@ namespace StormTestProject.StormModel
 
         public void Insert(IStormContext context, IList<Policy> entities)
         {
+            for (int index = 0; index < entities.Count; index++)
+            {
+                PersistenceEvents.BeforeInsert(entities[index]);
+            }
+
             using (new ConnectionHandler(context.Connection))
             {
                 AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), 200);

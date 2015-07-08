@@ -32,9 +32,9 @@
             this.equalityGenerator = equalityGenerator;
         }
 
-        public GeneratedFile GenerateModel(Model model, Options options)
+        public GeneratedFile GenerateModel(Model model)
         {
-            return fileGenerator.GenerateFile(model.Name, options, stringGenerator => GenerateModelDefinition(model, stringGenerator));
+            return fileGenerator.GenerateFile(model.Name, stringGenerator => GenerateModelDefinition(model, stringGenerator));
         }
 
         private void GenerateModelDefinition(Model model, IStringGenerator stringGenerator)

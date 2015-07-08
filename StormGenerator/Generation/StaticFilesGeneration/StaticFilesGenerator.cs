@@ -30,12 +30,11 @@
                          };
         }
 
-        public List<GeneratedFile> GenerateStaticFiles(List<Model> models, Options options)
+        public List<GeneratedFile> GenerateStaticFiles(List<Model> models)
         {
-            return generators.Select(x => fileGenerator
-                                              .GenerateFile(x.GetName(options),
-                                                            options,
-                                                            stringGenerator => x.GenerateContent(models, options, stringGenerator))).ToList();
+            return generators
+                .Select(x => fileGenerator.GenerateFile(x.GetName(), stringGenerator => x.GenerateContent(models, stringGenerator)))
+                .ToList();
         }
     }
 }

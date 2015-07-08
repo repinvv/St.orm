@@ -3,23 +3,31 @@
     using System.Collections.Generic;
     using St.Orm.Interfaces;
     using StormGenerator.Common;
+    using StormGenerator.Infrastructure;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
 
     internal class ContextExtensionGenerator : IStaticFileGenerator
     {
-        public string GetName(Options options)
+        private readonly OptionsService options;
+
+        public ContextExtensionGenerator(OptionsService options)
         {
-            return "Storm." + options.ContextName + GenerationConstants.ModelGeneration.ContextExtensionSuffix;
+            this.options = options;
         }
 
-        public void GenerateContent(List<Model> models, Options options, IStringGenerator stringGenerator)
+        public string GetName()
+        {
+            return "Storm." + options.Options.ContextName + GenerationConstants.ModelGeneration.ContextExtensionSuffix;
+        }
+
+        public void GenerateContent(List<Model> models, IStringGenerator stringGenerator)
         {
             stringGenerator.AppendLine(@"using System.Data.Common;
     using System.Linq;
     using " + typeof(IStormContext).Namespace + @";
 
-    public partial class " + options.ContextName + @" : IStormContext
+    public partial class " + options.Options.ContextName + @" : IStormContext
     {
         private StormCommands stormCommands;
 
