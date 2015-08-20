@@ -19,7 +19,7 @@
             var output = "new { ";
             for (int n = 0; n < keys.Count; n++)
             {
-                var fieldName = replaceFieldNames ? "f" + (n + 1) + " = " : string.Empty;
+                var fieldName = replaceFieldNames ? $"f{n + 1} = " : string.Empty;
                 output += fieldName + accessor + keys[n];
                 if (n < keys.Count - 1)
                 {

@@ -16,8 +16,8 @@
 
         public void Add(TDal entity)
         {
-            list.Add(entity); 
-        } 
+            list.Add(entity);
+        }
 
         public void PersistenceAction(IStormContext context)
         {

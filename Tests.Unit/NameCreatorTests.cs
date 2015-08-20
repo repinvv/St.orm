@@ -16,7 +16,7 @@
                   { "SOMENAME", "Somename" },
                   { "SomeName", "SomeName" },
                   { "SomeName_OfSomeone", "SomeNameOfSomeone" },
-                  { "someName", "SomeName"}
+                  { "someName", "SomeName" }
               };
 
         private readonly Dictionary<string, string> pluralSamples

@@ -15,16 +15,6 @@
             return string.Join(string.Empty, source.Split(separators, StringSplitOptions.RemoveEmptyEntries).Select(ConvertSection));
         }
 
-        private string ConvertSection(string arg)
-        {
-            return char.ToUpper(arg[0]) + ConvertRestOfString(arg.Substring(1));
-        }
-
-        private string ConvertRestOfString(string arg)
-        {
-            return arg.All(char.IsUpper) || arg.All(char.IsLower) ? arg.ToLower() : arg;
-        }
-
         public string CreatePluralName(string name)
         {
             if (addEs.Contains(char.ToLower(name.Last())))
@@ -42,10 +32,20 @@
                 if (name.Length > 1 && !syllables.Contains(char.ToLower(name[name.Length - 2])))
                 {
                     return name.Substring(0, name.Length - 1) + "ies";
-                } 
+                }
             }
 
             return name + "s";
+        }
+
+        private string ConvertSection(string arg)
+        {
+            return char.ToUpper(arg[0]) + ConvertRestOfString(arg.Substring(1));
+        }
+
+        private string ConvertRestOfString(string arg)
+        {
+            return arg.All(char.IsUpper) || arg.All(char.IsLower) ? arg.ToLower() : arg;
         }
     }
 }

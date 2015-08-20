@@ -10,6 +10,6 @@
 
         public bool IsStructure { get; set; }
 
-        public List<FieldConfig> Fields { get; set; } 
+        public List<FieldConfig> Fields { get; set; }
     }
 }

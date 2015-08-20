@@ -15,7 +15,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void Update(" + model.Name + " entity, " + model.Name + " existing, ISavesCollector saves)");
+            stringGenerator.AppendLine($"public void Update({model.Name} entity, {model.Name} existing, ISavesCollector saves)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -29,9 +29,9 @@
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("SetMtoFields(entity);");
             stringGenerator.AppendLine("if (EntityChanged(entity, existing))");
-            stringGenerator.Braces("saves.Update" + generics.Line(model) + "(entity, existing);");
+            stringGenerator.Braces($"saves.Update{generics.Line(model)}(entity, existing);");
             stringGenerator.AppendLine("else");
-            stringGenerator.Braces("saves.NoUpdate" + generics.Line(model) + "(entity, existing);");
+            stringGenerator.Braces($"saves.NoUpdate{generics.Line(model)}(entity, existing);");
         }
     }
 }

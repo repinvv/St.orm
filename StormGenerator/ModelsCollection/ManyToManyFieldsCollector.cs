@@ -12,7 +12,7 @@
         private const string GetDate = "(getdate())";
         private readonly RelationFieldFactory fieldFactory;
         private readonly RelationsModeChecker modeChecker;
-        
+
         public ManyToManyFieldsCollector(RelationFieldFactory fieldFactory, RelationsModeChecker modeChecker)
         {
             this.fieldFactory = fieldFactory;
@@ -37,10 +37,10 @@
                 var mtmModel = first.Model;
                 var keys = mtmModel.MappingFields.Where(x => x.DbField.IsPrimaryKey).ToList();
                 var restOfFields = mtmModel.MappingFields.Where(x => !x.DbField.IsPrimaryKey).ToList();
-                if (keys.Count == 2 
+                if (keys.Count == 2
                     && keys.All(x => x.DbField.Associations.Any())
                     && restOfFields.Count <= 2
-                    && restOfFields.All(x => x.Type == typeof(DateTime) && x.DbField.Default == GetDate) 
+                    && restOfFields.All(x => x.Type == typeof(DateTime) && x.DbField.Default == GetDate)
                     && first.RootModel != last.RootModel)
                 {
                     mtmLinks.Add(new Tuple<Relation, Relation>(first, last));

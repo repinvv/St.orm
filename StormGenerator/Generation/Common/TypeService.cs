@@ -19,11 +19,6 @@
                                                                            { typeof(bool), "bool" }
                                                                        };
 
-        private string GetTypeAliasName(Type type)
-        {
-            return TypeAliases.ContainsKey(type) ? TypeAliases[type] : type.Name;
-        }
-
         public string GetTypeName(Type type)
         {
             return IsNullable(type) ? (GetTypeAliasName(GenArgument(type)) + "?") : GetTypeAliasName(type);
@@ -39,14 +34,19 @@
             return IsNullable(type) || type == typeof(string) || type == typeof(byte[]);
         }
 
-        private bool IsDefinedGeneric(Type type, Type genType)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == genType;
-        }
-
         private Type GenArgument(Type type)
         {
             return type.GetGenericArguments().First();
+        }
+
+        private string GetTypeAliasName(Type type)
+        {
+            return TypeAliases.ContainsKey(type) ? TypeAliases[type] : type.Name;
+        }
+
+        private bool IsDefinedGeneric(Type type, Type genType)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == genType;
         }
     }
 }

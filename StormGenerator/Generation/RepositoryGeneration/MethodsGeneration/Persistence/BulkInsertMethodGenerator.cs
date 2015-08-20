@@ -15,7 +15,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void Insert(IStormContext context, IList<" + model.Name + "> entities)");
+            stringGenerator.AppendLine($"public void Insert(IStormContext context, IList<{model.Name}> entities)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)

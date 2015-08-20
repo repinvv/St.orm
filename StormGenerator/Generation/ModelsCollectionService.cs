@@ -20,7 +20,7 @@
 
         public ModelsCollectionService(DbModelsCollector dbmodelsCollector,
             ModelsCollector modelsCollector,
-            NameNormalizer nameNormalizer, 
+            NameNormalizer nameNormalizer,
             OptionsService options)
         {
             this.dbmodelsCollector = dbmodelsCollector;

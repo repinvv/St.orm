@@ -13,6 +13,11 @@
             container.RegisterSingleton<OptionsService>();
         }
 
+        public T Get<T>()
+        {
+            return container.Resolve<T>();
+        }
+
         private void Register(object source)
         {
             foreach (var type in source.GetType().Assembly.GetTypes().Where(x => !x.IsAbstract).Where(x => !x.IsValueType).Where(x => !x.Name.StartsWith("<")))
@@ -24,11 +29,6 @@
                     container.Register(face, type);
                 }
             }
-        }
-
-        public T Get<T>()
-        {
-            return container.Resolve<T>();
         }
     }
 }

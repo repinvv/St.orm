@@ -7,7 +7,7 @@
     {
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void SetExtension(IDalRepositoryExtension<" + model.Name + "> extension)");
+            stringGenerator.AppendLine($"public void SetExtension(IDalRepositoryExtension<{model.Name}> extension)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)

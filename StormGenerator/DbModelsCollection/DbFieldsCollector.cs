@@ -8,7 +8,7 @@
     internal class DbFieldsCollector
     {
         private readonly ColumnReader columnReader;
-        
+
         public DbFieldsCollector(ColumnReader columnReader)
         {
             this.columnReader = columnReader;

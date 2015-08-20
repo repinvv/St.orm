@@ -8,11 +8,10 @@
     {
         public void GenerateConstructor(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private IDalRepositoryExtension<" + model.Name + "> extension;");
+            stringGenerator.AppendLine($"private IDalRepositoryExtension<{model.Name}> extension;");
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
-                                       + "()");
-            stringGenerator.Braces("extension = new EmptyRepositoryExtension<" + model.Name + ">();");
+            stringGenerator.AppendLine($"public {model.Name}{GenerationConstants.ModelGeneration.RepositorySuffix}()");
+            stringGenerator.Braces($"extension = new EmptyRepositoryExtension<{model.Name}>();");
         }
     }
 }

@@ -11,18 +11,18 @@
         {
             var keyFields = model.MappingFields.Where(x => x.DbField.IsPrimaryKey).ToList();
             stringGenerator.AppendLine("public override bool Equals(object obj)");
-            stringGenerator.Braces("return Equals(obj as " + model.Name + ");");
+            stringGenerator.Braces($"return Equals(obj as {model.Name});");
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public bool Equals(" + model.Name + " other)");
+            stringGenerator.AppendLine($"public bool Equals({model.Name} other)");
             stringGenerator.Braces(() => GenerateEquals(keyFields, stringGenerator));
             stringGenerator.AppendLine();
             stringGenerator.AppendLine("public override int GetHashCode()");
             stringGenerator.Braces(() => GenerateGetHashCode(keyFields, stringGenerator));
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public static bool operator ==(" + model.Name + " left, " + model.Name + " right)");
+            stringGenerator.AppendLine($"public static bool operator ==({model.Name} left, {model.Name} right)");
             stringGenerator.Braces("return Equals(left, right);");
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("public static bool operator !=(" + model.Name + " left, " + model.Name + " right)");
+            stringGenerator.AppendLine($"public static bool operator !=({model.Name} left, {model.Name} right)");
             stringGenerator.Braces("return !Equals(left, right);");
         }
 

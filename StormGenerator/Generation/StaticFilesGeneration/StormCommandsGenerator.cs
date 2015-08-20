@@ -18,8 +18,8 @@
         {
             stringGenerator.AppendLine(@"using System.Collections.Generic;
     using System.Linq;
-    using " + typeof(Storm).Namespace + @";    
-    using " + typeof(IStormContext).Namespace + @";    
+    using " + typeof(Storm).Namespace + @";
+    using " + typeof(IStormContext).Namespace + @";
     using " + typeof(LoadParameter).Namespace + @";
 
     public class StormCommands

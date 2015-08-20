@@ -5,11 +5,11 @@
     using StormGenerator.Models.Pregen;
     using StormGenerator.Models.Pregen.Relation;
 
-    internal class SetMtoFieldsGenerator : IMethodGenerator 
+    internal class SetMtoFieldsGenerator : IMethodGenerator
     {
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private void SetMtoFields(" + model.Name + " entity)");
+            stringGenerator.AppendLine($"private void SetMtoFields({model.Name} entity)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -22,13 +22,12 @@
                     stringGenerator.AppendLine();
                 }
 
-                stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
+                stringGenerator.AppendLine($"if(entity.{field.Name} != null)");
                 stringGenerator.Braces(() =>
                 {
                     for (int i = 0; i < field.NearEndFields.Count; i++)
                     {
-                        stringGenerator.AppendLine("entity." + field.NearEndFields[i].Name + " = entity."
-                                                   + field.Name + "." + field.FarEndFields[i].Name + ";");
+                        stringGenerator.AppendLine($"entity.{field.NearEndFields[i].Name} = entity.{field.Name}.{field.FarEndFields[i].Name};");
                     }
                 });
                 first = false;

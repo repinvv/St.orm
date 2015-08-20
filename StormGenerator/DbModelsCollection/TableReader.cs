@@ -9,8 +9,8 @@
     internal class TableReader
     {
         private const string Query = @"SELECT *
-		FROM  INFORMATION_SCHEMA.TABLES
-		WHERE TABLE_TYPE='BASE TABLE' OR TABLE_TYPE='VIEW'";
+    FROM  INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_TYPE='BASE TABLE' OR TABLE_TYPE='VIEW'";
 
         private readonly Reader reader;
         private readonly TableIdCreator tableIdCreator;

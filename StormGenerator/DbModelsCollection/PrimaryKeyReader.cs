@@ -9,7 +9,7 @@
 
     internal class PrimaryKeyReader
     {
-        private const string Query = 
+        private const string Query =
 @"SELECT k.*
   FROM
    INFORMATION_SCHEMA.KEY_COLUMN_USAGE k

@@ -34,15 +34,15 @@
         {
             if (typeService.IsNullable(type) || type == typeof(string) || type == typeof(byte[]))
             {
-                return readerName + "[" + index + "] as " + typeService.GetTypeName(type);
+                return readerName + $"[{index}] as " + typeService.GetTypeName(type);
             }
 
             if (Getters.ContainsKey(type))
             {
-                return readerName + "." + Getters[type] + "(" + index + ")";
+                return readerName + $".{Getters[type]}({index})";
             }
 
-            return "(" + typeService.GetTypeName(type) + ")input[" + index + "]";
+            return $"({typeService.GetTypeName(type)})input[{index}]";
         }
     }
 }

@@ -8,7 +8,7 @@
         private readonly AttributedClassPartsGenerator attributedClassPartsGenerator;
         private readonly PlainClassPartsGenerator plainClassPartsGenerator;
 
-        public ModelPartsGeneratorFactory(StructPartsGenerator structPartsGenerator, 
+        public ModelPartsGeneratorFactory(StructPartsGenerator structPartsGenerator,
             AttributedClassPartsGenerator attributedClassPartsGenerator,
             PlainClassPartsGenerator plainClassPartsGenerator)
         {

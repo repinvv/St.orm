@@ -74,7 +74,7 @@
                 var field = relationFields[index];
                 field.Name = names[index];
 
-                stringGenerator.AppendLine("public virtual " + fieldUtility.GetRelationFieldType(field) + " " + field.Name);
+                stringGenerator.AppendLine($"public virtual {fieldUtility.GetRelationFieldType(field)} {field.Name}");
                 stringGenerator
                     .Braces(() => stringGenerator
                                 .Region("implementation", () => GenerateLazyProperty(field, index, model, stringGenerator)));
@@ -89,8 +89,8 @@
             stringGenerator.AppendLine("set");
             stringGenerator.Braces(() =>
             {
-                stringGenerator.AppendLine("field" + index + " = value;");
-                stringGenerator.AppendLine("populated[" + index + "] = true;");
+                stringGenerator.AppendLine($"field{index} = value;");
+                stringGenerator.AppendLine($"populated[{index}] = true;");
             });
         }
 
@@ -114,7 +114,7 @@
             for (int index = 0; index < fields.Count; index++)
             {
                 var field = fields[index];
-                stringGenerator.AppendLine("private " + fieldUtility.GetRelationFieldType(field) + " field" + index + ";");
+                stringGenerator.AppendLine($"private {fieldUtility.GetRelationFieldType(field)} field{index};");
             }
         }
     }

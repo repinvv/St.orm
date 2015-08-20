@@ -17,12 +17,12 @@
         public void GenerateSaveRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var mtmField = field as ManyToManyField;
-            stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
+            stringGenerator.AppendLine($"if(entity.{field.Name} != null)");
             stringGenerator.Braces(() =>
             {
                 if (field.IsList)
                 {
-                    stringGenerator.AppendLine("foreach(var item in entity." + field.Name + ")");
+                    stringGenerator.AppendLine($"foreach(var item in entity.{field.Name})");
                     stringGenerator.Braces(() => GenerateSave(mtmField, "item", stringGenerator));
                 }
                 else
@@ -48,12 +48,12 @@
         public void GenerateDeleteRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var mtmField = field as ManyToManyField;
-            stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
+            stringGenerator.AppendLine($"if(entity.{field.Name} != null)");
             stringGenerator.Braces(() =>
             {
                 if (field.IsList)
                 {
-                    stringGenerator.AppendLine("foreach(var item in entity." + field.Name + ")");
+                    stringGenerator.AppendLine($"foreach(var item in entity.{field.Name})");
                     stringGenerator.Braces(() => GenerateDelete(mtmField, "item", stringGenerator));
                 }
                 else
@@ -67,12 +67,12 @@
         private void GenerateListUpdateRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var mtmField = field as ManyToManyField;
-            stringGenerator.AppendLine("var items = entity." + field.Name + " ?? new List<" + field.FieldModel.Name + ">();");
-            stringGenerator.AppendLine("var entitySet = new HashSet<" + field.FieldModel.Name + ">(items);");
-            stringGenerator.AppendLine("foreach (var item in existing." + field.Name + ".Where(x => !entitySet.Contains(x)))");
+            stringGenerator.AppendLine($"var items = entity.{field.Name} ?? new List<{field.FieldModel.Name}>();");
+            stringGenerator.AppendLine($"var entitySet = new HashSet<{field.FieldModel.Name}>(items);");
+            stringGenerator.AppendLine($"foreach (var item in existing.{field.Name}.Where(x => !entitySet.Contains(x)))");
             stringGenerator.Braces(() => GenerateDelete(mtmField, "item", stringGenerator));
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("var existingSet = new HashSet<" + field.FieldModel.Name + ">(existing." + field.Name + ");");
+            stringGenerator.AppendLine($"var existingSet = new HashSet<{field.FieldModel.Name}>(existing.{field.Name});");
             stringGenerator.AppendLine("foreach (var item in items.Where(x => !existingSet.Contains(x)))");
             stringGenerator.Braces(() => GenerateSave(mtmField, "item", stringGenerator));
         }
@@ -80,12 +80,12 @@
         private void GenerateSingleUpdateRelation(RelationField field, IStringGenerator stringGenerator)
         {
             var mtmField = field as ManyToManyField;
-            stringGenerator.AppendLine("if(entity." + field.Name  + " != existing." + field.Name + ")");
+            stringGenerator.AppendLine($"if(entity.{field.Name} != existing.{field.Name})");
             stringGenerator.Braces(() =>
             {
-                stringGenerator.AppendLine("if(existing." + field.Name + " != null)");
+                stringGenerator.AppendLine($"if(existing.{field.Name} != null)");
                 stringGenerator.Braces(() => GenerateDelete(mtmField, "existing." + field.Name, stringGenerator));
-                stringGenerator.AppendLine("if(entity." + field.Name + " != null)");
+                stringGenerator.AppendLine($"if(entity.{field.Name} != null)");
                 stringGenerator.Braces(() => GenerateSave(mtmField, "entity." + field.Name, stringGenerator));
             });
         }
@@ -93,13 +93,13 @@
         private void GenerateSave(ManyToManyField mtmField, string accessor, IStringGenerator stringGenerator)
         {
             GenerateCreateMediator(mtmField, accessor, stringGenerator);
-            stringGenerator.AppendLine("saves.Save" + generics.Line(mtmField.MediatorModel) + "(mediator);");
+            stringGenerator.AppendLine($"saves.Save{generics.Line(mtmField.MediatorModel)}(mediator);");
         }
 
         private void GenerateDelete(ManyToManyField mtmField, string accessor, IStringGenerator stringGenerator)
         {
             GenerateCreateMediator(mtmField, accessor, stringGenerator);
-            stringGenerator.AppendLine("saves.Delete" + generics.Line(mtmField.MediatorModel) + "(mediator);");
+            stringGenerator.AppendLine($"saves.Delete{generics.Line(mtmField.MediatorModel)}(mediator);");
         }
 
         private void GenerateCreateMediator(ManyToManyField mtmField, string accessor, IStringGenerator stringGenerator)
@@ -110,9 +110,9 @@
 
         private void GenerateMediatorContent(ManyToManyField field, string accessor, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine(field.FarEndFields[0].Name + " = entity." + field.FarEndFields[0].Name + ",");
-            stringGenerator.AppendLine(field.MediatorMtoField.NearEndFields[0].Name + " = " + accessor +
-                                       "." + field.MediatorMtoField.FarEndFields[0].Name);
+            stringGenerator.AppendLine(field.FarEndFields[0].Name + $" = entity.{field.FarEndFields[0].Name},");
+            stringGenerator.AppendLine(field.MediatorMtoField.NearEndFields[0].Name + $" = {accessor}."
+                                       + field.MediatorMtoField.FarEndFields[0].Name);
         }
     }
 }

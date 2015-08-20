@@ -12,8 +12,9 @@
         private readonly ForeignKeyReader foreignKeyReader;
         private readonly Sequencer sequencer;
 
-        public DbModelsCollector(DbConnectionCreator connectionCreator, 
-            TableReader tableReader, 
+        public DbModelsCollector(
+            DbConnectionCreator connectionCreator,
+            TableReader tableReader,
             DbFieldsCollector fieldsCollector,
             PrimaryKeyReader primaryKeyReader,
             ForeignKeyReader foreignKeyReader,

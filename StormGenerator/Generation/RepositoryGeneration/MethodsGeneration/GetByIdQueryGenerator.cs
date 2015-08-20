@@ -18,7 +18,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public IQueryable<" + model.Parent.Name + "> GetByIdQuery(object id, IStormContext context)");
+            stringGenerator.AppendLine($"public IQueryable<{model.Parent.Name}> GetByIdQuery(object id, IStormContext context)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -31,8 +31,8 @@
 
             identityFinder.WithIdentity(model, field =>
             {
-                stringGenerator.AppendLine("var key = (" + typeService.GetTypeName(field.Type) + ")id;");
-                stringGenerator.AppendLine("return context.Set<" + model.Parent.Name + ">().Where(x => x." + field.Name + " == key);");
+                stringGenerator.AppendLine($"var key = ({typeService.GetTypeName(field.Type)})id;");
+                stringGenerator.AppendLine($"return context.Set<{model.Parent.Name}>().Where(x => x.{field.Name} == key);");
             });
         }
     }

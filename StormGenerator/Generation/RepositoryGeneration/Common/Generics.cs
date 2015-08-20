@@ -6,7 +6,7 @@
     {
         public string Line(Model model)
         {
-            return "<" + model.Name + ", " + model.Parent.Name + ">";
+            return $"<{model.Name}, {model.Name}>";
         }
     }
 }

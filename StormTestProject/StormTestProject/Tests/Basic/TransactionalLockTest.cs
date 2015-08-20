@@ -1,6 +1,7 @@
 ﻿namespace StormTestProject.Tests.Basic
 {
     using System;
+    using System.Data;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
@@ -83,7 +84,7 @@
         {
             var tp = arg as ThreadParam;
             var context = new StormTestContext();
-            using (context.Database.BeginTransaction())
+            using (context.Database.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 LockTax(context, policy.Taxes[tp.TaxIndex].TaxId);
                 tp.LockDate = DateTime.Now;

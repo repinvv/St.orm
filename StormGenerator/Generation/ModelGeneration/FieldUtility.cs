@@ -7,14 +7,14 @@
     {
         public string GetUsing(MappingField arg)
         {
-            return arg.Type == null ? arg.CustomTypeNamespace : arg.Type.Namespace;
+            return arg.Type?.Namespace ?? arg.CustomTypeNamespace;
         }
 
         public string GetRelationFieldType(RelationField field)
         {
             if (field.IsList)
             {
-                return "IList<" + field.FieldModel.Name + ">";
+                return $"IList<{field.FieldModel.Name}>";
             }
 
             return field.FieldModel.Name;

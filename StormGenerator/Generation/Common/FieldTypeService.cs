@@ -52,7 +52,7 @@
             }
             catch (Exception)
             {
-                Console.Error.WriteLine("type " + type + " is not supported.");
+                Console.Error.WriteLine($"type {type} is not supported.");
                 return typeof(object);
             }
         }

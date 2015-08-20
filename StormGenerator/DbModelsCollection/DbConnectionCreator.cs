@@ -22,10 +22,10 @@
         {
             if (options.Options.IntegratedSecurity)
             {
-                return string.Format("Data Source={0};Database={1};Integrated Security=SSPI", options.Options.Server, options.Options.Database);
+                return $"Data Source={options.Options.Server};Database={options.Options.Database};Integrated Security=SSPI";
             }
 
-            return string.Format("Server={0};Database={1};User Id={2};Password={3};", options.Options.Server, options.Options.Database, options.Options.User, options.Options.Server);
+            return $"Server={options.Options.Server};Database={options.Options.Database};User Id={options.Options.User};Password={options.Options.Server};";
         }
     }
 }

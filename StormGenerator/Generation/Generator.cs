@@ -13,7 +13,8 @@
         private readonly ModelsCollectionService modelsCollectionService;
         private readonly ModelIterator modelIterator;
 
-        public Generator(ModelGenerator modelGenerator,
+        public Generator(
+            ModelGenerator modelGenerator,
             StaticFilesGenerator staticFilesGenerator,
             RepositoryGenerator repositoryGenerator,
             ModelsCollectionService modelsCollectionService,
@@ -34,6 +35,6 @@
             modelIterator.ForAllModels(models, model => output.Add(repositoryGenerator.GenerateRepository(model)));
             output.AddRange(staticFilesGenerator.GenerateStaticFiles(models));
             return output;
-        }        
+        }
     }
 }

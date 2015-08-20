@@ -18,11 +18,13 @@
             fields = new object[relationPropertiesCount];
         }
 
-        public Dictionary<object, object> Parameters { get; private set; }
+        public Dictionary<object, object> Parameters { get; }
 
-        public IStormContext Context { get { return context; } }
+        public IStormContext Context => context;
 
-        private ILookup<TIndex, TField> GetLookup<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
+        private ILookup<TIndex, TField> GetLookup<TField, TQuery, TIndex>(int propertyIndex,
+            Func<IQueryable<TQuery>> query,
+            Func<TField, TIndex> indexLambda)
         {
             if (fields[propertyIndex] != null)
             {
@@ -30,13 +32,16 @@
             }
 
             var repo = context.GetDalRepository<TField, TQuery>();
-            var items = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount())).ToLookup(indexLambda);
+            var items = repo.Materialize(query(), new LoadService(Parameters, context, repo.RelationsCount()))
+                            .ToLookup(indexLambda);
             fields[propertyIndex] = items;
             return items;
         }
 
         // will need many2many test with lots of entities, most likely lookup will remain
-        private IDictionary<TIndex, TField> GetDictionary<TField, TQuery, TIndex>(int propertyIndex, Func<IQueryable<TQuery>> query, Func<TField, TIndex> indexLambda)
+        private IDictionary<TIndex, TField> GetDictionary<TField, TQuery, TIndex>(int propertyIndex, 
+            Func<IQueryable<TQuery>> query, 
+            Func<TField, TIndex> indexLambda)
         {
             if (fields[propertyIndex] != null)
             {

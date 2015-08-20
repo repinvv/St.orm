@@ -36,7 +36,6 @@
             foreach (var relation in relations.Where(x => !x.Key.IsManyToManyLink))
             {
                 var groups = relation.Value.GroupBy(x => x.Id).Where(x => !x.First().Model.IsManyToManyLink).ToList();
-                
                 if (modeChecker.IsOtmRelationNeeded(relation.Value, relationsMode))
                 {
                     relation.Key.RelationFields.AddRange(groups.Select(x => fieldFactory.CreateOneToManyField(x.ToList())));
@@ -51,6 +50,6 @@
                     }
                 }
             }
-        }        
+        }
     }
 }

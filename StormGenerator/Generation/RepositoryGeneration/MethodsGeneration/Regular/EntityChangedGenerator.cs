@@ -8,7 +8,7 @@
     {
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public bool EntityChanged(" + model.Name + " entity, " + model.Name + " existing)");
+            stringGenerator.AppendLine($"public bool EntityChanged({model.Name} entity, {model.Name} existing)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -27,7 +27,7 @@
             {
                 var semicolon = i == fields.Count - 1 ? ";" : string.Empty;
                 var field = fields[i];
-                stringGenerator.AppendLine("|| entity." + field.Name + " != existing." + field.Name + semicolon);
+                stringGenerator.AppendLine($"|| entity.{field.Name} != existing." + field.Name + semicolon);
             }
 
             stringGenerator.PopIndent();

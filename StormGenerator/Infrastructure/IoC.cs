@@ -49,7 +49,7 @@
             RegisteredObject registeredObject;
             if (!registeredObjects.TryGetValue(type, out registeredObject))
             {
-                throw new ArgumentOutOfRangeException(string.Format("The type {0} has not been registered", type.Name));
+                throw new ArgumentOutOfRangeException($"The type {type.Name} has not been registered");
             }
 
             return registeredObject.CreateInstance();

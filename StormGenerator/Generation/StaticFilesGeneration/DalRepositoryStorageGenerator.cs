@@ -28,10 +28,10 @@
     using System.Collections.Generic;
     using " + typeof(EmptyRepositoryExtension<>).Namespace + @";
     using " + typeof(IDalRepository<,>).Namespace + @";
-    
+
     internal static class DalRepositoryStorage
     {
-        private static readonly Dictionary<Type, object> repositories 
+        private static readonly Dictionary<Type, object> repositories
             = new Dictionary<Type, object>");
             stringGenerator.PushIndent(3);
             stringGenerator.Braces(() => GenerateKeyValuePairs(models, stringGenerator), true);
@@ -48,8 +48,7 @@
         {
             Action<Model> action =
                 model => stringGenerator
-                    .AppendLine("{ typeof(" + model.Name + "), new " + model.Name
-                                + GenerationConstants.ModelGeneration.RepositorySuffix + "() },");
+                    .AppendLine($"{{ typeof({model.Name}), new {model.Name}{GenerationConstants.ModelGeneration.RepositorySuffix}() }},");
             modelIterator.ForAllModels(models, action);
         }
     }

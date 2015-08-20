@@ -15,8 +15,9 @@
         private readonly IdentityFinder identityFinder;
         private readonly Type[] integerTypes = { typeof(int), typeof(short), typeof(long) };
 
-        public AttributedClassPartsGenerator(UsingsGenerator usingsGenerator, 
-            FieldUtility fieldUtility, 
+        public AttributedClassPartsGenerator(
+            UsingsGenerator usingsGenerator,
+            FieldUtility fieldUtility,
             PlainClassPartsGenerator plainClassPartsGenerator,
             IdentityFinder identityFinder)
         {

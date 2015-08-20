@@ -17,14 +17,15 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void Insert(IStormContext context, IList<" + model.Name + "> entities)");
+            stringGenerator.AppendLine($"public void Insert(IStormContext context, IList<{model.Name}> entities)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
             persistenceEventGenerator.GeneratePreInsert(model, stringGenerator);
             stringGenerator.AppendLine("using (new ConnectionHandler(context.Connection))");
-            stringGenerator.Braces("AdoCommands.SplitRun(entities.AsList(), x => RangeInsert(x, context.Connection, context.Transaction), " + splitRunCount.Get(model) + ");");
+            stringGenerator.Braces("AdoCommands.SplitRun(entities.AsList(), " +
+                                   $"x => RangeInsert(x, context.Connection, context.Transaction), {splitRunCount.Get(model)});");
         }
     }
 }

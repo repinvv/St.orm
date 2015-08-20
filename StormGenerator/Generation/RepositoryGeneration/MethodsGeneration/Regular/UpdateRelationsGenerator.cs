@@ -15,8 +15,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void UpdateRelations(" + model.Name + " entity, " + model.Name
-                                       + " existing, ISavesCollector saves)");
+            stringGenerator.AppendLine($"public void UpdateRelations({model.Name} entity, {model.Name} existing, ISavesCollector saves)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -32,7 +31,7 @@
                     continue;
                 }
 
-                stringGenerator.AppendLine("if(populated[" + index + "])");
+                stringGenerator.AppendLine($"if(populated[{index}])");
                 stringGenerator.Braces(() => generator.GenerateUpdateRelation(field, stringGenerator));
                 stringGenerator.AppendLine();
             }

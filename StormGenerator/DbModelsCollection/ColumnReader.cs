@@ -8,9 +8,9 @@
     internal class ColumnReader
     {
         private const string Query = @"SELECT *,
-			COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsIdentity') AS IsIdentity,
-			COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsComputed') as IsComputed
-		FROM  INFORMATION_SCHEMA.COLUMNS";
+        COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsIdentity') AS IsIdentity,
+        COLUMNPROPERTY(object_id('[' + TABLE_SCHEMA + '].[' + TABLE_NAME + ']'), COLUMN_NAME, 'IsComputed') as IsComputed
+    FROM  INFORMATION_SCHEMA.COLUMNS";
 
         private readonly Reader reader;
         private readonly TableIdCreator tableIdCreator;

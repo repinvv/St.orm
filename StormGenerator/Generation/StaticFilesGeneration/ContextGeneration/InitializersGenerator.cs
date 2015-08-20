@@ -18,11 +18,6 @@
             this.objectStringService = objectStringService;
         }
 
-        private bool NeedsInitializer(MappingField field)
-        {
-            return field.Enabled && GenerationConstants.ModelGeneration.DottedTypes.Contains(field.Type);
-        }
-
         public bool NeedsInitializer(Model model)
         {
             return model.RelationFields.ActiveAny() || model.MappingFields.Any(NeedsInitializer);
@@ -131,6 +126,11 @@
             var rightKeys = field.MediatorMtoField.NearEndFields.ActiveSelect(x => "\"" + x.DbField.Name + "\"");
             stringGenerator.AppendLine(".MapRightKey(" + string.Join(", ", rightKeys) + "));");
             stringGenerator.PopIndent();
+        }
+
+        private bool NeedsInitializer(MappingField field)
+        {
+            return field.Enabled && GenerationConstants.ModelGeneration.DottedTypes.Contains(field.Type);
         }
     }
 }

@@ -10,31 +10,31 @@
     internal class ForeignKeyReader
     {
         private const string Query = @"SELECT
-	fk.TABLE_SCHEMA,
-	fk.TABLE_NAME,
-	fk.COLUMN_NAME,
-	rc.CONSTRAINT_SCHEMA,
-	rc.CONSTRAINT_NAME,
-	rc.UPDATE_RULE,
-	rc.DELETE_RULE,
+    fk.TABLE_SCHEMA,
+    fk.TABLE_NAME,
+    fk.COLUMN_NAME,
+    rc.CONSTRAINT_SCHEMA,
+    rc.CONSTRAINT_NAME,
+    rc.UPDATE_RULE,
+    rc.DELETE_RULE,
     pk.ORDINAL_POSITION,
-	pk.TABLE_SCHEMA as OTHER_SCHEMA,
-	pk.TABLE_NAME as OTHER_TABLE,
+    pk.TABLE_SCHEMA as OTHER_SCHEMA,
+    pk.TABLE_NAME as OTHER_TABLE,
     pk.COLUMN_NAME as OTHER_COLUMN
-				FROM
-					INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
-					JOIN
-						INFORMATION_SCHEMA.KEY_COLUMN_USAGE fk
-					ON
-						fk.CONSTRAINT_SCHEMA  = rc.CONSTRAINT_SCHEMA  AND
-						fk.CONSTRAINT_NAME    = rc.CONSTRAINT_NAME
-					JOIN
-						INFORMATION_SCHEMA.KEY_COLUMN_USAGE pk
-					ON
-						pk.CONSTRAINT_SCHEMA  = rc.UNIQUE_CONSTRAINT_SCHEMA  AND
-						pk.CONSTRAINT_NAME    = rc.UNIQUE_CONSTRAINT_NAME
-				WHERE
-					fk.ORDINAL_POSITION = pk.ORDINAL_POSITION";
+        FROM
+            INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
+            JOIN
+                INFORMATION_SCHEMA.KEY_COLUMN_USAGE fk
+            ON
+                fk.CONSTRAINT_SCHEMA  = rc.CONSTRAINT_SCHEMA  AND
+                fk.CONSTRAINT_NAME    = rc.CONSTRAINT_NAME
+            JOIN
+                INFORMATION_SCHEMA.KEY_COLUMN_USAGE pk
+            ON
+                pk.CONSTRAINT_SCHEMA  = rc.UNIQUE_CONSTRAINT_SCHEMA  AND
+                pk.CONSTRAINT_NAME    = rc.UNIQUE_CONSTRAINT_NAME
+        WHERE
+            fk.ORDINAL_POSITION = pk.ORDINAL_POSITION";
 
         private readonly Reader reader;
         private readonly TableIdCreator tableIdCreator;

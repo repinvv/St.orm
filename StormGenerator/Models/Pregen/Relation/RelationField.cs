@@ -12,7 +12,7 @@
 
         public List<MappingField> NearEndFields { get; set; }
 
-        public List<MappingField> FarEndFields { get; set; } 
+        public List<MappingField> FarEndFields { get; set; }
 
         public bool IsList { get; set; }
 

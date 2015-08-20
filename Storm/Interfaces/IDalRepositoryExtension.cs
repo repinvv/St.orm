@@ -14,11 +14,11 @@
         void ExtendCreate(TDal entity, IDataReader reader);
 
         // extra action before saving, return false if entity is "invalid"
-        // and should not be saved to DB 
+        // and should not be saved to DB
         bool PreSave(TDal entity);
 
         // extra action before updating, return false if entity is "invalid"
-        // and should be deleted from DB 
+        // and should be deleted from DB
         bool PreUpdate(TDal entity, TDal existing);
 
         // extra action before deletion, include delete entities in custom nav props

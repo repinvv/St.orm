@@ -25,7 +25,7 @@
                          .OrderBy(x => x.Name);
             foreach (var fieldType in types)
             {
-                stringGenerator.AppendLine("using " + fieldType.Name + " = " + fieldType.FullName + ";");
+                stringGenerator.AppendLine($"using {fieldType.Name} = {fieldType.FullName};");
             }
         }
     }

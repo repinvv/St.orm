@@ -7,7 +7,7 @@
     {
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private " + model.Name + " FullCreate(IDataReader reader)");
+            stringGenerator.AppendLine($"private {model.Name} FullCreate(IDataReader reader)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)

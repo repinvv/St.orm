@@ -22,8 +22,8 @@
             var nearend = GetFields(nearEndFields, farEndFields);
 
             var sourceJoin = ".Join(sourceQuery,";
-            var firstArg = "x => " + objectStringService.CreateObjectString(farend, "x") + ",";
-            var secondArg = "x => " + objectStringService.CreateObjectString(nearend, "x") + ",";
+            var firstArg = $"x => {objectStringService.CreateObjectString(farend, "x")},";
+            var secondArg = $"x => {objectStringService.CreateObjectString(nearend, "x")},";
             var ending = "(x, y) => x)" + (semicolon ? ";" : string.Empty);
 
             if (farEndFields.Count == 1)
@@ -41,19 +41,13 @@
             }
         }
 
-        private List<string> GetFields(List<MappingField> these, List<MappingField> other, bool defaultValue = false)
-        {
-            var value = defaultValue ? ".GetValueOrDefault()" : ".Value";
-            var output = new List<string>(these.Count);
-            for (int i = 0; i < these.Count; i++)
-            {
-                output.Add(these[i].Name + (these[i].DbField.IsNullable && !other[i].DbField.IsNullable && these.Count > 1 ? value : string.Empty));
-            }
-
-            return output;
-        }
-
-        public void GenerateGetItems(Model fieldModel, int index, List<MappingField> farEndFields, List<MappingField> nearEndFields, IStringGenerator stringGenerator, bool semicolon, bool isList)
+        public void GenerateGetItems(Model fieldModel,
+            int index,
+            List<MappingField> farEndFields,
+            List<MappingField> nearEndFields,
+            IStringGenerator stringGenerator,
+            bool semicolon,
+            bool isList)
         {
             var farend = GetFields(farEndFields, nearEndFields, true);
             var nearend = GetFields(nearEndFields, farEndFields, true);
@@ -79,6 +73,18 @@
                 stringGenerator.AppendLine(fourth);
                 stringGenerator.PopIndent();
             }
+        }
+
+        private List<string> GetFields(List<MappingField> these, List<MappingField> other, bool defaultValue = false)
+        {
+            var value = defaultValue ? ".GetValueOrDefault()" : ".Value";
+            var output = new List<string>(these.Count);
+            for (int i = 0; i < these.Count; i++)
+            {
+                output.Add(these[i].Name + (these[i].DbField.IsNullable && !other[i].DbField.IsNullable && these.Count > 1 ? value : string.Empty));
+            }
+
+            return output;
         }
     }
 }

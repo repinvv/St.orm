@@ -18,7 +18,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("public void Save(" + model.Name + " entity, ISavesCollector saves)");
+            stringGenerator.AppendLine($"public void Save({model.Name} entity, ISavesCollector saves)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
@@ -31,14 +31,14 @@
             {
                 if (field.Type == typeof(Guid))
                 {
-                    stringGenerator.AppendLine("if(entity." + field.Name + " == Guid.Empty)");
-                    stringGenerator.Braces("entity." + field.Name + " = Guid.NewGuid();");
+                    stringGenerator.AppendLine($"if(entity.{field.Name} == Guid.Empty)");
+                    stringGenerator.Braces("entity.{field.Name} = Guid.NewGuid();");
                     stringGenerator.AppendLine();
                 }
             });
 
             stringGenerator.AppendLine("SetMtoFields(entity);");
-            stringGenerator.AppendLine("saves.Save" + generics.Line(model) + "(entity);");
+            stringGenerator.AppendLine($"saves.Save{generics.Line(model)}(entity);");
         }
     }
 }

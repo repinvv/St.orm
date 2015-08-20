@@ -17,9 +17,9 @@
         private readonly Generics generics;
 
         public RepositoryGenerator(FileGenerator fileGenerator,
-            UsingsGenerator usingsGenerator, 
+            UsingsGenerator usingsGenerator,
             FieldUtility fieldUtility,
-            RepositoryMethodsGenerator repositoryMethodsGenerator, 
+            RepositoryMethodsGenerator repositoryMethodsGenerator,
             RepositoryConstructorGenerator repositoryConstructorGenerator,
             Generics generics)
         {
@@ -43,8 +43,8 @@
                               .Concat(GenerationConstants.ModelGeneration.RepositoryUsings);
             usingsGenerator.GenerateUsings(stringGenerator, usings);
             stringGenerator.AppendLine();
-            stringGenerator.AppendLine("internal class " + model.Name + GenerationConstants.ModelGeneration.RepositorySuffix
-                                       + " : IDalRepository" + generics.Line(model));
+            stringGenerator.AppendLine($"internal class {model.Name}{GenerationConstants.ModelGeneration.RepositorySuffix} " +
+                                       $": IDalRepository{generics.Line(model)}");
             stringGenerator.Braces(() => GenerateRepositoryContent(model, stringGenerator));
         }
 

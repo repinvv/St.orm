@@ -16,7 +16,7 @@
 
         public void GenerateSignature(Model model, IStringGenerator stringGenerator)
         {
-            stringGenerator.AppendLine("private void DeleteRelations(" + model.Name + " entity, ISavesCollector saves)");
+            stringGenerator.AppendLine($"private void DeleteRelations({model.Name} entity, ISavesCollector saves)");
         }
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)

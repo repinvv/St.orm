@@ -12,9 +12,9 @@
         private readonly PlainClassPartsGenerator classPartsGenerator;
         private readonly OptionsService options;
 
-        public StructPartsGenerator(UsingsGenerator usingsGenerator, 
-            FieldUtility fieldUtility, 
-            PlainClassPartsGenerator classPartsGenerator, 
+        public StructPartsGenerator(UsingsGenerator usingsGenerator,
+            FieldUtility fieldUtility,
+            PlainClassPartsGenerator classPartsGenerator,
             OptionsService options)
         {
             this.usingsGenerator = usingsGenerator;
