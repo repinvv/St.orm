@@ -176,7 +176,7 @@ namespace StormTestProject.StormModel
                 sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ", @parm4i" + i + ", @parm5i" + i + ", @parm6i" + i + ", @parm7i" + i + ")");
             }
 
-            var parameters = new List<SqlParameter>(entities.Count*7);
+            var parameters = new List<SqlParameter>(entities.Count * 7);
             for (i = 0; i < entities.Count; i++)
             {
                 var entity = entities[i];

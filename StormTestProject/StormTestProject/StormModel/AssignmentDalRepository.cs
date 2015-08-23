@@ -279,6 +279,7 @@ namespace StormTestProject.StormModel
             }
 
             SaveService.Delete<Premium, Premium>(entity.Premiums, saves);
+            SaveService.Delete<Covered, Covered>(entity.Covereds, saves);
         }
 
         private void SetMtoFields(Assignment entity)
@@ -321,7 +322,7 @@ namespace StormTestProject.StormModel
                 sb.AppendLine("   ,(@parm1i" + i + ", @parm2i" + i + ", @parm3i" + i + ", @parm4i" + i + ")");
             }
 
-            var parameters = new List<SqlParameter>(entities.Count*4);
+            var parameters = new List<SqlParameter>(entities.Count * 4);
             for (i = 0; i < entities.Count; i++)
             {
                 var entity = entities[i];

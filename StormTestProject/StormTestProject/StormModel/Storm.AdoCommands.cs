@@ -18,7 +18,10 @@ namespace StormTestProject.StormModel
 
     public static class AdoCommands
     {
-        public static List<TDal> Materialize<TDal, TQuery>(IQueryable<TQuery> source, Func<IDataReader, TDal> itemCreator, DbConnection connection, DbTransaction transaction)
+        public static List<TDal> Materialize<TDal, TQuery>(IQueryable<TQuery> source,
+                                                           Func<IDataReader, TDal> itemCreator,
+                                                           DbConnection connection,
+                                                           DbTransaction transaction)
             where TQuery : class
         {
             var objectQuery = source.ToObjectQuery();
@@ -29,7 +32,11 @@ namespace StormTestProject.StormModel
                                  objectQuery.Parameters.Select(x => new SqlParameter(x.Name, x.Value)).ToArray());
         }
 
-        private static List<T> ExecuteSelect<T>(string request, Func<IDataReader, T> itemCreator, DbConnection connection, DbTransaction transaction, params SqlParameter[] parameters)
+        private static List<T> ExecuteSelect<T>(string request,
+                                                Func<IDataReader, T> itemCreator,
+                                                DbConnection connection,
+                                                DbTransaction transaction,
+                                                params SqlParameter[] parameters)
         {
             using (new ConnectionHandler(connection))
             {

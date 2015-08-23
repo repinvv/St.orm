@@ -10,8 +10,8 @@ namespace StormTestProject.StormModel
 {
     using System.Collections.Generic;
     using System.Linq;
-    using St.Orm;    
-    using St.Orm.Interfaces;    
+    using St.Orm;
+    using St.Orm.Interfaces;
     using St.Orm.Parameters;
 
     public class StormCommands

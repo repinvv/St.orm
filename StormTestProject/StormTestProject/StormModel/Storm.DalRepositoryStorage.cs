@@ -12,18 +12,18 @@ namespace StormTestProject.StormModel
     using System.Collections.Generic;
     using St.Orm;
     using St.Orm.Interfaces;
-    
+
     internal static class DalRepositoryStorage
     {
-        private static readonly Dictionary<Type, object> repositories 
+        private static readonly Dictionary<Type, object> repositories
             = new Dictionary<Type, object>
                 {
+                    { typeof(Calculation), new CalculationDalRepository() },
+                    { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
                     { typeof(Department), new DepartmentDalRepository() },
                     { typeof(Eligibility), new EligibilityDalRepository() },
                     { typeof(Currency), new CurrencyDalRepository() },
                     { typeof(Country), new CountryDalRepository() },
-                    { typeof(Calculation), new CalculationDalRepository() },
-                    { typeof(CalculationDetails), new CalculationDetailsDalRepository() },
                     { typeof(Policy), new PolicyDalRepository() },
                     { typeof(Tax), new TaxDalRepository() },
                     { typeof(Assignment), new AssignmentDalRepository() },

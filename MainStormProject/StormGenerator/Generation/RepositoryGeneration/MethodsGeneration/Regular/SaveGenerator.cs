@@ -32,7 +32,7 @@
                 if (field.Type == typeof(Guid))
                 {
                     stringGenerator.AppendLine($"if(entity.{field.Name} == Guid.Empty)");
-                    stringGenerator.Braces("entity.{field.Name} = Guid.NewGuid();");
+                    stringGenerator.Braces($"entity.{field.Name} = Guid.NewGuid();");
                     stringGenerator.AppendLine();
                 }
             });

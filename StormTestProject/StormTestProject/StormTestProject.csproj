@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StormTestProject</RootNamespace>
     <AssemblyName>StormTestProject</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -133,13 +135,6 @@
     <Compile Include="StormModel\PolicyDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Tests\Basic\ActualTests\ActualInsertTest.cs" />
-    <Compile Include="Tests\Basic\TransactionalLockTest.cs" />
-    <Compile Include="Tests\Helpers\AssignmentHelper.cs" />
-    <Compile Include="Tests\Helpers\CommentHelper.cs" />
-    <Compile Include="Tests\Helpers\CountryHelper.cs" />
-    <Compile Include="Tests\Helpers\CurrencyHelper.cs" />
-    <Compile Include="Tests\Helpers\PolicyHelper.cs" />
     <Compile Include="StormModel\Premium.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
@@ -165,19 +160,26 @@
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormModel\StormEntities.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Tests\Basic\EfTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Basic\InsertTest.cs" />
     <Compile Include="StormModel\Tax.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormModel\TaxDalRepository.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tests\Basic\ActualTests\ActualInsertTest.cs" />
+    <Compile Include="Tests\Basic\TransactionalLockTest.cs" />
+    <Compile Include="Tests\Helpers\AssignmentHelper.cs" />
+    <Compile Include="Tests\Helpers\CommentHelper.cs" />
+    <Compile Include="Tests\Helpers\CountryHelper.cs" />
+    <Compile Include="Tests\Helpers\CurrencyHelper.cs" />
+    <Compile Include="Tests\Helpers\PolicyHelper.cs" />
+    <Compile Include="Tests\Basic\EfTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\Basic\InsertTest.cs" />
     <Compile Include="Tests\Helpers\TaxHelper.cs" />
     <Compile Include="Tests\Infrastructure\TestConfig.cs" />
     <Compile Include="Tests\Infrastructure\IoC.cs" />
@@ -198,6 +200,9 @@
   <ItemGroup>
     <Content Include="DatabaseScripts\DropTables.sql" />
     <Content Include="DatabaseScripts\CreateTables.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ef\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
