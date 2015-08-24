@@ -4,133 +4,100 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Generation.Common;
+    using StormGenerator.Generation.StaticFilesGeneration.ContextGeneration.RelationFieldInitializers;
     using StormGenerator.Infrastructure.StringGenerator;
     using StormGenerator.Models.Pregen;
-    using StormGenerator.Models.Pregen.Relation;
 
     internal class InitializersGenerator
     {
+        private readonly RelationFieldInitializer relationFieldInitializer;
+        private readonly InitializerStartingLine initializerStartingLine;
         private readonly ObjectStringService objectStringService;
-        private readonly HashSet<string> relationIds = new HashSet<string>();
 
-        public InitializersGenerator(ObjectStringService objectStringService)
+        public InitializersGenerator(RelationFieldInitializer relationFieldInitializer, 
+            InitializerStartingLine initializerStartingLine,
+            ObjectStringService objectStringService)
         {
+            this.relationFieldInitializer = relationFieldInitializer;
+            this.initializerStartingLine = initializerStartingLine;
             this.objectStringService = objectStringService;
         }
 
         public bool NeedsInitializer(Model model)
         {
-            return model.RelationFields.ActiveAny() || model.MappingFields.Any(NeedsInitializer);
+            return model == model.Parent;
         }
 
         public void GenerateInitializers(List<Model> models, IStringGenerator stringGenerator)
         {
+            var relationIds = new HashSet<string>();
             foreach (var model in models.Where(NeedsInitializer))
             {
                 stringGenerator.AppendLine();
                 stringGenerator.AppendLine("protected virtual void Initialize" + model.Name + "Fields(DbModelBuilder modelBuilder)");
-                stringGenerator.Braces(() => GenerateInitializer(model, stringGenerator));
+                stringGenerator.Braces(() => GenerateInitializer(model, relationIds, stringGenerator));
             }
         }
 
-        private void GenerateInitializer(Model model, IStringGenerator stringGenerator)
+        private void GenerateInitializer(Model model, HashSet<string> relationIds, IStringGenerator stringGenerator)
         {
-            // suppressed mtm's
-            foreach (var field in model.RelationFields.Active())
+            InitializeTable(model, stringGenerator);
+            foreach (var field in model.RelationFields.Active( x=>!relationIds.Contains(x.AssociationId)))
             {
-                if (relationIds.Contains(field.AssociationId))
+                relationIds.Add(field.AssociationId);
+                relationFieldInitializer.InitializeRelationField(model, field, stringGenerator);
+            }
+
+            foreach (var field in model.MappingFields.Active())
+            {
+                InitializeMappingField(model, field, stringGenerator);
+            }
+        }
+
+        private void InitializeMappingField(Model model, MappingField field, IStringGenerator stringGenerator)
+        {
+            initializerStartingLine.CreateInitializerStartingLine(model, stringGenerator);
+            stringGenerator.PushIndent();
+            stringGenerator.AppendLine(".Property(e => e." + field.Name + ")");
+            if (GenerationConstants.ModelGeneration.TypesWithPrecision.Contains(field.DbField.Type))
+            {
+                stringGenerator.AppendLine($".HasPrecision({field.DbField.Precision}, {field.DbField.Scale})");
+            }
+
+            if (field.DbField.IsPrimaryKey)
+            {
+                var gen = field.DbField.IsIdentity ? "Identity": "None";
+                stringGenerator.AppendLine($".HasDatabaseGeneratedOption(DatabaseGeneratedOption.{gen})");
+            }
+
+            if (field.Type == typeof(string))
+            {
+                if (!field.DbField.IsNullable)
                 {
-                    continue;
+                    stringGenerator.AppendLine(".IsRequired()");
                 }
 
-                stringGenerator.AppendLine("modelBuilder.Entity<" + model.Name + ">()");
-                stringGenerator.PushIndent();
-                relationIds.Add(field.AssociationId);
-                GenerateManyToManyIgnore(field as ManyToManyField, stringGenerator);
-                GenerateOneToManyInit(field as OneToManyField, stringGenerator);
-                GenerateManyToOneInit(field as ManyToOneField, stringGenerator);
-                stringGenerator.PopIndent();
+                if (field.DbField.Length > 0)
+                {
+                    stringGenerator.AppendLine($".HasMaxLength({field.DbField.Length})");
+                }
             }
 
-            foreach (var field in model.MappingFields.Where(NeedsInitializer))
-            {
-                stringGenerator.AppendLine("modelBuilder.Entity<" + model.Name + ">()");
-                stringGenerator.PushIndent();
-                stringGenerator.AppendLine(".Property(e => e." + field.Name + ")");
-                stringGenerator.AppendLine(".HasPrecision(" + field.DbField.Precision + ", " + field.DbField.Scale + ");");
-                stringGenerator.PopIndent();
-            }
-        }
-
-        private void GenerateManyToOneInit(ManyToOneField field, IStringGenerator stringGenerator)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            var required = field.NearEndFields.ActiveAny(x => x.DbField.IsNullable) ? "Optional" : "Required";
-
-            stringGenerator.AppendLine(".Has" + required + "(x => x." + field.Name + ")");
-            var reverseField = field.FieldModel.RelationFields.Active().FirstOrDefault(x => x.AssociationId == field.AssociationId);
-            var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
-            stringGenerator.AppendLine(".WithMany(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.NearEndFields.ActiveSelect(x => x.Name), "x", false);
-            stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
-        }
-
-        private void GenerateOneToManyInit(OneToManyField field, IStringGenerator stringGenerator)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            stringGenerator.AppendLine(".HasMany(x => x." + field.Name + ")");
-            var reverseField = field.FieldModel.RelationFields.Active().FirstOrDefault(x => x.AssociationId == field.AssociationId);
-            var required = field.FarEndFields.ActiveAny(x => x.DbField.IsNullable) ? "Optional" : "Required";
-            var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
-            stringGenerator.AppendLine(".With" + required + "(" + reverse + ")");
-            var objectString = objectStringService.CreateObjectString(field.FarEndFields.ActiveSelect(x => x.Name), "x", false);
-            stringGenerator.AppendLine(".HasForeignKey(x => " + objectString + ");");
-        }
-
-        private void GenerateManyToManyIgnore(ManyToManyField field, IStringGenerator stringGenerator)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            stringGenerator.AppendLine(".Ignore(x => x." + field.Name + ");");
-        }
-
-        private void GenerateManyToManyInit(ManyToManyField field, IStringGenerator stringGenerator)
-        {
-            if (field == null)
-            {
-                return;
-            }
-
-            relationIds.Add(field.MediatorMtoField.AssociationId);
-            stringGenerator.AppendLine(".HasMany(x => x." + field.Name + ")");
-            var reverseField = field.MediatorMtoField.FieldModel.RelationFields.Active().OfType<ManyToManyField>()
-                .FirstOrDefault(x => x.MediatorMtoField.AssociationId == field.AssociationId);
-            var reverse = reverseField == null ? string.Empty : ("x => x." + reverseField.Name);
-            stringGenerator.AppendLine(".WithMany(" + reverse + ")");
-            stringGenerator.AppendLine(".Map(m => m.ToTable(\"" + field.MediatorModel.DbModel.Name + "\", \"" +
-                                       field.MediatorModel.DbModel.Schema + "\")");
-            stringGenerator.PushIndent();
-            var leftKeys = field.FarEndFields.ActiveSelect(x => "\"" + x.DbField.Name + "\"");
-            stringGenerator.AppendLine(".MapLeftKey(" + string.Join(", ", leftKeys) + ")");
-            var rightKeys = field.MediatorMtoField.NearEndFields.ActiveSelect(x => "\"" + x.DbField.Name + "\"");
-            stringGenerator.AppendLine(".MapRightKey(" + string.Join(", ", rightKeys) + "));");
+            stringGenerator.AppendLine($".HasColumnName(\"{field.DbField.Name}\")");
+            stringGenerator.AppendLine($".HasColumnType(\"{field.DbField.Type}\")");
+            stringGenerator.AppendLine($".HasColumnOrder({field.DbField.Index});");
             stringGenerator.PopIndent();
         }
 
-        private bool NeedsInitializer(MappingField field)
+        private void InitializeTable(Model model, IStringGenerator stringGenerator)
         {
-            return field.Enabled && GenerationConstants.ModelGeneration.DottedTypes.Contains(field.Type);
+            initializerStartingLine.CreateInitializerStartingLine(model, stringGenerator);
+            stringGenerator.PushIndent();
+            stringGenerator.AppendLine($".ToTable(\"{model.DbModel.Name}\", \"{model.DbModel.Schema}\")");
+            var keyFields = model.KeyFields().Select(x => x.Name).ToList();
+            var key = objectStringService.CreateObjectString(keyFields, "x");
+            stringGenerator.AppendLine($".HasKey(x => {key});");
+            stringGenerator.PopIndent();
         }
     }
 }

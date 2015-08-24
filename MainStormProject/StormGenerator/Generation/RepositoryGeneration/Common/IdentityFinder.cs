@@ -6,19 +6,14 @@
 
     internal class IdentityFinder
     {
-        public bool HasId(Model model)
-        {
-            return model.MappingFields.ActiveCount(x => x.DbField.IsPrimaryKey) == 1;
-        }
-
         public void WithIdentity(Model model, Action<MappingField> action)
         {
-            if (!HasId(model))
+            if (!model.HasId())
             {
                 return;
             }
 
-            action(model.MappingFields.First(x => x.DbField.IsPrimaryKey));
+            action(model.KeyFields().First());
         }
     }
 }

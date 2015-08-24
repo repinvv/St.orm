@@ -23,7 +23,7 @@
 
         public void GenerateMethod(Model model, IStringGenerator stringGenerator)
         {
-            if (!identityFinder.HasId(model))
+            if (!model.HasId())
             {
                 stringGenerator.AppendLine("throw new Exception(\"Get by id is only available for entities with single primary key field.\");");
                 return;

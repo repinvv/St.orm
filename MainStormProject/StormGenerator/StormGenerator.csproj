@@ -123,6 +123,12 @@
     <Compile Include="Generation\ModelGeneration\ModelGeneratorFactory.cs" />
     <Compile Include="Generation\ModelGeneration\PlainClassPartsGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\StructPartsGenerator.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializerStartingLine.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\IRelationFieldInitializer.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\ManyToManyIgnoreInitializer.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\ManyToOneFieldInitializer.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\OneToManyFieldInitializer.cs" />
+    <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\RelationFieldInitializer.cs" />
     <Compile Include="Generation\StaticFilesGeneration\DalRepositoryStorageGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\IStaticFileGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\StaticFilesGenerator.cs" />
@@ -142,6 +148,7 @@
     <Compile Include="ModelsCollection\RelationsModeChecker.cs" />
     <Compile Include="Models\Config\Db\DbAssociation.cs" />
     <Compile Include="Models\Config\StormConfig.cs" />
+    <Compile Include="Models\Pregen\ModelExtension.cs" />
     <Compile Include="Models\Pregen\Relation\JoinField.cs" />
     <Compile Include="Models\Pregen\Relation\ManyToManyField.cs" />
     <Compile Include="Models\Pregen\Relation\ManyToOneField.cs" />

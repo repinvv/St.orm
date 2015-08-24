@@ -50,7 +50,7 @@
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.Identity)]");
                 }
-                else if (integerTypes.Contains(field.Type) && identityFinder.HasId(model))
+                else if (integerTypes.Contains(field.Type) && model.HasId())
                 {
                     stringGenerator.AppendLine("[DatabaseGenerated(DatabaseGeneratedOption.None)]");
                 }

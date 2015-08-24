@@ -9,7 +9,7 @@
     {
         public void GenerateEqualityMembers(Model model, IStringGenerator stringGenerator)
         {
-            var keyFields = model.MappingFields.Where(x => x.DbField.IsPrimaryKey).ToList();
+            var keyFields = model.KeyFields();
             stringGenerator.AppendLine("public override bool Equals(object obj)");
             stringGenerator.Braces($"return Equals(obj as {model.Name});");
             stringGenerator.AppendLine();

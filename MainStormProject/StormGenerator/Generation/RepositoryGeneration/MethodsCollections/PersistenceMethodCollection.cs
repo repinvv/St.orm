@@ -27,7 +27,7 @@
 
         public IMethodGenerator[] GetGeneratorsCollection(Model model)
         {
-            var keyFields = model.MappingFields.Where(x => x.DbField.IsPrimaryKey).ToList();
+            var keyFields = model.KeyFields();
             if (keyFields.Count == 1 && keyFields[0].DbField.IsIdentity)
             {
                 return identityInsertMethods;

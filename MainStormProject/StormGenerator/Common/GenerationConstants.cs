@@ -29,7 +29,15 @@
             public const string RepositorySuffix = "DalRepository";
             public const string ContextExtensionSuffix = "Extension";
 
-            public static readonly Type[] DottedTypes = { typeof(decimal), typeof(double), typeof(float) };
+            public static readonly string[] TypesWithPrecision =
+            {
+                "decimal",
+                "numeric",
+                "money",
+                "smallmoney",
+                "float",
+                "real"
+            };
 
             public static readonly string[] RepositoryUsings =
             {
@@ -61,6 +69,7 @@
             public static readonly string[] ContextUsings =
             {
                 "System.Data.Entity",
+                "System.ComponentModel.DataAnnotations.Schema",
                 typeof(IStormContext).Namespace
             };
         }

@@ -34,7 +34,7 @@
 
         public void GenerateDefinition(Model model, IStringGenerator stringGenerator)
         {
-            var haveId = model.Parent.MappingFields.Count(x => x.DbField.IsPrimaryKey) == 1 ? ", IHaveId" : string.Empty;
+            var haveId = model.Parent.KeyFields().Count == 1 ? ", IHaveId" : string.Empty;
             var customInterface = string.IsNullOrWhiteSpace(options.Options.CustomInterfaceForEntities)
                                       ? string.Empty
                                       : ", " + options.Options.CustomInterfaceForEntities.Trim();
