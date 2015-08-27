@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\StormTestProject\packages\st.orm.0.1.0\</OutputPath>
+    <OutputPath>..\..\BasicFeaturesTest\packages\st.orm.0.1.0\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -61,6 +61,8 @@
     <Compile Include="DbModelsCollection\TableReader.cs" />
     <Compile Include="GeneratedFile.cs" />
     <Compile Include="Generation\Common\ObjectStringService.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\DefinitionGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelFieldsGenerator.cs" />
     <Compile Include="Generation\RepositoryGeneration\Common\SplitRunCount.cs" />
     <Compile Include="Generation\FileGenerator.cs" />
     <Compile Include="Generation\ModelGeneration\EqualityGenerator.cs" />
@@ -116,13 +118,12 @@
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\ContextGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializersGenerator.cs" />
     <Compile Include="Generation\Generator.cs" />
-    <Compile Include="Generation\ModelGeneration\AttributedClassPartsGenerator.cs" />
-    <Compile Include="Generation\ModelGeneration\FieldUtility.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\FieldUtility.cs" />
     <Compile Include="Generation\ModelGeneration\ModelGenerator.cs" />
-    <Compile Include="Generation\ModelGeneration\IModelPartsGenerator.cs" />
-    <Compile Include="Generation\ModelGeneration\ModelGeneratorFactory.cs" />
-    <Compile Include="Generation\ModelGeneration\PlainClassPartsGenerator.cs" />
-    <Compile Include="Generation\ModelGeneration\StructPartsGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\IModelPartsGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\ModelGeneratorFactory.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\ClassPartsGenerator.cs" />
+    <Compile Include="Generation\ModelGeneration\ModelPartsGeneration\StructPartsGenerator.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\InitializerStartingLine.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\IRelationFieldInitializer.cs" />
     <Compile Include="Generation\StaticFilesGeneration\ContextGeneration\RelationFieldInitializers\ManyToManyIgnoreInitializer.cs" />
