@@ -41,11 +41,37 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TechTalk.SpecFlow, Version=1.9.0.77, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NameCreatorTests.cs" />
-    <Compile Include="NameNormalizerTest.cs" />
+    <Compile Include="Definitions\ConvertNameToCamelCase.cs" />
+    <Compile Include="Definitions\ConvertNameToPlural.cs" />
+    <Compile Include="Definitions\HaveAListDefinedAs.cs" />
+    <Compile Include="Definitions\HaveANameDefinedAs.cs" />
+    <Compile Include="Definitions\ResultListsShouldBeEqual.cs" />
+    <Compile Include="Definitions\NormalizeNameList.cs" />
+    <Compile Include="Definitions\ResultShouldBeEqualTo.cs" />
+    <Compile Include="Features\CamelCaseNameCreation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CamelCaseNameCreation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\NameNormalization.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NameNormalization.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\PluralNameCreation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluralNameCreation.feature</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleTestingContext.cs" />
+    <Compile Include="TableToStringList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StormGenerator\StormGenerator.csproj">
@@ -56,6 +82,23 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Features\CamelCaseNameCreation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CamelCaseNameCreation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\NameNormalization.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>NameNormalization.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\PluralNameCreation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PluralNameCreation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -11,6 +11,7 @@ namespace BasicFeaturesTest.StormModel
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using St.Orm.Interfaces;
 
     public partial class Assignment : IEquatable<Assignment>, ICloneable<Assignment>, IHaveId, IDbEntity
     {

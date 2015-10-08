@@ -1,6 +1,6 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
-<#@ assembly name="$(SolutionDir)packages\St.orm.0.1.0\St.orm.dll" 
-#><#@ assembly name="$(SolutionDir)packages\St.orm.0.1.0\St.orm.Generator.dll" 
+<#@ assembly name="$(SolutionDir)..\output\St.orm.dll" 
+#><#@ assembly name="$(SolutionDir)..\output\St.orm.Generator.dll" 
 #><#@ assembly name="System.Core"
 #><#@ assembly name="System.Data.Linq"
 #><#@ assembly name="EnvDTE"
