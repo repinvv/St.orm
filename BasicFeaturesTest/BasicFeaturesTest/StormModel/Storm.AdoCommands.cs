@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace BasicFeaturesTest.StormModel
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace StormTestProject.StormModel
     using System.Data.Common;
     using System.Data.SqlClient;
     using System.Linq;
-    using EntityFramework.Extensions;
 
     public static class AdoCommands
     {

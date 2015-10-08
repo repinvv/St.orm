@@ -1,7 +1,6 @@
-﻿namespace StormTestProject.StormModel
+﻿namespace BasicFeaturesTest.StormModel
 {
     using System;
-    using System.Collections.Generic;
 
     public static class PersistenceEvents
     {

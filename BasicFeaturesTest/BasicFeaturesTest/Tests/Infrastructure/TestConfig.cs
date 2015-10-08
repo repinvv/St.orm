@@ -1,7 +1,6 @@
-﻿namespace StormTestProject.Tests.Infrastructure
+﻿namespace BasicFeaturesTest.Tests.Infrastructure
 {
     using System.Linq;
-    using StormTestProject.StormModel;
 
     internal static class TestConfig
     {

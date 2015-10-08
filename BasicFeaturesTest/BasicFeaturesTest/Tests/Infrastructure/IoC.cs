@@ -1,4 +1,4 @@
-﻿namespace StormTestProject.Tests.Infrastructure
+﻿namespace BasicFeaturesTest.Tests.Infrastructure
 {
     using System;
     using System.Collections.Generic;

@@ -1,7 +1,7 @@
-﻿namespace StormTestProject.Tests.Helpers
+﻿namespace BasicFeaturesTest.Tests.Helpers
 {
     using System;
-    using StormTestProject.StormModel;
+    using BasicFeaturesTest.StormModel;
 
     internal class CurrencyHelper
     {

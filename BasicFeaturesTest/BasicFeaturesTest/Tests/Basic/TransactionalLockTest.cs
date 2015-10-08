@@ -1,15 +1,14 @@
-﻿namespace StormTestProject.Tests.Basic
+﻿namespace BasicFeaturesTest.Tests.Basic
 {
     using System;
     using System.Data;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
-    using EntityFramework.Extensions;
+    using BasicFeaturesTest.StormModel;
+    using BasicFeaturesTest.Tests.Helpers;
+    using BasicFeaturesTest.Tests.Infrastructure;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using StormTestProject.StormModel;
-    using StormTestProject.Tests.Helpers;
-    using StormTestProject.Tests.Infrastructure;
 
     [TestClass]
     public class TransactionalLockTest

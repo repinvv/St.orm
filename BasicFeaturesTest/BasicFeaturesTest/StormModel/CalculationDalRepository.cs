@@ -6,18 +6,12 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace BasicFeaturesTest.StormModel
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Data.Common;
-    using System.Data.SqlClient;
     using System.Linq;
-    using System.Text;
-    using St.Orm;
-    using St.Orm.Implementation;
-    using St.Orm.Interfaces;
 
     internal class CalculationDalRepository : IDalRepository<Calculation, Calculation>
     {

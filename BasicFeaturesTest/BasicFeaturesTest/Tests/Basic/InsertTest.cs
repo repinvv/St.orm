@@ -1,8 +1,8 @@
-﻿namespace StormTestProject.Tests.Basic
+﻿namespace BasicFeaturesTest.Tests.Basic
 {
+    using BasicFeaturesTest.Tests.Basic.ActualTests;
+    using BasicFeaturesTest.Tests.Infrastructure;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using StormTestProject.Tests.Basic.ActualTests;
-    using StormTestProject.Tests.Infrastructure;
 
     [TestClass]
     public class InsertTest

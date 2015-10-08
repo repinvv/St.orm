@@ -1,4 +1,4 @@
-﻿namespace StormTestProject.StormModel
+﻿namespace BasicFeaturesTest.StormModel
 {
     using System;
 

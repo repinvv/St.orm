@@ -1,7 +1,7 @@
-﻿namespace StormTestProject.Tests.Basic.ActualTests
+﻿namespace BasicFeaturesTest.Tests.Basic.ActualTests
 {
-    using StormTestProject.StormModel;
-    using StormTestProject.Tests.Helpers;
+    using BasicFeaturesTest.StormModel;
+    using BasicFeaturesTest.Tests.Helpers;
 
     internal class ActualInsertTest
     {

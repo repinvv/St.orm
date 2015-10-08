@@ -6,13 +6,11 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace BasicFeaturesTest.StormModel
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using St.Orm;
-    using St.Orm.Interfaces;
 
     public partial class Calculation : IEquatable<Calculation>, ICloneable<Calculation>, IHaveId, IDbEntity
     {

@@ -1,10 +1,8 @@
-﻿namespace StormTestProject.Tests.Basic
+﻿namespace BasicFeaturesTest.Tests.Basic
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using BasicFeaturesTest.StormModel;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using StormTestProject.StormModel;
-    using StormTestProject.Tests.Infrastructure;
 
     [TestClass]
     public class EfTest

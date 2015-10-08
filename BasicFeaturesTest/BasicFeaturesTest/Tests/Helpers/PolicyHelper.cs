@@ -1,8 +1,8 @@
-﻿namespace StormTestProject.Tests.Helpers
+﻿namespace BasicFeaturesTest.Tests.Helpers
 {
     using System;
     using System.Collections.Generic;
-    using StormTestProject.StormModel;
+    using BasicFeaturesTest.StormModel;
 
     internal class PolicyHelper
     {
