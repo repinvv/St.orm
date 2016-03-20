@@ -47,6 +47,9 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Storm">
+      <HintPath>..\..\output\Storm.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -106,6 +109,17 @@
     <Compile Include="Services\ComparisionService.cs" />
     <Compile Include="Services\ConversionService.cs" />
     <Compile Include="Services\MainService.cs" />
+    <Compile Include="StormEntities\AdoCommands.cs" />
+    <Compile Include="StormEntities\CompanyAdoRepository.cs" />
+    <Compile Include="StormEntities\ConnectionHandler.cs" />
+    <Compile Include="StormEntities\company.cs" />
+    <Compile Include="StormEntities\CompanyDalRepository.cs" />
+    <Compile Include="StormEntities\department.cs" />
+    <Compile Include="StormEntities\DepartmentAdoRepository.cs" />
+    <Compile Include="StormEntities\DepartmentDalRepository.cs" />
+    <Compile Include="StormEntities\RepositoryStorage.cs" />
+    <Compile Include="StormEntities\StormDb.cs" />
+    <Compile Include="StormEntities\StormDb.IStormContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -147,6 +161,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

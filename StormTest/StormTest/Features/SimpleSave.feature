@@ -1,4 +1,4 @@
-﻿@inTransaction
+﻿@inTransaction1
 Feature: SimpleSave
 	In order save data to db
 	I want to call simple DAL method

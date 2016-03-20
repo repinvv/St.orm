@@ -9,7 +9,6 @@
     {
         private readonly IStormContext context;
         private readonly object[] fields;
-        private readonly Dictionary<Type, object> inheritedServices = new Dictionary<Type, object>();
 
         public LoadService(Dictionary<object, object> parametersDictionary, IStormContext context, int relationPropertiesCount)
         {

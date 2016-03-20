@@ -1,0 +1,123 @@
+﻿namespace StormTest.StormEntities
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LinqToDB.Mapping;
+    using Storm.Interfaces;
+
+    [Table(Schema = "models", Name = "company")]
+    public class company : IDalEntity<company>
+    {
+        [PrimaryKey, Identity]
+        public int company_id { get; set; }
+
+        [Column, Nullable]
+        public string name { get; set; }
+
+        [Association(ThisKey = "company_id", OtherKey = "company_id", CanBeNull = true, IsBackReference = true)]
+        public List<department> Departments { get { return GetField0(); } set { populated[0] = true; field0 = value; } }
+
+        #region private fields
+        private readonly company clonedFrom;
+        private readonly bool[] populated;
+        private readonly ILoadService loadService;
+        private readonly IQueryable<company> sourceQuery;
+
+        private List<department> field0;
+        #endregion
+
+        #region constructors
+        public company(IQueryable<company> sourceQuery, ILoadService loadService)
+        {
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
+            populated = new bool[1];
+        }
+
+        public company(company clonedFrom, IQueryable<company> sourceQuery, ILoadService loadService)
+        {
+            this.clonedFrom = clonedFrom;
+            this.loadService = loadService;
+            this.sourceQuery = sourceQuery;
+            populated = new bool[1];
+        }
+
+        public company()
+        {
+            populated = new [] { true };
+            Departments = new List<department>();
+        }
+        #endregion
+
+        #region private methods
+        private List<department> GetField0()
+        {
+            if (populated[0])
+            {
+                return field0;
+            }
+
+            Func<IQueryable<department>> query = () =>
+            {
+                return loadService.Context.Set<department>()
+                    .Join(sourceQuery, x => x.company_id, x => x.company_id, (x, y) => x);
+            };
+            Func<department, int> indexLambda = x => x.company_id;
+            var items = loadService.GetList(0, query, indexLambda, company_id);
+            if (clonedFrom == null)
+            {
+                populated[0] = true;
+                return field0 = items;
+            }
+
+            clonedFrom.Departments = items;
+            field0 = new List<department>(items.Count);
+            field0.AddRange(items.Select(x => (x as IDalEntity<department>).Clone()));
+            populated[0] = true;
+            return field0;
+        }
+
+        #endregion
+
+        #region IDalEntity members
+        company IDalEntity<company>.Clone()
+        {
+            return new company(this, sourceQuery, loadService)
+            {
+                company_id = company_id,
+                name = name
+            };
+        }
+
+        company IDalEntity<company>.ClonedFrom()
+        {
+            return clonedFrom;
+        }
+
+        bool[] IDalEntity<company>.GetPopulated()
+        {
+            return populated;
+        }
+        #endregion
+
+        #region equality
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as company);
+        }
+
+        protected bool Equals(company other)
+        {
+            return other != null
+                   && company_id == other.company_id;
+        }
+
+        public override int GetHashCode()
+        {
+            return company_id.GetHashCode();
+        }
+
+        #endregion
+    }
+}

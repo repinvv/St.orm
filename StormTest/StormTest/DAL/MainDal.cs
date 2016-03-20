@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using LinqToDB;
 using StormTest.Schema;
@@ -8,6 +7,11 @@ using TestingContextCore.PublicMembers;
 
 namespace StormTest.DAL
 {
+    using Storm;
+    using StormTest.StormEntities;
+    using company = StormTest.Schema.company;
+    using department = StormTest.Schema.department;
+
     public class MainDal
     {
         private readonly Storage storage;
@@ -30,6 +34,7 @@ namespace StormTest.DAL
 
         private void InsertCompany(StormTestDB db, company company)
         {
+            return;
             var id = Convert.ToInt32(db.InsertWithIdentity(company));
             foreach (var department in company.fkdepartment1)
             {
@@ -65,6 +70,15 @@ namespace StormTest.DAL
 
         public company LoadCompany(string name)
         {
+            using (var stormdb = new StormDb())
+            {
+                var query = stormdb.companies.Where(x => x.name == name);
+                var companies = stormdb.Get(query);
+                var a = query.ToList();
+                var departments = companies[0].Departments;
+            }
+
+
             var db = CreateContext();
             var company = db.companies.First(x => x.name == name);
             company.fkdepartment1 = LoadDepartments(db, company);

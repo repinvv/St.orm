@@ -31,7 +31,7 @@ namespace StormTest.Features
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner(null, 0);
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "SimpleSave", "\tIn order save data to db\r\n\tI want to call simple DAL method", ProgrammingLanguage.CSharp, new string[] {
-                        "inTransaction"});
+                        "inTransaction1"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -150,7 +150,7 @@ namespace StormTest.Features
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Save and then load")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "SimpleSave")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("inTransaction")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("inTransaction1")]
         public virtual void SaveAndThenLoad()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Save and then load", ((string[])(null)));
@@ -169,7 +169,7 @@ this.FeatureBackground();
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Load, change and save")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "SimpleSave")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("inTransaction")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("inTransaction1")]
         public virtual void LoadChangeAndSave()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Load, change and save", ((string[])(null)));
