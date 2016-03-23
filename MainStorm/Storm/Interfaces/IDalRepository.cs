@@ -5,7 +5,7 @@
 
     public interface IDalRepository<TDal, TQuery>
     {
-        List<TDal> Materialize(IQueryable<TQuery> query, ILoadService loadService);
+        List<TDal> Materialize(ILoadService<TQuery> loadService);
 
         /// <summary>
         /// returns total count of navigation properties in TDal entity

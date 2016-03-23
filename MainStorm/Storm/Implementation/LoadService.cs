@@ -5,20 +5,23 @@
     using System.Linq;
     using Storm.Interfaces;
 
-    internal class LoadService : ILoadService
+    internal class LoadService<TQuery> : ILoadService<TQuery>
     {
         private readonly object[] fields;
 
-        public LoadService(IStormContext context, int navPropsCount)
+        public LoadService(IStormContext context, int navPropsCount, IQueryable<TQuery> query)
         {
             Context = context;
+            Query = query;
             fields = new object[navPropsCount];
         }
 
         public IStormContext Context { get; }
 
-        private ILookup<TIndex, TField> GetLookup<TField, TQuery, TIndex>(int navPropIndex,
-            Func<IQueryable<TQuery>> query,
+        public IQueryable<TQuery> Query { get; set; }
+
+        private ILookup<TIndex, TField> GetLookup<TField, TFieldQuery, TIndex>(int navPropIndex,
+            Func<IQueryable<TFieldQuery>> query,
             Func<TField, TIndex> indexLambda)
         {
             if (fields[navPropIndex] != null)
@@ -26,15 +29,15 @@
                 return fields[navPropIndex] as Lookup<TIndex, TField>;
             }
 
-            var repo = Context.GetDalRepository<TField, TQuery>();
-            var items = repo.Materialize(query(), new LoadService(Context, repo.NavPropsCount()))
+            var repo = Context.GetDalRepository<TField, TFieldQuery>();
+            var items = repo.Materialize(new LoadService<TFieldQuery>(Context, repo.NavPropsCount(), query()))
                             .ToLookup(indexLambda);
             fields[navPropIndex] = items;
             return items;
         }
 
-        public List<TField> GetList<TField, TQuery, TIndex>(int navPropIndex,
-            Func<IQueryable<TQuery>> query,
+        public List<TField> GetList<TField, TFieldQuery, TIndex>(int navPropIndex,
+            Func<IQueryable<TFieldQuery>> query,
             Func<TField, TIndex> indexLambda,
             TIndex key)
         {
@@ -43,8 +46,8 @@
                 : GetLookup(navPropIndex, query, indexLambda)[key].ToList();
         }
 
-        public List<TField> GetList<TField, TQuery, TIndex>(int navPropIndex,
-            Func<IQueryable<TQuery>> query,
+        public List<TField> GetList<TField, TFieldQuery, TIndex>(int navPropIndex,
+            Func<IQueryable<TFieldQuery>> query,
             Func<TField, TIndex> indexLambda,
             TIndex? key)
             where TIndex : struct
@@ -54,8 +57,8 @@
                 : new List<TField>();
         }
 
-        public TField GetSingle<TField, TQuery, TIndex>(int navPropIndex,
-            Func<IQueryable<TQuery>> query,
+        public TField GetSingle<TField, TFieldQuery, TIndex>(int navPropIndex,
+            Func<IQueryable<TFieldQuery>> query,
             Func<TField, TIndex> indexLambda,
             TIndex key)
             where TField : class
@@ -65,8 +68,8 @@
                 : GetLookup(navPropIndex, query, indexLambda)[key].FirstOrDefault();
         }
 
-        public TField GetSingle<TField, TQuery, TIndex>(int navPropIndex,
-            Func<IQueryable<TQuery>> query,
+        public TField GetSingle<TField, TFieldQuery, TIndex>(int navPropIndex,
+            Func<IQueryable<TFieldQuery>> query,
             Func<TField, TIndex> indexLambda,
             TIndex? key)
             where TIndex : struct

@@ -21,25 +21,22 @@
         #region private fields
         private readonly company clonedFrom;
         private readonly bool[] populated;
-        private readonly ILoadService loadService;
-        private readonly IQueryable<company> sourceQuery;
+        private readonly ILoadService<company> loadService;
 
         private List<department> field0;
         #endregion
 
         #region constructors
-        public company(IQueryable<company> sourceQuery, ILoadService loadService)
+        public company(ILoadService<company> loadService)
         {
             this.loadService = loadService;
-            this.sourceQuery = sourceQuery;
             populated = new bool[1];
         }
 
-        public company(company clonedFrom, IQueryable<company> sourceQuery, ILoadService loadService)
+        public company(company clonedFrom, ILoadService<company> loadService)
         {
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
-            this.sourceQuery = sourceQuery;
             populated = new bool[1];
         }
 
@@ -61,7 +58,7 @@
             Func<IQueryable<department>> query = () =>
             {
                 return loadService.Context.Set<department>()
-                    .Join(sourceQuery, x => x.company_id, x => x.company_id, (x, y) => x);
+                    .Join(loadService.Query, x => x.company_id, x => x.company_id, (x, y) => x);
             };
             Func<department, int> indexLambda = x => x.company_id;
             var items = loadService.GetList(0, query, indexLambda, company_id);
@@ -83,7 +80,7 @@
         #region IDalEntity members
         company IDalEntity<company>.Clone()
         {
-            return new company(this, sourceQuery, loadService)
+            return new company(this, loadService)
             {
                 company_id = company_id,
                 name = name
