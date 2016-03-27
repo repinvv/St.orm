@@ -1,8 +1,8 @@
-﻿namespace StormGenerator.Generation.Models
+﻿namespace StormGenerator.Models.Configs
 {
     using System.Collections.Generic;
 
-    internal class EntityConfig
+    internal class ModelConfig
     {
         public string Name { get; set; }
 

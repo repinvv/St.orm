@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    internal class NameNormalizer
+    public class NameNormalizer
     {
         public List<string> NormalizeNames(List<string> names)
         {

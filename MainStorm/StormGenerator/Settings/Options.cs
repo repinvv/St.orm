@@ -8,6 +8,10 @@
 
         public bool ForceRefreshDbInfo { get; set; }
 
-        public GenerationOptions Generation { get; set; }
+        public bool AutomaticPopulation { get; set; }
+
+        public AutomaticPopulationOptions AutomaticPopulationOptions { get; set; }
+
+        public GenerationOptions GenerationOptions { get; set; }
     }
 }

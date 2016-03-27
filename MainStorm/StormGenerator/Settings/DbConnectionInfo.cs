@@ -2,7 +2,7 @@
 {
     internal class DbConnectionInfo
     {
-        public DbType DbType { get; set; }
+        public DbProvider DbProvider { get; set; }
 
         public string Server { get; set; }
 

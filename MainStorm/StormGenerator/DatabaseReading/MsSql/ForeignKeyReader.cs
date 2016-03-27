@@ -5,7 +5,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
-    using StormGenerator.DatabaseReading.DbModels;
+    using StormGenerator.Models.DbModels;
 
     internal class ForeignKeyReader
     {

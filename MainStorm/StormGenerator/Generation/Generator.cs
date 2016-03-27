@@ -14,7 +14,12 @@
         public List<GeneratedFile> Generate(string schemaFile)
         {
             var schema = schemaLoader.LoadSchema(schemaFile);
-            return null;
+            var file = new GeneratedFile
+                       {
+                           Name = "StormContext.cs",
+                           Content = "//Context content Will Be here someday"
+                       };
+            return new List<GeneratedFile> { file };
         }
     }
 }

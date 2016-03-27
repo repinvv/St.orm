@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Linq;
-    using StormGenerator.DatabaseReading.DbModels;
+    using StormGenerator.Models.DbModels;
 
     internal class DbFieldsCollector
     {

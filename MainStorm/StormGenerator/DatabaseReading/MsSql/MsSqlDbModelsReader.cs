@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.DatabaseReading.MsSql
 {
     using System.Collections.Generic;
-    using StormGenerator.DatabaseReading.DbModels;
+    using StormGenerator.Models.DbModels;
 
     internal class MsSqlDbModelsReader : IDbModelsReader
     {

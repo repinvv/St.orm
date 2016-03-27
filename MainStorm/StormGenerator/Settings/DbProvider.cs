@@ -1,6 +1,6 @@
 ﻿namespace StormGenerator.Settings
 {
-    internal enum DbType
+    internal enum DbProvider
     {
         MsSql,
         Oracle

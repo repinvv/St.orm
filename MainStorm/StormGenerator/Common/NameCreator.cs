@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class NameCreator
+    public class NameCreator
     {
         private readonly string[] separators = { "_", "-" };
         private readonly List<char> addEs = new List<char> { 'h', 'x', 's' };

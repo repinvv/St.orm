@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Generation.Models
+﻿namespace StormGenerator.Models.Configs
 {
     internal class FieldConfig
     {

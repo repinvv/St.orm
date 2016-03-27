@@ -1,13 +1,18 @@
 {
   "ConnectionInfo": {
+    "DbType": "MsSql",
     "Database": "StormTest",
     "IntegratedSecurity": true,
     "Server": "localhost"
   },
-  "Generation": {
+  "GenerationOptions": {
+    "Linq2EntitiesProvider": "linq2db",
     "ContextName": "StormTestContext",
     "CustomInterfaceForEntities": "IDbEntity",
     "OutputNamespace": "StormTestProject.StormModel"
   },
-	"ForceRefreshDbInfo": false
+  "AutomaticPopulation": false,
+  "AutomaticPopulationOptions": {
+  },
+  "ForceRefreshDbInfo": false
 }

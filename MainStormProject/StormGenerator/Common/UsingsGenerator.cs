@@ -5,7 +5,7 @@
     using System.Linq;
     using StormGenerator.Infrastructure.StringGenerator;
 
-    public class UsingsGenerator
+    internal class UsingsGenerator
     {
         public void GenerateUsings(IStringGenerator stringGenerator, IEnumerable<string> usings)
         {

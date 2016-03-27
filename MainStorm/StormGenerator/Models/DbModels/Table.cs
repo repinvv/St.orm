@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.DatabaseReading.DbModels
+﻿namespace StormGenerator.Models.DbModels
 {
     using System.Collections.Generic;
 
