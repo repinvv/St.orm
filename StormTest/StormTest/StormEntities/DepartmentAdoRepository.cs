@@ -19,8 +19,9 @@
             Func<IDataReader, department> creator = reader =>
             {
                 var item = creationFunc();
-                item.company_id = reader.GetInt32(0);
-                item.name = reader[1] as string;
+                item.department_id = reader.GetInt32(0);
+                item.company_id = reader.GetInt32(1);
+                item.name = reader[3] as string;
                 return item;
             };
             return AdoCommands.Materialize(query, connection, transaction, creator);

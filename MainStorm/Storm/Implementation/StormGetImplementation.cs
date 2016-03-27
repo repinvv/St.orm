@@ -9,7 +9,7 @@
         public static List<TDal> Get<TDal>(IStormContext context, IQueryable<TDal> query)
         {
             var repo = context.GetDalRepository<TDal, TDal>();
-            var items = repo.Materialize(query, new LoadService(context, repo.NavPropsCount()));
+            var items = repo.Materialize(new LoadService<TDal>(context, repo.NavPropsCount(), query));
             var result = new List<TDal>(items.Count);
             result.AddRange(items.Select(repo.Clone));
             return result;

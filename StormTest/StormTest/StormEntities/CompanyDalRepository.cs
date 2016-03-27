@@ -6,11 +6,11 @@
     using Storm.Interfaces;
     internal partial class CompanyRepository : IDalRepository<company, company>
     {
-        public List<company> Materialize(IQueryable<company> query, ILoadService loadService)
+        public List<company> Materialize(ILoadService<company> loadService)
         {
             var connection = loadService.Context.Connection;
             var transaction = loadService.Context.Transaction;
-            return Materialize(query, connection, transaction, () => new company(query, loadService));
+            return Materialize(loadService.Query, connection, transaction, () => new company(loadService));
         }
 
         public int NavPropsCount()
