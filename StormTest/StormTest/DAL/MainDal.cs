@@ -75,6 +75,7 @@ namespace StormTest.DAL
                 var query = stormdb.companies.Where(x => x.name == name);
                 var companies = stormdb.Get(query);
                 var a = query.ToList();
+                var b = query.ToString();
                 var departments = companies[0].Departments;
             }
 

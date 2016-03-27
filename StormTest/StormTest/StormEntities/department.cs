@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using LinqToDB.Mapping;
+    using Storm.Exceptions;
     using Storm.Interfaces;
 
     [Table(Schema = "models", Name = "department")]
@@ -57,9 +58,9 @@
             return clonedFrom;
         }
 
-        bool[] IDalEntity<department>.GetPopulated()
+        bool IDalEntity<department>.IsPopulated(int navPropIndex)
         {
-            return populated;
+            throw new NavigationPropertyException("Entity department has no navigation properties.");
         }
         #endregion
 

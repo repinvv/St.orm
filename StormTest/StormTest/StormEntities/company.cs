@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using LinqToDB.Mapping;
+    using Storm.Exceptions;
     using Storm.Interfaces;
 
     [Table(Schema = "models", Name = "company")]
@@ -16,14 +17,14 @@
         public string name { get; set; }
 
         [Association(ThisKey = "company_id", OtherKey = "company_id", CanBeNull = true, IsBackReference = true)]
-        public List<department> Departments { get { return GetField0(); } set { populated[0] = true; field0 = value; } }
+        public List<department> Departments { get { return GetField0(); } set { pop0 = true; field0 = value; } }
 
         #region private fields
         private readonly company clonedFrom;
-        private readonly bool[] populated;
         private readonly ILoadService loadService;
         private readonly IQueryable<company> sourceQuery;
 
+        private bool pop0;
         private List<department> field0;
         #endregion
 
@@ -32,7 +33,6 @@
         {
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
-            populated = new bool[1];
         }
 
         public company(company clonedFrom, IQueryable<company> sourceQuery, ILoadService loadService)
@@ -40,12 +40,11 @@
             this.clonedFrom = clonedFrom;
             this.loadService = loadService;
             this.sourceQuery = sourceQuery;
-            populated = new bool[1];
         }
 
         public company()
         {
-            populated = new [] { true };
+            pop0 = true;
             Departments = new List<department>();
         }
         #endregion
@@ -53,7 +52,7 @@
         #region private methods
         private List<department> GetField0()
         {
-            if (populated[0])
+            if (pop0)
             {
                 return field0;
             }
@@ -67,14 +66,14 @@
             var items = loadService.GetList(0, query, indexLambda, company_id);
             if (clonedFrom == null)
             {
-                populated[0] = true;
+                pop0 = true;
                 return field0 = items;
             }
 
             clonedFrom.Departments = items;
             field0 = new List<department>(items.Count);
             field0.AddRange(items.Select(x => (x as IDalEntity<department>).Clone()));
-            populated[0] = true;
+            pop0 = true;
             return field0;
         }
 
@@ -95,9 +94,16 @@
             return clonedFrom;
         }
 
-        bool[] IDalEntity<company>.GetPopulated()
+        bool IDalEntity<company>.IsPopulated(int navPropIndex)
         {
-            return populated;
+            switch (navPropIndex)
+            {
+                case 0:
+                    return pop0;
+            }
+            
+            throw new NavigationPropertyException("Entity company has 1 navigation property, index " 
+                + navPropIndex + " is not allowed.");
         }
         #endregion
 
