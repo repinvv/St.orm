@@ -1,0 +1,13 @@
+{
+  "ConnectionInfo": {
+    "Database": "StormTest",
+    "IntegratedSecurity": true,
+    "Server": "localhost"
+  },
+  "Generation": {
+    "ContextName": "StormTestContext",
+    "CustomInterfaceForEntities": "IDbEntity",
+    "OutputNamespace": "StormTestProject.StormModel"
+  },
+	"ForceRefreshDbInfo": false
+}

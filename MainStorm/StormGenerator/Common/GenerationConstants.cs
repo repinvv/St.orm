@@ -52,7 +52,7 @@
             {
                 "System.Collections.Generic",
                 "System.Linq",
-                typeof(ILoadService).Namespace,
+                typeof(ILoadService<>).Namespace,
                 //typeof(HelpfulExtensions).Namespace
             };
 

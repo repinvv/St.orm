@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web.Script.Serialization;
     using StormGenerator.Common;
     using StormGenerator.DbModelsCollection;
     using StormGenerator.Infrastructure;

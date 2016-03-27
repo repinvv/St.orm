@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\output\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,7 +44,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DatabaseReading\DbModelsReaderFactory.cs" />
+    <Compile Include="DatabaseReading\DbModels\Association.cs" />
+    <Compile Include="DatabaseReading\DbModels\Column.cs" />
+    <Compile Include="DatabaseReading\DbModels\Table.cs" />
+    <Compile Include="DatabaseReading\IDbModelsReader.cs" />
+    <Compile Include="DatabaseReading\MsSql\ColumnReader.cs" />
+    <Compile Include="DatabaseReading\MsSql\DbColumn.cs" />
+    <Compile Include="DatabaseReading\MsSql\DbConnectionCreator.cs" />
+    <Compile Include="DatabaseReading\MsSql\DbFieldsCollector.cs" />
+    <Compile Include="DatabaseReading\MsSql\ForeignKeyReader.cs" />
+    <Compile Include="DatabaseReading\MsSql\MsSqlDbModelsReader.cs" />
+    <Compile Include="DatabaseReading\MsSql\PrimaryKeyReader.cs" />
+    <Compile Include="DatabaseReading\MsSql\Reader.cs" />
+    <Compile Include="DatabaseReading\MsSql\Sequencer.cs" />
+    <Compile Include="DatabaseReading\MsSql\TableIdCreator.cs" />
+    <Compile Include="DatabaseReading\MsSql\TableReader.cs" />
+    <Compile Include="Generation\Models\EntityConfig.cs" />
+    <Compile Include="Generation\Models\FieldConfig.cs" />
+    <Compile Include="Generation\Models\NavPropConfig.cs" />
+    <Compile Include="Generation\Models\Schema.cs" />
+    <Compile Include="Generation\SchemaLoader.cs" />
+    <Compile Include="Settings\DbConnectionInfo.cs" />
+    <Compile Include="Settings\DBType.cs" />
+    <Compile Include="Settings\GenerationOptions.cs" />
+    <Compile Include="Settings\Options.cs" />
+    <Compile Include="GeneratedFile.cs" />
+    <Compile Include="Generation\Generator.cs" />
+    <Compile Include="Infrastructure\IoC.cs" />
+    <Compile Include="Infrastructure\Container.cs" />
+    <Compile Include="StormGeneration.cs" />
     <Compile Include="Common\GenerationConstants.cs" />
     <Compile Include="Common\NameCreator.cs" />
     <Compile Include="Common\NameNormalizer.cs" />
@@ -52,6 +85,10 @@
       <Name>Storm</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

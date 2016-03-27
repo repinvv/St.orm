@@ -120,6 +120,11 @@
     <Compile Include="StormEntities\RepositoryStorage.cs" />
     <Compile Include="StormEntities\StormDb.cs" />
     <Compile Include="StormEntities\StormDb.IStormContext.cs" />
+    <Compile Include="StormSchema\StormEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -151,11 +156,17 @@
     <None Include="LinqToDB.Templates\T4Model.ttinclude" />
     <None Include="LinqToDB.Templates\Validation.ttinclude" />
     <None Include="packages.config" />
+    <None Include="StormSchema\options.json" />
+    <None Include="StormSchema\schema.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Schema\StormTest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StormTest1.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="StormSchema\StormEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StormEntities.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

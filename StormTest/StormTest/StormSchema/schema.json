@@ -1,0 +1,228 @@
+{
+  "Tables": [
+    {
+      "Id": "country",
+      "Name": "country",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "country_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "name",
+          "Type": "nvarchar",
+          "Index": 2,
+          "Length": 256,
+          "Associations": []
+        },
+        {
+          "Name": "country_code",
+          "Type": "nvarchar",
+          "Index": 3,
+          "Length": 10,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "models.company",
+      "Name": "company",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "company_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "name",
+          "Type": "nvarchar",
+          "IsNullable": true,
+          "Index": 2,
+          "Length": 256,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "models.department",
+      "Name": "department",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "department_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "company_id",
+          "Type": "int",
+          "Index": 2,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_department1",
+              "Index": 1,
+              "TableId": "models.company",
+              "FieldName": "company_id"
+            }
+          ]
+        },
+        {
+          "Name": "country_id",
+          "Type": "int",
+          "IsNullable": true,
+          "Index": 3,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_department2",
+              "Index": 1,
+              "TableId": "country",
+              "FieldName": "country_id"
+            }
+          ]
+        },
+        {
+          "Name": "name",
+          "Type": "nvarchar",
+          "Index": 4,
+          "Length": 256,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "models.asset",
+      "Name": "asset",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "asset_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "department_id",
+          "Type": "int",
+          "Index": 2,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_asset1",
+              "Index": 1,
+              "TableId": "models.department",
+              "FieldName": "department_id"
+            }
+          ]
+        },
+        {
+          "Name": "name",
+          "Type": "nvarchar",
+          "Index": 3,
+          "Length": 256,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "models.employee",
+      "Name": "employee",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "employee_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "department_id",
+          "Type": "int",
+          "Index": 2,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_employee1",
+              "Index": 1,
+              "TableId": "models.department",
+              "FieldName": "department_id"
+            }
+          ]
+        },
+        {
+          "Name": "name",
+          "Type": "nvarchar",
+          "Index": 3,
+          "Length": 256,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "models.payment",
+      "Name": "payment",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "payment_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "employee_id",
+          "Type": "int",
+          "Index": 2,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_payment1",
+              "Index": 1,
+              "TableId": "models.employee",
+              "FieldName": "employee_id"
+            }
+          ]
+        },
+        {
+          "Name": "effective_date",
+          "Type": "datetime2",
+          "Index": 3,
+          "Associations": []
+        },
+        {
+          "Name": "amount",
+          "Type": "decimal",
+          "Index": 4,
+          "Precision": 18,
+          "Scale": 2,
+          "Associations": []
+        }
+      ]
+    }
+  ]
+}
