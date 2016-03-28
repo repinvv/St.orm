@@ -11,7 +11,7 @@
     "CustomInterfaceForEntities": "IDbEntity",
     "OutputNamespace": "StormTestProject.StormModel"
   },
-  "AutomaticPopulation": false,
+  "AutomaticPopulation": true,
   "AutomaticPopulationOptions": {
   },
   "ForceRefreshDbInfo": false

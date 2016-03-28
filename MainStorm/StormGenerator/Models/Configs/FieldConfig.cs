@@ -1,6 +1,6 @@
 ﻿namespace StormGenerator.Models.Configs
 {
-    internal class FieldConfig
+    internal class FieldConfig : ItemConfig
     {
         public string Name { get; set; }
 

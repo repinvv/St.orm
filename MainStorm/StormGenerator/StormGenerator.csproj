@@ -46,6 +46,12 @@
   <ItemGroup>
     <Compile Include="AutomaticPopulation\AutomaticModelConfigsPopulation.cs" />
     <Compile Include="DatabaseReading\DbModelsReaderFactory.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\Modifier.cs" />
+    <Compile Include="Models\Configs\ItemConfig.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\ManyToManyNavPropConfig.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\ModifierType.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\NavPropAmount.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\NavPropType.cs" />
     <Compile Include="Models\DbModels\Association.cs" />
     <Compile Include="Models\DbModels\Column.cs" />
     <Compile Include="Models\DbModels\Table.cs" />
@@ -61,9 +67,9 @@
     <Compile Include="DatabaseReading\MsSql\Sequencer.cs" />
     <Compile Include="DatabaseReading\MsSql\TableIdCreator.cs" />
     <Compile Include="DatabaseReading\MsSql\TableReader.cs" />
-    <Compile Include="Models\Configs\EntityConfig.cs" />
+    <Compile Include="Models\Configs\ModelConfig.cs" />
     <Compile Include="Models\Configs\FieldConfig.cs" />
-    <Compile Include="Models\Configs\NavPropConfig.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\NavPropConfig.cs" />
     <Compile Include="Models\Schema.cs" />
     <Compile Include="Generation\SchemaLoader.cs" />
     <Compile Include="Settings\AutomaticPopulation.cs" />

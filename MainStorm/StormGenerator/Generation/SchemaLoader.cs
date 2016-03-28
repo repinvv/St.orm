@@ -1,11 +1,13 @@
 ﻿namespace StormGenerator.Generation
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using Newtonsoft.Json;
     using StormGenerator.AutomaticPopulation;
     using StormGenerator.DatabaseReading;
     using StormGenerator.Models;
+    using StormGenerator.Models.Configs;
     using StormGenerator.Settings;
 
     internal class SchemaLoader
@@ -25,18 +27,27 @@
 
         public Schema LoadSchema(string schemaFile)
         {
-            var schema = JsonConvert.DeserializeObject<Schema>(File.ReadAllText(schemaFile)) ?? new Schema();
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+
+            var schema = JsonConvert.DeserializeObject<Schema>(File.ReadAllText(schemaFile), settings) ?? new Schema();
             var save = false;
-            if (schema.Tables?.Count < 1 || options.ForceRefreshDbInfo)
+            if (schema.Tables == null || !schema.Tables.Any() || options.ForceRefreshDbInfo)
             {
                 schema.Tables = factory.GetReader().GetTables();
                 save = true;
             }
 
-            if (schema.Configs?.Count < 1 || options.AutomaticPopulation)
+            schema.Configs = schema.Configs ?? new List<ModelConfig>();
+            if (options.AutomaticPopulation)
             {
-                schema.Configs = autoPopulation.PopulateConfigs(schema.Configs, schema.Tables);
-                save = true;
+                var newConfigs = autoPopulation.PopulateConfigs(schema.Configs, schema.Tables);
+                save = newConfigs.Count > schema.Configs.Count;
+                schema.Configs = newConfigs;
             }
 
             if (!save)
@@ -45,11 +56,6 @@
             }
 
             schema.Tables = factory.GetReader().GetTables();
-            var settings = new JsonSerializerSettings
-                           {
-                               Formatting = Formatting.Indented,
-                               DefaultValueHandling = DefaultValueHandling.Ignore
-                           };
             File.WriteAllText(schemaFile, JsonConvert.SerializeObject(schema, settings));
             return schema;
         }

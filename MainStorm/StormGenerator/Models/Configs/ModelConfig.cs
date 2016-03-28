@@ -1,13 +1,14 @@
 ﻿namespace StormGenerator.Models.Configs
 {
     using System.Collections.Generic;
+    using StormGenerator.Models.Configs.NovPropConfigs;
 
-    internal class ModelConfig
+    internal class ModelConfig : ItemConfig
     {
         public string Name { get; set; }
 
         public List<FieldConfig> Fields { get; set; }
 
-        public List<NavPropConfig> NavPropConfigs { get; set; } 
+        public List<NavPropConfig> NavProps { get; set; } 
     }
 }
