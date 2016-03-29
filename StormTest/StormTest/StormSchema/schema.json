@@ -224,5 +224,54 @@
         }
       ]
     }
+  ],
+  "Configs": [
+    {
+      "Name": "Country",
+      "DbTableId": "country",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    },
+    {
+      "Name": "Company",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.company",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    },
+    {
+      "Name": "Department",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.department",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    },
+    {
+      "Name": "Asset",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.asset",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    },
+    {
+      "Name": "Employee",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.employee",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    },
+    {
+      "Name": "Payment",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.payment",
+      "Fields": [],
+      "NavProps": [],
+      "IsEnabled": true
+    }
   ]
 }

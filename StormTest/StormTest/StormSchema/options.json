@@ -13,6 +13,8 @@
   },
   "AutomaticPopulation": true,
   "AutomaticPopulationOptions": {
+    "CamelCaseNames": true,
+    "PluralNames": true
   },
   "ForceRefreshDbInfo": false
 }

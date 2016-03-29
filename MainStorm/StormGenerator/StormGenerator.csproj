@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomaticPopulation\AutomaticModelConfigsPopulation.cs" />
+    <Compile Include="AutomaticPopulation\ModelConfigPopulation.cs" />
+    <Compile Include="AutomaticPopulation\NamePopulationService.cs" />
+    <Compile Include="AutomaticPopulation\PopulationOptionsService.cs" />
     <Compile Include="DatabaseReading\DbModelsReaderFactory.cs" />
     <Compile Include="Models\Configs\NovPropConfigs\Modifier.cs" />
     <Compile Include="Models\Configs\ItemConfig.cs" />
@@ -72,7 +75,7 @@
     <Compile Include="Models\Configs\NovPropConfigs\NavPropConfig.cs" />
     <Compile Include="Models\Schema.cs" />
     <Compile Include="Generation\SchemaLoader.cs" />
-    <Compile Include="Settings\AutomaticPopulation.cs" />
+    <Compile Include="Settings\AutomaticPopulationOptions.cs" />
     <Compile Include="Settings\DbConnectionInfo.cs" />
     <Compile Include="Settings\DbProvider.cs" />
     <Compile Include="Settings\GenerationOptions.cs" />

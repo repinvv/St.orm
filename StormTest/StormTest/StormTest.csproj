@@ -120,9 +120,6 @@
     <Compile Include="StormEntities\RepositoryStorage.cs" />
     <Compile Include="StormEntities\StormDb.cs" />
     <Compile Include="StormEntities\StormDb.IStormContext.cs" />
-    <Compile Include="StormSchema\NoModels.cs">
-      <DependentUpon>StormEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="StormSchema\StormEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

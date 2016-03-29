@@ -31,7 +31,7 @@
             {
                 Formatting = Formatting.Indented,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.Objects
+                TypeNameHandling = TypeNameHandling.Auto
             };
 
             var schema = JsonConvert.DeserializeObject<Schema>(File.ReadAllText(schemaFile), settings) ?? new Schema();

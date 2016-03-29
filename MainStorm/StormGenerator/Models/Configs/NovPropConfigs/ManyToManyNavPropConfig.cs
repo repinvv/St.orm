@@ -2,6 +2,6 @@
 {
     internal class ManyToManyNavPropConfig : NavPropConfig
     {
-        public TYPE Type { get; set; }
+        public string MediatorId { get; set; }
     }
 }
