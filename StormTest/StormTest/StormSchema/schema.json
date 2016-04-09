@@ -51,6 +51,21 @@
           "Index": 2,
           "Length": 256,
           "Associations": []
+        },
+        {
+          "Name": "country_id",
+          "Type": "int",
+          "IsNullable": true,
+          "Index": 3,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_company1",
+              "Index": 1,
+              "TableId": "country",
+              "FieldName": "country_id"
+            }
+          ]
         }
       ]
     },
@@ -140,6 +155,21 @@
           "Index": 3,
           "Length": 256,
           "Associations": []
+        },
+        {
+          "Name": "country_id",
+          "Type": "int",
+          "IsNullable": true,
+          "Index": 4,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_asset2",
+              "Index": 1,
+              "TableId": "country",
+              "FieldName": "country_id"
+            }
+          ]
         }
       ]
     },
@@ -223,11 +253,48 @@
           "Associations": []
         }
       ]
+    },
+    {
+      "Id": "models.payment_country",
+      "Name": "payment_country",
+      "Schema": "models",
+      "Columns": [
+        {
+          "Name": "payment_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_payment_country1",
+              "Index": 1,
+              "TableId": "models.payment",
+              "FieldName": "payment_id"
+            }
+          ]
+        },
+        {
+          "Name": "country_id",
+          "Type": "int",
+          "IsPrimaryKey": true,
+          "Index": 2,
+          "Precision": 10,
+          "Associations": [
+            {
+              "ConstraintId": "models.fk_payment_country2",
+              "Index": 1,
+              "TableId": "country",
+              "FieldName": "country_id"
+            }
+          ]
+        }
+      ]
     }
   ],
   "Configs": [
     {
-      "Id": ".Country",
+      "Id": "Country",
       "DbTableId": "country",
       "Fields": [
         {
@@ -249,7 +316,54 @@
           "Name": "CountryCode"
         }
       ],
-      "NavProps": [],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_payment_country2",
+          "FarModel": "Models.Payment",
+          "ReverseNavPropName": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToManyNavPropConfigParams, StormGenerator",
+            "MediatorId": "Models.PaymentCountry",
+            "FarEndNavPropName": "Payment",
+            "Modifiers": []
+          },
+          "IsGenerated": true,
+          "Name": "Payments"
+        },
+        {
+          "AssociationName": "models.fk_company1",
+          "FarModel": "Models.Company",
+          "ReverseNavPropName": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsGenerated": true,
+          "Name": "Companies"
+        },
+        {
+          "AssociationName": "models.fk_department2",
+          "FarModel": "Models.Department",
+          "ReverseNavPropName": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsGenerated": true,
+          "Name": "Departments"
+        },
+        {
+          "AssociationName": "models.fk_asset2",
+          "FarModel": "Models.Asset",
+          "ReverseNavPropName": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsGenerated": true,
+          "Name": "Assets"
+        }
+      ],
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "Country"
@@ -270,9 +384,44 @@
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Name"
+        },
+        {
+          "DbFieldName": "country_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryId"
         }
       ],
-      "NavProps": [],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_company1",
+          "FarModel": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "country_id"
+            ],
+            "FarFields": [
+              "country_id"
+            ]
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Country"
+        },
+        {
+          "AssociationName": "models.fk_department1",
+          "FarModel": "Models.Department",
+          "ReverseNavPropName": "Company",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Departments"
+        }
+      ],
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "Company"
@@ -310,14 +459,15 @@
       "NavProps": [
         {
           "AssociationName": "models.fk_department1",
-          "NearFields": [
-            "company_id"
-          ],
-          "FarFields": [
-            "company_id"
-          ],
+          "FarModel": "Models.Company",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "company_id"
+            ],
+            "FarFields": [
+              "company_id"
+            ]
           },
           "IsEnabled": true,
           "IsGenerated": true,
@@ -325,18 +475,43 @@
         },
         {
           "AssociationName": "models.fk_department2",
-          "NearFields": [
-            "country_id"
-          ],
-          "FarFields": [
-            "country_id"
-          ],
+          "FarModel": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "country_id"
+            ],
+            "FarFields": [
+              "country_id"
+            ]
           },
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Country"
+        },
+        {
+          "AssociationName": "models.fk_asset1",
+          "FarModel": "Models.Asset",
+          "ReverseNavPropName": "Department",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Assets"
+        },
+        {
+          "AssociationName": "models.fk_employee1",
+          "FarModel": "Models.Employee",
+          "ReverseNavPropName": "Department",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Employees"
         }
       ],
       "IsEnabled": true,
@@ -365,23 +540,46 @@
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Name"
+        },
+        {
+          "DbFieldName": "country_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryId"
         }
       ],
       "NavProps": [
         {
           "AssociationName": "models.fk_asset1",
-          "NearFields": [
-            "department_id"
-          ],
-          "FarFields": [
-            "department_id"
-          ],
+          "FarModel": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "department_id"
+            ],
+            "FarFields": [
+              "department_id"
+            ]
           },
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Department"
+        },
+        {
+          "AssociationName": "models.fk_asset2",
+          "FarModel": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "country_id"
+            ],
+            "FarFields": [
+              "country_id"
+            ]
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Country"
         }
       ],
       "IsEnabled": true,
@@ -415,18 +613,31 @@
       "NavProps": [
         {
           "AssociationName": "models.fk_employee1",
-          "NearFields": [
-            "department_id"
-          ],
-          "FarFields": [
-            "department_id"
-          ],
+          "FarModel": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "department_id"
+            ],
+            "FarFields": [
+              "department_id"
+            ]
           },
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Department"
+        },
+        {
+          "AssociationName": "models.fk_payment1",
+          "FarModel": "Models.Payment",
+          "ReverseNavPropName": "Employee",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "Modifiers": []
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Payments"
         }
       ],
       "IsEnabled": true,
@@ -466,23 +677,94 @@
       "NavProps": [
         {
           "AssociationName": "models.fk_payment1",
-          "NearFields": [
-            "employee_id"
-          ],
-          "FarFields": [
-            "employee_id"
-          ],
+          "FarModel": "Models.Employee",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "employee_id"
+            ],
+            "FarFields": [
+              "employee_id"
+            ]
           },
           "IsEnabled": true,
           "IsGenerated": true,
           "Name": "Employee"
+        },
+        {
+          "AssociationName": "models.fk_payment_country1",
+          "FarModel": "Country",
+          "ReverseNavPropName": "Payment",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToManyNavPropConfigParams, StormGenerator",
+            "MediatorId": "Models.PaymentCountry",
+            "FarEndNavPropName": "Country",
+            "Modifiers": []
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Countries"
         }
       ],
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "Payment"
+    },
+    {
+      "Id": "Models.PaymentCountry",
+      "NamespaceSuffix": "Models",
+      "DbTableId": "models.payment_country",
+      "Fields": [
+        {
+          "DbFieldName": "payment_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "PaymentId"
+        },
+        {
+          "DbFieldName": "country_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryId"
+        }
+      ],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_payment_country1",
+          "FarModel": "Models.Payment",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "payment_id"
+            ],
+            "FarFields": [
+              "payment_id"
+            ]
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Payment"
+        },
+        {
+          "AssociationName": "models.fk_payment_country2",
+          "FarModel": "Country",
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "NearFields": [
+              "country_id"
+            ],
+            "FarFields": [
+              "country_id"
+            ]
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Country"
+        }
+      ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "PaymentCountry"
     }
   ]
 }

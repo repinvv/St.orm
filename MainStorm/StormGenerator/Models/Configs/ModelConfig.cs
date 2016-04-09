@@ -5,7 +5,9 @@
 
     internal class ModelConfig : ItemConfig
     {
-        public string Id { get; set; }
+        public string Id => string.IsNullOrEmpty(NamespaceSuffix)
+            ? Name
+            : NamespaceSuffix + "." + Name;
 
         public string NamespaceSuffix { get; set; }
 

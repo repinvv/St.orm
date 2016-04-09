@@ -30,7 +30,6 @@
             var configs = existingConfigs.Concat(newConfigs).ToList();
             navPropConfigsPopulation.PopulateNavProps(newConfigs, configs, tables);
             NormalizeNames(configs);
-            newConfigs.ForEach(x => x.Id = x.NamespaceSuffix + "." + x.Name);
             return configs;
         }
 

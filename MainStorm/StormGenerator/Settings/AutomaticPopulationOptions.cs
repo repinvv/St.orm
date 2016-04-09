@@ -5,5 +5,7 @@
         public bool CamelCaseNames { get; set; }
 
         public bool PluralNames { get; set; }
+
+        public int MaxChildModels { get; set; }
     }
 }

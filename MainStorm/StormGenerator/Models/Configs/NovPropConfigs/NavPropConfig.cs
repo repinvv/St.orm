@@ -7,10 +7,6 @@
     {
         public string AssociationName { get; set; }
 
-        public List<string> NearFields { get; set; }
-
-        public List<string> FarFields { get; set; }
-
         public string FarModel { get; set; }
         
         public string ReverseNavPropName { get; set; }

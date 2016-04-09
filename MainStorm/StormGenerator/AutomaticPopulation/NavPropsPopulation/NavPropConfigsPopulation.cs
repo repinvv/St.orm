@@ -2,57 +2,57 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using StormGenerator.Common;
     using StormGenerator.Models.Configs;
     using StormGenerator.Models.Configs.NovPropConfigs;
     using StormGenerator.Models.Configs.NovPropConfigs.Params;
     using StormGenerator.Models.DbModels;
+    using StormGenerator.Settings;
 
     internal class NavPropConfigsPopulation
     {
-        private readonly RelationsCollector relationsCollector;
-        private readonly NamePopulation namePopulation;
+        private readonly ManyToOneNavPropsPopulation manyToOneNavPropsPopulation;
+        private readonly ManyToManyNavPropsPopulation manyToManyNavPropsPopulation;
+        private readonly OneToManyNavPropsPopulation oneToManyNavPropsPopulation;
+        private readonly ConfigListNameNormalizer nameNormalizer;
+        private AutomaticPopulationOptions options;
 
-        public NavPropConfigsPopulation(RelationsCollector relationsCollector, NamePopulation namePopulation)
+        public NavPropConfigsPopulation(ManyToOneNavPropsPopulation manyToOneNavPropsPopulation,
+            ManyToManyNavPropsPopulation manyToManyNavPropsPopulation,
+            OneToManyNavPropsPopulation oneToManyNavPropsPopulation,
+            ConfigListNameNormalizer nameNormalizer,
+            PopulationOptionsService populationOptionsService)
         {
-            this.relationsCollector = relationsCollector;
-            this.namePopulation = namePopulation;
-        }
-
-        public List<NavPropConfig> PopulateNavProps(Table table, Dictionary<string, ModelConfig> configs)
-        {
-            var manyToOneNavs = GetManyToOneNavs(table, configs);
-            return null;
-        }
-
-        private List<NavPropConfig> GetManyToOneNavs(Table table, Dictionary<string, ModelConfig> configs)
-        {
-            var relations = relationsCollector.CollectRelations(table).GroupBy(x => x.Id);
-            var navProps = relations
-                .Select(x =>
-                {
-                    var refConfig = configs[x.First().RefTableId];
-                    return new NavPropConfig
-                    {
-                        IsEnabled = true,
-                        IsGenerated = true,
-                        Name = namePopulation.CreateNavPropName(refConfig.Name, false),
-                        AssociationName = x.Key,
-                        FarModel = refConfig.Id,
-                        NearFields = x.Select(y => y.Column).ToList(),
-                        FarFields = x.Select(y => y.RefColumn).ToList(),
-                        Parameters = new ManyToOneConfigParams()
-                    };
-                });
-            return navProps.ToList();
+            this.manyToOneNavPropsPopulation = manyToOneNavPropsPopulation;
+            this.manyToManyNavPropsPopulation = manyToManyNavPropsPopulation;
+            this.oneToManyNavPropsPopulation = oneToManyNavPropsPopulation;
+            this.nameNormalizer = nameNormalizer;
+            options = populationOptionsService.AutomaticPopulationOptions;
         }
 
         internal void PopulateNavProps(List<ModelConfig> newConfigs, List<ModelConfig> configs, List<Table> tables)
         {
-            var configDict = configs.ToDictionary(x => x.DbTableId);
-            var tablesDict = tables.ToDictionary(x => x.Id);
-            foreach (var config in newConfigs)
+            manyToOneNavPropsPopulation.PopulateManyToOne(newConfigs, configs, tables);
+            var mtoLook = configs
+                .SelectMany(x => x.NavProps, (m, n) => new Mto { ModelConfig = m, NavPropConfig = n })
+                .Where(x => x.NavPropConfig.IsManyToOne())
+                .ToLookup(x => x.NavPropConfig.FarModel);
+            foreach (var modelConfig in newConfigs)
             {
-                config.NavProps = GetManyToOneNavs(tablesDict[config.DbTableId], configDict);
+                modelConfig.NavProps
+                    .AddRange(manyToManyNavPropsPopulation.GetMtmNavProps(modelConfig.Id, mtoLook));
+                modelConfig.NavProps
+                    .AddRange(oneToManyNavPropsPopulation.GetOtmNavProps(modelConfig.Id, mtoLook));
+            }
+
+            foreach (var modelConfig in newConfigs)
+            {
+                nameNormalizer.NormalizeNames(modelConfig.NavProps);
+                var nonMtoProps = modelConfig.NavProps.Where(x => !x.IsManyToOne()).ToList();
+                if (nonMtoProps.Count > options.MaxChildModels)
+                {
+                    nonMtoProps.ForEach(x => x.IsEnabled = false);
+                }
             }
         }
     }

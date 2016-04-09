@@ -49,6 +49,12 @@
     <Compile Include="AutomaticPopulation\FieldsConfigPopulation.cs" />
     <Compile Include="AutomaticPopulation\ModelConfigPopulation.cs" />
     <Compile Include="AutomaticPopulation\NamePopulation.cs" />
+    <Compile Include="AutomaticPopulation\NavPropsPopulation\ManyToManyNavPropsPopulation.cs" />
+    <Compile Include="AutomaticPopulation\NavPropsPopulation\ManyToOneNavPropsPopulation.cs" />
+    <Compile Include="AutomaticPopulation\NavPropsPopulation\MtmLinkExtension.cs" />
+    <Compile Include="AutomaticPopulation\NavPropsPopulation\Mto.cs" />
+    <Compile Include="AutomaticPopulation\NavPropsPopulation\OneToManyNavPropsPopulation.cs" />
+    <Compile Include="Models\Configs\NovPropConfigs\NavPropConfigExtension.cs" />
     <Compile Include="AutomaticPopulation\NavPropsPopulation\NavPropConfigsPopulation.cs" />
     <Compile Include="AutomaticPopulation\PopulationOptionsService.cs" />
     <Compile Include="AutomaticPopulation\NavPropsPopulation\Relation.cs" />

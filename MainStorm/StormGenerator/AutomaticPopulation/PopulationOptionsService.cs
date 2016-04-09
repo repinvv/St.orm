@@ -13,6 +13,10 @@
                       CamelCaseNames = true,
                       PluralNames = true
                   };
+            if (AutomaticPopulationOptions.MaxChildModels < 1)
+            {
+                AutomaticPopulationOptions.MaxChildModels = 3;
+            }
         }
 
         public AutomaticPopulationOptions AutomaticPopulationOptions { get; }
