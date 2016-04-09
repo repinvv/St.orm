@@ -1,19 +1,19 @@
 ﻿namespace StormGenerator.AutomaticPopulation
 {
     using System.Collections.Generic;
-    using StormGenerator.Common;
     using StormGenerator.Models.Configs;
-    using StormGenerator.Models.Configs.NovPropConfigs;
     using StormGenerator.Models.DbModels;
-    using StormGenerator.Settings;
 
     internal class ModelConfigPopulation
     {
-        private readonly NamePopulationService namePopulationService;
+        private readonly NamePopulation namePopulation;
+        private readonly FieldsConfigPopulation fieldsConfigPopulation;
 
-        public ModelConfigPopulation(NamePopulationService namePopulationService)
+        public ModelConfigPopulation(NamePopulation namePopulation,
+            FieldsConfigPopulation fieldsConfigPopulation)
         {
-            this.namePopulationService = namePopulationService;
+            this.namePopulation = namePopulation;
+            this.fieldsConfigPopulation = fieldsConfigPopulation;
         }
 
         public ModelConfig PopulateConfig(Table table, List<Table> tables)
@@ -21,13 +21,13 @@
             var config = new ModelConfig
                          {
                              IsEnabled = true,
+                             IsGenerated = true,
                              DbTableId = table.Id,
-                             Name = namePopulationService.CreateItemName(table.Name),
+                             Name = namePopulation.CreateItemName(table.Name),
                              NamespaceSuffix = table.Schema == "dbo"
                                  ? null
-                                 : namePopulationService.CreateItemName(table.Schema),
-                             Fields = new List<FieldConfig>(),
-                             NavProps = new List<NavPropConfig>()
+                                 : namePopulation.CreateItemName(table.Schema),
+                             Fields = fieldsConfigPopulation.PopulateModelFields(table)
                          };
             return config;
         }

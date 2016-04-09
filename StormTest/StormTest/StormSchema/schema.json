@@ -227,51 +227,262 @@
   ],
   "Configs": [
     {
-      "Name": "Country",
+      "Id": ".Country",
       "DbTableId": "country",
-      "Fields": [],
+      "Fields": [
+        {
+          "DbFieldName": "country_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryId"
+        },
+        {
+          "DbFieldName": "name",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Name"
+        },
+        {
+          "DbFieldName": "country_code",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryCode"
+        }
+      ],
       "NavProps": [],
-      "IsEnabled": true
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Country"
     },
     {
-      "Name": "Company",
+      "Id": "Models.Company",
       "NamespaceSuffix": "Models",
       "DbTableId": "models.company",
-      "Fields": [],
+      "Fields": [
+        {
+          "DbFieldName": "company_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CompanyId"
+        },
+        {
+          "DbFieldName": "name",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Name"
+        }
+      ],
       "NavProps": [],
-      "IsEnabled": true
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Company"
     },
     {
-      "Name": "Department",
+      "Id": "Models.Department",
       "NamespaceSuffix": "Models",
       "DbTableId": "models.department",
-      "Fields": [],
-      "NavProps": [],
-      "IsEnabled": true
+      "Fields": [
+        {
+          "DbFieldName": "department_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "DepartmentId"
+        },
+        {
+          "DbFieldName": "company_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CompanyId"
+        },
+        {
+          "DbFieldName": "country_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "CountryId"
+        },
+        {
+          "DbFieldName": "name",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Name"
+        }
+      ],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_department1",
+          "NearFields": [
+            "company_id"
+          ],
+          "FarFields": [
+            "company_id"
+          ],
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Company"
+        },
+        {
+          "AssociationName": "models.fk_department2",
+          "NearFields": [
+            "country_id"
+          ],
+          "FarFields": [
+            "country_id"
+          ],
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Country"
+        }
+      ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Department"
     },
     {
-      "Name": "Asset",
+      "Id": "Models.Asset",
       "NamespaceSuffix": "Models",
       "DbTableId": "models.asset",
-      "Fields": [],
-      "NavProps": [],
-      "IsEnabled": true
+      "Fields": [
+        {
+          "DbFieldName": "asset_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AssetId"
+        },
+        {
+          "DbFieldName": "department_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "DepartmentId"
+        },
+        {
+          "DbFieldName": "name",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Name"
+        }
+      ],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_asset1",
+          "NearFields": [
+            "department_id"
+          ],
+          "FarFields": [
+            "department_id"
+          ],
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Department"
+        }
+      ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Asset"
     },
     {
-      "Name": "Employee",
+      "Id": "Models.Employee",
       "NamespaceSuffix": "Models",
       "DbTableId": "models.employee",
-      "Fields": [],
-      "NavProps": [],
-      "IsEnabled": true
+      "Fields": [
+        {
+          "DbFieldName": "employee_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "EmployeeId"
+        },
+        {
+          "DbFieldName": "department_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "DepartmentId"
+        },
+        {
+          "DbFieldName": "name",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Name"
+        }
+      ],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_employee1",
+          "NearFields": [
+            "department_id"
+          ],
+          "FarFields": [
+            "department_id"
+          ],
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Department"
+        }
+      ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Employee"
     },
     {
-      "Name": "Payment",
+      "Id": "Models.Payment",
       "NamespaceSuffix": "Models",
       "DbTableId": "models.payment",
-      "Fields": [],
-      "NavProps": [],
-      "IsEnabled": true
+      "Fields": [
+        {
+          "DbFieldName": "payment_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "PaymentId"
+        },
+        {
+          "DbFieldName": "employee_id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "EmployeeId"
+        },
+        {
+          "DbFieldName": "effective_date",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "EffectiveDate"
+        },
+        {
+          "DbFieldName": "amount",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Amount"
+        }
+      ],
+      "NavProps": [
+        {
+          "AssociationName": "models.fk_payment1",
+          "NearFields": [
+            "employee_id"
+          ],
+          "FarFields": [
+            "employee_id"
+          ],
+          "Parameters": {
+            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator"
+          },
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Employee"
+        }
+      ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "Payment"
     }
   ]
 }

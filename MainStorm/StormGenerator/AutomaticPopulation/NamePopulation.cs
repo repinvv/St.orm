@@ -3,12 +3,12 @@
     using StormGenerator.Common;
     using StormGenerator.Settings;
 
-    internal class NamePopulationService
+    internal class NamePopulation
     {
         private readonly NameCreator nameCreator;
         private readonly AutomaticPopulationOptions options;
 
-        public NamePopulationService(NameCreator nameCreator, PopulationOptionsService optionsService)
+        public NamePopulation(NameCreator nameCreator, PopulationOptionsService optionsService)
         {
             this.nameCreator = nameCreator;
             options = optionsService.AutomaticPopulationOptions;
@@ -22,7 +22,7 @@
         public string CreateNavPropName(string name, bool isMultiple)
         {
             var output = options.CamelCaseNames ? nameCreator.CreateCamelCaseName(name) : name;
-            return options.PluralNames ? nameCreator.CreatePluralName(output) : name;
+            return isMultiple && options.PluralNames ? nameCreator.CreatePluralName(output) : name;
         }
     }
 }

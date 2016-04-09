@@ -5,7 +5,7 @@
 
     internal class ModelConfig : ItemConfig
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
 
         public string NamespaceSuffix { get; set; }
 

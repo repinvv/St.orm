@@ -1,7 +1,6 @@
 ﻿namespace StormGenerator.Infrastructure
 {
     using System.Linq;
-    using StormGenerator.DatabaseReading;
     using StormGenerator.Settings;
 
     internal class Container

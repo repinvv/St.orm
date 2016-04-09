@@ -1,7 +1,6 @@
 ﻿namespace Storm.Interfaces
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IDalRepository<TDal, TQuery>
     {

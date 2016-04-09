@@ -1,13 +1,10 @@
 ﻿namespace StormGenerator.Models.Configs.NovPropConfigs
 {
     using System.Collections.Generic;
+    using StormGenerator.Models.Configs.NovPropConfigs.Params;
 
     internal class NavPropConfig : ItemConfig
     {
-        public string Name { get; set; }
-
-        public NavPropType NavPropType { get; set; }
-
         public string AssociationName { get; set; }
 
         public List<string> NearFields { get; set; }
@@ -18,8 +15,6 @@
         
         public string ReverseNavPropName { get; set; }
 
-        public NavPropAmount NavPropAmount { get; set; }
-
-        public List<Modifier> Modifiers { get; set; }
+        public INavPropConfigParams Parameters { get; set; }
     }
 }

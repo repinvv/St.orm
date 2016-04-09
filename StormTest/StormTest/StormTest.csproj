@@ -160,6 +160,8 @@
     <None Include="StormSchema\schema.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DatabaseScripts\CreateTables.sql" />
+    <Content Include="DatabaseScripts\DropTables.sql" />
     <Content Include="Schema\StormTest.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StormTest1.generated.cs</LastGenOutput>
