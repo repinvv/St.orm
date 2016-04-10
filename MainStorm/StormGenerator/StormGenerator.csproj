@@ -57,6 +57,7 @@
     <Compile Include="ModelsCreation\ModelCreation.cs" />
     <Compile Include="ModelsCreation\ModelsCreation.cs" />
     <Compile Include="ModelsCreation\RelationCreate.cs" />
+    <Compile Include="ModelsCreation\RelationParamsCreate.cs" />
     <Compile Include="Models\Configs\RelationConfigs\RelationConfigExtension.cs" />
     <Compile Include="AutomaticPopulation\RelationsPopulation\RelationConfigsPopulation.cs" />
     <Compile Include="AutomaticPopulation\PopulationOptionsService.cs" />

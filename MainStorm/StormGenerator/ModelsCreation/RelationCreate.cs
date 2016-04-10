@@ -1,11 +1,21 @@
 ﻿namespace StormGenerator.ModelsCreation
 {
+    using System;
     using System.Collections.Generic;
     using StormGenerator.Models.Configs.RelationConfigs;
+    using StormGenerator.Models.Configs.RelationConfigs.Params;
     using StormGenerator.Models.GenModels;
+    using StormGenerator.Models.GenModels.Params;
 
     internal class RelationCreate
     {
+        private readonly RelationParamsCreate relationParamsCreate;
+
+        public RelationCreate(RelationParamsCreate relationParamsCreate)
+        {
+            this.relationParamsCreate = relationParamsCreate;
+        }
+
         public Relation CreateRelation(RelationConfig config)
         {
             return new Relation
@@ -15,9 +25,53 @@
             };
         }
 
-        public void FillRelationParams(Relation relation, Dictionary<string, Model> modelsDict)
+        public void FillRelationParams(Model model,
+            Relation relation,
+            Dictionary<string, Model> modelsDict,
+            Dictionary<Relation, RelationConfig> relationDict)
         {
-            
+            var relationConfig = relationDict[relation];
+            relation.FarModel = modelsDict[relationConfig.FarModelId];
+            relation.Parameters = CreateRelationParameters(model,
+                relationConfig.Parameters, 
+                relation.FarModel, 
+                modelsDict);
+        }
+
+        private IRelationParams CreateRelationParameters(Model model, 
+            IRelationConfigParams config,
+            Model farModel, 
+            Dictionary<string, Model> modelsDict)
+        {
+            switch (config.RelationType)
+            {
+                case RelationType.OneToMany:
+                    return relationParamsCreate.CreateOtmParameters(farModel, (OneToManyConfigParams)config);
+                case RelationType.OneToManyFlagged:
+                    return relationParamsCreate.CreateOtmfParameters(farModel, (OneToManyFlaggedConfigParams)config);
+                //case RelationType.ManyToOne:
+                //    return relationParamsCreate.CreateMtoParameters(model, farModel, (ManyToOneConfigParams)config);
+                case RelationType.ManyToMany:
+                    return relationParamsCreate.CreateMtmParameters((ManyToManyRelationConfigParams)config, modelsDict);
+            }
+
+            throw new Exception("wtf?");
+        }
+
+        public void CreateMtoRelationParams(Model model,
+            Relation relation,
+            Dictionary<string, Model> modelsDict,
+            Dictionary<Relation, RelationConfig> relationDict)
+        {
+            var config = relationDict[relation];
+            if (!config.IsManyToOne())
+            {
+                return;
+            }
+
+            relation.FarModel = modelsDict[config.FarModelId];
+            relation.Parameters = relationParamsCreate
+                .CreateMtoParameters(model, relation.FarModel, (ManyToOneConfigParams)config.Parameters);
         }
     }
 }

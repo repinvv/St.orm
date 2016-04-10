@@ -298,75 +298,71 @@
       "DbTableId": "country",
       "Fields": [
         {
-          "DbFieldName": "country_id",
+          "DbColumnName": "country_id",
+          "Name": "CountryId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "name",
+          "DbColumnName": "name",
+          "Name": "Name",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Name"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "country_code",
+          "DbColumnName": "country_code",
+          "Name": "CountryCode",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryCode"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_payment_country2",
-          "FarModel": "Models.Payment",
-          "ReverseNavPropName": "Country",
+          "FarModelId": "Models.Payment",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToManyNavPropConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToManyRelationConfigParams, StormGenerator",
             "MediatorId": "Models.PaymentCountry",
-            "FarEndNavPropName": "Payment",
+            "FarEndRelationName": "Payment",
+            "ReverseRelationName": "Country",
             "Modifiers": []
           },
-          "IsGenerated": true,
-          "Name": "Payments"
+          "Name": "Payments",
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_company1",
-          "FarModel": "Models.Company",
-          "ReverseNavPropName": "Country",
+          "FarModelId": "Models.Company",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Country",
             "Modifiers": []
           },
-          "IsGenerated": true,
-          "Name": "Companies"
+          "Name": "Companies",
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_department2",
-          "FarModel": "Models.Department",
-          "ReverseNavPropName": "Country",
+          "FarModelId": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Country",
             "Modifiers": []
           },
-          "IsGenerated": true,
-          "Name": "Departments"
+          "Name": "Departments",
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_asset2",
-          "FarModel": "Models.Asset",
-          "ReverseNavPropName": "Country",
+          "FarModelId": "Models.Asset",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Country",
             "Modifiers": []
           },
-          "IsGenerated": true,
-          "Name": "Assets"
+          "Name": "Assets",
+          "IsGenerated": true
         }
       ],
+      "Name": "Country",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Country"
+      "IsGenerated": true
     },
     {
       "Id": "Models.Company",
@@ -374,30 +370,29 @@
       "DbTableId": "models.company",
       "Fields": [
         {
-          "DbFieldName": "company_id",
+          "DbColumnName": "company_id",
+          "Name": "CompanyId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CompanyId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "name",
+          "DbColumnName": "name",
+          "Name": "Name",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Name"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "country_id",
+          "DbColumnName": "country_id",
+          "Name": "CountryId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryId"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_company1",
-          "FarModel": "Country",
+          "FarModelId": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "country_id"
             ],
@@ -405,26 +400,25 @@
               "country_id"
             ]
           },
+          "Name": "Country",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Country"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_department1",
-          "FarModel": "Models.Department",
-          "ReverseNavPropName": "Company",
+          "FarModelId": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Company",
             "Modifiers": []
           },
+          "Name": "Departments",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Departments"
+          "IsGenerated": true
         }
       ],
+      "Name": "Company",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Company"
+      "IsGenerated": true
     },
     {
       "Id": "Models.Department",
@@ -432,36 +426,35 @@
       "DbTableId": "models.department",
       "Fields": [
         {
-          "DbFieldName": "department_id",
+          "DbColumnName": "department_id",
+          "Name": "DepartmentId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "DepartmentId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "company_id",
+          "DbColumnName": "company_id",
+          "Name": "CompanyId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CompanyId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "country_id",
+          "DbColumnName": "country_id",
+          "Name": "CountryId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "name",
+          "DbColumnName": "name",
+          "Name": "Name",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Name"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_department1",
-          "FarModel": "Models.Company",
+          "FarModelId": "Models.Company",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "company_id"
             ],
@@ -469,15 +462,14 @@
               "company_id"
             ]
           },
+          "Name": "Company",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Company"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_department2",
-          "FarModel": "Country",
+          "FarModelId": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "country_id"
             ],
@@ -485,38 +477,36 @@
               "country_id"
             ]
           },
+          "Name": "Country",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Country"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_asset1",
-          "FarModel": "Models.Asset",
-          "ReverseNavPropName": "Department",
+          "FarModelId": "Models.Asset",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Department",
             "Modifiers": []
           },
+          "Name": "Assets",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Assets"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_employee1",
-          "FarModel": "Models.Employee",
-          "ReverseNavPropName": "Department",
+          "FarModelId": "Models.Employee",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Department",
             "Modifiers": []
           },
+          "Name": "Employees",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Employees"
+          "IsGenerated": true
         }
       ],
+      "Name": "Department",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Department"
+      "IsGenerated": true
     },
     {
       "Id": "Models.Asset",
@@ -524,36 +514,35 @@
       "DbTableId": "models.asset",
       "Fields": [
         {
-          "DbFieldName": "asset_id",
+          "DbColumnName": "asset_id",
+          "Name": "AssetId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "AssetId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "department_id",
+          "DbColumnName": "department_id",
+          "Name": "DepartmentId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "DepartmentId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "name",
+          "DbColumnName": "name",
+          "Name": "Name",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Name"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "country_id",
+          "DbColumnName": "country_id",
+          "Name": "CountryId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryId"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_asset1",
-          "FarModel": "Models.Department",
+          "FarModelId": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "department_id"
             ],
@@ -561,15 +550,14 @@
               "department_id"
             ]
           },
+          "Name": "Department",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Department"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_asset2",
-          "FarModel": "Country",
+          "FarModelId": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "country_id"
             ],
@@ -577,14 +565,14 @@
               "country_id"
             ]
           },
+          "Name": "Country",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Country"
+          "IsGenerated": true
         }
       ],
+      "Name": "Asset",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Asset"
+      "IsGenerated": true
     },
     {
       "Id": "Models.Employee",
@@ -592,30 +580,29 @@
       "DbTableId": "models.employee",
       "Fields": [
         {
-          "DbFieldName": "employee_id",
+          "DbColumnName": "employee_id",
+          "Name": "EmployeeId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "EmployeeId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "department_id",
+          "DbColumnName": "department_id",
+          "Name": "DepartmentId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "DepartmentId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "name",
+          "DbColumnName": "name",
+          "Name": "Name",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Name"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_employee1",
-          "FarModel": "Models.Department",
+          "FarModelId": "Models.Department",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "department_id"
             ],
@@ -623,26 +610,25 @@
               "department_id"
             ]
           },
+          "Name": "Department",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Department"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_payment1",
-          "FarModel": "Models.Payment",
-          "ReverseNavPropName": "Employee",
+          "FarModelId": "Models.Payment",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.OneToManyConfigParams, StormGenerator",
+            "ReverseRelationName": "Employee",
             "Modifiers": []
           },
+          "Name": "Payments",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Payments"
+          "IsGenerated": true
         }
       ],
+      "Name": "Employee",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Employee"
+      "IsGenerated": true
     },
     {
       "Id": "Models.Payment",
@@ -650,36 +636,35 @@
       "DbTableId": "models.payment",
       "Fields": [
         {
-          "DbFieldName": "payment_id",
+          "DbColumnName": "payment_id",
+          "Name": "PaymentId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "PaymentId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "employee_id",
+          "DbColumnName": "employee_id",
+          "Name": "EmployeeId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "EmployeeId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "effective_date",
+          "DbColumnName": "effective_date",
+          "Name": "EffectiveDate",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "EffectiveDate"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "amount",
+          "DbColumnName": "amount",
+          "Name": "Amount",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Amount"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_payment1",
-          "FarModel": "Models.Employee",
+          "FarModelId": "Models.Employee",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "employee_id"
             ],
@@ -687,28 +672,27 @@
               "employee_id"
             ]
           },
+          "Name": "Employee",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Employee"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_payment_country1",
-          "FarModel": "Country",
-          "ReverseNavPropName": "Payment",
+          "FarModelId": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToManyNavPropConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToManyRelationConfigParams, StormGenerator",
             "MediatorId": "Models.PaymentCountry",
-            "FarEndNavPropName": "Country",
+            "FarEndRelationName": "Country",
+            "ReverseRelationName": "Payment",
             "Modifiers": []
           },
+          "Name": "Countries",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Countries"
+          "IsGenerated": true
         }
       ],
+      "Name": "Payment",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "Payment"
+      "IsGenerated": true
     },
     {
       "Id": "Models.PaymentCountry",
@@ -716,24 +700,23 @@
       "DbTableId": "models.payment_country",
       "Fields": [
         {
-          "DbFieldName": "payment_id",
+          "DbColumnName": "payment_id",
+          "Name": "PaymentId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "PaymentId"
+          "IsGenerated": true
         },
         {
-          "DbFieldName": "country_id",
+          "DbColumnName": "country_id",
+          "Name": "CountryId",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "CountryId"
+          "IsGenerated": true
         }
       ],
-      "NavProps": [
+      "Relations": [
         {
-          "AssociationName": "models.fk_payment_country1",
-          "FarModel": "Models.Payment",
+          "FarModelId": "Models.Payment",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "payment_id"
             ],
@@ -741,15 +724,14 @@
               "payment_id"
             ]
           },
+          "Name": "Payment",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Payment"
+          "IsGenerated": true
         },
         {
-          "AssociationName": "models.fk_payment_country2",
-          "FarModel": "Country",
+          "FarModelId": "Country",
           "Parameters": {
-            "$type": "StormGenerator.Models.Configs.NovPropConfigs.Params.ManyToOneConfigParams, StormGenerator",
+            "$type": "StormGenerator.Models.Configs.RelationConfigs.Params.ManyToOneConfigParams, StormGenerator",
             "NearFields": [
               "country_id"
             ],
@@ -757,14 +739,14 @@
               "country_id"
             ]
           },
+          "Name": "Country",
           "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Country"
+          "IsGenerated": true
         }
       ],
+      "Name": "PaymentCountry",
       "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "PaymentCountry"
+      "IsGenerated": true
     }
   ]
 }

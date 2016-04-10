@@ -29,7 +29,14 @@
             }
 
             var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema);
-            return new List<GeneratedFile>();
+            return new List<GeneratedFile>
+                   {
+                       new GeneratedFile
+                       {
+                           Name = "SomeModels.cs",
+                           Content = $"// {models.Count} models created."
+                       }
+                   };
         }
     }
 }

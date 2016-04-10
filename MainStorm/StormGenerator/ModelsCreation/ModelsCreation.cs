@@ -23,10 +23,23 @@
             var relationDict = new Dictionary<Relation, RelationConfig>();
             var models = schema.Configs.Select(x => modelCreation.CreateModel(x, tablesDict, relationDict)).ToList();
             var modelsDict = models.ToDictionary(x => x.Id);
-            foreach (var relation in models.SelectMany(x=>x.Relations))
+
+            foreach (var model in models)
             {
-                relationCreate.FillRelationParams(relation, modelsDict);
+                foreach (var relation in model.Relations)
+                {
+                    relationCreate.CreateMtoRelationParams(model, relation, modelsDict, relationDict);
+                }
             }
+
+            foreach (var model in models)
+            {
+                foreach (var relation in model.Relations.Where(x => x.Parameters == null))
+                {
+                    relationCreate.FillRelationParams(model, relation, modelsDict, relationDict);
+                }
+            }
+
             return models;
         }
     }

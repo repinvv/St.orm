@@ -6,6 +6,8 @@
     {
         public RelationType RelationType => RelationType.OneToManyFlagged;
 
+        public Relation ReverseRelation { get; set; }
+
         public string FlagColumn { get; set; }
 
         public string TrueValue { get; set; }

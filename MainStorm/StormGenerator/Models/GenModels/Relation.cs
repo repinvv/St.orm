@@ -6,8 +6,6 @@
     {
         public Model FarModel { get; set; }
 
-        public Relation ReverseRelation { get; set; }
-
         public IRelationParams Parameters { get; set; }
     }
 }

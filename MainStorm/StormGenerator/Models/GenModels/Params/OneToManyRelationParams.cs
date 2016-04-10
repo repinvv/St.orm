@@ -8,6 +8,8 @@
     {
         public virtual RelationType RelationType => RelationType.OneToMany;
 
+        public Relation ReverseRelation { get; set; }
+
         public RelationAmount RelationAmount { get; set; }
 
         public List<Modifier> Modifiers { get; set; }
