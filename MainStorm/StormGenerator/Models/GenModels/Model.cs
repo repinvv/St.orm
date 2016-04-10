@@ -15,6 +15,6 @@
 
         public List<Field> Fields { get; set; }
 
-        public List<NavProp> NavProps { get; set; }
+        public List<Relation> Relations { get; set; }
     }
 }

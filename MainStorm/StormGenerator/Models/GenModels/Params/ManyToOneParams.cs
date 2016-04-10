@@ -1,11 +1,11 @@
 ﻿namespace StormGenerator.Models.GenModels.Params
 {
     using System.Collections.Generic;
-    using StormGenerator.Models.Configs.NavPropConfigs.Params;
+    using StormGenerator.Models.Configs.RelationConfigs.Params;
 
-    internal class ManyToOneParams : INavPropParams
+    internal class ManyToOneParams : IRelationParams
     {
-        public NavPropType NavPropType => NavPropType.ManyToOne;
+        public RelationType RelationType => RelationType.ManyToOne;
 
         public List<Field> NearFields { get; set; }
 

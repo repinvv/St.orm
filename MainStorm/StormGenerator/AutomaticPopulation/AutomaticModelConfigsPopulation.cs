@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using StormGenerator.AutomaticPopulation.NavPropsPopulation;
+    using StormGenerator.AutomaticPopulation.RelationsPopulation;
     using StormGenerator.Models.Configs;
     using StormGenerator.Models.DbModels;
 
@@ -10,15 +10,15 @@
     {
         private readonly ModelConfigPopulation configPopulation;
         private readonly ConfigListNameNormalizer normalizer;
-        private readonly NavPropConfigsPopulation navPropConfigsPopulation;
+        private readonly RelationConfigsPopulation relationConfigsPopulation;
 
         public AutomaticModelConfigsPopulation(ModelConfigPopulation configPopulation,
             ConfigListNameNormalizer normalizer,
-            NavPropConfigsPopulation navPropConfigsPopulation)
+            RelationConfigsPopulation relationConfigsPopulation)
         {
             this.configPopulation = configPopulation;
             this.normalizer = normalizer;
-            this.navPropConfigsPopulation = navPropConfigsPopulation;
+            this.relationConfigsPopulation = relationConfigsPopulation;
         }
 
         public List<ModelConfig> PopulateConfigs(List<ModelConfig> existingConfigs, List<Table> tables)
@@ -28,7 +28,7 @@
             var newConfigs = unconfiguredTables
                 .Select(x => configPopulation.PopulateConfig(x, tables)).ToList();
             var configs = existingConfigs.Concat(newConfigs).ToList();
-            navPropConfigsPopulation.PopulateNavProps(newConfigs, configs, tables);
+            relationConfigsPopulation.PopulateRelations(newConfigs, configs, tables);
             NormalizeNames(configs);
             return configs;
         }

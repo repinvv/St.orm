@@ -1,10 +1,10 @@
 ﻿namespace StormGenerator.Models.GenModels.Params
 {
-    using StormGenerator.Models.Configs.NavPropConfigs.Params;
+    using StormGenerator.Models.Configs.RelationConfigs.Params;
 
-    internal class OneToManyFlaggedNavPropParams : INavPropParams
+    internal class OneToManyFlaggedRelationParams : IRelationParams
     {
-        public NavPropType NavPropType => NavPropType.OneToManyFlagged;
+        public RelationType RelationType => RelationType.OneToManyFlagged;
 
         public string FlagColumn { get; set; }
 

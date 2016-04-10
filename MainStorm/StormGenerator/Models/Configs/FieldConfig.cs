@@ -2,6 +2,6 @@
 {
     internal class FieldConfig : ItemConfig
     {
-        public string DbFieldName { get; set; }
+        public string DbColumnName { get; set; }
     }
 }

@@ -6,6 +6,6 @@
 
         TDal ClonedFrom();
 
-        bool IsPopulated(int navPropIndex);
+        bool IsPopulated(int relationIndex);
     }
 }

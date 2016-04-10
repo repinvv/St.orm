@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.Models.Configs
 {
     using System.Collections.Generic;
-    using StormGenerator.Models.Configs.NavPropConfigs;
+    using StormGenerator.Models.Configs.RelationConfigs;
 
     internal class ModelConfig : ItemConfig
     {
@@ -15,6 +15,6 @@
 
         public List<FieldConfig> Fields { get; set; }
 
-        public List<NavPropConfig> NavProps { get; set; } 
+        public List<RelationConfig> Relations { get; set; } 
     }
 }

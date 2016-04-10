@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.AutomaticPopulation.NavPropsPopulation
+﻿namespace StormGenerator.AutomaticPopulation.RelationsPopulation
 {
     using System.Collections.Generic;
     using System.Linq;

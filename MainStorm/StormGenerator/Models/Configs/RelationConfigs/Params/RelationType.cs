@@ -1,6 +1,6 @@
-namespace StormGenerator.Models.Configs.NavPropConfigs.Params
+namespace StormGenerator.Models.Configs.RelationConfigs.Params
 {
-    internal enum NavPropType
+    internal enum RelationType
     {
         OneToMany,
         OneToManyFlagged,

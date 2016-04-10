@@ -30,7 +30,7 @@
                        Name = namePopulation.CreateItemName(column.Name),
                        IsGenerated = true,
                        IsEnabled = true,
-                       DbFieldName = column.Name,
+                       DbColumnName = column.Name,
                    };
         }
     }

@@ -19,7 +19,7 @@
             return options.CamelCaseNames ? nameCreator.CreateCamelCaseName(name) : name;
         }
 
-        public string CreateNavPropName(string name, bool isMultiple)
+        public string CreateRelationName(string name, bool isMultiple)
         {
             var output = options.CamelCaseNames ? nameCreator.CreateCamelCaseName(name) : name;
             return isMultiple && options.PluralNames ? nameCreator.CreatePluralName(output) : name;

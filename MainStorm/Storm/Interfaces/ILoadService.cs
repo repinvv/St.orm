@@ -25,12 +25,12 @@
         /// <typeparam name="TField">type of navigation property item</typeparam>
         /// <typeparam name="TQuery">type of query</typeparam>
         /// <typeparam name="TIndex">type of index</typeparam>
-        /// <param name="navPropIndex">index of navigation property in the entity, needed to mark the caching</param>
+        /// <param name="relationIndex">index of navigation property in the entity, needed to mark the caching</param>
         /// <param name="query">query to retrieve the subset, used once then cached</param>
         /// <param name="indexLambda">lambda to run on all items to get their index value to match key of entity</param>
         /// <param name="key">key of entiy to match item index value</param>
         /// <returns>subset of items</returns>
-        List<TField> GetList<TField, TFieldQuery, TIndex>(int navPropIndex, 
+        List<TField> GetList<TField, TFieldQuery, TIndex>(int relationIndex, 
             Func<IQueryable<TFieldQuery>> query, 
             Func<TField, TIndex> indexLambda, 
             TIndex key);
@@ -42,12 +42,12 @@
         /// <typeparam name="TField">type of navigation property item</typeparam>
         /// <typeparam name="TFieldQuery">type of query</typeparam>
         /// <typeparam name="TIndex">type of index</typeparam>
-        /// <param name="navPropIndex">index of navigation property in the entity, needed to mark the caching</param>
+        /// <param name="relationIndex">index of navigation property in the entity, needed to mark the caching</param>
         /// <param name="query">query to retrieve the subset, used once then cached</param>
         /// <param name="indexLambda">lambda to run on all items to get their index value to match key of entity</param>
         /// <param name="key">key of entiy to match item index value</param>
         /// <returns>subset of items</returns>
-        List<TField> GetList<TField, TFieldQuery, TIndex>(int navPropIndex, 
+        List<TField> GetList<TField, TFieldQuery, TIndex>(int relationIndex, 
             Func<IQueryable<TFieldQuery>> query, 
             Func<TField, TIndex> indexLambda, 
             TIndex? key)
@@ -60,12 +60,12 @@
         /// <typeparam name="TField">type of navigation property item</typeparam>
         /// <typeparam name="TFieldQuery">type of query</typeparam>
         /// <typeparam name="TIndex">type of index</typeparam>
-        /// <param name="navPropIndex">index of navigation property in the entity, needed to mark the caching</param>
+        /// <param name="relationIndex">index of navigation property in the entity, needed to mark the caching</param>
         /// <param name="query">query to retrieve the subset, used once then cached</param>
         /// <param name="indexLambda">lambda to run on all items to get their index value to match key of entity</param>
         /// <param name="key">key of entiy to match item index value</param>
         /// <returns>single item which key matches the key of entity</returns>
-        TField GetSingle<TField, TFieldQuery, TIndex>(int navPropIndex,
+        TField GetSingle<TField, TFieldQuery, TIndex>(int relationIndex,
             Func<IQueryable<TFieldQuery>> query, 
             Func<TField, TIndex> indexLambda, 
             TIndex key)
@@ -78,12 +78,12 @@
         /// <typeparam name="TField">type of navigation property item</typeparam>
         /// <typeparam name="TFieldQuery">type of query</typeparam>
         /// <typeparam name="TIndex">type of index</typeparam>
-        /// <param name="navPropIndex">index of navigation property in the entity, needed to mark the caching</param>
+        /// <param name="relationIndex">index of navigation property in the entity, needed to mark the caching</param>
         /// <param name="query">query to retrieve the subset, used once then cached</param>
         /// <param name="indexLambda">lambda to run on all items to get their index value to match key of entity</param>
         /// <param name="key">key of entiy to match item index value</param>
         /// <returns>single item which key matches the key of entity</returns>
-        TField GetSingle<TField, TFieldQuery, TIndex>(int navPropIndex, 
+        TField GetSingle<TField, TFieldQuery, TIndex>(int relationIndex, 
             Func<IQueryable<TFieldQuery>> query, 
             Func<TField, TIndex> indexLambda, 
             TIndex? key)

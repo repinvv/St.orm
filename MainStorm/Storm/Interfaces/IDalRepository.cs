@@ -10,7 +10,7 @@
         /// returns total count of navigation properties in TDal entity
         /// </summary>
         /// <returns></returns>
-        int NavPropsCount();
+        int RelationsCount();
 
         TDal Clone(TDal item);
     }

@@ -1,19 +1,19 @@
-﻿namespace StormGenerator.AutomaticPopulation.NavPropsPopulation
+﻿namespace StormGenerator.AutomaticPopulation.RelationsPopulation
 {
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Models.Configs;
-    using StormGenerator.Models.Configs.NavPropConfigs;
-    using StormGenerator.Models.Configs.NavPropConfigs.Params;
+    using StormGenerator.Models.Configs.RelationConfigs;
+    using StormGenerator.Models.Configs.RelationConfigs.Params;
     using StormGenerator.Models.DbModels;
 
-    internal class ManyToOneNavPropsPopulation
+    internal class ManyToOneRelationsPopulation
     {
         private readonly RelationsCollector relationsCollector;
         private readonly NamePopulation namePopulation;
         private readonly ConfigListNameNormalizer nameNormalizer;
 
-        public ManyToOneNavPropsPopulation(RelationsCollector relationsCollector, 
+        public ManyToOneRelationsPopulation(RelationsCollector relationsCollector, 
             NamePopulation namePopulation, 
             ConfigListNameNormalizer nameNormalizer)
         {
@@ -28,25 +28,24 @@
             var tablesDict = tables.ToDictionary(x => x.Id);
             foreach (var config in newConfigs)
             {
-                config.NavProps = GetManyToOneNavs(tablesDict[config.DbTableId], configDict);
-                nameNormalizer.NormalizeNames(config.NavProps);
+                config.Relations = GetManyToOneNavs(tablesDict[config.DbTableId], configDict);
+                nameNormalizer.NormalizeNames(config.Relations);
             }
         }
 
-        public List<NavPropConfig> GetManyToOneNavs(Table table, Dictionary<string, ModelConfig> configs)
+        public List<RelationConfig> GetManyToOneNavs(Table table, Dictionary<string, ModelConfig> configs)
         {
-            var relations = relationsCollector.CollectRelations(table).GroupBy(x => x.Id);
-            var navProps = relations
+            var relationGroups = relationsCollector.CollectRelations(table).GroupBy(x => x.Id);
+            var relations = relationGroups
                 .Select(x =>
                 {
                     var refConfig = configs[x.First().RefTableId];
-                    return new NavPropConfig
+                    return new RelationConfig
                            {
                                IsEnabled = true,
                                IsGenerated = true,
-                               Name = namePopulation.CreateNavPropName(refConfig.Name, false),
-                               AssociationName = x.Key,
-                               FarModel = refConfig.Id,
+                               Name = namePopulation.CreateRelationName(refConfig.Name, false),
+                               FarModelId = refConfig.Id,
                                Parameters = new ManyToOneConfigParams
                                             {
                                                 NearFields = x.Select(y => y.Column).ToList(),
@@ -54,7 +53,7 @@
                                             }
                            };
                 });
-            return navProps.ToList();
+            return relations.ToList();
         }
     }
 }
