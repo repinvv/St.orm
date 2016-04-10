@@ -1,4 +1,4 @@
-namespace StormGenerator.Models.Configs.NovPropConfigs.Params
+namespace StormGenerator.Models.Configs.NavPropConfigs.Params
 {
     using System.Collections.Generic;
 

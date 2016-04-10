@@ -1,4 +1,4 @@
-﻿namespace StormGenerator.Models.Configs.NovPropConfigs
+﻿namespace StormGenerator.Models.Configs.NavPropConfigs
 {
     public class Modifier
     {

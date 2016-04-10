@@ -1,7 +1,6 @@
-﻿namespace StormGenerator.Models.Configs.NovPropConfigs
+﻿namespace StormGenerator.Models.Configs.NavPropConfigs
 {
-    using System.Collections.Generic;
-    using StormGenerator.Models.Configs.NovPropConfigs.Params;
+    using StormGenerator.Models.Configs.NavPropConfigs.Params;
 
     internal class NavPropConfig : ItemConfig
     {

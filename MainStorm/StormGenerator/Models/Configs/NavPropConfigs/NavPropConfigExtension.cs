@@ -1,6 +1,6 @@
-﻿namespace StormGenerator.Models.Configs.NovPropConfigs
+﻿namespace StormGenerator.Models.Configs.NavPropConfigs
 {
-    using StormGenerator.Models.Configs.NovPropConfigs.Params;
+    using StormGenerator.Models.Configs.NavPropConfigs.Params;
 
     internal static class NavPropConfigExtension
     {

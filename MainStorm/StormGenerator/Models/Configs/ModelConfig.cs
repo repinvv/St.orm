@@ -1,7 +1,7 @@
 ﻿namespace StormGenerator.Models.Configs
 {
     using System.Collections.Generic;
-    using StormGenerator.Models.Configs.NovPropConfigs;
+    using StormGenerator.Models.Configs.NavPropConfigs;
 
     internal class ModelConfig : ItemConfig
     {

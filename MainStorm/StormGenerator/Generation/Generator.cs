@@ -2,14 +2,17 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using StormGenerator.ModelsCreation;
 
     internal class Generator
     {
         private readonly SchemaLoader schemaLoader;
+        private readonly ModelsCreation modelsFromConfigsCreation;
 
-        public Generator(SchemaLoader schemaLoader)
+        public Generator(SchemaLoader schemaLoader, ModelsCreation modelsFromConfigsCreation)
         {
             this.schemaLoader = schemaLoader;
+            this.modelsFromConfigsCreation = modelsFromConfigsCreation;
         }
 
         public List<GeneratedFile> Generate(string schemaFile)
@@ -24,7 +27,8 @@
                 };
                 return new List<GeneratedFile> { file };
             }
-            
+
+            var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema);
             return new List<GeneratedFile>();
         }
     }

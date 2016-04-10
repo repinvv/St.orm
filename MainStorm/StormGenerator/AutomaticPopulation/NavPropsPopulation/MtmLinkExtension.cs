@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using StormGenerator.Models.Configs;
-    using StormGenerator.Models.Configs.NovPropConfigs;
+    using StormGenerator.Models.Configs.NavPropConfigs;
 
     internal static class MtmLinkExtension
     {

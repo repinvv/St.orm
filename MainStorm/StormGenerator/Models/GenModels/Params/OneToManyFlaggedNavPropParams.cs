@@ -1,6 +1,8 @@
-﻿namespace StormGenerator.Models.Configs.NovPropConfigs.Params
+﻿namespace StormGenerator.Models.GenModels.Params
 {
-    internal class OneToManyFlaggedConfigParams : INavPropConfigParams
+    using StormGenerator.Models.Configs.NavPropConfigs.Params;
+
+    internal class OneToManyFlaggedNavPropParams : INavPropParams
     {
         public NavPropType NavPropType => NavPropType.OneToManyFlagged;
 

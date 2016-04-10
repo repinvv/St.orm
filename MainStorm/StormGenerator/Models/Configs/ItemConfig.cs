@@ -2,10 +2,10 @@
 {
     internal abstract class ItemConfig
     {
+        public string Name { get; set; }
+
         public bool IsEnabled { get; set; }
 
         public bool IsGenerated { get; set; }
-
-        public string Name { get; set; }
     }
 }

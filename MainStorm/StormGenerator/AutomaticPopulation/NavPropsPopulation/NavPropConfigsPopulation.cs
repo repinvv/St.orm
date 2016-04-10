@@ -4,8 +4,7 @@
     using System.Linq;
     using StormGenerator.Common;
     using StormGenerator.Models.Configs;
-    using StormGenerator.Models.Configs.NovPropConfigs;
-    using StormGenerator.Models.Configs.NovPropConfigs.Params;
+    using StormGenerator.Models.Configs.NavPropConfigs;
     using StormGenerator.Models.DbModels;
     using StormGenerator.Settings;
 
