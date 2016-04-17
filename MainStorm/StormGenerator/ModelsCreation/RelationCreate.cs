@@ -49,29 +49,13 @@
                     return relationParamsCreate.CreateOtmParameters(farModel, (OneToManyConfigParams)config);
                 case RelationType.OneToManyFlagged:
                     return relationParamsCreate.CreateOtmfParameters(farModel, (OneToManyFlaggedConfigParams)config);
-                //case RelationType.ManyToOne:
-                //    return relationParamsCreate.CreateMtoParameters(model, farModel, (ManyToOneConfigParams)config);
+                case RelationType.ManyToOne:
+                    return relationParamsCreate.CreateMtoParameters(model, farModel, (ManyToOneConfigParams)config);
                 case RelationType.ManyToMany:
                     return relationParamsCreate.CreateMtmParameters((ManyToManyRelationConfigParams)config, modelsDict);
             }
 
             throw new Exception("wtf?");
-        }
-
-        public void CreateMtoRelationParams(Model model,
-            Relation relation,
-            Dictionary<string, Model> modelsDict,
-            Dictionary<Relation, RelationConfig> relationDict)
-        {
-            var config = relationDict[relation];
-            if (!config.IsManyToOne())
-            {
-                return;
-            }
-
-            relation.FarModel = modelsDict[config.FarModelId];
-            relation.Parameters = relationParamsCreate
-                .CreateMtoParameters(model, relation.FarModel, (ManyToOneConfigParams)config.Parameters);
         }
     }
 }

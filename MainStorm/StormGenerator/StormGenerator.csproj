@@ -54,6 +54,17 @@
     <Compile Include="AutomaticPopulation\RelationsPopulation\MtmLinkExtension.cs" />
     <Compile Include="AutomaticPopulation\RelationsPopulation\Mto.cs" />
     <Compile Include="AutomaticPopulation\RelationsPopulation\OneToManyRelationsPopulation.cs" />
+    <None Include="Generation\Generators\Linq2Db\Context.rcs">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Context.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\Linq2Db\Context.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Context.rcs</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\RazorResolve.cs" />
+    <Compile Include="Generation\Generators\TemplateBase.cs" />
     <Compile Include="ModelsCreation\ModelCreation.cs" />
     <Compile Include="ModelsCreation\ModelsCreation.cs" />
     <Compile Include="ModelsCreation\RelationCreate.cs" />

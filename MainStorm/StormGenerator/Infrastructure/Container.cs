@@ -3,18 +3,21 @@
     using System.Linq;
     using StormGenerator.Settings;
 
-    internal class Container
+    internal interface IResolve
     {
-        private readonly Options options;
+        T Get<T>();
+    }
+
+    internal class Container : IResolve
+    {
         private readonly IoC container;
 
         public Container(Options options)
         {
-            this.options = options;
             container = new IoC();
             Register(this);
             container.RegisterInstance(options);
-            container.RegisterInstance(this);
+            container.RegisterInstance<IResolve, Container>(this);
         }
 
         public T Get<T>()

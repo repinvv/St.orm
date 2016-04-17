@@ -1,0 +1,19 @@
+﻿@* Generator : Template
+ GeneratePrettyNames: true  
+ Namespace: StormGenerator.Generation.Generators.Linq2Db
+ TypeVisibility: Internal 
+ Imports: Models.GenModels *@
+@inherits TemplateBase<List<Model>> 
+@{FileName = "Context";}
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace @Options.OutputNamespace
+{
+    class Context
+    {
+    }
+}

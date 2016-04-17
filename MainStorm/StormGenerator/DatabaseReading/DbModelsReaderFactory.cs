@@ -7,17 +7,17 @@
     internal class DbModelsReaderFactory
     {
         private readonly Options options;
-        private readonly Container container;
+        private readonly IResolve resolve;
 
-        public DbModelsReaderFactory(Options options, Container container)
+        public DbModelsReaderFactory(Options options, IResolve resolve)
         {
             this.options = options;
-            this.container = container;
+            this.resolve = resolve;
         }
 
         public IDbModelsReader GetReader()
         {
-            return container.Get<MsSqlDbModelsReader>();
+            return resolve.Get<MsSqlDbModelsReader>();
         }
     }
 }
