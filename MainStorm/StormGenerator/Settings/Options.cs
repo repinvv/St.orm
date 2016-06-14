@@ -12,6 +12,6 @@
 
         public AutomaticPopulationOptions AutomaticPopulationOptions { get; set; }
 
-        public GenerationOptions GenerationOptions { get; set; }
+        public GenOptions GenOptions { get; set; }
     }
 }

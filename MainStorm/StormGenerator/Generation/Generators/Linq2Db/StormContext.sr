@@ -1,0 +1,16 @@
+﻿@using Models System.Collections.Generic
+@using Settings
+@visibility internal
+@inherits FileGenerator
+@constructor(GenerationOptions options, List<EntityModel> model)
+@member{public override string FileName => options.ContextName;}
+
+namespace @options.OutputNamespace
+{
+    using LinqToDB;
+
+    public partial class @options.ContextName
+	{
+    @foreach(var m in model){@(new ContextTableLine(m).Execute())}
+	}	
+}

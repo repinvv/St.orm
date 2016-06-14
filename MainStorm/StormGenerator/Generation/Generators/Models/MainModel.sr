@@ -1,0 +1,25 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Models StormGenerator.Settings GeneratorHelpers
+@constructor(GenOptions options, EntityModel entityModel)
+@member{public override string FileName => entityModel.Model.Name + ".main";}
+
+@{var model = entityModel.Model;}
+namespace @entityModel.GetNamespace(options)
+{
+	@foreach(var u in model.GetUsings()){
+	using @u;
+	}
+@newline
+	@{var type = model.IsStruct ? "struct" : "class";}
+    @options.Visibility partial @type @model.Name : IEquatable<@model.Name>
+    {	
+	  @{var fields = model.Fields.Where(x => x.IsEnabled).ToList();}
+      @foreach (var field in model.Fields){
+        @[ModelField(field, options)]
+		@newline
+      }
+
+@[ModelEquality(model)]	  
+    }
+}

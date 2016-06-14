@@ -1,0 +1,5 @@
+﻿@visibility internal
+@using StormGenerator.Models
+@constructor(EntityModel model)
+
+public ITable<@model.Model.Name> @model.Name { get { return GetTable<@model.Model.Name>(); } }

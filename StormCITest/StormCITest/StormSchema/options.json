@@ -1,0 +1,20 @@
+{
+  "ConnectionInfo": {
+    "DbType": "MsSql",
+    "Database": "StormCI",
+    "IntegratedSecurity": true,
+    "Server": "localhost"
+  },
+  "GenerationOptions": {
+    "Linq2EntitiesProvider": "linq2db",
+    "ContextName": "StormTestContext",
+    "CustomInterfaceForEntities": "IDbEntity",
+    "OutputNamespace": "StormTestProject.StormModel"
+  },
+  "AutomaticPopulation": true,
+  "AutomaticPopulationOptions": {
+    "CamelCaseNames": true,
+    "PluralNames": true
+  },
+  "ForceRefreshDbInfo": false
+}

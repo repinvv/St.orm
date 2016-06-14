@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Storm;
     using StormGenerator.Models.Configs;
     using StormGenerator.Models.Configs.RelationConfigs;
     using StormGenerator.Models.DbModels;
@@ -22,15 +23,23 @@
         {
             var table = tablesDict[config.DbTableId];
             var columnsDict = table.Columns.ToDictionary(x => x.Name);
+            var fields = config.Fields
+                               .Select(x => CreateField(x, columnsDict))
+                               .Where(x => x.IsEnabled || x.IsKeyField())
+                               .ToList();
+            var keys = fields.Where(x => x.IsKeyField())
+                             .ToList();
             var model = new Model
-            {
-                IsEnabled = config.IsEnabled,
-                Name = config.Name,
-                NamespaceSuffix = config.NamespaceSuffix,
-                Table = table,
-                Fields = config.Fields.Select(x => CreateField(x, columnsDict)).ToList(),
-                Relations = new List<Relation>()
-            };
+                        {
+                            IsEnabled = config.IsEnabled && fields.Count > 0,
+                            Name = config.Name,
+                            NamespaceSuffix = config.NamespaceSuffix,
+                            IsStruct = config.IsStruct,
+                            Table = table,
+                            Fields = fields,
+                            KeyFields = keys,
+                            Relations = new List<Relation>()
+                        };
             foreach (var relationConfig in config.Relations)
             {
                 var relation = relationCreate.CreateRelation(relationConfig);
@@ -42,10 +51,10 @@
 
         private Field CreateField(FieldConfig config, Dictionary<string, Column> columnsDict)
         {
-            var column = columnsDict[config.DbColumnName];
+            var column = columnsDict.SafeGet(config.DbColumnName);
             return new Field
             {
-                IsEnabled = config.IsEnabled,
+                IsEnabled = config.IsEnabled && column != null,
                 Name = config.Name,
                 Column = column,
             };

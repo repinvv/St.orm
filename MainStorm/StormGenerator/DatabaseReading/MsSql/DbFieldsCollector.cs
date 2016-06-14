@@ -26,10 +26,13 @@
 
         private Column CreateColumn(DbColumn column)
         {
+            var csType = SqlCsType.GetCsType(column.Type, column.IsNullable);
             return new Column
             {
                        Name = column.Name,
-                       Type = column.Type,
+                       DbType = column.Type,
+                       CsType = csType,
+                       CsTypeName = csType.GetTypeName(),
                        Default = column.Default,
                        IsIdentity = column.IsIdentity,
                        IsNullable = column.IsNullable,

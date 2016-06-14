@@ -34,6 +34,10 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RcsGen, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8fb75e1dbc3f5ced, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\RcsGen\RcsGen\bin\Debug\RcsGen.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,18 +58,70 @@
     <Compile Include="AutomaticPopulation\RelationsPopulation\MtmLinkExtension.cs" />
     <Compile Include="AutomaticPopulation\RelationsPopulation\Mto.cs" />
     <Compile Include="AutomaticPopulation\RelationsPopulation\OneToManyRelationsPopulation.cs" />
-    <None Include="Generation\Generators\Linq2Db\Context.rcs">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Context.generated.cs</LastGenOutput>
+    <None Include="Generation\Generators\Linq2Db\StormContext.sr">
+      <Generator>SharpRazor</Generator>
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Linq2Db</CustomToolNamespace>
+      <LastGenOutput>StormContext.generated.cs</LastGenOutput>
     </None>
-    <Compile Include="Generation\Generators\Linq2Db\Context.generated.cs">
+    <None Include="Generation\Generators\Linq2Db\StormContextPartial.sr">
+      <Generator>SharpRazor1</Generator>
+      <LastGenOutput>StormContextPartial1.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\Linq2Db\ContextTableLine.sr">
+      <Generator>SharpRazor</Generator>
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Linq2Db</CustomToolNamespace>
+      <LastGenOutput>ContextTableLine.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="DatabaseReading\TypeExtension.cs" />
+    <Compile Include="DatabaseReading\MsSql\CsType.cs" />
+    <Compile Include="Generation\GenerationOptionsService.cs" />
+    <Compile Include="Generation\GeneratorCollections\GeneratorCollectionsFactory.cs" />
+    <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
+    <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
+    <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
+    <Compile Include="Generation\Generators\FileGenerator.cs" />
+    <Compile Include="Generation\Generators\GeneratorHelpers\ModelHelpers.cs" />
+    <Compile Include="Generation\Generators\Linq2Db\ContextTableLine.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Context.rcs</DependentUpon>
+      <DependentUpon>ContextTableLine.sr</DependentUpon>
     </Compile>
-    <Compile Include="Generation\Generators\RazorResolve.cs" />
-    <Compile Include="Generation\Generators\TemplateBase.cs" />
+    <Compile Include="Generation\Generators\Linq2Db\StormContext.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StormContext.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\Models\ModelEquality.sr">
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ModelEquality.generated.cs</LastGenOutput>
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+    </None>
+    <None Include="Generation\Generators\Models\MainModel.sr">
+      <Generator>SharpRazor</Generator>
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+      <LastGenOutput>MainModel.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\Models\ModelField.sr">
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ModelField.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\Models\MainModel.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainModel.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\Models\ModelEquality.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelEquality.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\Models\ModelField.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ModelField.sr</DependentUpon>
+    </Compile>
     <Compile Include="ModelsCreation\ModelCreation.cs" />
+    <Compile Include="ModelsCreation\ModelExtension.cs" />
     <Compile Include="ModelsCreation\ModelsCreation.cs" />
     <Compile Include="ModelsCreation\RelationCreate.cs" />
     <Compile Include="ModelsCreation\RelationParamsCreate.cs" />
@@ -103,6 +159,7 @@
     <Compile Include="Models\Configs\ModelConfig.cs" />
     <Compile Include="Models\Configs\FieldConfig.cs" />
     <Compile Include="Models\Configs\RelationConfigs\RelationConfig.cs" />
+    <Compile Include="Models\EnttityModel.cs" />
     <Compile Include="Models\GenModels\Field.cs" />
     <Compile Include="Models\GenModels\Item.cs" />
     <Compile Include="Models\GenModels\Model.cs" />
@@ -112,12 +169,13 @@
     <Compile Include="Models\GenModels\Params\ManyToOneParams.cs" />
     <Compile Include="Models\GenModels\Params\OneToManyFlaggedRelationParams.cs" />
     <Compile Include="Models\GenModels\Params\OneToManyRelationParams.cs" />
+    <Compile Include="Models\Named.cs" />
     <Compile Include="Models\Schema.cs" />
     <Compile Include="Generation\SchemaLoader.cs" />
     <Compile Include="Settings\AutomaticPopulationOptions.cs" />
     <Compile Include="Settings\DbConnectionInfo.cs" />
     <Compile Include="Settings\DbProvider.cs" />
-    <Compile Include="Settings\GenerationOptions.cs" />
+    <Compile Include="Settings\GenOptions.cs" />
     <Compile Include="Settings\Linq2EntitiesProvider.cs" />
     <Compile Include="Settings\Options.cs" />
     <Compile Include="GeneratedFile.cs" />

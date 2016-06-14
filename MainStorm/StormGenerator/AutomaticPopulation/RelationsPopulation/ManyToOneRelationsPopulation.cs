@@ -29,7 +29,7 @@
             foreach (var config in newConfigs)
             {
                 config.Relations = GetManyToOneNavs(tablesDict[config.DbTableId], configDict);
-                nameNormalizer.NormalizeNames(config.Relations);
+                nameNormalizer.NormalizeConfigNames(config.Relations);
             }
         }
 

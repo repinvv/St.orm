@@ -2,7 +2,7 @@
 {
     internal enum Linq2EntitiesProvider
     {
-        linq2db,
+        linq2db = 0,
         EntityFramework
     }
 }

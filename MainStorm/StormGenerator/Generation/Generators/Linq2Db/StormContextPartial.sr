@@ -1,0 +1,29 @@
+﻿@* Generator : Template
+ GeneratePrettyNames: true  
+ Namespace: StormGenerator.Generation.Generators.Linq2Db
+ TypeVisibility: Internal 
+ Imports: Models.GenModels, Storm.Interfaces *@
+@inherits TemplateBase<int> 
+@{FileName = Options.ContextName + ".IStormContext";}
+namespace @Options.OutputNamespace
+{
+    using System.Data.Common;
+    using System.Linq;
+    using @typeof(IStormContext).Namespace;
+
+    public partial class @Options.ContextName : IStormContext
+    {
+	    public IDalRepository<TDal, TQuery> GetDalRepository<TDal, TQuery>()
+        {
+            return RepositoryStorage.GetDalRepository<TDal, TQuery>();
+        }
+
+        public IQueryable<TDal> Set<TDal>() where TDal : class
+        {
+            return GetTable<TDal>();
+        }
+
+        DbConnection IStormContext.Connection { get { return Connection as DbConnection; } }
+        DbTransaction IStormContext.Transaction { get { return Transaction as DbTransaction; } }
+    }
+}

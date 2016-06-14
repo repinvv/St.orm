@@ -1,12 +1,17 @@
 ﻿namespace StormGenerator.Models.DbModels
 {
+    using System;
     using System.Collections.Generic;
 
     internal class Column
     {
         public string Name { get; set; }
 
-        public string Type { get; set; }
+        public string DbType { get; set; }
+
+        public Type CsType { get; set; }
+
+        public string CsTypeName { get; set; }
 
         public bool IsNullable { get; set; }
 

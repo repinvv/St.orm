@@ -11,10 +11,12 @@
 
         public string NamespaceSuffix { get; set; }
 
+        public bool IsStruct { get; set; }
+
         public string DbTableId { get; set; }
 
         public List<FieldConfig> Fields { get; set; }
 
-        public List<RelationConfig> Relations { get; set; } 
+        public List<RelationConfig> Relations { get; set; }
     }
 }

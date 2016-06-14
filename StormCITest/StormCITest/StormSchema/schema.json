@@ -1,0 +1,533 @@
+{
+  "Tables": [
+    {
+      "Id": "entity_with_id",
+      "Name": "entity_with_id",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "id",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "IsPrimaryKey": true,
+          "IsIdentity": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "a_bigint",
+          "DbType": "bigint",
+          "CsType": "System.Nullable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "long?",
+          "IsNullable": true,
+          "Index": 2,
+          "Precision": 19,
+          "Associations": []
+        },
+        {
+          "Name": "a_int",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "Index": 3,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "a_numeric",
+          "DbType": "numeric",
+          "CsType": "System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "decimal?",
+          "IsNullable": true,
+          "Index": 4,
+          "Precision": 6,
+          "Scale": 2,
+          "Associations": []
+        },
+        {
+          "Name": "a_bit",
+          "DbType": "bit",
+          "CsType": "System.Nullable`1[[System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "bool?",
+          "IsNullable": true,
+          "Index": 5,
+          "Associations": []
+        },
+        {
+          "Name": "a_smallint",
+          "DbType": "smallint",
+          "CsType": "System.Nullable`1[[System.Int16, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "short?",
+          "IsNullable": true,
+          "Index": 6,
+          "Precision": 5,
+          "Associations": []
+        },
+        {
+          "Name": "a_decimal",
+          "DbType": "decimal",
+          "CsType": "System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "decimal?",
+          "IsNullable": true,
+          "Index": 7,
+          "Precision": 8,
+          "Scale": 3,
+          "Associations": []
+        },
+        {
+          "Name": "a_smallmoney",
+          "DbType": "smallmoney",
+          "CsType": "System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "decimal?",
+          "IsNullable": true,
+          "Index": 8,
+          "Precision": 10,
+          "Scale": 4,
+          "Associations": []
+        },
+        {
+          "Name": "a_tinyint",
+          "DbType": "tinyint",
+          "CsType": "System.Nullable`1[[System.Byte, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "byte?",
+          "IsNullable": true,
+          "Index": 9,
+          "Precision": 3,
+          "Associations": []
+        },
+        {
+          "Name": "a_money",
+          "DbType": "money",
+          "CsType": "System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "decimal?",
+          "IsNullable": true,
+          "Index": 10,
+          "Precision": 19,
+          "Scale": 4,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "entity_with_guid",
+      "Name": "entity_with_guid",
+      "Schema": "dbo",      
+      "Columns": [
+        {
+          "Name": "id",
+          "DbType": "uniqueidentifier",
+          "CsType": "System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "Guid",
+          "IsPrimaryKey": true,
+          "Index": 1,
+          "Associations": []
+        },
+        {
+          "Name": "a_float",
+          "DbType": "float",
+          "CsType": "System.Nullable`1[[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "float?",
+          "IsNullable": true,
+          "Index": 2,
+          "Precision": 53,
+          "Associations": []
+        },
+        {
+          "Name": "a_real",
+          "DbType": "real",
+          "CsType": "System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "double",
+          "Index": 3,
+          "Precision": 24,
+          "Associations": []
+        },
+        {
+          "Name": "a_date",
+          "DbType": "date",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 4,
+          "Associations": []
+        },
+        {
+          "Name": "a_time",
+          "DbType": "time",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 5,
+          "Associations": []
+        },
+        {
+          "Name": "a_offset",
+          "DbType": "datetimeoffset",
+          "CsType": "System.Nullable`1[[System.DateTimeOffset, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTimeOffset?",
+          "IsNullable": true,
+          "Index": 6,
+          "Associations": []
+        },
+        {
+          "Name": "a_datetime",
+          "DbType": "datetime",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 7,
+          "Associations": []
+        },
+        {
+          "Name": "a_datetime2",
+          "DbType": "datetime2",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 8,
+          "Associations": []
+        },
+        {
+          "Name": "a_smalldatetime",
+          "DbType": "smalldatetime",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 9,
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "some_schema.entity_with_sequence",
+      "Name": "entity_with_sequence",
+      "Schema": "some_schema",
+      "Columns": [
+        {
+          "Name": "id",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "IsPrimaryKey": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "a_char",
+          "DbType": "char",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 2,
+          "Length": 1,
+          "Associations": []
+        },
+        {
+          "Name": "a_varchar",
+          "DbType": "varchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "Index": 3,
+          "Length": 2000,
+          "Associations": []
+        },
+        {
+          "Name": "a_text",
+          "DbType": "text",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 4,
+          "Length": 2147483647,
+          "Associations": []
+        },
+        {
+          "Name": "a_nchar",
+          "DbType": "nchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 5,
+          "Length": 10,
+          "Associations": []
+        },
+        {
+          "Name": "a_nvarchar",
+          "DbType": "nvarchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 6,
+          "Length": -1,
+          "Associations": []
+        },
+        {
+          "Name": "a_ntext",
+          "DbType": "ntext",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 7,
+          "Length": 1073741823,
+          "Associations": []
+        },
+        {
+          "Name": "a_xml",
+          "DbType": "xml",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 8,
+          "Length": -1,
+          "Associations": []
+        },
+        {
+          "Name": "a_binary",
+          "DbType": "binary",
+          "CsType": "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "byte[]",
+          "IsNullable": true,
+          "Index": 9,
+          "Length": 1000,
+          "Associations": []
+        },
+        {
+          "Name": "a_varbinary",
+          "DbType": "varbinary",
+          "CsType": "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "byte[]",
+          "IsNullable": true,
+          "Index": 10,
+          "Length": 2000,
+          "Associations": []
+        },
+        {
+          "Name": "a_image",
+          "DbType": "image",
+          "CsType": "System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "byte[]",
+          "IsNullable": true,
+          "Index": 11,
+          "Length": 2147483647,
+          "Associations": []
+        }
+      ]
+    }
+  ],
+  "Configs": [
+    {
+      "Id": "EntityWithId",
+      "DbTableId": "entity_with_id",
+      "Fields": [
+        {
+          "DbColumnName": "id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id"
+        },
+        {
+          "DbColumnName": "a_bigint",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ABigint"
+        },
+        {
+          "DbColumnName": "a_int",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AInt"
+        },
+        {
+          "DbColumnName": "a_numeric",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ANumeric"
+        },
+        {
+          "DbColumnName": "a_bit",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ABit"
+        },
+        {
+          "DbColumnName": "a_smallint",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ASmallint"
+        },
+        {
+          "DbColumnName": "a_decimal",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ADecimal"
+        },
+        {
+          "DbColumnName": "a_smallmoney",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ASmallmoney"
+        },
+        {
+          "DbColumnName": "a_tinyint",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ATinyint"
+        },
+        {
+          "DbColumnName": "a_money",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AMoney"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "EntityWithId"
+    },
+    {
+      "Id": "EntityWithGuid",
+      "DbTableId": "entity_with_guid",
+      "Fields": [
+        {
+          "DbColumnName": "id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id"
+        },
+        {
+          "DbColumnName": "a_float",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AFloat"
+        },
+        {
+          "DbColumnName": "a_real",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AReal"
+        },
+        {
+          "DbColumnName": "a_date",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ADate"
+        },
+        {
+          "DbColumnName": "a_time",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ATime"
+        },
+        {
+          "DbColumnName": "a_offset",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AOffset"
+        },
+        {
+          "DbColumnName": "a_datetime",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ADatetime"
+        },
+        {
+          "DbColumnName": "a_datetime2",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ADatetime2"
+        },
+        {
+          "DbColumnName": "a_smalldatetime",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ASmalldatetime"
+        }
+      ],
+      "Relations": [ ],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "IsStruct": true,
+      "Name": "EntityWithGuid"
+    },
+    {
+      "Id": "SomeSchema.EntityWithSequence",
+      "NamespaceSuffix": "SomeSchema",
+      "DbTableId": "some_schema.entity_with_sequence",
+      "Fields": [
+        {
+          "DbColumnName": "id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id"
+        },
+        {
+          "DbColumnName": "a_char",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AChar"
+        },
+        {
+          "DbColumnName": "a_varchar",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AVarchar"
+        },
+        {
+          "DbColumnName": "a_text",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AText"
+        },
+        {
+          "DbColumnName": "a_nchar",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ANchar"
+        },
+        {
+          "DbColumnName": "a_nvarchar",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ANvarchar"
+        },
+        {
+          "DbColumnName": "a_ntext",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ANtext"
+        },
+        {
+          "DbColumnName": "a_xml",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AXml"
+        },
+        {
+          "DbColumnName": "a_binary",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ABinary"
+        },
+        {
+          "DbColumnName": "a_varbinary",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AVarbinary"
+        },
+        {
+          "DbColumnName": "a_image",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AImage"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "EntityWithSequence"
+    }
+  ]
+}

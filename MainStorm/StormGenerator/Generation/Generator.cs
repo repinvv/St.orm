@@ -2,17 +2,27 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using StormGenerator.Common;
+    using StormGenerator.Generation.GeneratorCollections;
     using StormGenerator.ModelsCreation;
+    using StormGenerator.Settings;
 
     internal class Generator
     {
         private readonly SchemaLoader schemaLoader;
         private readonly ModelsCreation modelsFromConfigsCreation;
+        private readonly GeneratorCollectionsFactory collectionsFactory;
+        private readonly GenOptions options;
 
-        public Generator(SchemaLoader schemaLoader, ModelsCreation modelsFromConfigsCreation)
+        public Generator(SchemaLoader schemaLoader, 
+            ModelsCreation modelsFromConfigsCreation,
+            GeneratorCollectionsFactory collectionsFactory,
+            GenerationOptionsService generationOptionsService)
         {
+            this.options = generationOptionsService.GenOptions;
             this.schemaLoader = schemaLoader;
             this.modelsFromConfigsCreation = modelsFromConfigsCreation;
+            this.collectionsFactory = collectionsFactory;
         }
 
         public List<GeneratedFile> Generate(string schemaFile)
@@ -29,14 +39,9 @@
             }
 
             var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema);
-            return new List<GeneratedFile>
-                   {
-                       new GeneratedFile
-                       {
-                           Name = "SomeModels.cs",
-                           Content = $"// {models.Count} models created."
-                       }
-                   };
+            var collection = collectionsFactory.GetGeneratorCollections();
+
+            return collection.SelectMany(x => x.Generate(models, options)).ToList();
         }
     }
 }

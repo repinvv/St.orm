@@ -120,7 +120,25 @@
     <Compile Include="StormEntities\RepositoryStorage.cs" />
     <Compile Include="StormEntities\StormDb.cs" />
     <Compile Include="StormEntities\StormDb.IStormContext.cs" />
-    <Compile Include="StormSchema\SomeModels.cs">
+    <Compile Include="StormSchema\Asset.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\Company.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\Country.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\Department.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\Employee.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\Payment.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\PaymentCountry.main.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormSchema\StormEntities.cs">

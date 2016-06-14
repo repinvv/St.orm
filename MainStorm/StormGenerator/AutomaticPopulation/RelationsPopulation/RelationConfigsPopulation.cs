@@ -45,7 +45,7 @@
 
             foreach (var modelConfig in newConfigs)
             {
-                nameNormalizer.NormalizeNames(modelConfig.Relations);
+                nameNormalizer.NormalizeConfigNames(modelConfig.Relations);
                 var nonMtoProps = modelConfig.Relations.Where(x => !x.IsManyToOne()).ToList();
                 if (nonMtoProps.Count > options.MaxChildModels)
                 {

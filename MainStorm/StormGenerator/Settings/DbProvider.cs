@@ -2,7 +2,7 @@
 {
     internal enum DbProvider
     {
-        MsSql,
+        MsSql = 0,
         Oracle
     }
 }

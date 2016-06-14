@@ -38,7 +38,7 @@
             var groups = configs.GroupBy(x => x.NamespaceSuffix ?? string.Empty);
             foreach (var group in groups)
             {
-                normalizer.NormalizeNames(group);
+                normalizer.NormalizeConfigNames(group);
             }
         }
     }

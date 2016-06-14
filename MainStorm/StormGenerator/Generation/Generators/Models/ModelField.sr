@@ -1,0 +1,4 @@
+﻿@constructor(Field field, GenOptions options)
+@using StormGenerator.Models.GenModels StormGenerator.Settings
+
+public @field.Column.CsTypeName @field.Name { get; set; }

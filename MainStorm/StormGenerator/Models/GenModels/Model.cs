@@ -11,9 +11,13 @@
 
         public string NamespaceSuffix { get; set; }
 
+        public bool IsStruct { get; set; }
+
         public Table Table { get; set; }
 
         public List<Field> Fields { get; set; }
+
+        public List<Field> KeyFields { get; set; }
 
         public List<Relation> Relations { get; set; }
     }

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelpfulExtensions.cs" />
     <Compile Include="Exceptions\NavigationPropertyException.cs" />
     <Compile Include="Implementation\LoadService.cs" />
     <Compile Include="Interfaces\IAdoRepository.cs" />

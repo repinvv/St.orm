@@ -19,7 +19,7 @@
         public List<FieldConfig> PopulateModelFields(Table table)
         {
             var fields = table.Columns.Select(CreateFieldConfig).ToList();
-            normalizer.NormalizeNames(fields);
+            normalizer.NormalizeConfigNames(fields);
             return fields;
         }
 
