@@ -75,10 +75,16 @@
     <Compile Include="DatabaseReading\TypeExtension.cs" />
     <Compile Include="DatabaseReading\MsSql\CsType.cs" />
     <Compile Include="Generation\GenerationOptionsService.cs" />
+    <Compile Include="Generation\GeneratorCollections\MsSqlCiServicesCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\GeneratorCollectionsFactory.cs" />
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
+    <None Include="Generation\Generators\MsSqlCiServices\MsSqlICiService.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>MsSqlICiService.generated.cs</LastGenOutput>
+    </None>
     <Compile Include="Generation\Generators\FileGenerator.cs" />
     <Compile Include="Generation\Generators\GeneratorHelpers\ModelHelpers.cs" />
     <Compile Include="Generation\Generators\Linq2Db\ContextTableLine.generated.cs">
@@ -91,10 +97,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StormContext.sr</DependentUpon>
     </Compile>
-    <None Include="Generation\Generators\Models\ModelEquality.sr">
+    <None Include="Generation\Generators\Models\ClassEquality.sr">
       <Generator>SharpRazor</Generator>
-      <LastGenOutput>ModelEquality.generated.cs</LastGenOutput>
       <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+      <LastGenOutput>ClassEquality.generated.cs</LastGenOutput>
     </None>
     <None Include="Generation\Generators\Models\MainModel.sr">
       <Generator>SharpRazor</Generator>
@@ -105,20 +111,50 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>ModelField.generated.cs</LastGenOutput>
     </None>
+    <Compile Include="Generation\Generators\Models\ClassEquality.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClassEquality.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\Models\FieldsComparision.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>FieldsComparision.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\Models\GetHashCode.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>GetHashCode.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\Models\FieldsComparision.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FieldsComparision.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\Models\GetHashCode.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GetHashCode.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\Models\MainModel.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MainModel.sr</DependentUpon>
     </Compile>
-    <Compile Include="Generation\Generators\Models\ModelEquality.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelEquality.sr</DependentUpon>
-    </Compile>
     <Compile Include="Generation\Generators\Models\ModelField.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelField.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\Models\StructEquality.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StructEquality.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlICiService.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsSqlICiService.sr</DependentUpon>
     </Compile>
     <Compile Include="ModelsCreation\ModelCreation.cs" />
     <Compile Include="ModelsCreation\ModelExtension.cs" />
@@ -195,6 +231,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Generation\Generators\Models\StructEquality.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.Models</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>StructEquality.generated.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

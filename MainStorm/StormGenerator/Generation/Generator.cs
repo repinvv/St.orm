@@ -41,7 +41,10 @@
             var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema);
             var collection = collectionsFactory.GetGeneratorCollections();
 
-            return collection.SelectMany(x => x.Generate(models, options)).ToList();
+            return collection
+                .SelectMany(x => x.GetFileGenerators(models, options))
+                .Select(x => x.GetFile())
+                .ToList();
         }
     }
 }

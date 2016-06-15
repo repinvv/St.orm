@@ -14,12 +14,12 @@ namespace StormGenerator.Generation.Generators.Models
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ModelEquality
+    internal class GetHashCode
     {
         #region constructor
         Model model;
 
-        public ModelEquality(Model model)
+        public GetHashCode(Model model)
         {
             this.model = model;
         }
@@ -53,81 +53,7 @@ namespace StormGenerator.Generation.Generators.Models
 
         public string Execute()
         {
-            WriteLiteral("        #region equality");
-            WriteLiteral(Environment.NewLine);
-            if (!model.IsStruct)
-            {
-                WriteLiteral("        public override bool Equals(object obj)");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("        {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            return Equals(obj as ");
-                Write(model.Name);
-                WriteLiteral(");");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("        ");
-                WriteLiteral("}");
-                WriteLiteral(Environment.NewLine);
-            }
             var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        public bool Equals(");
-            Write(model.Name);
-            WriteLiteral(" other)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {");
-            WriteLiteral(Environment.NewLine);
-            if (!model.IsStruct)
-            {
-                WriteLiteral("            if (other == null)");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                return false;");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            ");
-                WriteLiteral("}");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(Environment.NewLine);
-            }
-            if (keyfields.Count == 1)
-            {
-                WriteLiteral("            return ");
-                Write(keyfields[0].Name);
-                WriteLiteral(" == other.");
-                Write(keyfields[0].Name);
-                WriteLiteral(";");
-                WriteLiteral(Environment.NewLine);
-            }
-            else
-            {
-                foreach (var field in keyfields)
-                {
-                    if (field == keyfields[0])
-                    {
-                        WriteLiteral("            return ");
-                        Write(field.Name);
-                        WriteLiteral(" == other.");
-                        Write(field.Name);
-                        WriteLiteral(Environment.NewLine);
-                    }
-                    else
-                    {
-                        WriteLiteral("                && ");
-                        Write(field.Name);
-                        WriteLiteral(" == other.");
-                        Write(field.Name);
-                        if (field == keyfields.Last())
-                        {
-                            WriteLiteral(";");
-                        }
-                        WriteLiteral(Environment.NewLine);
-                    }
-                }
-            }
-            WriteLiteral("        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
             WriteLiteral("        public override int GetHashCode()");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {");
@@ -168,8 +94,6 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral("            }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        #endregion");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

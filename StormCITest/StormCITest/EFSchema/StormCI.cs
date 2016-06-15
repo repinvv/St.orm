@@ -14,6 +14,7 @@ namespace StormCITest.EFSchema
 
         public virtual DbSet<entity_with_guid> entity_with_guid { get; set; }
         public virtual DbSet<entity_with_id> entity_with_id { get; set; }
+        public virtual DbSet<entity_with_multikey> entity_with_multikey { get; set; }
         public virtual DbSet<entity_with_sequence> entity_with_sequence { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

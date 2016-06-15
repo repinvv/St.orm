@@ -1,0 +1,24 @@
+﻿@visibility internal
+@using StormGenerator.Models.GenModels
+@constructor(Model model)
+@{var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;}
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+  @if(keyfields.Count == 1){
+                return @(keyfields[0].Name).GetHashCode();
+  }
+  else{
+    @foreach(var field in keyfields){
+      @if(field == keyfields[0]){
+                int hash = @(field.Name).GetHashCode();
+      }
+	  else{
+                hash = (hash * 397) ^ @(field.Name).GetHashCode();
+	  }
+    }
+                return hash; 
+  } 
+            }
+        }

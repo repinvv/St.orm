@@ -5,23 +5,24 @@
 
     internal class GeneratorCollectionsFactory
     {
-        private readonly ModelsCollection modelsCollection;
-        private readonly Linq2DbContextCollection linq2DbContextCollection;
         private GenOptions options;
 
-        public GeneratorCollectionsFactory(GenerationOptionsService generationOptionsService,
-            ModelsCollection modelsCollection,
-            Linq2DbContextCollection linq2DbContextCollection)
+        public GeneratorCollectionsFactory(GenerationOptionsService generationOptionsService)
         {
             options = generationOptionsService.GenOptions;
-            this.modelsCollection = modelsCollection;
-            this.linq2DbContextCollection = linq2DbContextCollection;
         }
 
         public IEnumerable<IGeneratorCollection> GetGeneratorCollections()
         {
-            yield return modelsCollection;
-            // yield return linq2DbContextCollection;
+            yield return new ModelsCollection();
+            if (options.DbProvider == DbProvider.MsSql)
+            {
+                yield return new MsSqlCiServicesCollection();
+            }
+            if (options.Linq2EntitiesProvider == Linq2EntitiesProvider.linq2db)
+            {
+                // yield return linq2DbContextCollection;
+            }
         } 
     }
 }

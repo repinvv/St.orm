@@ -113,7 +113,7 @@
     {
       "Id": "entity_with_guid",
       "Name": "entity_with_guid",
-      "Schema": "dbo",      
+      "Schema": "dbo",
       "Columns": [
         {
           "Name": "id",
@@ -314,6 +314,43 @@
           "Associations": []
         }
       ]
+    },
+    {
+      "Id": "entity_with_multikey",
+      "Name": "entity_with_multikey",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "id_1",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "IsPrimaryKey": true,
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "id_2",
+          "DbType": "nvarchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsPrimaryKey": true,
+          "Index": 2,
+          "Length": 256,
+          "Associations": []
+        },
+        {
+          "Name": "content",
+          "DbType": "nvarchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 3,
+          "Length": -1,
+          "Associations": []
+        }
+      ]
     }
   ],
   "Configs": [
@@ -389,6 +426,7 @@
     },
     {
       "Id": "EntityWithGuid",
+      "IsStruct": true,
       "DbTableId": "entity_with_guid",
       "Fields": [
         {
@@ -446,10 +484,9 @@
           "Name": "ASmalldatetime"
         }
       ],
-      "Relations": [ ],
+      "Relations": [],
       "IsEnabled": true,
       "IsGenerated": true,
-      "IsStruct": true,
       "Name": "EntityWithGuid"
     },
     {
@@ -528,6 +565,34 @@
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "EntityWithSequence"
+    },
+    {
+      "Id": "EntityWithMultikey",
+      "DbTableId": "entity_with_multikey",
+      "Fields": [
+        {
+          "DbColumnName": "id_1",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id1"
+        },
+        {
+          "DbColumnName": "id_2",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id2"
+        },
+        {
+          "DbColumnName": "content",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Content"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "EntityWithMultikey"
     }
   ]
 }

@@ -1,0 +1,35 @@
+﻿@visibility internal
+@using StormGenerator.Models.GenModels
+@constructor(Model model)
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as @model.Name);		  
+        }
+			  
+        public bool Equals(@model.Name other)
+        {		
+            if (other == null)
+            {
+                return false;
+            }
+
+			if(ReferenceEquals(this, other))
+			{
+			    return true;
+			}
+
+@[FieldsComparision(model)]
+        }
+
+@[GetHashCode(model)]
+
+        public static bool operator ==(@model.Name left, @model.Name right)
+        {
+            return left != null && left.Equals(right);
+        }
+
+        public static bool operator !=(@model.Name left, @model.Name right)
+        {
+            return !(left == right);
+        }

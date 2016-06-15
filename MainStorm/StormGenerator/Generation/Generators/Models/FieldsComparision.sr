@@ -1,0 +1,20 @@
+﻿@visibility internal
+@using StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)
+@if(model.KeyFields.Any()){
+  @foreach(var field in model.KeyFields){
+    @{var start = field.Equals(model.KeyFields[0]) ? "return" : "    &&";}	
+            @start @field.Name != @field.TypeDefault()
+  }
+  @foreach(var field in model.KeyFields){
+    @{var end = field.Equals(model.KeyFields.Last()) ? ";" : "";}
+                && @field.Name == other.@field.Name@end
+  }
+}
+else{
+  @foreach(var field in model.Fields){
+    @{var start = field.Equals(model.Fields[0]) ? "return" : "    &&";}
+	@{var end = field.Equals(model.Fields.Last()) ? ";" : "";}
+            @start @field.Name == other.@field.Name@end
+  }
+}

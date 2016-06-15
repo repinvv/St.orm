@@ -66,11 +66,19 @@ namespace StormGenerator.Generation.Generators.Models
                 WriteLiteral("        ");
                 Write(new ModelField(field, options).Execute());
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral("		");
                 WriteLiteral(Environment.NewLine);
             }
-            Write(new ModelEquality(model).Execute());
-            WriteLiteral("	  ");
+            WriteLiteral("        #region equality");
+            WriteLiteral(Environment.NewLine);
+            if (model.IsStruct)
+            {
+                Write(new StructEquality(model).Execute());
+            }
+            else
+            {
+                Write(new ClassEquality(model).Execute());
+            }
+            WriteLiteral("        #endregion");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("    }");
             WriteLiteral(Environment.NewLine);

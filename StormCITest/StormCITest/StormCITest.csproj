@@ -53,12 +53,16 @@
   <ItemGroup>
     <Compile Include="EFSchema\entity_with_guid.cs" />
     <Compile Include="EFSchema\entity_with_id.cs" />
+    <Compile Include="EFSchema\entity_with_multikey.cs" />
     <Compile Include="EFSchema\entity_with_sequence.cs" />
     <Compile Include="EFSchema\StormCI.cs" />
     <Compile Include="StormSchema\EntityWithGuid.main.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormSchema\EntityWithId.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithMultikey.main.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormSchema\EntityWithSequence.main.cs">

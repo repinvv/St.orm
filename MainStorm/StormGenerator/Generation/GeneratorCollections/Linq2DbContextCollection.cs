@@ -15,9 +15,9 @@
             this.options = options;
         }
 
-        public IEnumerable<GeneratedFile> Generate(List<EntityModel> models, GenOptions options1)
+        public IEnumerable<FileGenerator> GetFileGenerators(List<EntityModel> models, GenOptions options1)
         {
-            yield return new StormContext(options.GenOptions, models).GetFile();
+            yield return new StormContext(options.GenOptions, models);
         }
     }
 }

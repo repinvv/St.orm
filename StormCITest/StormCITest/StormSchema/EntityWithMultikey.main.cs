@@ -6,41 +6,25 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Storm.SomeSchema
+namespace Storm
 {
 	using System;
 
-    public partial class EntityWithSequence : IEquatable<EntityWithSequence>
+    public partial class EntityWithMultikey : IEquatable<EntityWithMultikey>
     {	
-        public int Id { get; set; }
+        public int Id1 { get; set; }
 
-        public string AChar { get; set; }
+        public string Id2 { get; set; }
 
-        public string AVarchar { get; set; }
-
-        public string AText { get; set; }
-
-        public string ANchar { get; set; }
-
-        public string ANvarchar { get; set; }
-
-        public string ANtext { get; set; }
-
-        public string AXml { get; set; }
-
-        public byte[] ABinary { get; set; }
-
-        public byte[] AVarbinary { get; set; }
-
-        public byte[] AImage { get; set; }
+        public string Content { get; set; }
 
         #region equality
         public override bool Equals(object obj)
         {
-            return Equals(obj as EntityWithSequence);		  
+            return Equals(obj as EntityWithMultikey);		  
         }
 			  
-        public bool Equals(EntityWithSequence other)
+        public bool Equals(EntityWithMultikey other)
         {		
             if (other == null)
             {
@@ -52,24 +36,28 @@ namespace Storm.SomeSchema
 			    return true;
 			}
 
-            return Id != default(int)
-                && Id == other.Id;
+            return Id1 != default(int)
+                && Id2 != string.Empty
+                && Id1 == other.Id1
+                && Id2 == other.Id2;
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return Id.GetHashCode();
+                int hash = Id1.GetHashCode();
+                hash = (hash * 397) ^ Id2.GetHashCode();
+                return hash; 
             }
         }
 
-        public static bool operator ==(EntityWithSequence left, EntityWithSequence right)
+        public static bool operator ==(EntityWithMultikey left, EntityWithMultikey right)
         {
             return left != null && left.Equals(right);
         }
 
-        public static bool operator !=(EntityWithSequence left, EntityWithSequence right)
+        public static bool operator !=(EntityWithMultikey left, EntityWithMultikey right)
         {
             return !(left == right);
         }

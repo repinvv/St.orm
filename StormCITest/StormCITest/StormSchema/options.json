@@ -16,5 +16,5 @@
     "CamelCaseNames": true,
     "PluralNames": true
   },
-  "ForceRefreshDbInfo": false
+  "ForceRefreshDbInfo": true
 }

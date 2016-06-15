@@ -25,5 +25,12 @@
                                   .Distinct();
             return namespaces;
         }
+
+        public static string TypeDefault(this Field field)
+        {
+            return field.Column.CsType == typeof(string) 
+                ? "string.Empty" 
+                : $"default({field.Column.CsTypeName})";
+        }
     }
 }

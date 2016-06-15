@@ -17,9 +17,15 @@ namespace @entityModel.GetNamespace(options)
 	  @{var fields = model.Fields.Where(x => x.IsEnabled).ToList();}
       @foreach (var field in model.Fields){
         @[ModelField(field, options)]
-		@newline
-      }
 
-@[ModelEquality(model)]	  
+      }
+        #region equality
+@if(model.IsStruct){
+@[StructEquality(model)]
+}
+else{
+@[ClassEquality(model)]
+}
+        #endregion
     }
 }

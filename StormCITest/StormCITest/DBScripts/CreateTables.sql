@@ -49,3 +49,12 @@ create table some_schema.entity_with_sequence
     constraint entity_with_sequence_pk primary key (id)
 );
 GO
+
+create table entity_with_multikey
+(
+    id_1 int not null,
+	id_2 nvarchar(256) not null,
+	content nvarchar(max),
+    constraint entity_with_multikey_pk primary key (id_1, id_2)
+);
+GO
