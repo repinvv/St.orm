@@ -70,7 +70,9 @@ namespace StormGenerator.Generation.Generators.Models
             Write(model.Name);
             WriteLiteral(" other)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {        ");
+            WriteLiteral("        {     ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("		    var equals = true   ");
             WriteLiteral(Environment.NewLine);
             Write(new FieldsComparision(model).Execute());
             WriteLiteral("        }");

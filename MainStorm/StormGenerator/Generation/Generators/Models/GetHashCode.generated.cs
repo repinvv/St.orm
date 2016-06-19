@@ -73,20 +73,13 @@ namespace StormGenerator.Generation.Generators.Models
             {
                 foreach (var field in keyfields)
                 {
-                    if (field == keyfields[0])
-                    {
-                        WriteLiteral("                int hash = ");
-                        Write(field.Name);
-                        WriteLiteral(".GetHashCode();");
-                        WriteLiteral(Environment.NewLine);
-                    }
-                    else
-                    {
-                        WriteLiteral("                hash = (hash * 397) ^ ");
-                        Write(field.Name);
-                        WriteLiteral(".GetHashCode();");
-                        WriteLiteral(Environment.NewLine);
-                    }
+                    var start = field == keyfields[0] ? "int hash =" : "hash = (hash * 397) ^";
+                    WriteLiteral("                ");
+                    Write(start);
+                    WriteLiteral(" ");
+                    Write(field.Name);
+                    WriteLiteral(".GetHashCode();");
+                    WriteLiteral(Environment.NewLine);
                 }
                 WriteLiteral("                return hash; ");
                 WriteLiteral(Environment.NewLine);

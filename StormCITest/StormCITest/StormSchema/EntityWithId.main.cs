@@ -40,18 +40,12 @@ namespace Storm
 			  
         public bool Equals(EntityWithId other)
         {		
-            if (other == null)
-            {
-                return false;
-            }
-
-			if(ReferenceEquals(this, other))
-			{
-			    return true;
-			}
-
-            return Id != default(int)
-                && Id == other.Id;
+            if (other == null) return false;
+			var equals = ReferenceEquals(this, other)
+                && Id != default(int)
+                && Id == other.Id
+			    ;
+            return equals;
         }
 
         public override int GetHashCode()

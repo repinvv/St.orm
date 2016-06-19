@@ -10,28 +10,24 @@ namespace Storm
 {
 	using System;
 
-    public partial class EntityWithMultikey : IEquatable<EntityWithMultikey>
+    public partial class EntityWithoutKey : IEquatable<EntityWithoutKey>
     {	
-        public int Id1 { get; set; }
-
-        public string Id2 { get; set; }
+        public int Value { get; set; }
 
         public string Content { get; set; }
 
         #region equality
         public override bool Equals(object obj)
         {
-            return Equals(obj as EntityWithMultikey);		  
+            return Equals(obj as EntityWithoutKey);		  
         }
 			  
-        public bool Equals(EntityWithMultikey other)
+        public bool Equals(EntityWithoutKey other)
         {		
             if (other == null) return false;
 			var equals = ReferenceEquals(this, other)
-                && Id1 != default(int)
-                && Id2 != string.Empty
-                && Id1 == other.Id1
-                && Id2 == other.Id2
+                && Value == other.Value
+                && Content == other.Content
 			    ;
             return equals;
         }
@@ -40,18 +36,18 @@ namespace Storm
         {
             unchecked
             {
-                int hash = Id1.GetHashCode();
-                hash = (hash * 397) ^ Id2.GetHashCode();
+                int hash = Value.GetHashCode();
+                hash = (hash * 397) ^ Content.GetHashCode();
                 return hash; 
             }
         }
 
-        public static bool operator ==(EntityWithMultikey left, EntityWithMultikey right)
+        public static bool operator ==(EntityWithoutKey left, EntityWithoutKey right)
         {
             return left != null && left.Equals(right);
         }
 
-        public static bool operator !=(EntityWithMultikey left, EntityWithMultikey right)
+        public static bool operator !=(EntityWithoutKey left, EntityWithoutKey right)
         {
             return !(left == right);
         }

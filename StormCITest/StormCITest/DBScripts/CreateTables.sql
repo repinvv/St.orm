@@ -58,3 +58,10 @@ create table entity_with_multikey
     constraint entity_with_multikey_pk primary key (id_1, id_2)
 );
 GO
+
+create table entity_without_key
+(
+    value int not null,
+	content nvarchar(max),
+);
+GO

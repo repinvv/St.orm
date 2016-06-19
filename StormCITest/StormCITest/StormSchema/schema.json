@@ -351,6 +351,32 @@
           "Associations": []
         }
       ]
+    },
+    {
+      "Id": "entity_without_key",
+      "Name": "entity_without_key",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "value",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "Index": 1,
+          "Precision": 10,
+          "Associations": []
+        },
+        {
+          "Name": "content",
+          "DbType": "nvarchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 2,
+          "Length": -1,
+          "Associations": []
+        }
+      ]
     }
   ],
   "Configs": [
@@ -593,6 +619,28 @@
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "EntityWithMultikey"
+    },
+    {
+      "Id": "EntityWithoutKey",
+      "DbTableId": "entity_without_key",
+      "Fields": [
+        {
+          "DbColumnName": "value",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Value"
+        },
+        {
+          "DbColumnName": "content",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Content"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "EntityWithoutKey"
     }
   ]
 }

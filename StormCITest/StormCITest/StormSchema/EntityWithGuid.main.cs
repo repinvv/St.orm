@@ -37,9 +37,12 @@ namespace Storm
         }
 
         public bool Equals(EntityWithGuid other)
-        {        
-            return Id != default(Guid)
-                && Id == other.Id;
+        {     
+		    var equals = true   
+                && Id != default(Guid)
+                && Id == other.Id
+			    ;
+            return equals;
         }
 
         public override int GetHashCode()

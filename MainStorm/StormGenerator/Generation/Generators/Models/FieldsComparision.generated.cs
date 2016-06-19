@@ -58,42 +58,26 @@ namespace StormGenerator.Generation.Generators.Models
             {
                 foreach (var field in model.KeyFields)
                 {
-                    var start = field.Equals(model.KeyFields[0]) ? "return" : "    &&";
-                    WriteLiteral("            ");
-                    Write(start);
-                    WriteLiteral(" ");
+                    WriteLiteral("                && ");
                     Write(field.Name);
                     WriteLiteral(" != ");
                     Write(field.TypeDefault());
                     WriteLiteral(Environment.NewLine);
                 }
-                foreach (var field in model.KeyFields)
-                {
-                    var end = field.Equals(model.KeyFields.Last()) ? ";" : "";
-                    WriteLiteral("                && ");
-                    Write(field.Name);
-                    WriteLiteral(" == other.");
-                    Write(field.Name);
-                    Write(end);
-                    WriteLiteral(Environment.NewLine);
-                }
             }
-            else
+            var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;
+            foreach (var field in keyfields)
             {
-                foreach (var field in model.Fields)
-                {
-                    var start = field.Equals(model.Fields[0]) ? "return" : "    &&";
-                    var end = field.Equals(model.Fields.Last()) ? ";" : "";
-                    WriteLiteral("            ");
-                    Write(start);
-                    WriteLiteral(" ");
-                    Write(field.Name);
-                    WriteLiteral(" == other.");
-                    Write(field.Name);
-                    Write(end);
-                    WriteLiteral(Environment.NewLine);
-                }
+                WriteLiteral("                && ");
+                Write(field.Name);
+                WriteLiteral(" == other.");
+                Write(field.Name);
+                WriteLiteral(Environment.NewLine);
             }
+            WriteLiteral("			    ;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("            return equals;");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

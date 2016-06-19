@@ -11,12 +11,8 @@
   }
   else{
     @foreach(var field in keyfields){
-      @if(field == keyfields[0]){
-                int hash = @(field.Name).GetHashCode();
-      }
-	  else{
-                hash = (hash * 397) ^ @(field.Name).GetHashCode();
-	  }
+	            @{var start = field == keyfields[0] ? "int hash =" : "hash = (hash * 397) ^";}
+                @start @(field.Name).GetHashCode();
     }
                 return hash; 
   } 

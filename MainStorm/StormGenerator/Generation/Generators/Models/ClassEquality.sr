@@ -9,16 +9,8 @@
 			  
         public bool Equals(@model.Name other)
         {		
-            if (other == null)
-            {
-                return false;
-            }
-
-			if(ReferenceEquals(this, other))
-			{
-			    return true;
-			}
-
+            if (other == null) return false;
+			var equals = ReferenceEquals(this, other)
 @[FieldsComparision(model)]
         }
 
