@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace Storm
 {
+	using Storm;
 	using System;
 
     public partial class EntityWithId : IEquatable<EntityWithId>

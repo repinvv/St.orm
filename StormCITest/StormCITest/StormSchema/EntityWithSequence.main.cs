@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace Storm.SomeSchema
 {
+	using Storm;
 	using System;
 
     public partial class EntityWithSequence : IEquatable<EntityWithSequence>

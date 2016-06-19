@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace Storm
 {
+	using Storm;
 	using System;
 
     public partial struct EntityWithGuid : IEquatable<EntityWithGuid>

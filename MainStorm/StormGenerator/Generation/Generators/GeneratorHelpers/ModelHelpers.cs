@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Storm;
     using StormGenerator.Models;
     using StormGenerator.Models.GenModels;
     using StormGenerator.Settings;
@@ -20,9 +21,12 @@
 
         public static IEnumerable<string> GetUsings(this Model model)
         {
+            var fixedNamespaces = new[] { typeof(StormAccess).Namespace };
             var namespaces = model.Fields
                                   .Select(x => x.Column.CsType.Namespace)
-                                  .Distinct();
+                                  .Concat(fixedNamespaces)
+                                  .Distinct()
+                                  .OrderBy(x => x);
             return namespaces;
         }
 

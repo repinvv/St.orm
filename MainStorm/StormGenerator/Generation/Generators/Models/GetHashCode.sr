@@ -10,11 +10,12 @@
                 return @(keyfields[0].Name).GetHashCode();
   }
   else{
+                return new int[]
+				{
     @foreach(var field in keyfields){
-	            @{var start = field == keyfields[0] ? "int hash =" : "hash = (hash * 397) ^";}
-                @start @(field.Name).GetHashCode();
+                    @(field.Name).GetHashCode(),
     }
-                return hash; 
+	            @}.CombineHashcodes();
   } 
             }
         }

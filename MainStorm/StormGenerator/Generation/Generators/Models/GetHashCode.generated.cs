@@ -71,17 +71,19 @@ namespace StormGenerator.Generation.Generators.Models
             }
             else
             {
+                WriteLiteral("                return new int[]");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral("				{");
+                WriteLiteral(Environment.NewLine);
                 foreach (var field in keyfields)
                 {
-                    var start = field == keyfields[0] ? "int hash =" : "hash = (hash * 397) ^";
-                    WriteLiteral("                ");
-                    Write(start);
-                    WriteLiteral(" ");
+                    WriteLiteral("                    ");
                     Write(field.Name);
-                    WriteLiteral(".GetHashCode();");
+                    WriteLiteral(".GetHashCode(),");
                     WriteLiteral(Environment.NewLine);
                 }
-                WriteLiteral("                return hash; ");
+                WriteLiteral("	            ");
+                WriteLiteral("}.CombineHashcodes();");
                 WriteLiteral(Environment.NewLine);
             }
             WriteLiteral("            }");

@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace Storm
 {
+	using Storm;
 	using System;
 
     public partial class EntityWithoutKey : IEquatable<EntityWithoutKey>
@@ -36,9 +37,11 @@ namespace Storm
         {
             unchecked
             {
-                int hash = Value.GetHashCode();
-                hash = (hash * 397) ^ Content.GetHashCode();
-                return hash; 
+                return new int[]
+				{
+                    Value.GetHashCode(),
+                    Content.GetHashCode(),
+	            }.CombineHashcodes();
             }
         }
 

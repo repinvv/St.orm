@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 namespace Storm
 {
+	using Storm;
 	using System;
 
     public partial class EntityWithMultikey : IEquatable<EntityWithMultikey>
@@ -40,9 +41,11 @@ namespace Storm
         {
             unchecked
             {
-                int hash = Id1.GetHashCode();
-                hash = (hash * 397) ^ Id2.GetHashCode();
-                return hash; 
+                return new int[]
+				{
+                    Id1.GetHashCode(),
+                    Id2.GetHashCode(),
+	            }.CombineHashcodes();
             }
         }
 
