@@ -60,7 +60,43 @@
     <Compile Include="EFSchema\entity_with_multikey.cs" />
     <Compile Include="EFSchema\entity_with_sequence.cs" />
     <Compile Include="EFSchema\StormCI.cs" />
+    <Compile Include="StormSchema\CiHelper.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithGuid.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithGuidCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithId.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithIdCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithMultikey.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithMultikeyCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithoutKey.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithoutKeyCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithSequence.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\EntityWithSequenceCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormSchema\Extension.cs" />
+    <Compile Include="StormSchema\ICIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormSchema\StormEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
