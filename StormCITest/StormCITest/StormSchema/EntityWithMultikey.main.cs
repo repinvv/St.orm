@@ -6,9 +6,8 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Storm
+namespace StormTestProject.StormModel
 {
-	using Storm;
 	using System;
 
     public partial class EntityWithMultikey : IEquatable<EntityWithMultikey>
@@ -39,14 +38,11 @@ namespace Storm
 
         public override int GetHashCode()
         {
-            unchecked
+            return new int[]
             {
-                return new int[]
-				{
-                    Id1.GetHashCode(),
-                    Id2.GetHashCode(),
-	            }.CombineHashcodes();
-            }
+                Id1.GetHashCode(),
+                Id2.GetHashCode(),
+            }.CombineHashcodes();
         }
 
         public static bool operator ==(EntityWithMultikey left, EntityWithMultikey right)

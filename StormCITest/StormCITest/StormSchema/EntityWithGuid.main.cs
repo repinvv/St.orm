@@ -6,9 +6,8 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Storm
+namespace StormTestProject.StormModel
 {
-	using Storm;
 	using System;
 
     public partial struct EntityWithGuid : IEquatable<EntityWithGuid>
@@ -48,10 +47,7 @@ namespace Storm
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                return Id.GetHashCode();
-            }
+            return Id.GetHashCode();
         }
 
         public static bool operator ==(EntityWithGuid left, EntityWithGuid right)

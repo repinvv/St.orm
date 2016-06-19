@@ -1,0 +1,19 @@
+﻿@visibility internal
+        public static byte[] ReadBytes(this SqlDataReader reader, int index, int length)
+        {
+            var buffer = new byte[length];
+            var resultLength = (int)reader.GetBytes(index, 0, buffer, 0, length);
+            if (resultLength == 0)
+            {
+                return null;
+            }
+
+            if (resultLength == length)
+            {
+                return buffer;
+            }
+
+            var output = new byte[resultLength];
+            Buffer.BlockCopy(buffer, 0, output, 0, resultLength);
+            return output;
+        }

@@ -6,9 +6,8 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Storm
+namespace StormTestProject.StormModel
 {
-	using Storm;
 	using System;
 
     public partial class EntityWithoutKey : IEquatable<EntityWithoutKey>
@@ -35,14 +34,11 @@ namespace Storm
 
         public override int GetHashCode()
         {
-            unchecked
+            return new int[]
             {
-                return new int[]
-				{
-                    Value.GetHashCode(),
-                    Content.GetHashCode(),
-	            }.CombineHashcodes();
-            }
+                Value.GetHashCode(),
+                Content.GetHashCode(),
+            }.CombineHashcodes();
         }
 
         public static bool operator ==(EntityWithoutKey left, EntityWithoutKey right)

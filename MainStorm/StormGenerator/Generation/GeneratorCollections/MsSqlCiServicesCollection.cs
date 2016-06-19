@@ -10,7 +10,12 @@
     {
         public IEnumerable<FileGenerator> GetFileGenerators(List<EntityModel> models, GenOptions options)
         {
-            yield return new MsSqlICiService(options);
+            yield return new MsSqlCiServiceInterface(options);
+            yield return new CiHelper(options);
+            foreach (var entityModel in models)
+            {
+                yield return new MsSqlCiService(options, entityModel);
+            }
         }
     }
 }

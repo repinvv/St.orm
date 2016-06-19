@@ -1,0 +1,14 @@
+﻿@visibility internal
+        public static int CombineHashcodes(this IEnumerable<int> hashcodes)
+        {
+            unchecked
+            {
+                int hash = 17;
+                foreach (var hashcode in hashcodes)
+                {
+                    hash = hash * 31 + hashcode;
+                }
+			    
+                return hash;
+            }
+        }

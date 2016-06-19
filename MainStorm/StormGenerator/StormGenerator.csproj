@@ -80,13 +80,34 @@
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
-    <None Include="Generation\Generators\MsSqlCiServices\MsSqlICiService.sr">
+    <None Include="Generation\Generators\MsSqlCiServices\MsSqlCiServiceInterface.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
-      <LastGenOutput>MsSqlICiService.generated.cs</LastGenOutput>
+      <LastGenOutput>MsSqlCiServiceInterface.generated.cs</LastGenOutput>
     </None>
     <Compile Include="Generation\Generators\FileGenerator.cs" />
+    <Compile Include="Generation\Generators\GeneratorHelpers\FieldHelpers.cs" />
     <Compile Include="Generation\Generators\GeneratorHelpers\ModelHelpers.cs" />
+    <None Include="Generation\Generators\GenericCi\CombineHashcodes.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.GenericCi</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>CombineHashcodes.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\GenericCi\CombineHashcodes.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CombineHashcodes.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\GenericCi\ReadBytes.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.GenericCi</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ReadBytes.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\GenericCi\ReadBytes.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReadBytes.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\Linq2Db\ContextTableLine.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -151,10 +172,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StructEquality.sr</DependentUpon>
     </Compile>
-    <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlICiService.generated.cs">
+    <None Include="Generation\Generators\MsSqlCiServices\MsSqlCiService.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>MsSqlCiService.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiHelper.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>CiHelper.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiHelper.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>MsSqlICiService.sr</DependentUpon>
+      <DependentUpon>CiHelper.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlCiService.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsSqlCiService.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlCiServiceInterface.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsSqlCiServiceInterface.sr</DependentUpon>
     </Compile>
     <Compile Include="ModelsCreation\ModelCreation.cs" />
     <Compile Include="ModelsCreation\ModelExtension.cs" />

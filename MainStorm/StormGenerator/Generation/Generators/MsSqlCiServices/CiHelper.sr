@@ -1,0 +1,52 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings GenericCi
+@constructor(GenOptions options)
+@member{public override string FileName => "CiHelper";}
+
+namespace @options.OutputNamespace
+{
+    using System.Data.SqlClient;
+	using System.Collections.Generic;
+    using System;
+    using System.Data;
+
+    @options.Visibility static class CiHelper
+    {
+@[CombineHashcodes()]
+
+@[ReadBytes()]
+
+        public static List<T> ExecuteSelect<T>(string query, 
+                                        SqlParameter[] parms, 
+                                        Func<SqlDataReader, List<T>> func, 
+                                        SqlConnection conn, 
+                                        SqlTransaction trans)
+        {
+			var wasClosed = conn.State != ConnectionState.Open;
+			if(wasClosed)
+			{
+                conn.Open();
+            }
+            try
+            {
+                using (var command = new SqlCommand(query, conn))
+                {
+                    command.Transaction = trans;
+                    command.Parameters.AddRange(parms);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        return func(reader);
+                    }
+                }
+            }
+			finally 
+			{
+                if(wasClosed)
+                {
+                    conn.Close();
+                }
+            }
+        }
+    }
+}

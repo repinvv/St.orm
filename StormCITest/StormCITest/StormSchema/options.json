@@ -5,11 +5,12 @@
     "IntegratedSecurity": true,
     "Server": "localhost"
   },
-  "GenerationOptions": {
+  "GenOptions": {
     "Linq2EntitiesProvider": "linq2db",
     "ContextName": "StormTestContext",
     "CustomInterfaceForEntities": "IDbEntity",
-    "OutputNamespace": "StormTestProject.StormModel"
+    "OutputNamespace": "StormTestProject.StormModel",
+    "CiOnly":  true
   },
   "AutomaticPopulation": true,
   "AutomaticPopulationOptions": {

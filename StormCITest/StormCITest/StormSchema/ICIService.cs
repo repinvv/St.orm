@@ -6,12 +6,16 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Storm
+namespace StormTestProject.StormModel
 {
     using System.Data.SqlClient;
+	using System.Collections.Generic;
 
-    internal interface ICiService<T>
+    public interface ICiService<T>
     {
-        T Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
+        List<T> Materialize(string query, 
+                            SqlParameter[] parms, 
+                            SqlConnection conn, 
+                            SqlTransaction trans);
     }
 }

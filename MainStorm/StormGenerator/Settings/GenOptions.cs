@@ -13,5 +13,7 @@
         public string ContextName { get; set; }
 
         public string CustomInterfaceForEntities { get; set; }
+
+        public bool CiOnly { get; set; }
     }
 }

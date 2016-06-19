@@ -41,7 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsListExtension.cs" />
-    <Compile Include="CombineHashCodes.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Exceptions\NavigationPropertyException.cs" />
     <Compile Include="Implementation\LoadService.cs" />

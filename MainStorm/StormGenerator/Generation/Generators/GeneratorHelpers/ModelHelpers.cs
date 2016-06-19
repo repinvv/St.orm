@@ -21,20 +21,12 @@
 
         public static IEnumerable<string> GetUsings(this Model model)
         {
-            var fixedNamespaces = new[] { typeof(StormAccess).Namespace };
+            // var fixedNamespaces = new[] { typeof(StormAccess).Namespace };
             var namespaces = model.Fields
                                   .Select(x => x.Column.CsType.Namespace)
-                                  .Concat(fixedNamespaces)
                                   .Distinct()
                                   .OrderBy(x => x);
             return namespaces;
-        }
-
-        public static string TypeDefault(this Field field)
-        {
-            return field.Column.CsType == typeof(string) 
-                ? "string.Empty" 
-                : $"default({field.Column.CsTypeName})";
         }
     }
 }

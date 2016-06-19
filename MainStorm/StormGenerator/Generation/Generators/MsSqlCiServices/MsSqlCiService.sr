@@ -1,0 +1,72 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings StormGenerator.Models Storm.Interfaces GeneratorHelpers
+@constructor(GenOptions options, EntityModel entityModel)
+@member{public override string FileName => entityModel.Model.Name + "CIService";}
+
+@{var model = entityModel.Model;}
+namespace @options.OutputNamespace
+{
+    using System;
+    using System.Data;
+    using System.Data.SqlClient;
+	using System.Collections.Generic;
+@if(model.NamespaceSuffix != null){
+    using @model.NamespaceSuffix;
+}
+@if(!options.CiOnly){
+    using @typeof(ILoadService<>).Namespace;
+}
+
+    @options.Visibility class @(model.Name)CiService : ICiService<@model.Name>
+    {
+        public List<@model.Name> Materialize(string query, 
+                            SqlParameter[] parms, 
+                            SqlConnection conn, 
+                            SqlTransaction trans)
+        {
+            Func<SqlDataReader, List<@model.Name>> func = reader =>
+            {
+                var list = new List<@model.Name>();
+                while (reader.Read())
+                {
+                    var entity = new @(model.Name)();
+                    PopulateFields(entity, reader);
+                    list.Add(entity);
+                }
+                return list;
+            };
+            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+        }
+
+@if(!options.CiOnly){
+        public List<@model.Name> Materialize(ILoadService<@model.Name> loadService,
+                            string query, 
+                            SqlParameter[] parms, 
+                            SqlConnection conn, 
+                            SqlTransaction trans)
+        {
+            Func<SqlDataReader, List<@model.Name>> func = reader =>
+            {
+                var list = new List<@model.Name>();
+                while (reader.Read())
+                {
+                    var entity = new @(model.Name)(loadService);
+                    PopulateFields(entity, reader);
+                    list.Add(entity);
+                @}
+                return list;
+            @};
+            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+        @}
+
+}
+        private void PopulateFields(@model.Name entity, SqlDataReader reader)
+        {
+		@{int i = 0;}
+@foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
+            entity.@field.Name = @field.GetReaderMethod(i++);
+}
+        }
+    }
+}

@@ -1,0 +1,29 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings  Storm.Interfaces
+@constructor(GenOptions options)
+@member{public override string FileName => "ICIService";}
+
+namespace @options.OutputNamespace
+{
+    using System.Data.SqlClient;
+	using System.Collections.Generic;
+@if(!options.CiOnly){
+    using @typeof(ILoadService<>).Namespace;
+}
+
+    @options.Visibility interface ICiService<T>
+    {
+        List<T> Materialize(string query, 
+                            SqlParameter[] parms, 
+                            SqlConnection conn, 
+                            SqlTransaction trans);
+@if(!options.CiOnly){@newline
+        List<T> Materialize(ILoadService<T> loadService,
+                            string query, 
+                            SqlParameter[] parms, 
+                            SqlConnection conn, 
+                            SqlTransaction trans);
+}
+    }
+}

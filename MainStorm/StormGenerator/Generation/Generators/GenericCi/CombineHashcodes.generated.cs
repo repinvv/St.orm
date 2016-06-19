@@ -6,25 +6,15 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.Models
+namespace StormGenerator.Generation.Generators.GenericCi
 {
-    using StormGenerator.Models.GenModels;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class GetHashCode
+    internal class CombineHashcodes
     {
-        #region constructor
-        Model model;
-
-        public GetHashCode(Model model)
-        {
-            this.model = model;
-        }
-        #endregion
-
         #region basic members
         private readonly StringBuilder sb = new StringBuilder();
         private string executed;
@@ -53,35 +43,30 @@ namespace StormGenerator.Generation.Generators.Models
 
         public string Execute()
         {
-            var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;
-            WriteLiteral("        public override int GetHashCode()");
+            WriteLiteral("        public static int CombineHashcodes(this IEnumerable<int> hashcodes)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {");
             WriteLiteral(Environment.NewLine);
-            if (keyfields.Count == 1)
-            {
-                WriteLiteral("            return ");
-                Write(keyfields[0].Name);
-                WriteLiteral(".GetHashCode();");
-                WriteLiteral(Environment.NewLine);
-            }
-            else
-            {
-                WriteLiteral("            return new int[]");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            {");
-                WriteLiteral(Environment.NewLine);
-                foreach (var field in keyfields)
-                {
-                    WriteLiteral("                ");
-                    Write(field.Name);
-                    WriteLiteral(".GetHashCode(),");
-                    WriteLiteral(Environment.NewLine);
-                }
-                WriteLiteral("            ");
-                WriteLiteral("}.CombineHashcodes();");
-                WriteLiteral(Environment.NewLine);
-            }
+            WriteLiteral("            unchecked");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                int hash = 17;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                foreach (var hashcode in hashcodes)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                    hash = hash * 31 + hashcode;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("			    ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("                return hash;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("            }");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
 
