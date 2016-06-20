@@ -58,26 +58,53 @@ namespace StormGenerator.Generation.Generators.Models
             {
                 foreach (var field in model.KeyFields)
                 {
+                    if (field == model.KeyFields.First())
+                    {
+                        Write(field.Name);
+                        WriteLiteral(" != ");
+                        Write(field.TypeDefault());
+                        WriteLiteral(Environment.NewLine);
+                    }
+                    else
+                    {
+                        WriteLiteral("                && ");
+                        Write(field.Name);
+                        WriteLiteral(" != ");
+                        Write(field.TypeDefault());
+                        WriteLiteral(Environment.NewLine);
+                    }
+                }
+                foreach (var field in model.KeyFields)
+                {
                     WriteLiteral("                && ");
                     Write(field.Name);
-                    WriteLiteral(" != ");
-                    Write(field.TypeDefault());
+                    WriteLiteral(" == other.");
+                    Write(field.Name);
                     WriteLiteral(Environment.NewLine);
                 }
             }
-            var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;
-            foreach (var field in keyfields)
+            else
             {
-                WriteLiteral("                && ");
-                Write(field.Name);
-                WriteLiteral(" == other.");
-                Write(field.Name);
-                WriteLiteral(Environment.NewLine);
+                foreach (var field in model.Fields)
+                {
+                    if (field == model.Fields.First())
+                    {
+                        Write(field.Name);
+                        WriteLiteral(" == other.");
+                        Write(field.Name);
+                        WriteLiteral(Environment.NewLine);
+                    }
+                    else
+                    {
+                        WriteLiteral("                && ");
+                        Write(field.Name);
+                        WriteLiteral(" == other.");
+                        Write(field.Name);
+                        WriteLiteral(Environment.NewLine);
+                    }
+                }
             }
-            WriteLiteral("			    ;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return equals;");
-            WriteLiteral(Environment.NewLine);
+            WriteLiteral("		    ;");
 
             return executed = sb.ToString();
         }

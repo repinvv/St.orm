@@ -71,11 +71,13 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {		");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            if (other == null) return false;");
+            WriteLiteral("            return ReferenceEquals(this, other)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("			var equals = ReferenceEquals(this, other)");
+            WriteLiteral("                || !(other as object).Equals(null)");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral("				&& ");
             Write(new FieldsComparision(model).Execute());
+            WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);

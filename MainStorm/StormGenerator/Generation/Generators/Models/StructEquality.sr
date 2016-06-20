@@ -9,8 +9,7 @@
 
         public bool Equals(@model.Name other)
         {     
-		    var equals = true   
-@[FieldsComparision(model)]
+		    return @[FieldsComparision(model)]
         }
 
 @[GetHashCode(model)]

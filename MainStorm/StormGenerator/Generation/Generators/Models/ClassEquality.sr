@@ -9,9 +9,9 @@
 			  
         public bool Equals(@model.Name other)
         {		
-            if (other == null) return false;
-			var equals = ReferenceEquals(this, other)
-@[FieldsComparision(model)]
+            return ReferenceEquals(this, other)
+                || !(other as object).Equals(null)
+				&& @[FieldsComparision(model)]
         }
 
 @[GetHashCode(model)]

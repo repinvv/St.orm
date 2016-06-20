@@ -4,12 +4,25 @@
 
 @if(model.KeyFields.Any()){
   @foreach(var field in model.KeyFields){
+    @if(field == model.KeyFields.First()){
+@field.Name != @field.TypeDefault()
+	}
+	else{
                 && @field.Name != @field.TypeDefault()
+	}
+  }
+  @foreach(var field in model.KeyFields){
+                && @field.Name == other.@field.Name
   }
 }
-@{var keyfields = model.KeyFields.Any() ? model.KeyFields : model.Fields;}
-@foreach(var field in keyfields){
+else{
+  @foreach(var field in model.Fields){
+    @if(field == model.Fields.First()){
+@field.Name == other.@field.Name
+    }
+	else{
                 && @field.Name == other.@field.Name
+	}
+  }
 }
-			    ;
-            return equals;
+		    ;

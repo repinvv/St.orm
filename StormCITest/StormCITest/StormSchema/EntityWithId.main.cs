@@ -40,12 +40,11 @@ namespace StormTestProject.StormModel
 			  
         public bool Equals(EntityWithId other)
         {		
-            if (other == null) return false;
-			var equals = ReferenceEquals(this, other)
-                && Id != default(int)
+            return ReferenceEquals(this, other)
+                || (other as object) != null
+				&& Id != default(int)
                 && Id == other.Id
-			    ;
-            return equals;
+		    ;
         }
 
         public override int GetHashCode()

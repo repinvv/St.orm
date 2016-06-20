@@ -24,12 +24,11 @@ namespace StormTestProject.StormModel
 			  
         public bool Equals(EntityWithoutKey other)
         {		
-            if (other == null) return false;
-			var equals = ReferenceEquals(this, other)
-                && Value == other.Value
+            return ReferenceEquals(this, other)
+                || (other as object) != null
+				&& Value == other.Value
                 && Content == other.Content
-			    ;
-            return equals;
+		    ;
         }
 
         public override int GetHashCode()

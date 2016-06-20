@@ -63,7 +63,7 @@ namespace StormCITest.Tests
             return watch.ElapsedMilliseconds;
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void EqualityTest()
         {
             var e1 = new EntityWithGuid
@@ -116,6 +116,14 @@ namespace StormCITest.Tests
             eq1 = measure1(e1, e3);
             eq2 = measure2(e1, e3);
             Console.WriteLine(eq1 + " " + eq2);
+        }
+
+        [TestMethod]
+        public void ManualComparisionTest()
+        {
+            var a = new EntityWithId();
+            var b = new EntityWithId();
+            var c = a.Equals(b);
         }
     }
 }

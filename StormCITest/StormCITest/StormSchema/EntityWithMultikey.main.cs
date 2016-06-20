@@ -26,14 +26,13 @@ namespace StormTestProject.StormModel
 			  
         public bool Equals(EntityWithMultikey other)
         {		
-            if (other == null) return false;
-			var equals = ReferenceEquals(this, other)
-                && Id1 != default(int)
+            return ReferenceEquals(this, other)
+                || (other as object) != null
+				&& Id1 != default(int)
                 && Id2 != string.Empty
                 && Id1 == other.Id1
                 && Id2 == other.Id2
-			    ;
-            return equals;
+		    ;
         }
 
         public override int GetHashCode()

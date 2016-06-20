@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Storm;
     using StormGenerator.Models;
     using StormGenerator.Models.GenModels;
     using StormGenerator.Settings;

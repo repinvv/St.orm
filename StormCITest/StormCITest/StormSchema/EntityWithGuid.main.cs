@@ -38,11 +38,9 @@ namespace StormTestProject.StormModel
 
         public bool Equals(EntityWithGuid other)
         {     
-		    var equals = true   
-                && Id != default(Guid)
+		    return Id != default(Guid)
                 && Id == other.Id
-			    ;
-            return equals;
+		    ;
         }
 
         public override int GetHashCode()
