@@ -102,7 +102,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Tests\ComparisionTest.cs" />
+    <Compile Include="Tests\EqualityTests.cs" />
     <Content Include="DBScripts\CreateTables.sql" />
     <Content Include="DBScripts\DropTables.sql" />
     <Compile Include="Properties\AssemblyInfo.cs" />

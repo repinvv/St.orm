@@ -1,6 +1,6 @@
 ﻿@visibility internal
 @inherits FileGenerator
-@using StormGenerator.Settings  Storm.Interfaces
+@using StormGenerator.Settings Storm.Interfaces
 @constructor(GenOptions options)
 @member{public override string FileName => "ICIService";}
 

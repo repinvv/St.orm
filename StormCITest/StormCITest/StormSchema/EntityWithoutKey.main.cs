@@ -42,7 +42,7 @@ namespace StormTestProject.StormModel
 
         public static bool operator ==(EntityWithoutKey left, EntityWithoutKey right)
         {
-            return left != null && left.Equals(right);
+            return (left as object) == null ? right.Equals(left) : left.Equals(right);
         }
 
         public static bool operator !=(EntityWithoutKey left, EntityWithoutKey right)

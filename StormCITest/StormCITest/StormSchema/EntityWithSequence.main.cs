@@ -56,7 +56,7 @@ namespace StormTestProject.StormModel.SomeSchema
 
         public static bool operator ==(EntityWithSequence left, EntityWithSequence right)
         {
-            return left != null && left.Equals(right);
+            return (left as object) == null ? right.Equals(left) : left.Equals(right);
         }
 
         public static bool operator !=(EntityWithSequence left, EntityWithSequence right)

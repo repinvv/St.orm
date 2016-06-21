@@ -1,0 +1,52 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings Storm.Interfaces StormGenerator.Models System.Collections.Generic
+@constructor(GenOptions options, List<EntityModel> models)
+@member{public override string FileName => "MsSqlCi";}
+
+namespace @options.OutputNamespace
+{
+    using System;
+    using System.Data.SqlClient;
+	using System.Collections.Generic;
+@if(!options.CiOnly){
+    using @typeof(ILoadService<>).Namespace;
+}
+@foreach(var nspace in models.Select(x => x.Model.NamespaceSuffix).Where(x => x != null).Distinct()){
+    using @nspace;
+}
+    @options.Visibility static class MsSqlCi
+    {
+        public static List<T> Materialize<T>(string query, 
+                               SqlParameter[] parms, 
+                               SqlConnection conn, 
+                               SqlTransaction trans)
+        {
+            return GetService<T>().Materialize(query, parms, conn, trans);
+        }
+
+@if(!options.CiOnly){
+        public static List<T> Materialize<T>(ILoadService<T> loadService,
+                               string query, 
+                               SqlParameter[] parms, 
+                               SqlConnection conn, 
+                               SqlTransaction trans)
+       {
+            return GetService<T>().Materialize(loadService, query, parms, conn, trans);
+       @}
+
+}
+        private static Dictionary<Type, object> services =
+            new Dictionary<Type, object>
+            {
+@foreach(var model in models){
+                { typeof(@model.Model.Name), new @(model.Model.Name)() },
+}
+           };
+
+        private static ICiService<T> GetService<T>()
+        {
+            return services[typeof(T)] as ICiService<T>;
+        }
+    }
+}

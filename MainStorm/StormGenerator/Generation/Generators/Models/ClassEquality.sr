@@ -10,7 +10,7 @@
         public bool Equals(@model.Name other)
         {		
             return ReferenceEquals(this, other)
-                || !(other as object).Equals(null)
+                || (other as object) != null
 				&& @[FieldsComparision(model)]
         }
 
@@ -18,7 +18,7 @@
 
         public static bool operator ==(@model.Name left, @model.Name right)
         {
-            return left != null && left.Equals(right);
+            return (left as object) == null ? right.Equals(left) : left.Equals(right);
         }
 
         public static bool operator !=(@model.Name left, @model.Name right)

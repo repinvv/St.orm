@@ -73,7 +73,7 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("            return ReferenceEquals(this, other)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                || !(other as object).Equals(null)");
+            WriteLiteral("                || (other as object) != null");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("				&& ");
             Write(new FieldsComparision(model).Execute());
@@ -91,7 +91,7 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return left != null && left.Equals(right);");
+            WriteLiteral("            return (left as object) == null ? right.Equals(left) : left.Equals(right);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);

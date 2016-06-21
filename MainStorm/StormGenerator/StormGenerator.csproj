@@ -187,6 +187,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CiHelper.sr</DependentUpon>
     </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\MsSqlCi.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>MsSqlCi.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlCi.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MsSqlCi.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlCiService.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
