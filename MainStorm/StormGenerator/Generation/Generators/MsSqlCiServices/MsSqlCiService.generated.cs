@@ -103,9 +103,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             Write(model.Name);
             WriteLiteral("();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                    PopulateFields(entity, reader);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                    list.Add(entity);");
+            WriteLiteral("                    list.Add(PopulateFields(entity, reader));");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("                }");
             WriteLiteral(Environment.NewLine);
@@ -154,9 +152,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 Write(model.Name);
                 WriteLiteral("(loadService);");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral("                    PopulateFields(entity, reader);");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                    list.Add(entity);");
+                WriteLiteral("                    list.Add(PopulateFields(entity, reader));");
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral("                ");
                 WriteLiteral("}");
@@ -173,7 +169,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral("        private void PopulateFields(");
+            WriteLiteral("        private ");
+            Write(model.Name);
+            WriteLiteral(" PopulateFields(");
             Write(model.Name);
             WriteLiteral(" entity, SqlDataReader reader)");
             WriteLiteral(Environment.NewLine);
@@ -189,6 +187,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 WriteLiteral(";");
                 WriteLiteral(Environment.NewLine);
             }
+            WriteLiteral("            return entity;");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("    }");

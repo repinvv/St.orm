@@ -27,15 +27,14 @@ namespace StormTestProject.StormModel
                 while (reader.Read())
                 {
                     var entity = new EntityWithSequence();
-                    PopulateFields(entity, reader);
-                    list.Add(entity);
+                    list.Add(PopulateFields(entity, reader));
                 }
                 return list;
             };
             return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
         }
 
-        private void PopulateFields(EntityWithSequence entity, SqlDataReader reader)
+        private EntityWithSequence PopulateFields(EntityWithSequence entity, SqlDataReader reader)
         {
             entity.Id = reader.GetInt32(0);
             entity.AChar = reader.IsDBNull(1) ? null : reader.GetString(1);
@@ -48,6 +47,7 @@ namespace StormTestProject.StormModel
             entity.ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8, 1000);
             entity.AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9, 2000);
             entity.AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10, 2147483647);
+            return entity;
         }
     }
 }

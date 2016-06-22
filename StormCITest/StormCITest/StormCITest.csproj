@@ -44,6 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EFSchema\entity_without_key.cs" />
     <Compile Include="EFSchema\entity_with_guid.cs" />
     <Compile Include="EFSchema\entity_with_id.cs" />
     <Compile Include="EFSchema\entity_with_multikey.cs" />
@@ -103,6 +105,8 @@
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Tests\EqualityTests.cs" />
+    <Compile Include="Tests\ReadTests.cs" />
+    <Compile Include="Tests\TestConnection.cs" />
     <Content Include="DBScripts\CreateTables.sql" />
     <Content Include="DBScripts\DropTables.sql" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -26,18 +26,18 @@ namespace StormTestProject.StormModel
                 while (reader.Read())
                 {
                     var entity = new EntityWithoutKey();
-                    PopulateFields(entity, reader);
-                    list.Add(entity);
+                    list.Add(PopulateFields(entity, reader));
                 }
                 return list;
             };
             return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
         }
 
-        private void PopulateFields(EntityWithoutKey entity, SqlDataReader reader)
+        private EntityWithoutKey PopulateFields(EntityWithoutKey entity, SqlDataReader reader)
         {
             entity.Value = reader.GetInt32(0);
             entity.Content = reader.IsDBNull(1) ? null : reader.GetString(1);
+            return entity;
         }
     }
 }

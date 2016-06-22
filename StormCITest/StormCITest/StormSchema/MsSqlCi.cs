@@ -10,26 +10,27 @@ namespace StormTestProject.StormModel
 {
     using System;
     using System.Data.SqlClient;
+	using System.Data.Common;
 	using System.Collections.Generic;
     using SomeSchema;
     public static class MsSqlCi
     {
         public static List<T> Materialize<T>(string query, 
                                SqlParameter[] parms, 
-                               SqlConnection conn, 
-                               SqlTransaction trans)
+                               DbConnection conn, 
+                               DbTransaction trans = null)
         {
-            return GetService<T>().Materialize(query, parms, conn, trans);
+            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);
         }
 
         private static Dictionary<Type, object> services =
             new Dictionary<Type, object>
             {
-                { typeof(EntityWithId), new EntityWithId() },
-                { typeof(EntityWithGuid), new EntityWithGuid() },
-                { typeof(EntityWithSequence), new EntityWithSequence() },
-                { typeof(EntityWithMultikey), new EntityWithMultikey() },
-                { typeof(EntityWithoutKey), new EntityWithoutKey() },
+                { typeof(EntityWithId), new EntityWithIdCiService() },
+                { typeof(EntityWithGuid), new EntityWithGuidCiService() },
+                { typeof(EntityWithSequence), new EntityWithSequenceCiService() },
+                { typeof(EntityWithMultikey), new EntityWithMultikeyCiService() },
+                { typeof(EntityWithoutKey), new EntityWithoutKeyCiService() },
            };
 
         private static ICiService<T> GetService<T>()

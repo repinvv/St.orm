@@ -43,6 +43,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral("    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral("	using System.Data.Common;");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral("	using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
             if (!options.CiOnly)
@@ -69,13 +71,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral("                               SqlParameter[] parms, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                               SqlConnection conn, ");
+            WriteLiteral("                               DbConnection conn, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                               SqlTransaction trans)");
+            WriteLiteral("                               DbTransaction trans = null)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return GetService<T>().Materialize(query, parms, conn, trans);");
+            WriteLiteral("            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
@@ -88,13 +90,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral("                               SqlParameter[] parms, ");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               SqlConnection conn, ");
+                WriteLiteral("                               DbConnection conn, ");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               SqlTransaction trans)");
+                WriteLiteral("                               DbTransaction trans = null)");
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral("       {");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral("            return GetService<T>().Materialize(loadService, query, parms, conn, trans);");
+                WriteLiteral("            return GetService<T>().Materialize(loadService, query, parms, (SqlConnection)conn, trans as SqlTransaction);");
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral("       ");
                 WriteLiteral("}");
@@ -113,7 +115,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 Write(model.Model.Name);
                 WriteLiteral("), new ");
                 Write(model.Model.Name);
-                WriteLiteral("() },");
+                WriteLiteral("CiService() },");
                 WriteLiteral(Environment.NewLine);
             }
             WriteLiteral("           };");

@@ -26,15 +26,14 @@ namespace StormTestProject.StormModel
                 while (reader.Read())
                 {
                     var entity = new EntityWithId();
-                    PopulateFields(entity, reader);
-                    list.Add(entity);
+                    list.Add(PopulateFields(entity, reader));
                 }
                 return list;
             };
             return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
         }
 
-        private void PopulateFields(EntityWithId entity, SqlDataReader reader)
+        private EntityWithId PopulateFields(EntityWithId entity, SqlDataReader reader)
         {
             entity.Id = reader.GetInt32(0);
             entity.ABigint = reader.IsDBNull(1) ? (long?)null : reader.GetInt64(1);
@@ -46,6 +45,7 @@ namespace StormTestProject.StormModel
             entity.ASmallmoney = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7);
             entity.ATinyint = reader.IsDBNull(8) ? (byte?)null : reader.GetByte(8);
             entity.AMoney = reader.IsDBNull(9) ? (decimal?)null : reader.GetDecimal(9);
+            return entity;
         }
     }
 }

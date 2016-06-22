@@ -59,6 +59,7 @@
                 { typeof(float), "GetFloat" },
                 { typeof(double), "GetDouble" },
                 { typeof(DateTime), "GetDateTime" },
+                { typeof(TimeSpan), "GetTimeSpan" },
                 { typeof(DateTimeOffset), "GetDateTimeOffset" },
                 { typeof(string), "GetString" },
             };

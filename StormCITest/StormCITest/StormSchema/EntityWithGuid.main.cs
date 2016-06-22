@@ -14,13 +14,13 @@ namespace StormTestProject.StormModel
     {	
         public Guid Id { get; set; }
 
-        public float? AFloat { get; set; }
+        public double? AFloat { get; set; }
 
-        public double AReal { get; set; }
+        public float AReal { get; set; }
 
         public DateTime? ADate { get; set; }
 
-        public DateTime? ATime { get; set; }
+        public TimeSpan? ATime { get; set; }
 
         public DateTimeOffset? AOffset { get; set; }
 

@@ -8,6 +8,7 @@ namespace @options.OutputNamespace
 {
     using System;
     using System.Data.SqlClient;
+	using System.Data.Common;
 	using System.Collections.Generic;
 @if(!options.CiOnly){
     using @typeof(ILoadService<>).Namespace;
@@ -19,20 +20,20 @@ namespace @options.OutputNamespace
     {
         public static List<T> Materialize<T>(string query, 
                                SqlParameter[] parms, 
-                               SqlConnection conn, 
-                               SqlTransaction trans)
+                               DbConnection conn, 
+                               DbTransaction trans = null)
         {
-            return GetService<T>().Materialize(query, parms, conn, trans);
+            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);
         }
 
 @if(!options.CiOnly){
         public static List<T> Materialize<T>(ILoadService<T> loadService,
                                string query, 
                                SqlParameter[] parms, 
-                               SqlConnection conn, 
-                               SqlTransaction trans)
+                               DbConnection conn, 
+                               DbTransaction trans = null)
        {
-            return GetService<T>().Materialize(loadService, query, parms, conn, trans);
+            return GetService<T>().Materialize(loadService, query, parms, (SqlConnection)conn, trans as SqlTransaction);
        @}
 
 }
@@ -40,7 +41,7 @@ namespace @options.OutputNamespace
             new Dictionary<Type, object>
             {
 @foreach(var model in models){
-                { typeof(@model.Model.Name), new @(model.Model.Name)() },
+                { typeof(@model.Model.Name), new @(model.Model.Name)CiService() },
 }
            };
 

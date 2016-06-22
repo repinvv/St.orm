@@ -31,8 +31,7 @@ namespace @options.OutputNamespace
                 while (reader.Read())
                 {
                     var entity = new @(model.Name)();
-                    PopulateFields(entity, reader);
-                    list.Add(entity);
+                    list.Add(PopulateFields(entity, reader));
                 }
                 return list;
             };
@@ -52,8 +51,7 @@ namespace @options.OutputNamespace
                 while (reader.Read())
                 {
                     var entity = new @(model.Name)(loadService);
-                    PopulateFields(entity, reader);
-                    list.Add(entity);
+                    list.Add(PopulateFields(entity, reader));
                 @}
                 return list;
             @};
@@ -61,12 +59,13 @@ namespace @options.OutputNamespace
         @}
 
 }
-        private void PopulateFields(@model.Name entity, SqlDataReader reader)
+        private @model.Name PopulateFields(@model.Name entity, SqlDataReader reader)
         {
 		@{int i = 0;}
 @foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
             entity.@field.Name = @field.GetReaderMethod(i++);
 }
+            return entity;
         }
     }
 }
