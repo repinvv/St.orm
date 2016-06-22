@@ -59,9 +59,9 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("		    return obj is ");
             Write(model.Name);
-            WriteLiteral(" && Equals((");
+            WriteLiteral(" && this == (");
             Write(model.Name);
-            WriteLiteral(")obj);");
+            WriteLiteral(")obj;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
@@ -72,8 +72,7 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {     ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("		    return ");
-            Write(new FieldsComparision(model).Execute());
+            WriteLiteral("		    return this == other;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);
@@ -88,7 +87,9 @@ namespace StormGenerator.Generation.Generators.Models
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return left.Equals(right);");
+            WriteLiteral("            return ");
+            Write(new FieldsComparision(model).Execute());
+            WriteLiteral(";");
             WriteLiteral(Environment.NewLine);
             WriteLiteral("        }");
             WriteLiteral(Environment.NewLine);

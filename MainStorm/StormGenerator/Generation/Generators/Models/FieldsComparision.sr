@@ -5,23 +5,23 @@
 @if(model.KeyFields.Any()){
   @foreach(var field in model.KeyFields){
     @if(field == model.KeyFields.First()){
-@field.Name != @field.TypeDefault()
+left.@field.Name != @field.TypeDefault()
 	}
 	else{
-                && @field.Name != @field.TypeDefault()
+                && left.@field.Name != @field.TypeDefault()
 	}
   }
   @foreach(var field in model.KeyFields){
-                && @field.Name == other.@field.Name
+                && left.@field.Name == right.@field.Name
   }
 }
 else{
   @foreach(var field in model.Fields){
     @if(field == model.Fields.First()){
-@field.Name == other.@field.Name
+left.@field.Name == right.@field.Name
     }
 	else{
-                && @field.Name == other.@field.Name
+                && left.@field.Name == right.@field.Name
 	}
   }
 }

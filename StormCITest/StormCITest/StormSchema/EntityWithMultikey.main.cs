@@ -21,18 +21,12 @@ namespace StormTestProject.StormModel
         #region equality
         public override bool Equals(object obj)
         {
-            return Equals(obj as EntityWithMultikey);		  
+            return this == obj as EntityWithMultikey;		  
         }
 			  
         public bool Equals(EntityWithMultikey other)
         {		
-            return ReferenceEquals(this, other)
-                || (other as object) != null
-				&& Id1 != default(int)
-                && Id2 != string.Empty
-                && Id1 == other.Id1
-                && Id2 == other.Id2
-		    ;
+		    return this == other;
         }
 
         public override int GetHashCode()
@@ -46,7 +40,14 @@ namespace StormTestProject.StormModel
 
         public static bool operator ==(EntityWithMultikey left, EntityWithMultikey right)
         {
-            return (left as object) == null ? right.Equals(left) : left.Equals(right);
+            return ReferenceEquals(left, right)
+                || (left as object) != null 
+                && (right as object) != null
+                && left.Id1 != default(int)
+                && left.Id2 != string.Empty
+                && left.Id1 == right.Id1
+                && left.Id2 == right.Id2
+		    ;
         }
 
         public static bool operator !=(EntityWithMultikey left, EntityWithMultikey right)

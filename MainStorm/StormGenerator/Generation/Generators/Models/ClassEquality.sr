@@ -4,21 +4,22 @@
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as @model.Name);		  
+            return this == obj as @model.Name;		  
         }
 			  
         public bool Equals(@model.Name other)
         {		
-            return ReferenceEquals(this, other)
-                || (other as object) != null
-				&& @[FieldsComparision(model)]
+		    return this == other;
         }
 
 @[GetHashCode(model)]
 
         public static bool operator ==(@model.Name left, @model.Name right)
         {
-            return (left as object) == null ? right.Equals(left) : left.Equals(right);
+            return ReferenceEquals(left, right)
+                || (left as object) != null 
+                && (right as object) != null
+                && @[FieldsComparision(model)]
         }
 
         public static bool operator !=(@model.Name left, @model.Name right)

@@ -33,14 +33,12 @@ namespace StormTestProject.StormModel
         #region equality
         public override bool Equals(object obj)
         {
-		    return obj is EntityWithGuid && Equals((EntityWithGuid)obj);
+		    return obj is EntityWithGuid && this == (EntityWithGuid)obj;
         }
 
         public bool Equals(EntityWithGuid other)
         {     
-		    return Id != default(Guid)
-                && Id == other.Id
-		    ;
+		    return this == other;
         }
 
         public override int GetHashCode()
@@ -50,7 +48,9 @@ namespace StormTestProject.StormModel
 
         public static bool operator ==(EntityWithGuid left, EntityWithGuid right)
         {
-            return left.Equals(right);
+            return left.Id != default(Guid)
+                && left.Id == right.Id
+		    ;;
         }
 
         public static bool operator !=(EntityWithGuid left, EntityWithGuid right)

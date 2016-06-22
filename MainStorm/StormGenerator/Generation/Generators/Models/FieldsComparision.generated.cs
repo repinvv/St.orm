@@ -60,6 +60,7 @@ namespace StormGenerator.Generation.Generators.Models
                 {
                     if (field == model.KeyFields.First())
                     {
+                        WriteLiteral("left.");
                         Write(field.Name);
                         WriteLiteral(" != ");
                         Write(field.TypeDefault());
@@ -67,7 +68,7 @@ namespace StormGenerator.Generation.Generators.Models
                     }
                     else
                     {
-                        WriteLiteral("                && ");
+                        WriteLiteral("                && left.");
                         Write(field.Name);
                         WriteLiteral(" != ");
                         Write(field.TypeDefault());
@@ -76,9 +77,9 @@ namespace StormGenerator.Generation.Generators.Models
                 }
                 foreach (var field in model.KeyFields)
                 {
-                    WriteLiteral("                && ");
+                    WriteLiteral("                && left.");
                     Write(field.Name);
-                    WriteLiteral(" == other.");
+                    WriteLiteral(" == right.");
                     Write(field.Name);
                     WriteLiteral(Environment.NewLine);
                 }
@@ -89,16 +90,17 @@ namespace StormGenerator.Generation.Generators.Models
                 {
                     if (field == model.Fields.First())
                     {
+                        WriteLiteral("left.");
                         Write(field.Name);
-                        WriteLiteral(" == other.");
+                        WriteLiteral(" == right.");
                         Write(field.Name);
                         WriteLiteral(Environment.NewLine);
                     }
                     else
                     {
-                        WriteLiteral("                && ");
+                        WriteLiteral("                && left.");
                         Write(field.Name);
-                        WriteLiteral(" == other.");
+                        WriteLiteral(" == right.");
                         Write(field.Name);
                         WriteLiteral(Environment.NewLine);
                     }

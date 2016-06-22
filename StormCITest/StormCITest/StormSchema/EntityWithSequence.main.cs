@@ -37,16 +37,12 @@ namespace StormTestProject.StormModel.SomeSchema
         #region equality
         public override bool Equals(object obj)
         {
-            return Equals(obj as EntityWithSequence);		  
+            return this == obj as EntityWithSequence;		  
         }
 			  
         public bool Equals(EntityWithSequence other)
         {		
-            return ReferenceEquals(this, other)
-                || (other as object) != null
-				&& Id != default(int)
-                && Id == other.Id
-		    ;
+		    return this == other;
         }
 
         public override int GetHashCode()
@@ -56,7 +52,12 @@ namespace StormTestProject.StormModel.SomeSchema
 
         public static bool operator ==(EntityWithSequence left, EntityWithSequence right)
         {
-            return (left as object) == null ? right.Equals(left) : left.Equals(right);
+            return ReferenceEquals(left, right)
+                || (left as object) != null 
+                && (right as object) != null
+                && left.Id != default(int)
+                && left.Id == right.Id
+		    ;
         }
 
         public static bool operator !=(EntityWithSequence left, EntityWithSequence right)

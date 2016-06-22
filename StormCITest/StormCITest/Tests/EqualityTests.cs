@@ -62,5 +62,25 @@ namespace StormCITest.Tests
             Assert.IsFalse(e1 == e2);
             Assert.AreNotEqual(e1, e2);
         }
+
+        [TestMethod]
+        public void Nulls_Equal()
+        {
+            EntityWithoutKey e1 = null;
+            EntityWithoutKey e2 = null;
+            Assert.IsTrue(e1 == e2);
+            Assert.AreEqual(e1, e2);
+        }
+
+        [TestMethod]
+        public void OneIsNull_NotEqual()
+        {
+            var e1 = new EntityWithoutKey();
+            EntityWithoutKey e2 = null;
+            Assert.IsFalse(e1 == e2);
+            Assert.AreNotEqual(e1, e2);
+            Assert.IsFalse(e2 == e1);
+            Assert.AreNotEqual(e2, e1);
+        }
     }
 }

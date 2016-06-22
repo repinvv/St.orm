@@ -4,19 +4,19 @@
 
         public override bool Equals(object obj)
         {
-		    return obj is @model.Name && Equals((@model.Name)obj);
+		    return obj is @model.Name && this == (@model.Name)obj;
         }
 
         public bool Equals(@model.Name other)
         {     
-		    return @[FieldsComparision(model)]
+		    return this == other;
         }
 
 @[GetHashCode(model)]
 
         public static bool operator ==(@model.Name left, @model.Name right)
         {
-            return left.Equals(right);
+            return @[FieldsComparision(model)];
         }
 
         public static bool operator !=(@model.Name left, @model.Name right)
