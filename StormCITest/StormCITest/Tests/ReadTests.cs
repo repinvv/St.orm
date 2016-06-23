@@ -13,22 +13,11 @@
     public class ReadTests
     {
         [TestMethod]
-        public void ReadEntityWithGuid_AllEntries()
+        public void Read_EntityWithGuid_AllEntries()
         {
-            //using (var trans = new TransactionScope(TransactionScopeOption.Required))
+            using (var trans = new TransactionScope(TransactionScopeOption.Required))
             {
-                var efEntity = new entity_with_guid
-                {
-                    id = Guid.NewGuid(),
-                    a_date = new DateTime(2016, 1, 1, 1, 2, 3),
-                    a_datetime = new DateTime(2016, 1, 2, 1, 2, 3),
-                    a_datetime2 = new DateTime(2016, 1, 3, 1, 2, 3),
-                    a_float = 123.456,
-                    a_offset = new DateTimeOffset(2016, 1, 4, 1,2,3, TimeSpan.FromMinutes(10)),
-                    a_real = (float)234.567,
-                    a_smalldatetime = new DateTime(2016, 1, 5, 1, 2, 3),
-                    a_time = TimeSpan.FromMinutes(20),
-                };
+                var efEntity = CreateFullEntity();
 
                 using (var context = new StormCI())
                 {
@@ -39,18 +28,77 @@
                     var sql = "select * from entity_with_guid where id = @id";
                     var parm = new[] { new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = efEntity.id } };
                     
-                    var entity = MsSqlCi.Materialize<EntityWithGuid>(sql, parm, context.Database.Connection).First();
+                    var entity = MsSqlCi
+                        .Materialize<EntityWithGuid>(sql, parm, context.Database.Connection)
+                        .First();
+                    CompareFullEntity(efEntity, entity);
                 }
             }
         }
 
-        [TestMethod]
-        public void ReadEntityWithGuid_AllNulls()
+        private void CompareFullEntity(entity_with_guid efEntity, EntityWithGuid entity)
+        {
+            Assert.AreEqual(efEntity.id, entity.Id);
+            Assert.IsTrue(efEntity.a_real == entity.AReal);
+            Assert.AreEqual(efEntity.a_date, entity.ADate);
+            Assert.AreEqual(efEntity.a_datetime ,entity.ADatetime);
+            Assert.AreEqual(efEntity.a_datetime2 ,entity.ADatetime2);
+            Assert.AreEqual(efEntity.a_float ,entity.AFloat);
+            Assert.AreEqual(efEntity.a_offset ,entity.AOffset);
+            Assert.AreEqual(efEntity.a_smalldatetime ,entity.ASmalldatetime);
+            Assert.AreEqual(efEntity.a_time ,entity.ATime);
+        }
+
+        private static entity_with_guid CreateFullEntity()
         {
             var efEntity = new entity_with_guid
+                           {
+                               id = Guid.NewGuid(),
+                               a_date = new DateTime(2016, 1, 1),
+                               a_datetime = new DateTime(2016, 1, 2, 1, 2, 3),
+                               a_datetime2 = new DateTime(2016, 1, 3, 1, 2, 3),
+                               a_float = 123.456,
+                               a_offset = new DateTimeOffset(2016, 1, 4, 1, 2, 3, TimeSpan.FromMinutes(10)),
+                               a_real = (float)234.567,
+                               a_smalldatetime = new DateTime(2016, 1, 5, 1, 2, 0), //precision is one minute
+                               a_time = TimeSpan.FromMinutes(20),
+                           };
+            return efEntity;
+        }
+
+        [TestMethod]
+        public void Read_EntityWithGuid_AllNulls()
+        {
+            using (var trans = new TransactionScope(TransactionScopeOption.Required))
             {
-                id = Guid.NewGuid()
-            };
+                var efEntity = new entity_with_guid { id = Guid.NewGuid(), a_real = (float)234.567,};
+                using (var context = new StormCI())
+                {
+                    context.entity_with_guid.Add(efEntity);
+                    context.SaveChanges();
+
+                    var sql = "select * from entity_with_guid where id = @id";
+                    var parm = new[] { new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = efEntity.id } };
+
+                    var entity = MsSqlCi
+                        .Materialize<EntityWithGuid>(sql, parm, context.Database.Connection)
+                        .First();
+                    CompareEmptyEntity(efEntity, entity);
+                }
+            }
+        }
+
+        private void CompareEmptyEntity(entity_with_guid efEntity, EntityWithGuid entity)
+        {
+            Assert.AreEqual(efEntity.id, entity.Id);
+            Assert.IsTrue(efEntity.a_real == entity.AReal);
+            Assert.IsNull(entity.ADate);
+            Assert.IsNull(entity.ADatetime);
+            Assert.IsNull(entity.ADatetime2);
+            Assert.IsNull(entity.AFloat);
+            Assert.IsNull(entity.AOffset);
+            Assert.IsNull(entity.ASmalldatetime);
+            Assert.IsNull(entity.ATime);
         }
     }
 }

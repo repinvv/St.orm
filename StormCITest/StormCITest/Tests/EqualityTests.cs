@@ -9,7 +9,7 @@ namespace StormCITest.Tests
     public class EqualityTests
     {
         [TestMethod]
-        public void OneOfTwo_NotEqual()
+        public void Equality_OneOfTwo_NotEqual()
         {
             var e1 = new EntityWithMultikey { Id1 = 10, Id2 = "key1", };
             var e2 = new EntityWithMultikey { Id1 = 10, Id2 = "key2" };
@@ -19,7 +19,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void TwoOfTwoDifferentContent_Equal()
+        public void Equality_TwoOfTwoDifferentContent_Equal()
         {
             var e1 = new EntityWithMultikey { Id1 = 10, Id2 = "key1", Content = "content1" };
             var e2 = new EntityWithMultikey { Id1 = 10, Id2 = "key2", Content = "content2" };
@@ -29,7 +29,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void SameWithNoKeys_Equal()
+        public void Equality_SameWithNoKeys_Equal()
         {
             var e1 = new EntityWithMultikey();
             var e2 = e1;
@@ -39,7 +39,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void WithDefaultKeys_NotEqual()
+        public void Equality_WithDefaultKeys_NotEqual()
         {
             var e1 = new EntityWithMultikey { Id2 = "key1" };
             var e2 = new EntityWithMultikey { Id2 = "key1" };
@@ -49,7 +49,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void KeylessWithSameContent_Equal()
+        public void Equality_KeylessWithSameContent_Equal()
         {
             var e1 = new EntityWithoutKey { Content = "content", Value = 10 };
             var e2 = new EntityWithoutKey { Content = "content", Value = 10 };
@@ -60,7 +60,7 @@ namespace StormCITest.Tests
 
 
         [TestMethod]
-        public void KeylessWithDifferentContent_NotEqual()
+        public void Equality_KeylessWithDifferentContent_NotEqual()
         {
             var e1 = new EntityWithoutKey { Content = "content", Value = 10 };
             var e2 = new EntityWithoutKey { Content = "content2", Value = 13 };
@@ -70,7 +70,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void Nulls_Equal()
+        public void Equality_Nulls_Equal()
         {
             EntityWithoutKey e1 = null;
             EntityWithoutKey e2 = null;
@@ -79,7 +79,7 @@ namespace StormCITest.Tests
         }
 
         [TestMethod]
-        public void OneIsNull_NotEqual()
+        public void Equality_OneIsNull_NotEqual()
         {
             var e1 = new EntityWithoutKey();
             EntityWithoutKey e2 = null;
