@@ -105,7 +105,9 @@
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Tests\EqualityTests.cs" />
-    <Compile Include="Tests\ReadTests.cs" />
+    <Compile Include="Tests\ContextInTransaction.cs" />
+    <Compile Include="Tests\ReadTests\ReadEntityWithGuidTests.cs" />
+    <Compile Include="Tests\ReadTests\ReadEntityWithIdTests.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Content Include="DBScripts\CreateTables.sql" />
     <Content Include="DBScripts\DropTables.sql" />
