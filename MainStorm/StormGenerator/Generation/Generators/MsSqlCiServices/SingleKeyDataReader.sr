@@ -1,0 +1,25 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings
+@constructor(GenOptions options)
+@member{public override string FileName => "SingleKeyDataReader";}
+
+namespace @options.OutputNamespace
+{
+    @options.Visibility class SingleKeyDataReader<T> : BaseDataReader
+    {
+        private readonly T[] keys;
+
+        public SingleKeyDataReader(T[] keys) : base(keys.Length)
+        {
+            this.keys = keys;
+        }
+
+        public override object GetValue(int i)
+        {
+            return keys[current];
+        }
+
+        public override int FieldCount { get { return 1; } }
+    }
+}

@@ -6,12 +6,13 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace StormTestProject.StormSchema
 {
     using System;
     using System.Data.SqlClient;
 	using System.Data.Common;
 	using System.Collections.Generic;
+
     using SomeSchema;
     public static class MsSqlCi
     {
@@ -21,6 +22,13 @@ namespace StormTestProject.StormModel
                                DbTransaction trans = null)
         {
             return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);
+        }
+
+        public static List<T> GetByPrimaryKey<T>(object ids,
+                       DbConnection conn,
+                       DbTransaction trans = null)
+        {
+            return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
         }
 
         private static Dictionary<Type, object> services =

@@ -20,52 +20,114 @@ namespace @options.OutputNamespace
 
     @options.Visibility class @(model.Name)CiService : ICiService<@model.Name>
     {
+        private List<@model.Name> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<@model.Name>();
+            while (reader.Read())
+            {
+                var entity = new @(model.Name)();
+@{int i = 0;}
+@foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
+                entity.@field.Name = @field.GetReaderMethod(i++);
+}
+                list.Add(entity);
+            }
+            return list;
+        }
+
         public List<@model.Name> Materialize(string query, 
                             SqlParameter[] parms, 
                             SqlConnection conn, 
                             SqlTransaction trans)
         {
-            Func<SqlDataReader, List<@model.Name>> func = reader =>
+            using (new ConnectionHandler(conn))
             {
-                var list = new List<@model.Name>();
-                while (reader.Read())
+                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+            }
+        }
+  @if(model.KeyFields.Count > 1){@newline
+        #region KeyDataReader
+        private class KeyDataReader : BaseDataReader
+        {
+	@{i = 0;}
+	@foreach(var key in model.KeyFields){
+            @(key.Column.CsTypeName)[] key@(i++);
+    }
+            public KeyDataReader(@model.GetTuple() keys) : base(keys.Item1.Length)
+            {
+	@{i = 0;}
+	@foreach(var key in model.KeyFields){
+                key@(i++) = keys.Item@i;
+    }
+            @}
+
+            public override object GetValue(int i)
+            {
+	@if(model.KeyFields.Count == 5){
+                return i == 0 ? key0[current] as object : key1[current];
+	} else {
+                switch(i)
                 {
-                    var entity = new @(model.Name)();
-                    list.Add(PopulateFields(entity, reader));
-                }
-                return list;
-            };
-            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+	  @{i = 0;}
+	  @foreach(var key in model.KeyFields){
+                    case @i:
+					    return key@(i++)[current];
+      }
+                    default:
+                        throw new Exception("No key with index " + i);
+                @}
+	}
+            @}
+
+            public override int FieldCount { get { return 2; } }
+        @}
+        #endregion
+  }
+
+        public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+@if(model.KeyFields.Any()){
+  @if(model.KeyFields.Count == 1){
+            var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
+  }else{
+            var idsTuple = (@(model.GetTuple()))ids;
+  }
+            using (new ConnectionHandler(conn))
+            {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+  @if(model.KeyFields.Count == 1){
+                CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
+  }else{
+                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);
+  }
+                var sql = @"select 
+  @foreach(var line in model.GetFieldSelectLines("e.")){
+                @line
+  }
+				from @model.Table.Id e
+                inner join " + table + @" t on 
+  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
+                @line
+  }
+                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+            @}
+}
+else{
+            throw new Exception("Entity @model.Name has no primary key");
+}
         }
 
-@if(!options.CiOnly){
-        public List<@model.Name> Materialize(ILoadService<@model.Name> loadService,
-                            string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans)
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
-            Func<SqlDataReader, List<@model.Name>> func = reader =>
-            {
-                var list = new List<@model.Name>();
-                while (reader.Read())
-                {
-                    var entity = new @(model.Name)(loadService);
-                    list.Add(PopulateFields(entity, reader));
-                @}
-                return list;
-            @};
-            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
-        @}
-
+            var sql = "CREATE TABLE " + table + @"(
+@foreach(var field in model.KeyFields){
+                @field.Column.Definition
 }
-        private @model.Name PopulateFields(@model.Name entity, SqlDataReader reader)
-        {
-		@{int i = 0;}
-@foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
-            entity.@field.Name = @field.GetReaderMethod(i++);
-}
-            return entity;
+                )";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
     }
 }

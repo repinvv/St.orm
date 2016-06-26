@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace StormTestProject.StormSchema
 {
     using System;
     using System.Data;
@@ -15,29 +15,40 @@ namespace StormTestProject.StormModel
 
     public class EntityWithoutKeyCiService : ICiService<EntityWithoutKey>
     {
+        private List<EntityWithoutKey> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<EntityWithoutKey>();
+            while (reader.Read())
+            {
+                var entity = new EntityWithoutKey();
+                entity.Value = reader.GetInt32(0);
+                entity.Content = reader.IsDBNull(1) ? null : reader.GetString(1);
+                list.Add(entity);
+            }
+            return list;
+        }
+
         public List<EntityWithoutKey> Materialize(string query, 
                             SqlParameter[] parms, 
                             SqlConnection conn, 
                             SqlTransaction trans)
         {
-            Func<SqlDataReader, List<EntityWithoutKey>> func = reader =>
+            using (new ConnectionHandler(conn))
             {
-                var list = new List<EntityWithoutKey>();
-                while (reader.Read())
-                {
-                    var entity = new EntityWithoutKey();
-                    list.Add(PopulateFields(entity, reader));
-                }
-                return list;
-            };
-            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+            }
         }
 
-        private EntityWithoutKey PopulateFields(EntityWithoutKey entity, SqlDataReader reader)
+        public List<EntityWithoutKey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            entity.Value = reader.GetInt32(0);
-            entity.Content = reader.IsDBNull(1) ? null : reader.GetString(1);
-            return entity;
+            throw new Exception("Entity EntityWithoutKey has no primary key");
+        }
+
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                )";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
     }
 }

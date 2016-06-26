@@ -1,0 +1,34 @@
+﻿@visibility internal
+@inherits FileGenerator
+@using StormGenerator.Settings GenericCi
+@constructor(GenOptions options)
+@member{public override string FileName => "ConnectionHandler";}
+
+namespace @options.OutputNamespace
+{
+    using System;
+    using System.Data;
+    using System.Data.Common;
+
+    @options.Visibility class ConnectionHandler : IDisposable
+    {
+        private readonly DbConnection connection;
+
+        public ConnectionHandler(DbConnection connection)
+        {
+            if (connection.State != ConnectionState.Open)
+            {
+                connection.Open();
+                this.connection = connection;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (connection != null)
+            {
+                connection.Close();
+            }
+        }
+    }
+}

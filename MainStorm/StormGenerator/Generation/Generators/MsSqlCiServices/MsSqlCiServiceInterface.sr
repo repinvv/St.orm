@@ -14,16 +14,8 @@ namespace @options.OutputNamespace
 
     @options.Visibility interface ICiService<T>
     {
-        List<T> Materialize(string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans);
-@if(!options.CiOnly){@newline
-        List<T> Materialize(ILoadService<T> loadService,
-                            string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans);
-}
+        List<T> Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
+
+		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
     }
 }

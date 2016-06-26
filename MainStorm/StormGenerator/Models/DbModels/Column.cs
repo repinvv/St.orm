@@ -31,6 +31,8 @@
 
         public int Scale { get; set; }
 
+        public string Definition { get; set; }
+
         public List<Association> Associations { get; set; }
     }
 }

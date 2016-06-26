@@ -22,7 +22,7 @@
                        + field.GetReaderMethodNullable(index);
             }
 
-            return GetReaderMethodNonNullable(field.Column.CsType, index, field.Column.Length);
+            return GetReaderMethodNonNullable(field.Column.CsType, index);
         }
 
         private static string GetTypeCast(this Field field)
@@ -39,11 +39,11 @@
         {
             if (field.Column.CsType == typeof(string) || field.Column.CsType == typeof(byte[]))
             {
-                return GetReaderMethodNonNullable(field.Column.CsType, index, field.Column.Length);
+                return GetReaderMethodNonNullable(field.Column.CsType, index);
             }
 
             var type = field.Column.CsType.GetGenericArguments().First();
-            return GetReaderMethodNonNullable(type, index, field.Column.Length);
+            return GetReaderMethodNonNullable(type, index);
         }
 
         private static readonly Dictionary<Type, string> readerMethods =
@@ -62,13 +62,12 @@
                 { typeof(TimeSpan), "GetTimeSpan" },
                 { typeof(DateTimeOffset), "GetDateTimeOffset" },
                 { typeof(string), "GetString" },
+                { typeof(byte[]), "ReadBytes" }
             };
 
-        private static string GetReaderMethodNonNullable(Type type, int index, int length)
+        private static string GetReaderMethodNonNullable(Type type, int index)
         {
-            return type == typeof(byte[]) 
-                ? $"reader.ReadBytes({index}, {length})" 
-                : $"reader.{readerMethods[type]}({index})";
+            return  $"reader.{readerMethods[type]}({index})";
         }
     }
 }

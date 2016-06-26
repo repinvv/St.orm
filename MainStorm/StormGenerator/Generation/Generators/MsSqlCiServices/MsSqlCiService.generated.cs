@@ -35,165 +35,299 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
         public override string Execute()
         {
             var model = entityModel.Model;
-            WriteLiteral("namespace ");
+            WriteLiteral(@"namespace ");
             Write(options.OutputNamespace);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("{");
+            WriteLiteral(@"{");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using System;");
+            WriteLiteral(@"    using System;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using System.Data;");
+            WriteLiteral(@"    using System.Data;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using System.Data.SqlClient;");
+            WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("	using System.Collections.Generic;");
+            WriteLiteral(@"	using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
             if (model.NamespaceSuffix != null)
             {
-                WriteLiteral("    using ");
+                WriteLiteral(@"    using ");
                 Write(model.NamespaceSuffix);
-                WriteLiteral(";");
+                WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
             }
             if (!options.CiOnly)
             {
-                WriteLiteral("    using ");
+                WriteLiteral(@"    using ");
                 Write(typeof(ILoadService<>).Namespace);
-                WriteLiteral(";");
+                WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
             }
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    ");
+            WriteLiteral(@"    ");
             Write(options.Visibility);
-            WriteLiteral(" class ");
+            WriteLiteral(@" class ");
             Write(model.Name);
-            WriteLiteral("CiService : ICiService<");
+            WriteLiteral(@"CiService : ICiService<");
             Write(model.Name);
-            WriteLiteral(">");
+            WriteLiteral(@">");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    {");
+            WriteLiteral(@"    {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        public List<");
+            WriteLiteral(@"        private List<");
             Write(model.Name);
-            WriteLiteral("> Materialize(string query, ");
+            WriteLiteral(@"> ReadEntities(SqlDataReader reader)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                            SqlParameter[] parms, ");
+            WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                            SqlConnection conn, ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                            SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("            Func<SqlDataReader, List<");
+            WriteLiteral(@"            var list = new List<");
             Write(model.Name);
-            WriteLiteral(">> func = reader =>");
+            WriteLiteral(@">();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            {");
+            WriteLiteral(@"            while (reader.Read())");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                var list = new List<");
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                var entity = new ");
             Write(model.Name);
-            WriteLiteral(">();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                while (reader.Read())");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                    var entity = new ");
-            Write(model.Name);
-            WriteLiteral("();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                    list.Add(PopulateFields(entity, reader));");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("                return list;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("            };");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            if (!options.CiOnly)
-            {
-                WriteLiteral("        public List<");
-                Write(model.Name);
-                WriteLiteral("> Materialize(ILoadService<");
-                Write(model.Name);
-                WriteLiteral("> loadService,");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                            string query, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                            SqlParameter[] parms, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                            SqlConnection conn, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                            SqlTransaction trans)");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("        {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            Func<SqlDataReader, List<");
-                Write(model.Name);
-                WriteLiteral(">> func = reader =>");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                var list = new List<");
-                Write(model.Name);
-                WriteLiteral(">();");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                while (reader.Read())");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                    var entity = new ");
-                Write(model.Name);
-                WriteLiteral("(loadService);");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                    list.Add(PopulateFields(entity, reader));");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                ");
-                WriteLiteral("}");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                return list;");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            ");
-                WriteLiteral("};");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("        ");
-                WriteLiteral("}");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral("        private ");
-            Write(model.Name);
-            WriteLiteral(" PopulateFields(");
-            Write(model.Name);
-            WriteLiteral(" entity, SqlDataReader reader)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {");
+            WriteLiteral(@"();");
             WriteLiteral(Environment.NewLine);
             int i = 0;
             foreach (var field in model.Fields.Where(x=>x.IsEnabled))
             {
-                WriteLiteral("            entity.");
+                WriteLiteral(@"                entity.");
                 Write(field.Name);
-                WriteLiteral(" = ");
+                WriteLiteral(@" = ");
                 Write(field.GetReaderMethod(i++));
-                WriteLiteral(";");
+                WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral("            return entity;");
+            WriteLiteral(@"                list.Add(entity);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        }");
+            WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    }");
+            WriteLiteral(@"            return list;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("}");
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public List<");
+            Write(model.Name);
+            WriteLiteral(@"> Materialize(string query, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                            SqlParameter[] parms, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                            SqlConnection conn, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                            SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Count > 1)
+            {
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        #region KeyDataReader");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        private class KeyDataReader : BaseDataReader");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        {");
+                WriteLiteral(Environment.NewLine);
+                i = 0;
+                foreach (var key in model.KeyFields)
+                {
+                    WriteLiteral(@"            ");
+                    Write(key.Column.CsTypeName);
+                    WriteLiteral(@"[] key");
+                    Write(i++);
+                    WriteLiteral(@";");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"            public KeyDataReader(");
+                Write(model.GetTuple());
+                WriteLiteral(@" keys) : base(keys.Item1.Length)");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            {");
+                WriteLiteral(Environment.NewLine);
+                i = 0;
+                foreach (var key in model.KeyFields)
+                {
+                    WriteLiteral(@"                key");
+                    Write(i++);
+                    WriteLiteral(@" = keys.Item");
+                    Write(i);
+                    WriteLiteral(@";");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"            ");
+                WriteLiteral(@"}");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            public override object GetValue(int i)");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            {");
+                WriteLiteral(Environment.NewLine);
+                if (model.KeyFields.Count == 5)
+                {
+                    WriteLiteral(@"                return i == 0 ? key0[current] as object : key1[current];");
+                    WriteLiteral(Environment.NewLine);
+                }
+                else
+                {
+                    WriteLiteral(@"                switch(i)");
+                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@"                {");
+                    WriteLiteral(Environment.NewLine);
+                    i = 0;
+                    foreach (var key in model.KeyFields)
+                    {
+                        WriteLiteral(@"                    case ");
+                        Write(i);
+                        WriteLiteral(@":");
+                        WriteLiteral(Environment.NewLine);
+                        WriteLiteral(@"					    return key");
+                        Write(i++);
+                        WriteLiteral(@"[current];");
+                        WriteLiteral(Environment.NewLine);
+                    }
+                    WriteLiteral(@"                    default:");
+                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@"                        throw new Exception(""No key with index "" + i);");
+                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@"                ");
+                    WriteLiteral(@"}");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"            ");
+                WriteLiteral(@"}");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            public override int FieldCount { get { return 2; } }");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        ");
+                WriteLiteral(@"}");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        #endregion");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public List<");
+            Write(model.Name);
+            WriteLiteral(@"> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Any())
+            {
+                if (model.KeyFields.Count == 1)
+                {
+                    WriteLiteral(@"            var idsArray = (");
+                    Write(model.KeyFields[0].Column.CsTypeName);
+                    WriteLiteral(@"[])ids;");
+                    WriteLiteral(Environment.NewLine);
+                }
+                else
+                {
+                    WriteLiteral(@"            var idsTuple = (");
+                    Write(model.GetTuple());
+                    WriteLiteral(@")ids;");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"            using (new ConnectionHandler(conn))");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            {");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                var table = CiHelper.CreateTempTableName();");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                CreateIdTempTable(table, conn, trans);");
+                WriteLiteral(Environment.NewLine);
+                if (model.KeyFields.Count == 1)
+                {
+                    WriteLiteral(@"                CiHelper.BulkInsert(new SingleKeyDataReader<");
+                    Write(model.KeyFields[0].Column.CsTypeName);
+                    WriteLiteral(@">(idsArray), table, conn, trans);");
+                    WriteLiteral(Environment.NewLine);
+                }
+                else
+                {
+                    WriteLiteral(@"                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"                var sql = ");
+                WriteLiteral(@"@");
+                WriteLiteral(@"""select ");
+                WriteLiteral(Environment.NewLine);
+                foreach (var line in model.GetFieldSelectLines("e."))
+                {
+                    WriteLiteral(@"                ");
+                    Write(line);
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"				from ");
+                Write(model.Table.Id);
+                WriteLiteral(@" e");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                inner join "" + table + ");
+                WriteLiteral(@"@");
+                WriteLiteral(@""" t on ");
+                WriteLiteral(Environment.NewLine);
+                foreach (var line in model.GetKeyEqualityLines("e.", "t.", "\";"))
+                {
+                    WriteLiteral(@"                ");
+                    Write(line);
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                CiHelper.DropTable(table, conn, trans);");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                return result;");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            ");
+                WriteLiteral(@"}");
+                WriteLiteral(Environment.NewLine);
+            }
+            else
+            {
+                WriteLiteral(@"            throw new Exception(""Entity ");
+                Write(model.Name);
+                WriteLiteral(@" has no primary key"");");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""(");
+            WriteLiteral(Environment.NewLine);
+            foreach (var field in model.KeyFields)
+            {
+                WriteLiteral(@"                ");
+                Write(field.Column.Definition);
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"                )"";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"    }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

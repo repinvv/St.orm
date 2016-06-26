@@ -13,6 +13,12 @@ namespace @options.OutputNamespace
 
     @options.Visibility static class CiHelper
     {
+        const SqlBulkCopyOptions BulkOptions =
+            SqlBulkCopyOptions.FireTriggers
+            | SqlBulkCopyOptions.CheckConstraints
+            | SqlBulkCopyOptions.KeepNulls
+            | SqlBulkCopyOptions.KeepIdentity;
+
 @[CombineHashcodes()]
 
 @[ReadBytes()]
@@ -23,30 +29,48 @@ namespace @options.OutputNamespace
                                         SqlConnection conn, 
                                         SqlTransaction trans)
         {
-			var wasClosed = conn.State != ConnectionState.Open;
-			if(wasClosed)
-			{
-                conn.Open();
-            }
-            try
+            using (var command = new SqlCommand(query, conn))
             {
-                using (var command = new SqlCommand(query, conn))
+                command.Transaction = trans;
+                command.Parameters.AddRange(parms);
+                using (var reader = command.ExecuteReader(CommandBehavior.SequentialAccess))
                 {
-                    command.Transaction = trans;
-                    command.Parameters.AddRange(parms);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        return func(reader);
-                    }
+                    return func(reader);
                 }
             }
-			finally 
-			{
-                if(wasClosed)
-                {
-                    conn.Close();
-                }
+        }
+
+        public static void ExecuteNonQuery(string query,
+            SqlParameter[] parms,
+            SqlConnection conn,
+            SqlTransaction trans)
+        {
+            using (var command = new SqlCommand(query, conn))
+            {
+                command.Transaction = trans;
+                command.Parameters.AddRange(parms);
+                command.ExecuteNonQuery();
             }
+        }
+
+        public static void BulkInsert(IDataReader reader, string table, SqlConnection conn, SqlTransaction trans)
+        {
+            using (var bulk = new SqlBulkCopy(conn, BulkOptions, trans))
+            {
+                bulk.DestinationTableName = table;
+                bulk.WriteToServer(reader);
+            }
+        }
+
+        public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "DROP TABLE " + table;
+            ExecuteNonQuery(sql, new SqlParameter[0],  conn, trans);
+        }
+
+        public static string CreateTempTableName()
+        {
+            return "#a" + Guid.NewGuid().ToString("N");
         }
     }
 }

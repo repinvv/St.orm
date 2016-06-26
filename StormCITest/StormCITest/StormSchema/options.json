@@ -9,7 +9,7 @@
     "Linq2EntitiesProvider": "linq2db",
     "ContextName": "StormTestContext",
     "CustomInterfaceForEntities": "IDbEntity",
-    "OutputNamespace": "StormTestProject.StormModel",
+    "OutputNamespace": "StormTestProject.StormSchema",
     "CiOnly":  true
   },
   "AutomaticPopulation": true,

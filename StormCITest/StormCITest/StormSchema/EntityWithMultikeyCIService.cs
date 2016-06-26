@@ -6,39 +6,93 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace StormTestProject.StormSchema
 {
     using System;
-    using System.Data;
     using System.Data.SqlClient;
 	using System.Collections.Generic;
 
     public class EntityWithMultikeyCiService : ICiService<EntityWithMultikey>
     {
+        private List<EntityWithMultikey> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<EntityWithMultikey>();
+            while (reader.Read())
+            {
+                var entity = new EntityWithMultikey();
+                entity.Id1 = reader.GetInt32(0);
+                entity.Id2 = reader.GetString(1);
+                entity.Content = reader.IsDBNull(2) ? null : reader.GetString(2);
+                list.Add(entity);
+            }
+            return list;
+        }
+
         public List<EntityWithMultikey> Materialize(string query, 
                             SqlParameter[] parms, 
                             SqlConnection conn, 
                             SqlTransaction trans)
         {
-            Func<SqlDataReader, List<EntityWithMultikey>> func = reader =>
+            using (new ConnectionHandler(conn))
             {
-                var list = new List<EntityWithMultikey>();
-                while (reader.Read())
-                {
-                    var entity = new EntityWithMultikey();
-                    list.Add(PopulateFields(entity, reader));
-                }
-                return list;
-            };
-            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+            }
         }
 
-        private EntityWithMultikey PopulateFields(EntityWithMultikey entity, SqlDataReader reader)
+        #region KeyDataReader
+        private class KeyDataReader : BaseDataReader
         {
-            entity.Id1 = reader.GetInt32(0);
-            entity.Id2 = reader.GetString(1);
-            entity.Content = reader.IsDBNull(2) ? null : reader.GetString(2);
-            return entity;
+            int[] key0;
+            string[] key1;
+            public KeyDataReader(Tuple<int[], string[]> keys) : base(keys.Item1.Length)
+            {
+                key0 = keys.Item1;
+                key1 = keys.Item2;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+					    return key0[current];
+                    case 1:
+					    return key1[current];
+                    default:
+                        throw new Exception("No key with index " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 2; } }
+        }
+        #endregion
+
+        public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            var idsTuple = (Tuple<int[], string[]>)ids;
+            using (new ConnectionHandler(conn))
+            {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);
+                var sql = @"select 
+                e.id_1, e.id_2, e.content
+				from entity_with_multikey e
+                inner join " + table + @" t on 
+                e.id_1 = t.id_1 AND e.id_2 = t.id_2";
+                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+            }
+        }
+
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id_1 int
+                id_2 nvarchar(256)
+                )";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
     }
 }

@@ -10,9 +10,7 @@ namespace @options.OutputNamespace
     using System.Data.SqlClient;
 	using System.Data.Common;
 	using System.Collections.Generic;
-@if(!options.CiOnly){
-    using @typeof(ILoadService<>).Namespace;
-}
+
 @foreach(var nspace in models.Select(x => x.Model.NamespaceSuffix).Where(x => x != null).Distinct()){
     using @nspace;
 }
@@ -26,17 +24,13 @@ namespace @options.OutputNamespace
             return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);
         }
 
-@if(!options.CiOnly){
-        public static List<T> Materialize<T>(ILoadService<T> loadService,
-                               string query, 
-                               SqlParameter[] parms, 
-                               DbConnection conn, 
-                               DbTransaction trans = null)
-       {
-            return GetService<T>().Materialize(loadService, query, parms, (SqlConnection)conn, trans as SqlTransaction);
-       @}
+        public static List<T> GetByPrimaryKey<T>(object ids,
+                       DbConnection conn,
+                       DbTransaction trans = null)
+        {
+            return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
+        }
 
-}
         private static Dictionary<Type, object> services =
             new Dictionary<Type, object>
             {

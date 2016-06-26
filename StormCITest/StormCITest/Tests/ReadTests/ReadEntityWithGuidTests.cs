@@ -7,7 +7,7 @@
     using System.Transactions;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StormCITest.EFSchema;
-    using StormTestProject.StormModel;
+    using StormTestProject.StormSchema;
 
     [TestClass]
     public class ReadEntityWithGuidTests : ContextInTransaction
@@ -24,7 +24,7 @@
             var sql = "select * from entity_with_guid where id = @id";
             var parm = new[] { new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = efEntity.id } };
             var entity = MsSqlCi
-                .Materialize<EntityWithGuid>(sql, parm, context.Database.Connection)
+                .Materialize<EntityWithGuid>(sql, parm, conn)
                 .First();
 
             // assert
@@ -75,7 +75,7 @@
             var sql = "select * from entity_with_guid where id = @id";
             var parm = new[] { new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = efEntity.id } };
             var entity = MsSqlCi
-                .Materialize<EntityWithGuid>(sql, parm, context.Database.Connection)
+                .Materialize<EntityWithGuid>(sql, parm, conn)
                 .First();
 
             // assert

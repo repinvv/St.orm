@@ -36,7 +36,6 @@ namespace StormCITest.EFSchema
         [MaxLength(1000)]
         public byte[] a_binary { get; set; }
 
-        [MaxLength(2000)]
         public byte[] a_varbinary { get; set; }
 
         [Column(TypeName = "image")]

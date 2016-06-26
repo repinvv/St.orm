@@ -34,104 +34,90 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
 
         public override string Execute()
         {
-            WriteLiteral("namespace ");
+            WriteLiteral(@"namespace ");
             Write(options.OutputNamespace);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("{");
+            WriteLiteral(@"{");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using System;");
+            WriteLiteral(@"    using System;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using System.Data.SqlClient;");
+            WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("	using System.Data.Common;");
+            WriteLiteral(@"	using System.Data.Common;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("	using System.Collections.Generic;");
+            WriteLiteral(@"	using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
-            if (!options.CiOnly)
-            {
-                WriteLiteral("    using ");
-                Write(typeof(ILoadService<>).Namespace);
-                WriteLiteral(";");
-                WriteLiteral(Environment.NewLine);
-            }
+            WriteLiteral(Environment.NewLine);
             foreach (var nspace in models.Select(x => x.Model.NamespaceSuffix).Where(x => x != null).Distinct())
             {
-                WriteLiteral("    using ");
+                WriteLiteral(@"    using ");
                 Write(nspace);
-                WriteLiteral(";");
+                WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral("    ");
+            WriteLiteral(@"    ");
             Write(options.Visibility);
-            WriteLiteral(" static class MsSqlCi");
+            WriteLiteral(@" static class MsSqlCi");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    {");
+            WriteLiteral(@"    {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        public static List<T> Materialize<T>(string query, ");
+            WriteLiteral(@"        public static List<T> Materialize<T>(string query, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                               SqlParameter[] parms, ");
+            WriteLiteral(@"                               SqlParameter[] parms, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                               DbConnection conn, ");
+            WriteLiteral(@"                               DbConnection conn, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("                               DbTransaction trans = null)");
+            WriteLiteral(@"                               DbTransaction trans = null)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {");
+            WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);");
+            WriteLiteral(@"            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        }");
+            WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            if (!options.CiOnly)
-            {
-                WriteLiteral("        public static List<T> Materialize<T>(ILoadService<T> loadService,");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               string query, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               SqlParameter[] parms, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               DbConnection conn, ");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("                               DbTransaction trans = null)");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("       {");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("            return GetService<T>().Materialize(loadService, query, parms, (SqlConnection)conn, trans as SqlTransaction);");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral("       ");
-                WriteLiteral("}");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral("        private static Dictionary<Type, object> services =");
+            WriteLiteral(@"        public static List<T> GetByPrimaryKey<T>(object ids,");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            new Dictionary<Type, object>");
+            WriteLiteral(@"                       DbConnection conn,");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            {");
+            WriteLiteral(@"                       DbTransaction trans = null)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private static Dictionary<Type, object> services =");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            new Dictionary<Type, object>");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
             foreach (var model in models)
             {
-                WriteLiteral("                { typeof(");
+                WriteLiteral(@"                { typeof(");
                 Write(model.Model.Name);
-                WriteLiteral("), new ");
+                WriteLiteral(@"), new ");
                 Write(model.Model.Name);
-                WriteLiteral("CiService() },");
+                WriteLiteral(@"CiService() },");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral("           };");
+            WriteLiteral(@"           };");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        private static ICiService<T> GetService<T>()");
+            WriteLiteral(@"        private static ICiService<T> GetService<T>()");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        {");
+            WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("            return services[typeof(T)] as ICiService<T>;");
+            WriteLiteral(@"            return services[typeof(T)] as ICiService<T>;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("        }");
+            WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    }");
+            WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("}");
+            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

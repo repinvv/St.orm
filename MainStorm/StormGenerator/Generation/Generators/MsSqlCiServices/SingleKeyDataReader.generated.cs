@@ -9,58 +9,63 @@
 namespace StormGenerator.Generation.Generators.MsSqlCiServices
 {
     using StormGenerator.Settings;
-    using Storm.Interfaces;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class MsSqlCiServiceInterface : FileGenerator
+    internal class SingleKeyDataReader : FileGenerator
     {
         #region constructor
         GenOptions options;
 
-        public MsSqlCiServiceInterface(GenOptions options)
+        public SingleKeyDataReader(GenOptions options)
         {
             this.options = options;
         }
         #endregion
 
-        public override string FileName => "ICIService";
+        public override string FileName => "SingleKeyDataReader";
 
         public override string Execute()
         {
-            WriteLiteral(@"namespace ");
+            WriteLiteral("namespace ");
             Write(options.OutputNamespace);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"{");
+            WriteLiteral("{");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"    using System.Data.SqlClient;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Collections.Generic;");
-            WriteLiteral(Environment.NewLine);
-            if (!options.CiOnly)
-            {
-                WriteLiteral(@"    using ");
-                Write(typeof(ILoadService<>).Namespace);
-                WriteLiteral(@";");
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"    ");
+            WriteLiteral("    ");
             Write(options.Visibility);
-            WriteLiteral(@" interface ICiService<T>");
+            WriteLiteral(" class SingleKeyDataReader<T> : BaseDataReader");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"    {");
+            WriteLiteral("    {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        List<T> Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral("        private readonly T[] keys;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral("        public SingleKeyDataReader(T[] keys) : base(keys.Length)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"    }");
+            WriteLiteral("        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"}");
+            WriteLiteral("            this.keys = keys;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("        public override object GetValue(int i)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("            return keys[current];");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("        public override int FieldCount { get { return 1; } }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("    }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral("}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

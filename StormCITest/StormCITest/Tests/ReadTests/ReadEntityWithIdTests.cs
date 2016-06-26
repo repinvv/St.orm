@@ -5,16 +5,16 @@
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StormCITest.EFSchema;
-    using StormTestProject.StormModel;
+    using StormTestProject.StormSchema;
 
     [TestClass]
     public class ReadEntityWithIdTests : ContextInTransaction
     {
         [TestMethod]
-        public void Read_EntityWithId()
+        public void Read_EntityWithId_ManualQuery()
         {
             // arrange
-            var efEntity = CreateFullEntity();
+            var efEntity = CreateFullEntity(1000);
             context.entity_with_id.Add(efEntity);
             context.SaveChanges();
 
@@ -22,7 +22,7 @@
             var sql = "select * from entity_with_id where id = @id";
             var parm = new[] { new SqlParameter("id", SqlDbType.Int) { Value = efEntity.id } };
             var entity = MsSqlCi
-                .Materialize<EntityWithId>(sql, parm, context.Database.Connection)
+                .Materialize<EntityWithId>(sql, parm, conn)
                 .First();
 
             // assert
@@ -42,12 +42,12 @@
             Assert.AreEqual(efEntity.a_money, entity.AMoney);
         }
 
-        private entity_with_id CreateFullEntity()
+        private entity_with_id CreateFullEntity(int intVal)
         {
             return new entity_with_id
                    {
                        a_bigint = 10L * 1000 * 1000 * 1000,
-                       a_int = 1000,
+                       a_int = intVal,
                        a_numeric = 3123.22M, //precision is 6.2
                        a_bit = true,
                        a_smallint = 123,
@@ -56,6 +56,27 @@
                        a_tinyint = 22,
                        a_money = 444.44M
                    };
+        }
+
+        [TestMethod]
+        public void Read_EntityWithId_ById()
+        {
+            // arrange
+            var entities = Enumerable.Range(500, 3500).Select(CreateFullEntity).ToList();
+            context.entity_with_id.AddRange(entities);
+            context.SaveChanges();
+
+            // act
+            var ids = entities.Select(x => x.id).ToArray();
+            var result = MsSqlCi.GetByPrimaryKey<EntityWithId>(ids, conn);
+            var dict = result.ToDictionary(x => x.Id);
+
+            // assert
+            Assert.AreEqual(entities.Count, result.Count);
+            foreach (var efEntity in entities)
+            {
+                CompareEntity(efEntity, dict[efEntity.id]);
+            }
         }
     }
 }

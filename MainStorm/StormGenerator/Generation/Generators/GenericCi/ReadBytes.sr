@@ -1,19 +1,33 @@
 ﻿@visibility internal
-        public static byte[] ReadBytes(this SqlDataReader reader, int index, int length)
+        public static byte[] ReadBytes(this SqlDataReader reader, int index)
         {
-            var buffer = new byte[length];
-            var resultLength = (int)reader.GetBytes(index, 0, buffer, 0, length);
-            if (resultLength == 0)
+            int bufferSize = 1000;
+            var buffers = new List<byte[]>();
+            int start = 0;
+            byte[] buffer = new byte[bufferSize];
+            var retval = reader.GetBytes(index, start, buffer, 0, bufferSize);
+            while (retval == bufferSize)
+            {
+                buffers.Add(buffer);
+                buffer = new byte[bufferSize];
+                start += bufferSize; 
+                retval = reader.GetBytes(index, start, buffer, 0, bufferSize);
+            }
+
+            var outputSize = buffers.Count * bufferSize + retval;
+            if (outputSize == 0)
             {
                 return null;
             }
 
-            if (resultLength == length)
+            var output = new byte[outputSize];
+            start = 0;
+            foreach (var buff in buffers)
             {
-                return buffer;
+                Buffer.BlockCopy(buff, 0, output, start, bufferSize);
+                start += bufferSize;
             }
 
-            var output = new byte[resultLength];
-            Buffer.BlockCopy(buffer, 0, output, 0, resultLength);
+            Buffer.BlockCopy(buffer, 0, output, start, (int)retval);
             return output;
         }

@@ -44,8 +44,8 @@ create table some_schema.entity_with_sequence
 	a_ntext ntext,
 	a_xml xml,
 	a_binary binary(1000),
-	a_varbinary varbinary(2000),
-	a_image image,
+	a_varbinary varbinary(max),
+	a_image image, -- deprecated, same as varbinary(max)
     constraint entity_with_sequence_pk primary key (id)
 );
 GO

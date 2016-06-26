@@ -59,7 +59,13 @@
     <Compile Include="EFSchema\entity_with_multikey.cs" />
     <Compile Include="EFSchema\entity_with_sequence.cs" />
     <Compile Include="EFSchema\StormCI.cs" />
+    <Compile Include="StormSchema\BaseDataReader.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormSchema\CiHelper.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\ConnectionHandler.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormSchema\EntityWithGuid.main.cs">
@@ -99,6 +105,9 @@
     <Compile Include="StormSchema\MsSqlCi.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormSchema\SingleKeyDataReader.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormSchema\StormEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -108,7 +117,10 @@
     <Compile Include="Tests\ContextInTransaction.cs" />
     <Compile Include="Tests\ReadTests\ReadEntityWithGuidTests.cs" />
     <Compile Include="Tests\ReadTests\ReadEntityWithIdTests.cs" />
+    <Compile Include="Tests\ReadTests\ReadEntityWithMultikeyTest.cs" />
+    <Compile Include="Tests\ReadTests\ReadEntityWithSequenceTest.cs" />
     <Compile Include="Tests\TestConnection.cs" />
+    <Compile Include="Tests\WatchIt.cs" />
     <Content Include="DBScripts\CreateTables.sql" />
     <Content Include="DBScripts\DropTables.sql" />
     <Compile Include="Properties\AssemblyInfo.cs" />

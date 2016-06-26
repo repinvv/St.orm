@@ -8,13 +8,20 @@
 //------------------------------------------------------------------------------
 namespace StormTestProject.StormSchema
 {
-    using System.Data.SqlClient;
-	using System.Collections.Generic;
-
-    public interface ICiService<T>
+    public class SingleKeyDataReader<T> : BaseDataReader
     {
-        List<T> Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
+        private readonly T[] keys;
 
-		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
+        public SingleKeyDataReader(T[] keys) : base(keys.Length)
+        {
+            this.keys = keys;
+        }
+
+        public override object GetValue(int i)
+        {
+            return keys[current];
+        }
+
+        public override int FieldCount { get { return 1; } }
     }
 }

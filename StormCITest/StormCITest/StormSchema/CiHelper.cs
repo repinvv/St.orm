@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace StormTestProject.StormSchema
 {
     using System.Data.SqlClient;
 	using System.Collections.Generic;
@@ -15,6 +15,12 @@ namespace StormTestProject.StormModel
 
     public static class CiHelper
     {
+        const SqlBulkCopyOptions BulkOptions =
+            SqlBulkCopyOptions.FireTriggers
+            | SqlBulkCopyOptions.CheckConstraints
+            | SqlBulkCopyOptions.KeepNulls
+            | SqlBulkCopyOptions.KeepIdentity;
+
         public static int CombineHashcodes(this IEnumerable<int> hashcodes)
         {
             unchecked
@@ -29,22 +35,36 @@ namespace StormTestProject.StormModel
             }
         }
 
-        public static byte[] ReadBytes(this SqlDataReader reader, int index, int length)
+        public static byte[] ReadBytes(this SqlDataReader reader, int index)
         {
-            var buffer = new byte[length];
-            var resultLength = (int)reader.GetBytes(index, 0, buffer, 0, length);
-            if (resultLength == 0)
+            int bufferSize = 1000;
+            var buffers = new List<byte[]>();
+            int start = 0;
+            byte[] buffer = new byte[bufferSize];
+            var retval = reader.GetBytes(index, start, buffer, 0, bufferSize);
+            while (retval == bufferSize)
+            {
+                buffers.Add(buffer);
+                buffer = new byte[bufferSize];
+                start += bufferSize; 
+                retval = reader.GetBytes(index, start, buffer, 0, bufferSize);
+            }
+
+            var outputSize = buffers.Count * bufferSize + retval;
+            if (outputSize == 0)
             {
                 return null;
             }
 
-            if (resultLength == length)
+            var output = new byte[outputSize];
+            start = 0;
+            foreach (var buff in buffers)
             {
-                return buffer;
+                Buffer.BlockCopy(buff, 0, output, start, bufferSize);
+                start += bufferSize;
             }
 
-            var output = new byte[resultLength];
-            Buffer.BlockCopy(buffer, 0, output, 0, resultLength);
+            Buffer.BlockCopy(buffer, 0, output, start, (int)retval);
             return output;
         }
 
@@ -54,30 +74,48 @@ namespace StormTestProject.StormModel
                                         SqlConnection conn, 
                                         SqlTransaction trans)
         {
-			var wasClosed = conn.State != ConnectionState.Open;
-			if(wasClosed)
-			{
-                conn.Open();
-            }
-            try
+            using (var command = new SqlCommand(query, conn))
             {
-                using (var command = new SqlCommand(query, conn))
+                command.Transaction = trans;
+                command.Parameters.AddRange(parms);
+                using (var reader = command.ExecuteReader(CommandBehavior.SequentialAccess))
                 {
-                    command.Transaction = trans;
-                    command.Parameters.AddRange(parms);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        return func(reader);
-                    }
+                    return func(reader);
                 }
             }
-			finally 
-			{
-                if(wasClosed)
-                {
-                    conn.Close();
-                }
+        }
+
+        public static void ExecuteNonQuery(string query,
+            SqlParameter[] parms,
+            SqlConnection conn,
+            SqlTransaction trans)
+        {
+            using (var command = new SqlCommand(query, conn))
+            {
+                command.Transaction = trans;
+                command.Parameters.AddRange(parms);
+                command.ExecuteNonQuery();
             }
+        }
+
+        public static void BulkInsert(IDataReader reader, string table, SqlConnection conn, SqlTransaction trans)
+        {
+            using (var bulk = new SqlBulkCopy(conn, BulkOptions, trans))
+            {
+                bulk.DestinationTableName = table;
+                bulk.WriteToServer(reader);
+            }
+        }
+
+        public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "DROP TABLE " + table;
+            ExecuteNonQuery(sql, new SqlParameter[0],  conn, trans);
+        }
+
+        public static string CreateTempTableName()
+        {
+            return "#a" + Guid.NewGuid().ToString("N");
         }
     }
 }

@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormTestProject.StormModel
+namespace StormTestProject.StormSchema
 {
     using System;
     using System.Data;
@@ -16,38 +16,65 @@ namespace StormTestProject.StormModel
 
     public class EntityWithSequenceCiService : ICiService<EntityWithSequence>
     {
+        private List<EntityWithSequence> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<EntityWithSequence>();
+            while (reader.Read())
+            {
+                var entity = new EntityWithSequence();
+                entity.Id = reader.GetInt32(0);
+                entity.AChar = reader.IsDBNull(1) ? null : reader.GetString(1);
+                entity.AVarchar = reader.GetString(2);
+                entity.AText = reader.IsDBNull(3) ? null : reader.GetString(3);
+                entity.ANchar = reader.IsDBNull(4) ? null : reader.GetString(4);
+                entity.ANvarchar = reader.IsDBNull(5) ? null : reader.GetString(5);
+                entity.ANtext = reader.IsDBNull(6) ? null : reader.GetString(6);
+                entity.AXml = reader.IsDBNull(7) ? null : reader.GetString(7);
+                entity.ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8);
+                entity.AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9);
+                entity.AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10);
+                list.Add(entity);
+            }
+            return list;
+        }
+
         public List<EntityWithSequence> Materialize(string query, 
                             SqlParameter[] parms, 
                             SqlConnection conn, 
                             SqlTransaction trans)
         {
-            Func<SqlDataReader, List<EntityWithSequence>> func = reader =>
+            using (new ConnectionHandler(conn))
             {
-                var list = new List<EntityWithSequence>();
-                while (reader.Read())
-                {
-                    var entity = new EntityWithSequence();
-                    list.Add(PopulateFields(entity, reader));
-                }
-                return list;
-            };
-            return CiHelper.ExecuteSelect(query, parms, func, conn, trans);
+                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+            }
         }
 
-        private EntityWithSequence PopulateFields(EntityWithSequence entity, SqlDataReader reader)
+        public List<EntityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            entity.Id = reader.GetInt32(0);
-            entity.AChar = reader.IsDBNull(1) ? null : reader.GetString(1);
-            entity.AVarchar = reader.GetString(2);
-            entity.AText = reader.IsDBNull(3) ? null : reader.GetString(3);
-            entity.ANchar = reader.IsDBNull(4) ? null : reader.GetString(4);
-            entity.ANvarchar = reader.IsDBNull(5) ? null : reader.GetString(5);
-            entity.ANtext = reader.IsDBNull(6) ? null : reader.GetString(6);
-            entity.AXml = reader.IsDBNull(7) ? null : reader.GetString(7);
-            entity.ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8, 1000);
-            entity.AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9, 2000);
-            entity.AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10, 2147483647);
-            return entity;
+            var idsArray = (int[])ids;
+            using (new ConnectionHandler(conn))
+            {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+                CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
+                var sql = @"select 
+                e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
+                e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
+				from some_schema.entity_with_sequence e
+                inner join " + table + @" t on 
+                e.id = t.id";
+                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+            }
+        }
+
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id int
+                )";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
     }
 }

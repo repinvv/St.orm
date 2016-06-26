@@ -2,8 +2,7 @@
 
 namespace StormCITest.Tests
 {
-    using StormCITest.EFSchema;
-    using StormTestProject.StormModel;
+    using StormTestProject.StormSchema;
 
     [TestClass]
     public class EqualityTests

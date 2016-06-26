@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using StormGenerator.Generation.Generators;
+    using StormGenerator.Generation.Generators.GenericCi;
     using StormGenerator.Generation.Generators.MsSqlCiServices;
     using StormGenerator.Models;
     using StormGenerator.Settings;
@@ -10,6 +11,9 @@
     {
         public IEnumerable<FileGenerator> GetFileGenerators(List<EntityModel> models, GenOptions options)
         {
+            yield return new BaseDataReader(options);
+            yield return new SingleKeyDataReader(options);
+            yield return new ConnectionHandler(options);
             yield return new MsSqlCi(options, models);
             yield return new MsSqlCiServiceInterface(options);
             yield return new CiHelper(options);

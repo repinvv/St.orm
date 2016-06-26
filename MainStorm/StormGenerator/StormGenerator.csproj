@@ -72,8 +72,10 @@
       <CustomToolNamespace>StormGenerator.Generation.Generators.Linq2Db</CustomToolNamespace>
       <LastGenOutput>ContextTableLine.generated.cs</LastGenOutput>
     </None>
+    <Compile Include="DatabaseReading\MsSql\ColumnDefinition.cs" />
     <Compile Include="DatabaseReading\TypeExtension.cs" />
     <Compile Include="DatabaseReading\MsSql\CsType.cs" />
+    <Compile Include="EnumerableExtension.cs" />
     <Compile Include="Generation\GenerationOptionsService.cs" />
     <Compile Include="Generation\GeneratorCollections\MsSqlCiServicesCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\GeneratorCollectionsFactory.cs" />
@@ -103,6 +105,16 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>ReadBytes.generated.cs</LastGenOutput>
     </None>
+    <None Include="Generation\Generators\GenericCi\ConnectionHandler.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.GenericCi</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ConnectionHandler.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\GenericCi\ConnectionHandler.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConnectionHandler.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\GenericCi\ReadBytes.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -182,6 +194,16 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>CiHelper.generated.cs</LastGenOutput>
     </None>
+    <None Include="Generation\Generators\MsSqlCiServices\BaseDataReader.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>BaseDataReader.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\BaseDataReader.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BaseDataReader.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiHelper.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -206,6 +228,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MsSqlCiServiceInterface.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\SingleKeyDataReader.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SingleKeyDataReader.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\SingleKeyDataReader.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SingleKeyDataReader.sr</DependentUpon>
     </Compile>
     <Compile Include="ModelsCreation\ModelCreation.cs" />
     <Compile Include="ModelsCreation\ModelExtension.cs" />

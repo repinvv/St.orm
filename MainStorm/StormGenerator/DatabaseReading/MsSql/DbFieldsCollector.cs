@@ -8,10 +8,12 @@
     internal class DbFieldsCollector
     {
         private readonly ColumnReader columnReader;
+        private readonly ColumnDefinition columnDefinition;
 
-        public DbFieldsCollector(ColumnReader columnReader)
+        public DbFieldsCollector(ColumnReader columnReader, ColumnDefinition columnDefinition)
         {
             this.columnReader = columnReader;
+            this.columnDefinition = columnDefinition;
         }
 
         public void CollectFields(List<Table> models, SqlConnection connection)
@@ -41,6 +43,7 @@
                        Length = column.Length,
                        Precision = column.Precision,
                        Scale = column.Scale,
+                       Definition = columnDefinition.GetColumnDefinition(column),
                        Associations = new List<Association>()
                    };
         }
