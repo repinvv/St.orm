@@ -9,7 +9,6 @@
 namespace StormGenerator.Generation.Generators.MsSqlCiServices
 {
     using StormGenerator.Settings;
-    using Storm.Interfaces;
     using System;
     using System.Text;
     using System.Linq;
@@ -39,13 +38,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"	using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
-            if (!options.CiOnly)
-            {
-                WriteLiteral(@"    using ");
-                Write(typeof(ILoadService<>).Namespace);
-                WriteLiteral(@";");
-                WriteLiteral(Environment.NewLine);
-            }
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    ");
             Write(options.Visibility);
@@ -57,6 +49,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);

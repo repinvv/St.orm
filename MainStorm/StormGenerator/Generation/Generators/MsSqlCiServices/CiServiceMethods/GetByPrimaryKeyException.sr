@@ -1,0 +1,8 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)
+
+        public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new Exception("Entity @model.Name has no primary key");
+        }

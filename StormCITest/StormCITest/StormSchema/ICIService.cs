@@ -16,5 +16,7 @@ namespace StormTestProject.StormSchema
         List<T> Get(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
 
 		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
+
+		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
     }
 }

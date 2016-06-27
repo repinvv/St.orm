@@ -1,0 +1,26 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)
+
+        public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
+            using (new ConnectionHandler(conn))
+            {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+                CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
+                var sql = @"select 
+  @foreach(var line in model.GetFieldSelectLines("e.")){
+                @line
+  }
+				from @model.Table.Id e
+                inner join " + table + @" t on 
+  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
+                @line
+  }
+                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+            }
+        }

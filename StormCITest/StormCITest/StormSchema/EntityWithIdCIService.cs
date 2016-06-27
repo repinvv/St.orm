@@ -74,5 +74,9 @@ namespace StormTestProject.StormSchema
                 )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
+
+		public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        {
+		}
     }
 }

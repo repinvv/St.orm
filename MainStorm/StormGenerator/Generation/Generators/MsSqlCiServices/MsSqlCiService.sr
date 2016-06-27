@@ -1,6 +1,6 @@
 ﻿@visibility internal
 @inherits FileGenerator
-@using StormGenerator.Settings StormGenerator.Models Storm.Interfaces GeneratorHelpers
+@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods
 @constructor(GenOptions options, EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
@@ -14,26 +14,10 @@ namespace @options.OutputNamespace
 @if(model.NamespaceSuffix != null){
     using @model.NamespaceSuffix;
 }
-@if(!options.CiOnly){
-    using @typeof(ILoadService<>).Namespace;
-}
 
     @options.Visibility class @(model.Name)CiService : ICiService<@model.Name>
     {
-        private List<@model.Name> ReadEntities(SqlDataReader reader)
-        {
-            var list = new List<@model.Name>();
-            while (reader.Read())
-            {
-                var entity = new @(model.Name)();
-@{int i = 0;}
-@foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
-                entity.@field.Name = @field.GetReaderMethod(i++);
-}
-                list.Add(entity);
-            }
-            return list;
-        }
+@[ReadEntities(model)]
 
         public List<@model.Name> Get(string query, 
             SqlParameter[] parms, 
@@ -46,85 +30,18 @@ namespace @options.OutputNamespace
             }
         }
   @if(model.KeyFields.Count > 1){@newline
-        #region KeyDataReader
-        private class KeyDataReader : BaseDataReader
-        {
-	@{i = 0;}
-	@foreach(var key in model.KeyFields){
-            @(key.Column.CsTypeName)[] key@(i++);
-    }
-            public KeyDataReader(@model.JoinKeys()) : base(key0.Length)
-            {
-	@{i = 0;}
-	@foreach(var key in model.KeyFields){
-                this.key@i = key@(i++);
-    }
-            @}
-
-            public override object GetValue(int i)
-            {
-	@if(model.KeyFields.Count == 5){
-                return i == 0 ? key0[current] as object : key1[current];
-	} else {
-                switch(i)
-                {
-	  @{i = 0;}
-	  @foreach(var key in model.KeyFields){
-                    case @i:
-					    return key@(i++)[current];
-      }
-                    default:
-                        throw new Exception("No key with index " + i);
-                @}
-	}
-            @}
-
-            public override int FieldCount { get { return 2; } }
-        @}
-        #endregion
+@[KeyDataReader(model)]
   }
 
-        public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-@if(model.KeyFields.Any()){
+@if(!model.KeyFields.Any()){
+@[GetByPrimaryKeyException(model)]
+} else {
   @if(model.KeyFields.Count == 1){
-            var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
-  }else{
-            var idsArray = (object[])ids;
-	@{i = 0;}
-	@foreach(var key in model.KeyFields){
-            var key@i = (@(key.Column.CsTypeName)[])idsArray[@(i++)];
-    }
+@[GetBySinglePrimaryKey(model)]
+  } else {
+@[GetByMultiPrimaryKey(model)]
   }
-            using (new ConnectionHandler(conn))
-            {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-  @if(model.KeyFields.Count == 1){
-                CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
-  }else{
-    @{i = 0;}
-                var dataReader = new KeyDataReader(@model.JoinKeyNames());
-                CiHelper.BulkInsert(dataReader, table, conn, trans);
-  }
-                var sql = @"select 
-  @foreach(var line in model.GetFieldSelectLines("e.")){
-                @line
-  }
-				from @model.Table.Id e
-                inner join " + table + @" t on 
-  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
-                @line
-  }
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-            @}
 }
-else{
-            throw new Exception("Entity @model.Name has no primary key");
-}
-        }
 
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
@@ -135,5 +52,9 @@ else{
                 )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
+
+		public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+		}
     }
 }

@@ -14,15 +14,15 @@
                 : $"default({field.Column.CsTypeName})";
         }
 
-        public static string GetGetErMethod(this Field field, int index)
+        public static string GetReaderMethod(this Field field, int index)
         {
             if (field.Column.IsNullable)
             {
-                return $"GetEr.IsDBNull({index}) ? {field.GetTypeCast()}null : "
-                       + field.GetGetErMethodNullable(index);
+                return $"reader.IsDBNull({index}) ? {field.GetTypeCast()}null : "
+                       + field.GetReaderMethodNullable(index);
             }
 
-            return GetGetErMethodNonNullable(field.Column.CsType, index);
+            return GetReaderMethodNonNullable(field.Column.CsType, index);
         }
 
         private static string GetTypeCast(this Field field)
@@ -35,18 +35,18 @@
             return $"({field.Column.CsTypeName})";
         }
 
-        private static string GetGetErMethodNullable(this Field field, int index)
+        private static string GetReaderMethodNullable(this Field field, int index)
         {
             if (field.Column.CsType == typeof(string) || field.Column.CsType == typeof(byte[]))
             {
-                return GetGetErMethodNonNullable(field.Column.CsType, index);
+                return GetReaderMethodNonNullable(field.Column.CsType, index);
             }
 
             var type = field.Column.CsType.GetGenericArguments().First();
-            return GetGetErMethodNonNullable(type, index);
+            return GetReaderMethodNonNullable(type, index);
         }
 
-        private static readonly Dictionary<Type, string> GetErMethods =
+        private static readonly Dictionary<Type, string> ReaderMethods =
             new Dictionary<Type, string>
             {
                 { typeof(long), "GetInt64" },
@@ -65,9 +65,9 @@
                 { typeof(byte[]), "ReadBytes" }
             };
 
-        private static string GetGetErMethodNonNullable(Type type, int index)
+        private static string GetReaderMethodNonNullable(Type type, int index)
         {
-            return  $"GetEr.{GetErMethods[type]}({index})";
+            return  $"reader.{ReaderMethods[type]}({index})";
         }
     }
 }

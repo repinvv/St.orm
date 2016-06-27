@@ -1,0 +1,18 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels StormGenerator.Generation.Generators.GeneratorHelpers
+@constructor(Model model)
+
+        private List<@model.Name> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<@model.Name>();
+            while (reader.Read())
+            {
+                var entity = new @(model.Name)();
+@{int i = 0;}
+@foreach(var field in model.Fields.Where(x=>x.IsEnabled)){
+                entity.@field.Name = @field.GetReaderMethod(i++);
+}
+                list.Add(entity);
+            }
+            return list;
+        }

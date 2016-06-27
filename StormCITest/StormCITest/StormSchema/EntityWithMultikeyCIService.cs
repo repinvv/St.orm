@@ -53,15 +53,7 @@ namespace StormTestProject.StormSchema
 
             public override object GetValue(int i)
             {
-                switch(i)
-                {
-                    case 0:
-					    return key0[current];
-                    case 1:
-					    return key1[current];
-                    default:
-                        throw new Exception("No key with index " + i);
-                }
+                return i == 0 ? key0[current] as object : key1[current];
             }
 
             public override int FieldCount { get { return 2; } }
@@ -98,5 +90,9 @@ namespace StormTestProject.StormSchema
                 )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
+
+		public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+		}
     }
 }
