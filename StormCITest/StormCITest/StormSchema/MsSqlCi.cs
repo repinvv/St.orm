@@ -10,8 +10,8 @@ namespace StormTestProject.StormSchema
 {
     using System;
     using System.Data.SqlClient;
-	using System.Data.Common;
-	using System.Collections.Generic;
+    using System.Data.Common;
+    using System.Collections.Generic;
 
     using SomeSchema;
     public static class MsSqlCi
@@ -27,6 +27,11 @@ namespace StormTestProject.StormSchema
         public static List<T> GetByPrimaryKey<T>(object ids, DbConnection conn, DbTransaction trans = null)
         {
             return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
+        }
+
+        public static void Insert<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)
+        {
+            GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);
         }
 
         private static Dictionary<Type, object> services =

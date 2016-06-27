@@ -11,6 +11,8 @@ namespace @options.OutputNamespace
     using System.Data;
     using System.Data.SqlClient;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
 @if(model.NamespaceSuffix != null){
     using @model.NamespaceSuffix;
 }
@@ -29,9 +31,6 @@ namespace @options.OutputNamespace
                 return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
             }
         }
-  @if(model.KeyFields.Count > 1){@newline
-@[KeyDataReader(model)]
-  }
 
 @if(!model.KeyFields.Any()){
 @[GetByPrimaryKeyException(model)]
@@ -39,12 +38,24 @@ namespace @options.OutputNamespace
   @if(model.KeyFields.Count == 1){
 @[GetBySinglePrimaryKey(model)]
   } else {
+@[KeyDataReader(model)]
+
 @[GetByMultiPrimaryKey(model)]
   }
 }
 
-		public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
-        {
-		}
+@if(model.KeyFields.Count != 1){
+@[BulkInsert(model)]
+} else {
+  @if(model.KeyFields[0].Column.IsIdentity){
+@[RangeInsert(model, options)]
+  } 
+  @if(model.Table.Sequence != null){
+@[SequenceBulkInsert(model)]
+  }
+  @if(model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity){
+@[BulkInsert(model)]
+  }
+}
     }
 }

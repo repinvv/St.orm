@@ -29,6 +29,11 @@ namespace @options.OutputNamespace
             return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
         }
 
+        public static void Insert<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)
+        {
+            GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);
+        }
+
         private static Dictionary<Type, object> services =
             new Dictionary<Type, object>
             {

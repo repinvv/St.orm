@@ -11,7 +11,9 @@ namespace StormTestProject.StormSchema
     using System;
     using System.Data;
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     public class EntityWithMultikeyCiService : ICiService<EntityWithMultikey>
     {
@@ -73,7 +75,7 @@ namespace StormTestProject.StormSchema
                 CiHelper.BulkInsert(dataReader, table, conn, trans);
                 var sql = @"select 
                 e.id_1, e.id_2, e.content
-				from entity_with_multikey e
+                from entity_with_multikey e
                 inner join " + table + @" t on 
                 e.id_1 = t.id_1 AND e.id_2 = t.id_2";
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
@@ -82,7 +84,7 @@ namespace StormTestProject.StormSchema
             }
         }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + @"(
                 id_1 int,
@@ -91,8 +93,9 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+		
+
+        public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-		}
-    }
+        }    }
 }

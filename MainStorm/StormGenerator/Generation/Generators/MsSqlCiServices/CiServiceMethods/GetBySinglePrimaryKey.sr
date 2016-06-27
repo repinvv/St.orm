@@ -11,7 +11,7 @@
                 CreateIdTempTable(table, conn, trans);
                 CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
                 var sql = @"select 
-  @foreach(var line in model.GetFieldSelectLines("e.")){
+  @foreach(var line in model.Fields.GetSelectLines("e.")){
                 @line
   }
 				from @model.Table.Id e

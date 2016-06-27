@@ -11,7 +11,9 @@ namespace StormTestProject.StormSchema
     using System;
     using System.Data;
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using SomeSchema;
 
     public class EntityWithSequenceCiService : ICiService<EntityWithSequence>
@@ -60,7 +62,7 @@ namespace StormTestProject.StormSchema
                 var sql = @"select 
                 e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
                 e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
-				from some_schema.entity_with_sequence e
+                from some_schema.entity_with_sequence e
                 inner join " + table + @" t on 
                 e.id = t.id";
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
@@ -69,14 +71,15 @@ namespace StormTestProject.StormSchema
             }
         }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + " ( id int )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+		
+
+        public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
-		}
-    }
+        }    }
 }

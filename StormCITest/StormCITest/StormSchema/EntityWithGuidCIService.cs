@@ -11,7 +11,9 @@ namespace StormTestProject.StormSchema
     using System;
     using System.Data;
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     public class EntityWithGuidCiService : ICiService<EntityWithGuid>
     {
@@ -57,7 +59,7 @@ namespace StormTestProject.StormSchema
                 var sql = @"select 
                 e.id, e.a_float, e.a_real, e.a_date, e.a_time,
                 e.a_offset, e.a_datetime, e.a_datetime2, e.a_smalldatetime
-				from entity_with_guid e
+                from entity_with_guid e
                 inner join " + table + @" t on 
                 e.id = t.id";
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
@@ -66,14 +68,15 @@ namespace StormTestProject.StormSchema
             }
         }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + " ( id uniqueidentifier )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+		
+
+        public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-		}
-    }
+        }    }
 }

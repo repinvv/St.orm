@@ -69,5 +69,30 @@
         {
             return  $"reader.{ReaderMethods[type]}({index})";
         }
+
+        public static IEnumerable<string> GetSelectLines(this IEnumerable<Field> fields, string prefix = "")
+        {
+            var groups = fields.SplitInGroupsBy(8)
+                              .ToList();
+            foreach (var g in groups)
+            {
+                var join = string.Join(", ", g.Select(x => prefix + x.Column.Name));
+                yield return g == groups.Last() ? @join : @join + ",";
+            }
+        }
+
+        public static IEnumerable<string> GetArgLines(this IEnumerable<Field> fields)
+        {
+            var groups = fields.SplitInGroupsBy(8).ToList();
+            int i = 0;
+            foreach (var g in groups)
+            {
+                var start = g == groups.First() ? "(" : "";
+                var end = g == groups.Last() ? ")" : ",";
+                var join = string.Join(", ", g.Select(x => "@parm"+ i++ +"i\" + i + \""));
+                yield return "sb.AppendLine(\"" + start + join + end + "\");";
+
+            }
+        }
     }
 }

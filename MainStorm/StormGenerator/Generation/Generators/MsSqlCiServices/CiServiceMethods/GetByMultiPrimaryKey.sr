@@ -16,7 +16,7 @@
                 var dataReader = new KeyDataReader(@model.JoinKeyNames());
                 CiHelper.BulkInsert(dataReader, table, conn, trans);
                 var sql = @"select 
-  @foreach(var line in model.GetFieldSelectLines("e.")){
+  @foreach(var line in model.Fields.GetSelectLines("e.")){
                 @line
   }
 				from @model.Table.Id e

@@ -82,6 +82,11 @@
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\RangeInsert.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>RangeInsert.generated.cs</LastGenOutput>
+    </None>
     <None Include="Generation\Generators\MsSqlCiServices\MsSqlCiServiceInterface.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
@@ -234,6 +239,16 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>GetByMultiPrimaryKey.generated.cs</LastGenOutput>
     </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\BulkInsert.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>BulkInsert.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\BulkInsert.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BulkInsert.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\GetByMultiPrimaryKey.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -259,10 +274,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KeyDataReader.sr</DependentUpon>
     </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\RangeInsert.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RangeInsert.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\ReadEntities.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReadEntities.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\SequenceBulkInsert.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SequenceBulkInsert.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\SequenceBulkInsert.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SequenceBulkInsert.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\MsSqlCi.generated.cs">
       <AutoGen>True</AutoGen>

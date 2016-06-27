@@ -46,7 +46,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Collections.Generic;");
+            WriteLiteral(@"    using System.Collections.Generic;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"    using System.Linq;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"    using System.Text;");
             WriteLiteral(Environment.NewLine);
             if (model.NamespaceSuffix != null)
             {
@@ -90,11 +94,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
-            if (model.KeyFields.Count > 1)
-            {
-                WriteLiteral(Environment.NewLine);
-                Write(new KeyDataReader(model).Execute());
-            }
             WriteLiteral(Environment.NewLine);
             if (!model.KeyFields.Any())
             {
@@ -108,18 +107,31 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
                 else
                 {
+                    Write(new KeyDataReader(model).Execute());
+                    WriteLiteral(Environment.NewLine);
                     Write(new GetByMultiPrimaryKey(model).Execute());
                 }
             }
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		public void Insert(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		}");
-            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Count != 1)
+            {
+                Write(new BulkInsert(model).Execute());
+            }
+            else
+            {
+                if (model.KeyFields[0].Column.IsIdentity)
+                {
+                    Write(new RangeInsert(model, options).Execute());
+                }
+                if (model.Table.Sequence != null)
+                {
+                    Write(new SequenceBulkInsert(model).Execute());
+                }
+                if (model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity)
+                {
+                    Write(new BulkInsert(model).Execute());
+                }
+            }
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"}");

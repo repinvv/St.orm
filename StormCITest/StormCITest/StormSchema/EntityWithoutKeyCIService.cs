@@ -11,7 +11,9 @@ namespace StormTestProject.StormSchema
     using System;
     using System.Data;
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     public class EntityWithoutKeyCiService : ICiService<EntityWithoutKey>
     {
@@ -44,8 +46,9 @@ namespace StormTestProject.StormSchema
             throw new Exception("Entity EntityWithoutKey has no primary key");
         }
 
-		public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+		
+
+        public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
-		}
-    }
+        }    }
 }

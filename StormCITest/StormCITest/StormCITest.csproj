@@ -113,12 +113,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tests\Compares.cs" />
     <Compile Include="Tests\EqualityTests.cs" />
     <Compile Include="Tests\ContextInTransaction.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithGuidTests.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithIdTests.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithMultikeyTest.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithSequenceTest.cs" />
+    <Compile Include="Tests\InsertTests\InsertEntityWithIdTests.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\WatchIt.cs" />
     <Content Include="DBScripts\CreateTables.sql" />

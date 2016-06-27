@@ -11,7 +11,9 @@ namespace StormTestProject.StormSchema
     using System;
     using System.Data;
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     public class EntityWithIdCiService : ICiService<EntityWithId>
     {
@@ -58,7 +60,7 @@ namespace StormTestProject.StormSchema
                 var sql = @"select 
                 e.id, e.a_bigint, e.a_int, e.a_numeric, e.a_bit,
                 e.a_smallint, e.a_decimal, e.a_smallmoney, e.a_tinyint, e.a_money
-				from entity_with_id e
+                from entity_with_id e
                 inner join " + table + @" t on 
                 e.id = t.id";
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
@@ -67,14 +69,94 @@ namespace StormTestProject.StormSchema
             }
         }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + " ( id int )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        {        
+           using(new ConnectionHandler(conn))
+           {
+               foreach(var group in entities.SplitInGroupsBy(83))
+               {
+                   RangeInsert(group, conn, trans);
+               }
+           }
+        }
+
+        private string insertRequestCache;
+        private int insertCacheLength;
+
+        private void RangeInsert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
-		}
+            if(insertCacheLength != entities.Count)
+            {
+                insertRequestCache = ConstructInsertRequest(entities.Count);
+                insertCacheLength = entities.Count;
+            }
+
+            int i = 0;
+            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadIdentity(reader, entities), conn, trans);
+        }
+
+        private List<EntityWithId> ReadIdentity(SqlDataReader reader, List<EntityWithId> entities)
+        {
+            int i = 0;
+            while (reader.Read())
+            {
+                entities[i++].Id = reader.GetInt32(0);
+            }
+
+            return entities;
+        }
+
+        private string ConstructInsertRequest(int count)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO entity_with_id");
+            sb.AppendLine("(");
+
+            sb.AppendLine("a_bigint, a_int, a_numeric, a_bit, a_smallint,");
+            sb.AppendLine("a_decimal, a_smallmoney, a_tinyint, a_money");
+            sb.AppendLine(") OUTPUT inserted.id VALUES");
+            AppendInsertKeys(sb, 0);
+            for (int i = 1; i < count; i++)
+            {
+                sb.AppendLine("), ");
+                AppendInsertKeys(sb, i);
+            }
+            
+            sb.AppendLine(")");
+            return sb.ToString();
+        }
+
+        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithId entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, entity.ABigint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm1i" + i, entity.AInt);
+            yield return new SqlParameter("parm2i" + i, entity.ANumeric ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm3i" + i, entity.ABit ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm4i" + i, entity.ASmallint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm5i" + i, entity.ADecimal ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm6i" + i, entity.ASmallmoney ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm7i" + i, entity.ATinyint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm8i" + i, entity.AMoney ?? (object)DBNull.Value);
+        }
+
+        private void AppendInsertKeys(StringBuilder sb, int i)
+        {
+                sb.Append("( @parm0i"); sb.Append(i);
+                sb.Append(", @parm1i"); sb.Append(i);
+                sb.Append(", @parm2i"); sb.Append(i);
+                sb.Append(", @parm3i"); sb.Append(i);
+                sb.Append(", @parm4i"); sb.Append(i);
+                sb.Append(", @parm5i"); sb.Append(i);
+                sb.Append(", @parm6i"); sb.Append(i);
+                sb.Append(", @parm7i"); sb.Append(i);
+                sb.Append(", @parm8i"); sb.Append(i);
+        }
     }
 }

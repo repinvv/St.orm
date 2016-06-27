@@ -81,13 +81,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"@");
             WriteLiteral(@"""select ");
             WriteLiteral(Environment.NewLine);
-            foreach (var line in model.GetFieldSelectLines("e."))
+            foreach (var line in model.Fields.GetSelectLines("e."))
             {
                 WriteLiteral(@"                ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"				from ");
+            WriteLiteral(@"                from ");
             Write(model.Table.Id);
             WriteLiteral(@" e");
             WriteLiteral(Environment.NewLine);
@@ -112,7 +112,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);

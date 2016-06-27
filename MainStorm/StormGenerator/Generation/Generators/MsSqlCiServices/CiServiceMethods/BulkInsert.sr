@@ -1,0 +1,7 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)		
+
+        public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+        }

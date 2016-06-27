@@ -28,17 +28,6 @@
             return namespaces;
         }
 
-        public static IEnumerable<string> GetFieldSelectLines(this Model model, string prefix)
-        {
-            var groups = model.Fields.SplitInGroupsBy(8)
-                              .ToList();
-            foreach (var g in groups)
-            {
-                var join = string.Join(", ", g.Select(x => prefix + x.Column.Name));
-                yield return g == groups.Last() ? @join : @join + ",";
-            }
-        }
-
         public static IEnumerable<string> GetKeyEqualityLines(this Model model,
             string leftPrefix,
             string rightPrefix,
@@ -64,6 +53,11 @@
         {
             int i = 0;
             return string.Join(", ", model.KeyFields.Select(x => x.Column.CsTypeName + "[] key" + i++));
+        }
+
+        public static List<Field> ValueFields(this Model model)
+        {
+            return model.Fields.Except(model.KeyFields).ToList();
         }
     }
 }

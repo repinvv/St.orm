@@ -21,6 +21,8 @@
             opt.ContextName = opt.ContextName ?? "StormContext";
             opt.OutputNamespace = opt.OutputNamespace ?? "Storm";
             opt.Visibility = opt.Visibility ?? "public";
+            if (opt.MaxInsertItems == 0) opt.MaxInsertItems = 150;
+            if (opt.MaxSqlParms == 0) opt.MaxSqlParms = 750;
             return opt;
         }
     }

@@ -43,9 +43,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Data.Common;");
+            WriteLiteral(@"    using System.Data.Common;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Collections.Generic;");
+            WriteLiteral(@"    using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             foreach (var nspace in models.Select(x => x.Model.NamespaceSuffix).Where(x => x != null).Distinct())
@@ -81,6 +81,15 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public static void Insert<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

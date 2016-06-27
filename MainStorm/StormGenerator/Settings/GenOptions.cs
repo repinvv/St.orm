@@ -15,5 +15,9 @@
         public string CustomInterfaceForEntities { get; set; }
 
         public bool CiOnly { get; set; }
+
+        public int MaxInsertItems { get; set; }
+
+        public int MaxSqlParms { get; set; }
     }
 }
