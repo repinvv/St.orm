@@ -21,10 +21,10 @@
             
             var id1 = entities.Select(x => x.id_1).ToArray();
             var id2 = entities.Select(x => x.id_2).ToArray();
-            var tuple = new Tuple<int[], string[]>(id1, id2);
+            var keys = new object[] { id1, id2 };
             
 
-            var result = MsSqlCi.GetByPrimaryKey<EntityWithMultikey>(tuple, conn);
+            var result = MsSqlCi.GetByPrimaryKey<EntityWithMultikey>(keys, conn);
             var dict = result.ToDictionary(x => new { id1 = x.Id1, id2 = x.Id2 });
 
             // assert

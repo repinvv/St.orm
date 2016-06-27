@@ -152,18 +152,18 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                     WriteLiteral(Environment.NewLine);
                 }
                 WriteLiteral(@"            public KeyDataReader(");
-                Write(model.GetTuple());
-                WriteLiteral(@" keys) : base(keys.Item1.Length)");
+                Write(model.JoinKeys());
+                WriteLiteral(@") : base(key0.Length)");
                 WriteLiteral(Environment.NewLine);
                 WriteLiteral(@"            {");
                 WriteLiteral(Environment.NewLine);
                 i = 0;
                 foreach (var key in model.KeyFields)
                 {
-                    WriteLiteral(@"                key");
-                    Write(i++);
-                    WriteLiteral(@" = keys.Item");
+                    WriteLiteral(@"                this.key");
                     Write(i);
+                    WriteLiteral(@" = key");
+                    Write(i++);
                     WriteLiteral(@";");
                     WriteLiteral(Environment.NewLine);
                 }
@@ -236,10 +236,20 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
                 else
                 {
-                    WriteLiteral(@"            var idsTuple = (");
-                    Write(model.GetTuple());
-                    WriteLiteral(@")ids;");
+                    WriteLiteral(@"            var idsArray = (object[])ids;");
                     WriteLiteral(Environment.NewLine);
+                    i = 0;
+                    foreach (var key in model.KeyFields)
+                    {
+                        WriteLiteral(@"            var key");
+                        Write(i);
+                        WriteLiteral(@" = (");
+                        Write(key.Column.CsTypeName);
+                        WriteLiteral(@"[])idsArray[");
+                        Write(i++);
+                        WriteLiteral(@"];");
+                        WriteLiteral(Environment.NewLine);
+                    }
                 }
                 WriteLiteral(@"            using (new ConnectionHandler(conn))");
                 WriteLiteral(Environment.NewLine);
@@ -258,7 +268,12 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
                 else
                 {
-                    WriteLiteral(@"                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);");
+                    i = 0;
+                    WriteLiteral(@"                var dataReader = new KeyDataReader(");
+                    Write(model.JoinKeyNames());
+                    WriteLiteral(@");");
+                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@"                CiHelper.BulkInsert(dataReader, table, conn, trans);");
                     WriteLiteral(Environment.NewLine);
                 }
                 WriteLiteral(@"                var sql = ");

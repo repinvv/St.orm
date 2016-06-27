@@ -53,11 +53,11 @@ namespace @options.OutputNamespace
 	@foreach(var key in model.KeyFields){
             @(key.Column.CsTypeName)[] key@(i++);
     }
-            public KeyDataReader(@model.GetTuple() keys) : base(keys.Item1.Length)
+            public KeyDataReader(@model.JoinKeys()) : base(key0.Length)
             {
 	@{i = 0;}
 	@foreach(var key in model.KeyFields){
-                key@(i++) = keys.Item@i;
+                this.key@i = key@(i++);
     }
             @}
 
@@ -90,7 +90,11 @@ namespace @options.OutputNamespace
   @if(model.KeyFields.Count == 1){
             var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
   }else{
-            var idsTuple = (@(model.GetTuple()))ids;
+            var idsArray = (object[])ids;
+	@{i = 0;}
+	@foreach(var key in model.KeyFields){
+            var key@i = (@(key.Column.CsTypeName)[])idsArray[@(i++)];
+    }
   }
             using (new ConnectionHandler(conn))
             {
@@ -99,7 +103,9 @@ namespace @options.OutputNamespace
   @if(model.KeyFields.Count == 1){
                 CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
   }else{
-                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);
+    @{i = 0;}
+                var dataReader = new KeyDataReader(@model.JoinKeyNames());
+                CiHelper.BulkInsert(dataReader, table, conn, trans);
   }
                 var sql = @"select 
   @foreach(var line in model.GetFieldSelectLines("e.")){

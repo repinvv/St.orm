@@ -9,6 +9,7 @@
 namespace StormTestProject.StormSchema
 {
     using System;
+    using System.Data;
     using System.Data.SqlClient;
 	using System.Collections.Generic;
 
@@ -44,10 +45,10 @@ namespace StormTestProject.StormSchema
         {
             int[] key0;
             string[] key1;
-            public KeyDataReader(Tuple<int[], string[]> keys) : base(keys.Item1.Length)
+            public KeyDataReader(int[] key0, string[] key1) : base(key0.Length)
             {
-                key0 = keys.Item1;
-                key1 = keys.Item2;
+                this.key0 = key0;
+                this.key1 = key1;
             }
 
             public override object GetValue(int i)
@@ -69,12 +70,15 @@ namespace StormTestProject.StormSchema
 
         public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            var idsTuple = (Tuple<int[], string[]>)ids;
+            var idsArray = (object[])ids;
+            var key0 = (int[])idsArray[0];
+            var key1 = (string[])idsArray[1];
             using (new ConnectionHandler(conn))
             {
                 var table = CiHelper.CreateTempTableName();
                 CreateIdTempTable(table, conn, trans);
-                CiHelper.BulkInsert(new KeyDataReader(idsTuple), table, conn, trans);
+                var dataReader = new KeyDataReader(key0, key1);
+                CiHelper.BulkInsert(dataReader, table, conn, trans);
                 var sql = @"select 
                 e.id_1, e.id_2, e.content
 				from entity_with_multikey e

@@ -30,7 +30,8 @@
 
         public static IEnumerable<string> GetFieldSelectLines(this Model model, string prefix)
         {
-            var groups = model.Fields.SplitInGroupsBy(8).ToList();
+            var groups = model.Fields.SplitInGroupsBy(8)
+                              .ToList();
             foreach (var g in groups)
             {
                 var join = string.Join(", ", g.Select(x => prefix + x.Column.Name));
@@ -38,22 +39,31 @@
             }
         }
 
-        public static string GetTuple(this Model model)
-        {
-            return $"Tuple<{string.Join(", ", model.KeyFields.Select(x => x.Column.CsTypeName + "[]"))}>";
-        }
-
-        public static IEnumerable<string> GetKeyEqualityLines(this Model model, 
+        public static IEnumerable<string> GetKeyEqualityLines(this Model model,
             string leftPrefix,
             string rightPrefix,
             string closeLastLine)
         {
-            var groups = model.KeyFields.SplitInGroupsBy(8).ToList();
+            var fields = model.KeyFields.Any() ? model.KeyFields : model.Fields;
+            var groups = fields.SplitInGroupsBy(8)
+                               .ToList();
             foreach (var g in groups)
             {
                 var join = string.Join(" AND ", g.Select(x => $"{leftPrefix}{x.Column.Name} = {rightPrefix}{x.Column.Name}"));
                 yield return g != groups.Last() ? join + " AND" : join + closeLastLine;
             }
+        }
+
+        public static string JoinKeyNames(this Model model)
+        {
+            int i = 0;
+            return string.Join(", ", model.KeyFields.Select(x => "key" + i++));
+        }
+
+        public static string JoinKeys(this Model model)
+        {
+            int i = 0;
+            return string.Join(", ", model.KeyFields.Select(x => x.Column.CsTypeName + "[] key" + i++));
         }
     }
 }
