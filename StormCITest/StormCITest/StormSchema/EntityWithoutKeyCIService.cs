@@ -28,10 +28,10 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithoutKey> Materialize(string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans)
+        public List<EntityWithoutKey> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {

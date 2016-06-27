@@ -13,11 +13,11 @@
     internal class SchemaLoader
     {
         private readonly Options options;
-        private readonly DbModelsReaderFactory factory;
+        private readonly DbModelsGetErFactory factory;
         private readonly AutomaticModelConfigsPopulation autoPopulation;
 
         public SchemaLoader(Options options,
-            DbModelsReaderFactory factory,
+            DbModelsGetErFactory factory,
             AutomaticModelConfigsPopulation autoPopulation)
         {
             this.options = options;
@@ -38,7 +38,7 @@
             var save = false;
             if (schema.Tables == null || !schema.Tables.Any() || options.ForceRefreshDbInfo)
             {
-                schema.Tables = factory.GetReader().GetTables();
+                schema.Tables = factory.GetGetEr().GetTables();
                 save = true;
             }
 
@@ -55,7 +55,7 @@
                 return schema;
             }
 
-            schema.Tables = factory.GetReader().GetTables();
+            schema.Tables = factory.GetGetEr().GetTables();
             File.WriteAllText(schemaFile, JsonConvert.SerializeObject(schema, settings));
             return schema;
         }

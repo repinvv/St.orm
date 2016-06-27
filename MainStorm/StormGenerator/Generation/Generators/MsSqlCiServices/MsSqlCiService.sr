@@ -35,10 +35,10 @@ namespace @options.OutputNamespace
             return list;
         }
 
-        public List<@model.Name> Materialize(string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans)
+        public List<@model.Name> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {

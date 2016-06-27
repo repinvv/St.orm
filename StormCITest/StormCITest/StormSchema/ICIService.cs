@@ -13,7 +13,7 @@ namespace StormTestProject.StormSchema
 
     public interface ICiService<T>
     {
-        List<T> Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
+        List<T> Get(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
 
 		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
     }

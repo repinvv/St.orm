@@ -115,10 +115,10 @@
     </Compile>
     <Compile Include="Tests\EqualityTests.cs" />
     <Compile Include="Tests\ContextInTransaction.cs" />
-    <Compile Include="Tests\ReadTests\ReadEntityWithGuidTests.cs" />
-    <Compile Include="Tests\ReadTests\ReadEntityWithIdTests.cs" />
-    <Compile Include="Tests\ReadTests\ReadEntityWithMultikeyTest.cs" />
-    <Compile Include="Tests\ReadTests\ReadEntityWithSequenceTest.cs" />
+    <Compile Include="Tests\GetTests\GetEntityWithGuidTests.cs" />
+    <Compile Include="Tests\GetTests\GetEntityWithIdTests.cs" />
+    <Compile Include="Tests\GetTests\GetEntityWithMultikeyTest.cs" />
+    <Compile Include="Tests\GetTests\GetEntityWithSequenceTest.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\WatchIt.cs" />
     <Content Include="DBScripts\CreateTables.sql" />

@@ -38,10 +38,10 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithSequence> Materialize(string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans)
+        public List<EntityWithSequence> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {

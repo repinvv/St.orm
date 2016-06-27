@@ -53,7 +53,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        List<T> Materialize(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(@"        List<T> Get(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");

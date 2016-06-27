@@ -29,10 +29,10 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithMultikey> Materialize(string query, 
-                            SqlParameter[] parms, 
-                            SqlConnection conn, 
-                            SqlTransaction trans)
+        public List<EntityWithMultikey> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {

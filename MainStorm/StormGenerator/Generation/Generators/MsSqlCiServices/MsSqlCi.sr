@@ -16,17 +16,15 @@ namespace @options.OutputNamespace
 }
     @options.Visibility static class MsSqlCi
     {
-        public static List<T> Materialize<T>(string query, 
-                               SqlParameter[] parms, 
-                               DbConnection conn, 
-                               DbTransaction trans = null)
+        public static List<T> Get<T>(string query, 
+            SqlParameter[] parms, 
+            DbConnection conn, 
+            DbTransaction trans = null)
         {
-            return GetService<T>().Materialize(query, parms, (SqlConnection)conn, trans as SqlTransaction);
+            return GetService<T>().Get(query, parms, (SqlConnection)conn, trans as SqlTransaction);
         }
 
-        public static List<T> GetByPrimaryKey<T>(object ids,
-                       DbConnection conn,
-                       DbTransaction trans = null)
+        public static List<T> GetByPrimaryKey<T>(object ids, DbConnection conn, DbTransaction trans = null)
         {
             return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
         }

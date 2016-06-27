@@ -112,13 +112,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public List<");
             Write(model.Name);
-            WriteLiteral(@"> Materialize(string query, ");
+            WriteLiteral(@"> Get(string query, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                            SqlParameter[] parms, ");
+            WriteLiteral(@"            SqlParameter[] parms, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                            SqlConnection conn, ");
+            WriteLiteral(@"            SqlConnection conn, ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                            SqlTransaction trans)");
+            WriteLiteral(@"            SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
