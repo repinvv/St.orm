@@ -24,3 +24,9 @@
                 return result;
             }
         }
+
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + " ( @model.KeyFields[0].Column.Definition )";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+        }

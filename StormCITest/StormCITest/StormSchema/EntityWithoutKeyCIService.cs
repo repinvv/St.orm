@@ -44,13 +44,6 @@ namespace StormTestProject.StormSchema
             throw new Exception("Entity EntityWithoutKey has no primary key");
         }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + @"(
-                )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-        }
-
 		public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
 		}

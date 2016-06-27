@@ -111,6 +111,19 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + "" ( ");
+            Write(model.KeyFields[0].Column.Definition);
+            WriteLiteral(@" )"";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }
