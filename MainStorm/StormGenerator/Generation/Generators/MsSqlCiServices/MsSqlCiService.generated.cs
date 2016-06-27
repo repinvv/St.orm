@@ -332,6 +332,10 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             {
                 WriteLiteral(@"                ");
                 Write(field.Column.Definition);
+                if (field != model.KeyFields.Last())
+                {
+                    WriteLiteral(@",");
+                }
                 WriteLiteral(Environment.NewLine);
             }
             WriteLiteral(@"                )"";");

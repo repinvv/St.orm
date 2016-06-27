@@ -130,7 +130,7 @@ else{
         {
             var sql = "CREATE TABLE " + table + @"(
 @foreach(var field in model.KeyFields){
-                @field.Column.Definition
+                @field.Column.Definition@if(field != model.KeyFields.Last()){,}
 }
                 )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);

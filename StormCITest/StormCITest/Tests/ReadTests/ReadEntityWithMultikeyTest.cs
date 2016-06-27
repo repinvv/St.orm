@@ -7,10 +7,10 @@
     using StormTestProject.StormSchema;
 
     [TestClass]
-    internal class ReadEntityWithMultikeyTest : ContextInTransaction
+    public class ReadEntityWithMultikeyTest : ContextInTransaction
     {
         [TestMethod]
-        public void Read_EntityWithMultiKey_ByIdsTuple()
+        public void Read_EntityWithMultiKey_ByIds()
         {
             // arrange
             var entities = Enumerable.Range(500, 3500).Select(CreateEntity).ToList();

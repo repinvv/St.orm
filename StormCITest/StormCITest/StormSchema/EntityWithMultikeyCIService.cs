@@ -93,7 +93,7 @@ namespace StormTestProject.StormSchema
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + @"(
-                id_1 int
+                id_1 int,
                 id_2 nvarchar(256)
                 )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
