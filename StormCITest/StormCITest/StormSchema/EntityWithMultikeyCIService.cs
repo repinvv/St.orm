@@ -93,9 +93,41 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		
+        #region EntityDataReader
+        internal class EntityDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithMultikey> entities;
+
+            public EntityDataReader(List<EntityWithMultikey> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Id1;
+                    case 1:
+                        return entities[current].Id2;
+                    case 2:
+                        return entities[current].Content;
+                    default:
+                        throw new Exception("EntityWithMultikey Can't read field " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 3; } }
+        }
+        #endregion
 
         public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-        }    }
+            using (new ConnectionHandler(conn))
+            {
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_multikey", conn, trans );
+            }
+        }
+    }
 }

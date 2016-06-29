@@ -120,6 +120,7 @@
     <Compile Include="Tests\GetTests\GetEntityWithIdTests.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithMultikeyTest.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithSequenceTest.cs" />
+    <Compile Include="Tests\InsertTests\InsertEntityWithGuidTest.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithIdTests.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\WatchIt.cs" />

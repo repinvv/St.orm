@@ -27,22 +27,7 @@
                 .First();
 
             // assert
-            CompareFullEntity(efEntity, entity);
-
-
-        }
-
-        private void CompareFullEntity(entity_with_guid efEntity, EntityWithGuid entity)
-        {
-            Assert.AreEqual(efEntity.id, entity.Id);
-            Assert.IsTrue(efEntity.a_real == entity.AReal);
-            Assert.AreEqual(efEntity.a_date, entity.ADate);
-            Assert.AreEqual(efEntity.a_datetime, entity.ADatetime);
-            Assert.AreEqual(efEntity.a_datetime2, entity.ADatetime2);
-            Assert.AreEqual(efEntity.a_float, entity.AFloat);
-            Assert.AreEqual(efEntity.a_offset, entity.AOffset);
-            Assert.AreEqual(efEntity.a_smalldatetime, entity.ASmalldatetime);
-            Assert.AreEqual(efEntity.a_time, entity.ATime);
+            Compares.CompareEntity(efEntity, entity);
         }
 
         private static entity_with_guid CreateFullEntity()

@@ -46,9 +46,39 @@ namespace StormTestProject.StormSchema
             throw new Exception("Entity EntityWithoutKey has no primary key");
         }
 
-		
+        #region EntityDataReader
+        internal class EntityDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithoutKey> entities;
+
+            public EntityDataReader(List<EntityWithoutKey> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Value;
+                    case 1:
+                        return entities[current].Content;
+                    default:
+                        throw new Exception("EntityWithoutKey Can't read field " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 2; } }
+        }
+        #endregion
 
         public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
-        }    }
+            using (new ConnectionHandler(conn))
+            {
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_without_key", conn, trans );
+            }
+        }
+    }
 }

@@ -74,9 +74,53 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		
+        #region EntityDataReader
+        internal class EntityDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithGuid> entities;
+
+            public EntityDataReader(List<EntityWithGuid> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Id;
+                    case 1:
+                        return entities[current].AFloat;
+                    case 2:
+                        return entities[current].AReal;
+                    case 3:
+                        return entities[current].ADate;
+                    case 4:
+                        return entities[current].ATime;
+                    case 5:
+                        return entities[current].AOffset;
+                    case 6:
+                        return entities[current].ADatetime;
+                    case 7:
+                        return entities[current].ADatetime2;
+                    case 8:
+                        return entities[current].ASmalldatetime;
+                    default:
+                        throw new Exception("EntityWithGuid Can't read field " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 9; } }
+        }
+        #endregion
 
         public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-        }    }
+            using (new ConnectionHandler(conn))
+            {
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_guid", conn, trans );
+            }
+        }
+    }
 }

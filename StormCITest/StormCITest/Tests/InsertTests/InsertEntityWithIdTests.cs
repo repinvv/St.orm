@@ -68,7 +68,7 @@
         public void Insert_EnitityWithId_Perf()
         {
             // arrange
-            var entities = Enumerable.Range(10, 3010).Select(CreateFullEntity).ToList(); 
+            var entities = Enumerable.Range(10, 3000).Select(CreateFullEntity).ToList(); 
             // About a second on my system
 
             // act

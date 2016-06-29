@@ -49,7 +49,7 @@ namespace @options.OutputNamespace
 } else {
   @if(model.KeyFields[0].Column.IsIdentity){
 @[RangeInsert(model, options)]
-  } 
+  }
   @if(model.Table.Sequence != null){
 @[SequenceBulkInsert(model)]
   }

@@ -55,7 +55,66 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"		");
+            WriteLiteral(@"        #region EntityDataReader");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        internal class EntityDataReader : BaseDataReader");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            private readonly List<");
+            Write(model.Name);
+            WriteLiteral(@"> entities;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            public EntityDataReader(List<");
+            Write(model.Name);
+            WriteLiteral(@"> entities) : base(entities.Count)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                this.entities = entities;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            public override object GetValue(int i)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                switch(i)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            int i = 0;
+            foreach (var field in model.Fields)
+            {
+                WriteLiteral(@"                    case ");
+                Write(i++);
+                WriteLiteral(@":");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                        return entities[current].");
+                Write(field.Name);
+                WriteLiteral(@";");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"                    default:");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                        throw new Exception(""");
+            Write(model.Name);
+            WriteLiteral(@" Can't read field "" + i);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            public override int FieldCount { get { return ");
+            Write(model.Fields.Count);
+            WriteLiteral(@"; } }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(List<");
@@ -64,7 +123,18 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
+            Write(model.Table.Id);
+            WriteLiteral(@""", conn, trans );");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

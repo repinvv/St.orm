@@ -77,9 +77,57 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
 
-		
+        #region EntityDataReader
+        internal class EntityDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithSequence> entities;
+
+            public EntityDataReader(List<EntityWithSequence> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Id;
+                    case 1:
+                        return entities[current].AChar;
+                    case 2:
+                        return entities[current].AVarchar;
+                    case 3:
+                        return entities[current].AText;
+                    case 4:
+                        return entities[current].ANchar;
+                    case 5:
+                        return entities[current].ANvarchar;
+                    case 6:
+                        return entities[current].ANtext;
+                    case 7:
+                        return entities[current].AXml;
+                    case 8:
+                        return entities[current].ABinary;
+                    case 9:
+                        return entities[current].AVarbinary;
+                    case 10:
+                        return entities[current].AImage;
+                    default:
+                        throw new Exception("EntityWithSequence Can't read field " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 11; } }
+        }
+        #endregion
 
         public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
-        }    }
+            using (new ConnectionHandler(conn))
+            {
+                CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
+            }
+        }
+    }
 }
