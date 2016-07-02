@@ -99,10 +99,10 @@ namespace StormTestProject.StormSchema
 
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
-            CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadIdentity(reader, entities), conn, trans);
+            CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadKey(reader, entities), conn, trans);
         }
 
-        private List<EntityWithId> ReadIdentity(SqlDataReader reader, List<EntityWithId> entities)
+        private List<EntityWithId> ReadKey(SqlDataReader reader, List<EntityWithId> entities)
         {
             int i = 0;
             while (reader.Read())

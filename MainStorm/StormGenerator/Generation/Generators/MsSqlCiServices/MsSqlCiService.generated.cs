@@ -12,6 +12,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using StormGenerator.Models;
     using GeneratorHelpers;
     using CiServiceMethods;
+    using CiServiceMethods.Insert;
     using System;
     using System.Text;
     using System.Linq;
@@ -113,23 +114,19 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
             }
             WriteLiteral(Environment.NewLine);
-            if (model.KeyFields.Count != 1)
+            if (model.KeyFields.Count != 1 || (model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity))
             {
-                Write(new BulkInsert(model).Execute());
+                Write(new RegularInsert(model, options).Execute());
             }
             else
             {
                 if (model.KeyFields[0].Column.IsIdentity)
                 {
-                    Write(new RangeInsert(model, options).Execute());
+                    Write(new IdentityInsert(model, options).Execute());
                 }
                 if (model.Table.Sequence != null)
                 {
-                    Write(new SequenceBulkInsert(model).Execute());
-                }
-                if (model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity)
-                {
-                    Write(new BulkInsert(model).Execute());
+                    Write(new SequenceInsert(model, options).Execute());
                 }
             }
             WriteLiteral(@"    }");

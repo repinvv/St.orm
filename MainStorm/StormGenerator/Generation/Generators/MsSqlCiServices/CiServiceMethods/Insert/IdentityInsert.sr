@@ -1,0 +1,24 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+@{ var parmCount = model.Fields.Count - 1;
+   var maxItems = Math.Min(options.MaxInsertItems, options.MaxSqlParms / parmCount);
+ }
+        public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {		
+		   using(new ConnectionHandler(conn))
+		   {
+		       foreach(var group in entities.SplitInGroupsBy(@maxItems))
+		       {
+		           RangeInsert(group, conn, trans);
+		       }
+           }
+        }
+
+@if(!model.IsStruct){
+@[RangeInsertWithKey(model, options)]
+} else{
+@[RangeInsert(model, options)]
+}
+
+@[RangeInsertMethods(model, model.ValueFields(), true)]

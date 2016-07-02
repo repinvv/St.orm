@@ -1,6 +1,6 @@
 ﻿@visibility internal
 @inherits FileGenerator
-@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods
+@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods CiServiceMethods.Insert
 @constructor(GenOptions options, EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
@@ -44,17 +44,14 @@ namespace @options.OutputNamespace
   }
 }
 
-@if(model.KeyFields.Count != 1){
-@[BulkInsert(model)]
+@if(model.KeyFields.Count != 1 || (model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity)){
+@[RegularInsert(model, options)]
 } else {
   @if(model.KeyFields[0].Column.IsIdentity){
-@[RangeInsert(model, options)]
+@[IdentityInsert(model, options)]
   }
   @if(model.Table.Sequence != null){
-@[SequenceBulkInsert(model)]
-  }
-  @if(model.Table.Sequence == null && !model.KeyFields[0].Column.IsIdentity){
-@[BulkInsert(model)]
+@[SequenceInsert(model, options)]
   }
 }
     }

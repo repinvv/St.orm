@@ -1,0 +1,13 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+@[EntityReader(model)]
+
+        public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
+            }
+        }

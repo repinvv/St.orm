@@ -1,0 +1,30 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+		private string insertRequestCache;
+		private int insertCacheLength;
+
+		private void RangeInsert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+		{
+		    if(insertCacheLength != entities.Count)
+			{
+			    insertRequestCache = ConstructInsertRequest(entities.Count);
+				insertCacheLength = entities.Count;
+			}
+
+			int i = 0;
+			var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+			CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadKey(reader, entities), conn, trans);
+		}
+
+        private List<@model.Name> ReadKey(SqlDataReader reader, List<@model.Name> entities)
+        {
+            int i = 0;
+            while (reader.Read())
+            {
+                entities[i++].@model.KeyFields[0].Name = @model.KeyFields[0].GetReaderMethod(0);
+            }
+
+			return entities;
+        }

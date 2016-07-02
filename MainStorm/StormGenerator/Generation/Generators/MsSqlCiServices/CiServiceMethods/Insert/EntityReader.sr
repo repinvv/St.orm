@@ -29,11 +29,3 @@
             public override int FieldCount { get { return @model.Fields.Count; } }
 		}
         #endregion
-
-        public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
-        {
-            using (new ConnectionHandler(conn))
-            {
-                CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
-            }
-        }

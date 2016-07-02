@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
@@ -16,14 +16,16 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class SequenceBulkInsert
+    internal class RangeInsert
     {
         #region constructor
         Model model;
+        GenOptions options;
 
-        public SequenceBulkInsert(Model model)
+        public RangeInsert(Model model, GenOptions options)
         {
             this.model = model;
+            this.options = options;
         }
         #endregion
 
@@ -55,11 +57,33 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        public void Insert(List<");
+            WriteLiteral(@"        private string insertRequestCache;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private int insertCacheLength;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private void RangeInsert(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            if(insertCacheLength != entities.Count)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                insertRequestCache = ConstructInsertRequest(entities.Count);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                insertCacheLength = entities.Count;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            int i = 0;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(insertRequestCache, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

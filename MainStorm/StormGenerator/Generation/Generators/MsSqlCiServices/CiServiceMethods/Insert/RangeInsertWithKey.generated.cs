@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
@@ -16,14 +16,16 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class BulkInsert
+    internal class RangeInsertWithKey
     {
         #region constructor
         Model model;
+        GenOptions options;
 
-        public BulkInsert(Model model)
+        public RangeInsertWithKey(Model model, GenOptions options)
         {
             this.model = model;
+            this.options = options;
         }
         #endregion
 
@@ -55,83 +57,61 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        #region EntityDataReader");
+            WriteLiteral(@"        private string insertRequestCache;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        internal class EntityDataReader : BaseDataReader");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            private readonly List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities;");
+            WriteLiteral(@"        private int insertCacheLength;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            public EntityDataReader(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities) : base(entities.Count)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                this.entities = entities;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            public override object GetValue(int i)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                switch(i)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                {");
-            WriteLiteral(Environment.NewLine);
-            int i = 0;
-            foreach (var field in model.Fields)
-            {
-                WriteLiteral(@"                    case ");
-                Write(i++);
-                WriteLiteral(@":");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                        return entities[current].");
-                Write(field.Name);
-                WriteLiteral(@";");
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"                    default:");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                        throw new Exception(""");
-            Write(model.Name);
-            WriteLiteral(@" Can't read field "" + i);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            public override int FieldCount { get { return ");
-            Write(model.Fields.Count);
-            WriteLiteral(@"; } }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #endregion");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public void Insert(List<");
+            WriteLiteral(@"        private void RangeInsert(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(@"            if(insertCacheLength != entities.Count)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
-            Write(model.Table.Id);
-            WriteLiteral(@""", conn, trans );");
+            WriteLiteral(@"                insertRequestCache = ConstructInsertRequest(entities.Count);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                insertCacheLength = entities.Count;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            int i = 0;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadKey(reader, entities), conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private List<");
+            Write(model.Name);
+            WriteLiteral(@"> ReadKey(SqlDataReader reader, List<");
+            Write(model.Name);
+            WriteLiteral(@"> entities)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            int i = 0;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            while (reader.Read())");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                entities[i++].");
+            Write(model.KeyFields[0].Name);
+            WriteLiteral(@" = ");
+            Write(model.KeyFields[0].GetReaderMethod(0));
+            WriteLiteral(@";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return entities;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

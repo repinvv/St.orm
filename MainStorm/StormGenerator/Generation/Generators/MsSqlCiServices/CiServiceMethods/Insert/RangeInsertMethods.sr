@@ -1,0 +1,44 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers System.Collections.Generic
+@constructor(Model model, List<Field> fields, bool output)
+
+		private string ConstructInsertRequest(int count)
+		{
+		    var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO @model.Table.Id");
+			sb.AppendLine("(");
+
+@foreach(var line in fields.GetSelectLines()){
+            sb.AppendLine("@line");
+}
+@if(output){
+			sb.AppendLine(") OUTPUT inserted.@model.KeyFields[0].Column.Name VALUES");
+} else{
+            sb.AppendLine(") VALUES");
+}
+			AppendInsertKeys(sb, 0);
+            for (int i = 1; i < count; i++)
+            {
+			    sb.AppendLine("), ");
+				AppendInsertKeys(sb, i);
+            }
+			
+			sb.AppendLine(")");
+			return sb.ToString();
+		}
+
+	    private IEnumerable<SqlParameter> GetInsertParameters(@model.Name entity, int i)
+		{
+@{var i = 0; }
+@foreach(var field in fields){
+            yield return new SqlParameter("parm@(i++)i" + i, entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value});
+}
+        }
+
+		private void AppendInsertKeys(StringBuilder sb, int i)
+		{
+@{i = 0; }
+@foreach(var field in fields){
+                sb.Append("@if(field != fields.First()){, }else{( }@@parm@(i++)i"); sb.Append(i);
+}
+        }
