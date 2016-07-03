@@ -17,7 +17,8 @@
             var entity = CreateFullEntity(1000);
 
             // act
-            MsSqlCi.Insert(new List<EntityWithGuid> { entity }, conn);
+            var time = WatchIt.Watch(() => MsSqlCi.Insert(new List<EntityWithGuid> { entity }, conn));
+            Console.WriteLine(time);
 
             // assert
             var efEntity = context.entity_with_guid.First(x => x.id == entity.Id);
@@ -61,7 +62,7 @@
         {
             // arrange
             var entities = Enumerable.Range(10, 200000).Select(CreateFullEntity).ToList();
-            // About a second on my system, if all tests are executed, i.e. ado dlls are loaded and heated
+            // About a second on my system, inconsistent timing
 
             // act
             var time = WatchIt.Watch(() => MsSqlCi.Insert(entities, conn));
@@ -75,7 +76,7 @@
 
             var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(new List<EntityWithGuid> { x }, conn)));
             DeleteAll();
-            var time2 = WatchIt.Watch(() => entities.ForEach(x => SingleInsert(x)));
+            var time2 = WatchIt.Watch(() => entities.ForEach(SingleInsert));
             Console.WriteLine(time1);
             Console.WriteLine(time2);
         }

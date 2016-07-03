@@ -1,11 +1,8 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings
-@constructor(GenOptions options)
 @member{public override string FileName => "ICIService";}
 
-namespace @options.OutputNamespace
-{
     using System.Data.SqlClient;
 	using System.Collections.Generic;
 
@@ -17,4 +14,3 @@ namespace @options.OutputNamespace
 
 		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
     }
-}

@@ -22,10 +22,12 @@ namespace StormTestProject.StormSchema
             var list = new List<EntityWithMultikey>();
             while (reader.Read())
             {
-                var entity = new EntityWithMultikey();
-                entity.Id1 = reader.GetInt32(0);
-                entity.Id2 = reader.GetString(1);
-                entity.Content = reader.IsDBNull(2) ? null : reader.GetString(2);
+                var entity = new EntityWithMultikey
+                {
+                    Id1 = reader.GetInt32(0),
+                    Id2 = reader.GetString(1),
+                    Content = reader.IsDBNull(2) ? null : reader.GetString(2),
+                };
                 list.Add(entity);
             }
             return list;

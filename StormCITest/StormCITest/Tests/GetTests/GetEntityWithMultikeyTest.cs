@@ -12,7 +12,7 @@
         public void Get_EntityWithMultiKey_ByIds()
         {
             // arrange
-            var entities = Enumerable.Range(500, 3500).Select(CreateEntity).ToList();
+            var entities = Enumerable.Range(500, 2000).Select(CreateEntity).ToList();
             context.entity_with_multikey.AddRange(entities);
             context.SaveChanges();
 

@@ -6,24 +6,25 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
 {
-    using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
-    using StormGenerator.Generation.Generators.GeneratorHelpers;
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ReadEntities
+    internal class InsertParameters
     {
         #region constructor
         Model model;
+        List<Field> fields;
 
-        public ReadEntities(Model model)
+        public InsertParameters(Model model, List<Field> fields)
         {
             this.model = model;
+            this.fields = fields;
         }
         #endregion
 
@@ -55,43 +56,26 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        private List<");
+            WriteLiteral(@"        private IEnumerable<SqlParameter> GetInsertParameters(");
             Write(model.Name);
-            WriteLiteral(@"> ReadEntities(SqlDataReader reader)");
+            WriteLiteral(@" entity, int i)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var list = new List<");
-            Write(model.Name);
-            WriteLiteral(@">();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            while (reader.Read())");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var entity = new ");
-            Write(model.Name);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                {");
-            WriteLiteral(Environment.NewLine);
-            int i = 0;
-            foreach (var field in model.Fields.Where(x=>x.IsEnabled))
+            var i = 0; 
+            foreach (var field in fields)
             {
-                WriteLiteral(@"                    ");
+                WriteLiteral(@"            yield return new SqlParameter(""parm");
+                Write(i++);
+                WriteLiteral(@"i"" + i, entity.");
                 Write(field.Name);
-                WriteLiteral(@" = ");
-                Write(field.GetReaderMethod(i++));
-                WriteLiteral(@",");
+                if (field.Column.IsNullable)
+                {
+                    WriteLiteral(@" ?? (object)DBNull.Value");
+                }
+                WriteLiteral(@");");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                };");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                list.Add(entity);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return list;");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
 

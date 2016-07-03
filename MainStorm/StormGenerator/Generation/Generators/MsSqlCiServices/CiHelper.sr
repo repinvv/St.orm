@@ -1,11 +1,8 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings GenericCi
-@constructor(GenOptions options)
 @member{public override string FileName => "CiHelper";}
 
-namespace @options.OutputNamespace
-{
     using System.Data.SqlClient;
 	using System.Collections.Generic;
     using System;
@@ -99,4 +96,3 @@ namespace @options.OutputNamespace
             }
         }
     }
-}

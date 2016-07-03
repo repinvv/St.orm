@@ -18,16 +18,17 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class MsSqlCiService : FileGenerator
+    internal class MsSqlCiService : NsFileGenerator
     {
         #region constructor
-        GenOptions options;
         EntityModel entityModel;
+        GenOptions options;
 
-        public MsSqlCiService(GenOptions options, EntityModel entityModel)
+        public MsSqlCiService(EntityModel entityModel, GenOptions options)
+            : base(options)
         {
-            this.options = options;
             this.entityModel = entityModel;
+            this.options = options;
         }
         #endregion
 
@@ -36,11 +37,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
         public override string Execute()
         {
             var model = entityModel.Model;
-            WriteLiteral(@"namespace ");
-            Write(options.OutputNamespace);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"{");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System.Data;");
@@ -130,8 +126,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
             }
             WriteLiteral(@"    }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

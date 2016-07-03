@@ -15,10 +15,18 @@
            }
         }
 
+@{var fields = model.ValueFields();}
+		#region range insert methods
 @if(!model.IsStruct){
 @[RangeInsertWithKey(model, options)]
+
+@{var output = "OUTPUT inserted." + model.KeyFields[0].Column.Name;}
+@[ConstructRequest(model, fields, output)]
 } else{
 @[RangeInsert(model, options)]
+
+@[ConstructRequest(model, fields, string.Empty)]
 }
 
-@[RangeInsertMethods(model, model.ValueFields(), true)]
+@[InsertParameters(model, fields)]
+		#endregion

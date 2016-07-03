@@ -57,11 +57,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        private string insertRequestCache;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private int insertCacheLength;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void RangeInsert(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
@@ -83,7 +78,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(insertRequestCache, parms, conn, trans);");
+            WriteLiteral(@"            var sql = ConstructInsertRequest(entities.Count);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

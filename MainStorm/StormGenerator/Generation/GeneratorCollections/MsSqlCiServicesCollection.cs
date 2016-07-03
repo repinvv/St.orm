@@ -14,12 +14,12 @@
             yield return new BaseDataReader(options);
             yield return new SingleKeyDataReader(options);
             yield return new ConnectionHandler(options);
-            yield return new MsSqlCi(options, models);
+            yield return new MsSqlCi(models, options);
             yield return new MsSqlCiServiceInterface(options);
             yield return new CiHelper(options);
             foreach (var entityModel in models)
             {
-                yield return new MsSqlCiService(options, entityModel);
+                yield return new MsSqlCiService(entityModel, options);
             }
         }
     }

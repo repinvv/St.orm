@@ -14,12 +14,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class MsSqlCiServiceInterface : FileGenerator
+    internal class MsSqlCiServiceInterface : NsFileGenerator
     {
         #region constructor
         GenOptions options;
 
         public MsSqlCiServiceInterface(GenOptions options)
+            : base(options)
         {
             this.options = options;
         }
@@ -29,14 +30,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
 
         public override string Execute()
         {
-            WriteLiteral(@"namespace ");
-            Write(options.OutputNamespace);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"{");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Collections.Generic;");
+            WriteLiteral(@"    using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    ");
@@ -48,14 +44,12 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        List<T> Get(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(@"        List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(@"        void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

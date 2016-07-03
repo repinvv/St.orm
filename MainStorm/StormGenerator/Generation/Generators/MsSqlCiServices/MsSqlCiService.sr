@@ -1,12 +1,10 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods CiServiceMethods.Insert
-@constructor(GenOptions options, EntityModel entityModel)
+@constructor(EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
 @{var model = entityModel.Model;}
-namespace @options.OutputNamespace
-{
     using System;
     using System.Data;
     using System.Data.SqlClient;
@@ -55,4 +53,3 @@ namespace @options.OutputNamespace
   }
 }
     }
-}

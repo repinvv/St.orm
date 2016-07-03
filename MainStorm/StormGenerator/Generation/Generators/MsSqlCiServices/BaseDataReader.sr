@@ -1,11 +1,8 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings
-@constructor(GenOptions options)
 @member{public override string FileName => "BaseDataReader";}
 
-namespace @options.OutputNamespace
-{
     using System;
     using System.Data;
 
@@ -57,4 +54,3 @@ namespace @options.OutputNamespace
         public int RecordsAffected { get; private set; }
         #endregion
     }
-}

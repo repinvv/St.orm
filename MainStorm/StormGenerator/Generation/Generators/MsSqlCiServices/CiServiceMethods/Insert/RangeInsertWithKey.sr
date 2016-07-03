@@ -2,9 +2,6 @@
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
 @constructor(Model model, GenOptions options)
 
-		private string insertRequestCache;
-		private int insertCacheLength;
-
 		private void RangeInsert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
 		{
 		    if(insertCacheLength != entities.Count)
@@ -15,7 +12,8 @@
 
 			int i = 0;
 			var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
-			CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadKey(reader, entities), conn, trans);
+			var sql = ConstructInsertRequest(entities.Count);
+			CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
 		}
 
         private List<@model.Name> ReadKey(SqlDataReader reader, List<@model.Name> entities)

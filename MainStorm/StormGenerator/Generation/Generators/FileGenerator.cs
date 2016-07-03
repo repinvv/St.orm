@@ -32,12 +32,12 @@
 
         public abstract string Execute();
 
-        public GeneratedFile GetFile()
+        public virtual GeneratedFile GetFile()
         {
             Execute();
             return new GeneratedFile
                    {
-                       Content = GenerationConstants.GenerationMark + sb.ToString(),
+                       Content = GenerationConstants.GenerationMark + ToString(),
                        Name = FileName + ".cs"
                    };
         }

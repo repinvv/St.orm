@@ -22,16 +22,18 @@ namespace StormTestProject.StormSchema
             var list = new List<EntityWithGuid>();
             while (reader.Read())
             {
-                var entity = new EntityWithGuid();
-                entity.Id = reader.GetGuid(0);
-                entity.AFloat = reader.IsDBNull(1) ? (double?)null : reader.GetDouble(1);
-                entity.AReal = reader.GetFloat(2);
-                entity.ADate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3);
-                entity.ATime = reader.IsDBNull(4) ? (TimeSpan?)null : reader.GetTimeSpan(4);
-                entity.AOffset = reader.IsDBNull(5) ? (DateTimeOffset?)null : reader.GetDateTimeOffset(5);
-                entity.ADatetime = reader.IsDBNull(6) ? (DateTime?)null : reader.GetDateTime(6);
-                entity.ADatetime2 = reader.IsDBNull(7) ? (DateTime?)null : reader.GetDateTime(7);
-                entity.ASmalldatetime = reader.IsDBNull(8) ? (DateTime?)null : reader.GetDateTime(8);
+                var entity = new EntityWithGuid
+                {
+                    Id = reader.GetGuid(0),
+                    AFloat = reader.IsDBNull(1) ? (double?)null : reader.GetDouble(1),
+                    AReal = reader.GetFloat(2),
+                    ADate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3),
+                    ATime = reader.IsDBNull(4) ? (TimeSpan?)null : reader.GetTimeSpan(4),
+                    AOffset = reader.IsDBNull(5) ? (DateTimeOffset?)null : reader.GetDateTimeOffset(5),
+                    ADatetime = reader.IsDBNull(6) ? (DateTime?)null : reader.GetDateTime(6),
+                    ADatetime2 = reader.IsDBNull(7) ? (DateTime?)null : reader.GetDateTime(7),
+                    ASmalldatetime = reader.IsDBNull(8) ? (DateTime?)null : reader.GetDateTime(8),
+                };
                 list.Add(entity);
             }
             return list;

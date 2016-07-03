@@ -15,12 +15,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class CiHelper : FileGenerator
+    internal class CiHelper : NsFileGenerator
     {
         #region constructor
         GenOptions options;
 
         public CiHelper(GenOptions options)
+            : base(options)
         {
             this.options = options;
         }
@@ -30,14 +31,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
 
         public override string Execute()
         {
-            WriteLiteral(@"namespace ");
-            Write(options.OutputNamespace);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"{");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System.Data.SqlClient;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"	using System.Collections.Generic;");
+            WriteLiteral(@"    using System.Collections.Generic;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    using System;");
             WriteLiteral(Environment.NewLine);
@@ -209,8 +205,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

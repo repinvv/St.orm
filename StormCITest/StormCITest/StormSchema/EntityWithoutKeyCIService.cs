@@ -22,9 +22,11 @@ namespace StormTestProject.StormSchema
             var list = new List<EntityWithoutKey>();
             while (reader.Read())
             {
-                var entity = new EntityWithoutKey();
-                entity.Value = reader.GetInt32(0);
-                entity.Content = reader.IsDBNull(1) ? null : reader.GetString(1);
+                var entity = new EntityWithoutKey
+                {
+                    Value = reader.GetInt32(0),
+                    Content = reader.IsDBNull(1) ? null : reader.GetString(1),
+                };
                 list.Add(entity);
             }
             return list;

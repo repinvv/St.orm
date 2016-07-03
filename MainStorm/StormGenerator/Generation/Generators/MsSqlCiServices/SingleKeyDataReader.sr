@@ -1,11 +1,8 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings
-@constructor(GenOptions options)
 @member{public override string FileName => "SingleKeyDataReader";}
 
-namespace @options.OutputNamespace
-{
     @options.Visibility class SingleKeyDataReader<T> : BaseDataReader
     {
         private readonly T[] keys;
@@ -22,4 +19,3 @@ namespace @options.OutputNamespace
 
         public override int FieldCount { get { return 1; } }
     }
-}

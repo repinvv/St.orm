@@ -22,17 +22,19 @@ namespace StormTestProject.StormSchema
             var list = new List<EntityWithId>();
             while (reader.Read())
             {
-                var entity = new EntityWithId();
-                entity.Id = reader.GetInt32(0);
-                entity.ABigint = reader.IsDBNull(1) ? (long?)null : reader.GetInt64(1);
-                entity.AInt = reader.GetInt32(2);
-                entity.ANumeric = reader.IsDBNull(3) ? (decimal?)null : reader.GetDecimal(3);
-                entity.ABit = reader.IsDBNull(4) ? (bool?)null : reader.GetBoolean(4);
-                entity.ASmallint = reader.IsDBNull(5) ? (short?)null : reader.GetInt16(5);
-                entity.ADecimal = reader.IsDBNull(6) ? (decimal?)null : reader.GetDecimal(6);
-                entity.ASmallmoney = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7);
-                entity.ATinyint = reader.IsDBNull(8) ? (byte?)null : reader.GetByte(8);
-                entity.AMoney = reader.IsDBNull(9) ? (decimal?)null : reader.GetDecimal(9);
+                var entity = new EntityWithId
+                {
+                    Id = reader.GetInt32(0),
+                    ABigint = reader.IsDBNull(1) ? (long?)null : reader.GetInt64(1),
+                    AInt = reader.GetInt32(2),
+                    ANumeric = reader.IsDBNull(3) ? (decimal?)null : reader.GetDecimal(3),
+                    ABit = reader.IsDBNull(4) ? (bool?)null : reader.GetBoolean(4),
+                    ASmallint = reader.IsDBNull(5) ? (short?)null : reader.GetInt16(5),
+                    ADecimal = reader.IsDBNull(6) ? (decimal?)null : reader.GetDecimal(6),
+                    ASmallmoney = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7),
+                    ATinyint = reader.IsDBNull(8) ? (byte?)null : reader.GetByte(8),
+                    AMoney = reader.IsDBNull(9) ? (decimal?)null : reader.GetDecimal(9),
+                };
                 list.Add(entity);
             }
             return list;
@@ -86,9 +88,7 @@ namespace StormTestProject.StormSchema
            }
         }
 
-        private string insertRequestCache;
-        private int insertCacheLength;
-
+        #region range insert methods
         private void RangeInsert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
             if(insertCacheLength != entities.Count)
@@ -99,7 +99,8 @@ namespace StormTestProject.StormSchema
 
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
-            CiHelper.ExecuteSelect(insertRequestCache, parms, reader => ReadKey(reader, entities), conn, trans);
+            var sql = ConstructInsertRequest(entities.Count);
+            CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
         }
 
         private List<EntityWithId> ReadKey(SqlDataReader reader, List<EntityWithId> entities)
@@ -113,15 +114,20 @@ namespace StormTestProject.StormSchema
             return entities;
         }
 
+        private string insertRequestCache;
+        private int insertCacheLength;
+
         private string ConstructInsertRequest(int count)
         {
+            if(insertCacheLength == count) return insertRequestCache;
+
             var sb = new StringBuilder();
             sb.AppendLine("INSERT INTO entity_with_id");
             sb.AppendLine("(");
-
             sb.AppendLine("a_bigint, a_int, a_numeric, a_bit, a_smallint,");
             sb.AppendLine("a_decimal, a_smallmoney, a_tinyint, a_money");
-            sb.AppendLine(") OUTPUT inserted.id VALUES");
+            sb.AppendLine(")OUTPUT inserted.id VALUES");
+
             AppendInsertKeys(sb, 0);
             for (int i = 1; i < count; i++)
             {
@@ -130,20 +136,8 @@ namespace StormTestProject.StormSchema
             }
             
             sb.AppendLine(")");
-            return sb.ToString();
-        }
-
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithId entity, int i)
-        {
-            yield return new SqlParameter("parm0i" + i, entity.ABigint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm1i" + i, entity.AInt);
-            yield return new SqlParameter("parm2i" + i, entity.ANumeric ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm3i" + i, entity.ABit ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm4i" + i, entity.ASmallint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm5i" + i, entity.ADecimal ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm6i" + i, entity.ASmallmoney ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm7i" + i, entity.ATinyint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm8i" + i, entity.AMoney ?? (object)DBNull.Value);
+            insertCacheLength = count;
+            return insertRequestCache = sb.ToString();
         }
 
         private void AppendInsertKeys(StringBuilder sb, int i)
@@ -158,5 +152,19 @@ namespace StormTestProject.StormSchema
                 sb.Append(", @parm7i"); sb.Append(i);
                 sb.Append(", @parm8i"); sb.Append(i);
         }
+
+        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithId entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, entity.ABigint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm1i" + i, entity.AInt);
+            yield return new SqlParameter("parm2i" + i, entity.ANumeric ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm3i" + i, entity.ABit ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm4i" + i, entity.ASmallint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm5i" + i, entity.ADecimal ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm6i" + i, entity.ASmallmoney ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm7i" + i, entity.ATinyint ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm8i" + i, entity.AMoney ?? (object)DBNull.Value);
+        }
+        #endregion
     }
 }

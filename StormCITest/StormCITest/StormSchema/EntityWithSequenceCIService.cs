@@ -23,18 +23,20 @@ namespace StormTestProject.StormSchema
             var list = new List<EntityWithSequence>();
             while (reader.Read())
             {
-                var entity = new EntityWithSequence();
-                entity.Id = reader.GetInt32(0);
-                entity.AChar = reader.IsDBNull(1) ? null : reader.GetString(1);
-                entity.AVarchar = reader.GetString(2);
-                entity.AText = reader.IsDBNull(3) ? null : reader.GetString(3);
-                entity.ANchar = reader.IsDBNull(4) ? null : reader.GetString(4);
-                entity.ANvarchar = reader.IsDBNull(5) ? null : reader.GetString(5);
-                entity.ANtext = reader.IsDBNull(6) ? null : reader.GetString(6);
-                entity.AXml = reader.IsDBNull(7) ? null : reader.GetString(7);
-                entity.ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8);
-                entity.AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9);
-                entity.AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10);
+                var entity = new EntityWithSequence
+                {
+                    Id = reader.GetInt32(0),
+                    AChar = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    AVarchar = reader.GetString(2),
+                    AText = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    ANchar = reader.IsDBNull(4) ? null : reader.GetString(4),
+                    ANvarchar = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    ANtext = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    AXml = reader.IsDBNull(7) ? null : reader.GetString(7),
+                    ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8),
+                    AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9),
+                    AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10),
+                };
                 list.Add(entity);
             }
             return list;

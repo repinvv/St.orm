@@ -1,11 +1,9 @@
 ﻿@visibility internal
-@inherits FileGenerator
+@inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings Storm.Interfaces StormGenerator.Models System.Collections.Generic
-@constructor(GenOptions options, List<EntityModel> models)
+@constructor(List<EntityModel> models)
 @member{public override string FileName => "MsSqlCi";}
 
-namespace @options.OutputNamespace
-{
     using System;
     using System.Data.SqlClient;
 	using System.Data.Common;
@@ -47,4 +45,3 @@ namespace @options.OutputNamespace
             return services[typeof(T)] as ICiService<T>;
         }
     }
-}

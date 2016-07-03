@@ -9,14 +9,14 @@
 namespace StormTestProject.StormSchema
 {
     using System.Data.SqlClient;
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 
     public interface ICiService<T>
     {
         List<T> Get(string query, SqlParameter[] parms, SqlConnection conn, SqlTransaction trans);
 
-		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
+        List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
 
-		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
+        void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
     }
 }
