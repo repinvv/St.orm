@@ -6,26 +6,23 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 {
-    using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
-    using GeneratorHelpers;
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class RangeInsert
+    internal class SequenceInsertKeys
     {
         #region constructor
         Model model;
-        GenOptions options;
 
-        public RangeInsert(Model model, GenOptions options)
+        public SequenceInsertKeys(Model model)
         {
             this.model = model;
-            this.options = options;
         }
         #endregion
 
@@ -57,20 +54,34 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        private void RangeInsert(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"        private void AppendInsertKeys(StringBuilder sb, int i)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            int i = 0;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ConstructInsertRequest(entities.Count);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
-            WriteLiteral(Environment.NewLine);
+            var i = 0; 
+            foreach (var field in model.Fields)
+            {
+                var start = field == model.Fields.First() ? "(" : ","; 
+                if (field.Column.IsPrimaryKey && field.Column.Sequence != null)
+                {
+                    WriteLiteral(@"                sb.Append(""");
+                    Write(start);
+                    WriteLiteral(@" NEXT VALUE FOR ");
+                    Write(field.Column.Sequence);
+                    WriteLiteral(@""");");
+                    WriteLiteral(Environment.NewLine);
+                }
+                else
+                {
+                    WriteLiteral(@"                sb.Append(""");
+                    Write(start);
+                    WriteLiteral(@"@");
+                    WriteLiteral(@"parm");
+                    Write(i++);
+                    WriteLiteral(@"i""); sb.Append(i);");
+                    WriteLiteral(Environment.NewLine);
+                }
+            }
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
 

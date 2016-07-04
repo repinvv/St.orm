@@ -33,6 +33,8 @@
 
         public string Definition { get; set; }
 
+        public string Sequence { get; set; }
+
         public List<Association> Associations { get; set; }
     }
 }

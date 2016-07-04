@@ -26,5 +26,7 @@
 
 @[ConstructRequest(model, model.Fields)]
 
+@[AppendInsertKeys(model.Fields)]
+
 @[InsertParameters(model, model.Fields)]
 		#endregion

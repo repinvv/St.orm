@@ -12,8 +12,6 @@
 
         public bool IsView { get; set; }
 
-        public string Sequence { get; set; }
-
         public List<Column> Columns { get; set; }
     }
 }

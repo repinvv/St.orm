@@ -1,0 +1,13 @@
+﻿@visibility internal
+@using StormGenerator.Models.GenModels
+@using System.Collections.Generic
+@constructor(List<Field> fields)
+
+		private void AppendInsertKeys(StringBuilder sb, int i)
+		{
+@{var i = 0; }
+@foreach(var field in fields){
+    @{var start = field == fields.First() ? "( " : ", "; }
+                sb.Append("@start@@parm@(i++)i"); sb.Append(i);
+}
+        }

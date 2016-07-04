@@ -21,10 +21,14 @@
 @[RangeInsertWithKey(model, options)]
 
 @[ConstructRequestWithOutput(model, fields)]
+
+@[AppendInsertKeys(fields)]
 } else{
 @[RangeInsert(model, options)]
 
 @[ConstructRequest(model, fields)]
+
+@[AppendInsertKeys(fields)]
 }
 
 @[InsertParameters(model, fields)]

@@ -137,12 +137,6 @@ namespace StormTestProject.StormSchema
         #region range insert methods
         private void RangeInsert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-            if(insertCacheLength != entities.Count)
-            {
-                insertRequestCache = ConstructInsertRequest(entities.Count);
-                insertCacheLength = entities.Count;
-            }
-
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);

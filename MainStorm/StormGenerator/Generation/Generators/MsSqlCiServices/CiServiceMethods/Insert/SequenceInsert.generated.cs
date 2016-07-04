@@ -57,14 +57,63 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
+            WriteLiteral(@"        public static int MinAmountForBulk = 10;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                if(entities.Count >= MinAmountForBulk)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                   ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                else");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    RangeInsert(entities, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            var fields = model.ValueFields();
+            WriteLiteral(@"        #region range insert methods");
+            WriteLiteral(Environment.NewLine);
+            if (!model.IsStruct)
+            {
+                Write(new RangeInsertWithKey(model, options).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new ConstructRequestWithOutput(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new SequenceInsertKeys(model).Execute());
+            }
+            else
+            {
+                Write(new RangeInsert(model, options).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new ConstructRequest(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new SequenceInsertKeys(model).Execute());
+            }
+            WriteLiteral(Environment.NewLine);
+            Write(new InsertParameters(model, fields).Execute());
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

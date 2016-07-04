@@ -9,19 +9,10 @@
     {
         private readonly Regex regex = new Regex(@"NEXT VALUE FOR \[(.*)\]");
 
-        public void MarkSequences(List<Table> models)
+        public string GetSequence(string defaultValue)
         {
-            foreach (var model in models.Where(x => x.Columns.Count(y => y.IsPrimaryKey) == 1))
-            {
-                var field = model.Columns.First(x => x.IsPrimaryKey);
-                if (field.IsIdentity)
-                {
-                    continue;
-                }
-
-                var match = regex.Match(field.Default ?? string.Empty);
-                model.Sequence = match.Success ? match.Groups[1].Value : null;
-            }
+            var match = regex.Match(defaultValue ?? string.Empty);
+            return match.Success ? match.Groups[1].Value : null;
         }
     }
 }

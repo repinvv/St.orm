@@ -114,31 +114,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private void AppendInsertKeys(StringBuilder sb, int i)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            var i = 0; 
-            foreach (var field in fields)
-            {
-                WriteLiteral(@"                sb.Append(""");
-                if (field != fields.First())
-                {
-                    WriteLiteral(@", ");
-                }
-                else
-                {
-                    WriteLiteral(@"( ");
-                }
-                WriteLiteral(@"@");
-                WriteLiteral(@"parm");
-                Write(i++);
-                WriteLiteral(@"i""); sb.Append(i);");
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

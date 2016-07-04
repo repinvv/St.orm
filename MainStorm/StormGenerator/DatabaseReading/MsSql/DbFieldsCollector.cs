@@ -9,11 +9,15 @@
     {
         private readonly ColumnReader columnReader;
         private readonly ColumnDefinition columnDefinition;
+        private readonly Sequencer sequencer;
 
-        public DbFieldsCollector(ColumnReader columnReader, ColumnDefinition columnDefinition)
+        public DbFieldsCollector(ColumnReader columnReader, 
+            ColumnDefinition columnDefinition,
+            Sequencer sequencer)
         {
             this.columnReader = columnReader;
             this.columnDefinition = columnDefinition;
+            this.sequencer = sequencer;
         }
 
         public void CollectFields(List<Table> models, SqlConnection connection)
@@ -36,6 +40,7 @@
                        CsType = csType,
                        CsTypeName = csType.GetTypeName(),
                        Default = column.Default,
+                       Sequence = sequencer.GetSequence(column.Default),
                        IsIdentity = column.IsIdentity,
                        IsNullable = column.IsNullable,
                        IsReadonly = column.IsComputed,

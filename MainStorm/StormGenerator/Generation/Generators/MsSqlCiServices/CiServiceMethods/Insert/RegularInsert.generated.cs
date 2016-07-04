@@ -101,6 +101,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             Write(new ConstructRequest(model, model.Fields).Execute());
             WriteLiteral(Environment.NewLine);
+            Write(new AppendInsertKeys(model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
             Write(new InsertParameters(model, model.Fields).Execute());
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);

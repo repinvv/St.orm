@@ -63,17 +63,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            if(insertCacheLength != entities.Count)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                insertRequestCache = ConstructInsertRequest(entities.Count);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                insertCacheLength = entities.Count;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            int i = 0;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");

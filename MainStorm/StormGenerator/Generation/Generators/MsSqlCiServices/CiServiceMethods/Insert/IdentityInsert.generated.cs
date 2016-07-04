@@ -93,12 +93,16 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
                 Write(new RangeInsertWithKey(model, options).Execute());
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequestWithOutput(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new AppendInsertKeys(fields).Execute());
             }
             else
             {
                 Write(new RangeInsert(model, options).Execute());
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequest(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new AppendInsertKeys(fields).Execute());
             }
             WriteLiteral(Environment.NewLine);
             Write(new InsertParameters(model, fields).Execute());

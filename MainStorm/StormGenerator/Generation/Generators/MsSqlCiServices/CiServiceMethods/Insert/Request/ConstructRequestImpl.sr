@@ -29,11 +29,3 @@
 			insertCacheLength = count;
 			return insertRequestCache = sb.ToString();
 		}
-
-		private void AppendInsertKeys(StringBuilder sb, int i)
-		{
-@{var i = 0; }
-@foreach(var field in fields){
-                sb.Append("@if(field != fields.First()){, }else{( }@@parm@(i++)i"); sb.Append(i);
-}
-        }

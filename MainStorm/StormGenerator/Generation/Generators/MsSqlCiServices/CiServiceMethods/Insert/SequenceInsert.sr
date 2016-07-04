@@ -2,7 +2,38 @@
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
 @constructor(Model model, GenOptions options)
 
+        public static int MinAmountForBulk = 10;
+
         public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
-
+            using (new ConnectionHandler(conn))
+            {
+			    if(entities.Count >= MinAmountForBulk)
+				{
+                   
+                }
+				else
+				{
+				    RangeInsert(entities, conn, trans);
+                }
+            }
         }
+
+@{var fields = model.ValueFields();}
+		#region range insert methods
+@if(!model.IsStruct){
+@[RangeInsertWithKey(model, options)]
+
+@[ConstructRequestWithOutput(model, fields)]
+
+@[SequenceInsertKeys(model)]
+} else{
+@[RangeInsert(model, options)]
+
+@[ConstructRequest(model, fields)]
+
+@[SequenceInsertKeys(model)]
+}
+
+@[InsertParameters(model, fields)]
+		#endregion

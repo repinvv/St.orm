@@ -112,7 +112,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
                     Write(i);
                     WriteLiteral(@":");
                     WriteLiteral(Environment.NewLine);
-                    WriteLiteral(@"					    return key");
+                    WriteLiteral(@"                        return key");
                     Write(i++);
                     WriteLiteral(@"[current];");
                     WriteLiteral(Environment.NewLine);

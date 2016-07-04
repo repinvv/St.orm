@@ -35,7 +35,6 @@
                 var tables = tableReader.ReadTables(connection);
                 fieldsCollector.CollectFields(tables, connection);
                 primaryKeyReader.MarkPrimaryKeys(tables, connection);
-                sequencer.MarkSequences(tables);
                 foreignKeyReader.GetForeignKeys(tables, connection);
                 return tables;
             }
