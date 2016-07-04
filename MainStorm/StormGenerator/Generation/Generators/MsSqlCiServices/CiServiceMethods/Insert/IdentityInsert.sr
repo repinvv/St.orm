@@ -20,12 +20,11 @@
 @if(!model.IsStruct){
 @[RangeInsertWithKey(model, options)]
 
-@{var output = "OUTPUT inserted." + model.KeyFields[0].Column.Name;}
-@[ConstructRequest(model, fields, output)]
+@[ConstructRequestWithOutput(model, fields)]
 } else{
 @[RangeInsert(model, options)]
 
-@[ConstructRequest(model, fields, string.Empty)]
+@[ConstructRequest(model, fields)]
 }
 
 @[InsertParameters(model, fields)]

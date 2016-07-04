@@ -117,12 +117,89 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public static int MinAmountForBulk = 10;
+
         public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_guid", conn, trans );
+                if(entities.Count >= MinAmountForBulk)
+                {
+                    CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_guid", conn, trans );
+                }
+                else
+                {
+                    RangeInsert(entities, conn, trans);
+                }
             }
         }
+
+        #region range insert methods
+        private void RangeInsert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if(insertCacheLength != entities.Count)
+            {
+                insertRequestCache = ConstructInsertRequest(entities.Count);
+                insertCacheLength = entities.Count;
+            }
+
+            int i = 0;
+            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var sql = ConstructInsertRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private string insertRequestCache;
+        private int insertCacheLength;
+
+        private string ConstructInsertRequest(int count)
+        {
+            if(insertCacheLength == count) return insertRequestCache;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO entity_with_guid");
+            sb.AppendLine("(");
+            sb.AppendLine("id, a_float, a_real, a_date, a_time,");
+            sb.AppendLine("a_offset, a_datetime, a_datetime2, a_smalldatetime");
+            sb.AppendLine(") VALUES");
+
+            AppendInsertKeys(sb, 0);
+            for (int i = 1; i < count; i++)
+            {
+                sb.AppendLine("), ");
+                AppendInsertKeys(sb, i);
+            }
+            
+            sb.AppendLine(")");
+            insertCacheLength = count;
+            return insertRequestCache = sb.ToString();
+        }
+
+        private void AppendInsertKeys(StringBuilder sb, int i)
+        {
+                sb.Append("( @parm0i"); sb.Append(i);
+                sb.Append(", @parm1i"); sb.Append(i);
+                sb.Append(", @parm2i"); sb.Append(i);
+                sb.Append(", @parm3i"); sb.Append(i);
+                sb.Append(", @parm4i"); sb.Append(i);
+                sb.Append(", @parm5i"); sb.Append(i);
+                sb.Append(", @parm6i"); sb.Append(i);
+                sb.Append(", @parm7i"); sb.Append(i);
+                sb.Append(", @parm8i"); sb.Append(i);
+        }
+
+        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithGuid entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, entity.Id);
+            yield return new SqlParameter("parm1i" + i, entity.AFloat ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm2i" + i, entity.AReal);
+            yield return new SqlParameter("parm3i" + i, entity.ADate ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm4i" + i, entity.ATime ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm5i" + i, entity.AOffset ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm6i" + i, entity.ADatetime ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm7i" + i, entity.ADatetime2 ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm8i" + i, entity.ASmalldatetime ?? (object)DBNull.Value);
+        }
+        #endregion
     }
 }

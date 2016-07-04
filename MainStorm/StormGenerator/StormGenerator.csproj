@@ -82,10 +82,15 @@
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
-    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\ConstructRequest.sr">
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequest.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
       <LastGenOutput>ConstructRequest.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequestImpl.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ConstructRequestImpl.cs</LastGenOutput>
     </None>
     <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\SequenceInsert.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert</CustomToolNamespace>
@@ -279,10 +284,15 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>IdentityInsert.generated.cs</LastGenOutput>
     </None>
-    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\ConstructRequest.generated.cs">
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequest.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ConstructRequest.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequestImpl.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConstructRequestImpl.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\EntityReader.generated.cs">
       <AutoGen>True</AutoGen>
@@ -323,6 +333,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RegularInsert.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequestWithOutput.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>ConstructRequestWithOutput.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\Request\ConstructRequestWithOutput.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConstructRequestWithOutput.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\SequenceInsert.generated.cs">
       <AutoGen>True</AutoGen>

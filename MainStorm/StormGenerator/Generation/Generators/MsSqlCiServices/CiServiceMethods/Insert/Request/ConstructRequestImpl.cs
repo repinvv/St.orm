@@ -17,14 +17,14 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ConstructRequest
+    internal class ConstructRequestImpl
     {
         #region constructor
         Model model;
         List<Field> fields;
         string output;
 
-        public ConstructRequest(Model model, List<Field> fields, string output)
+        public ConstructRequestImpl(Model model, List<Field> fields, string output)
         {
             this.model = model;
             this.fields = fields;

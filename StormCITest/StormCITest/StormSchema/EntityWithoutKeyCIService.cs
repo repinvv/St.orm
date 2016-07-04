@@ -75,12 +75,74 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public static int MinAmountForBulk = 10;
+
         public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_without_key", conn, trans );
+                if(entities.Count >= MinAmountForBulk)
+                {
+                    CiHelper.BulkInsert(new EntityDataReader(entities), "entity_without_key", conn, trans );
+                }
+                else
+                {
+                    RangeInsert(entities, conn, trans);
+                }
             }
         }
+
+        #region range insert methods
+        private void RangeInsert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if(insertCacheLength != entities.Count)
+            {
+                insertRequestCache = ConstructInsertRequest(entities.Count);
+                insertCacheLength = entities.Count;
+            }
+
+            int i = 0;
+            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var sql = ConstructInsertRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private string insertRequestCache;
+        private int insertCacheLength;
+
+        private string ConstructInsertRequest(int count)
+        {
+            if(insertCacheLength == count) return insertRequestCache;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO entity_without_key");
+            sb.AppendLine("(");
+            sb.AppendLine("value, content");
+            sb.AppendLine(") VALUES");
+
+            AppendInsertKeys(sb, 0);
+            for (int i = 1; i < count; i++)
+            {
+                sb.AppendLine("), ");
+                AppendInsertKeys(sb, i);
+            }
+            
+            sb.AppendLine(")");
+            insertCacheLength = count;
+            return insertRequestCache = sb.ToString();
+        }
+
+        private void AppendInsertKeys(StringBuilder sb, int i)
+        {
+                sb.Append("( @parm0i"); sb.Append(i);
+                sb.Append(", @parm1i"); sb.Append(i);
+        }
+
+        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithoutKey entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, entity.Value);
+            yield return new SqlParameter("parm1i" + i, entity.Content ?? (object)DBNull.Value);
+        }
+        #endregion
     }
 }

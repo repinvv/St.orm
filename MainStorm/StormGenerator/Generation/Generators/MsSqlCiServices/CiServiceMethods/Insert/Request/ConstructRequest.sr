@@ -1,0 +1,6 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers 
+@using System.Collections.Generic
+@constructor(Model model, List<Field> fields)
+
+@[ConstructRequestImpl(model, fields, string.Empty)]

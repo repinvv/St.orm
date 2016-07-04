@@ -124,12 +124,93 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public static int MinAmountForBulk = 10;
+
         public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-                CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
+                if(entities.Count >= MinAmountForBulk)
+                {
+                    CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
+                }
+                else
+                {
+                    RangeInsert(entities, conn, trans);
+                }
             }
         }
+
+        #region range insert methods
+        private void RangeInsert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if(insertCacheLength != entities.Count)
+            {
+                insertRequestCache = ConstructInsertRequest(entities.Count);
+                insertCacheLength = entities.Count;
+            }
+
+            int i = 0;
+            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var sql = ConstructInsertRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private string insertRequestCache;
+        private int insertCacheLength;
+
+        private string ConstructInsertRequest(int count)
+        {
+            if(insertCacheLength == count) return insertRequestCache;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("INSERT INTO some_schema.entity_with_sequence");
+            sb.AppendLine("(");
+            sb.AppendLine("id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,");
+            sb.AppendLine("a_ntext, a_xml, a_binary, a_varbinary, a_image");
+            sb.AppendLine(") VALUES");
+
+            AppendInsertKeys(sb, 0);
+            for (int i = 1; i < count; i++)
+            {
+                sb.AppendLine("), ");
+                AppendInsertKeys(sb, i);
+            }
+            
+            sb.AppendLine(")");
+            insertCacheLength = count;
+            return insertRequestCache = sb.ToString();
+        }
+
+        private void AppendInsertKeys(StringBuilder sb, int i)
+        {
+                sb.Append("( @parm0i"); sb.Append(i);
+                sb.Append(", @parm1i"); sb.Append(i);
+                sb.Append(", @parm2i"); sb.Append(i);
+                sb.Append(", @parm3i"); sb.Append(i);
+                sb.Append(", @parm4i"); sb.Append(i);
+                sb.Append(", @parm5i"); sb.Append(i);
+                sb.Append(", @parm6i"); sb.Append(i);
+                sb.Append(", @parm7i"); sb.Append(i);
+                sb.Append(", @parm8i"); sb.Append(i);
+                sb.Append(", @parm9i"); sb.Append(i);
+                sb.Append(", @parm10i"); sb.Append(i);
+        }
+
+        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithSequence entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, entity.Id);
+            yield return new SqlParameter("parm1i" + i, entity.AChar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm2i" + i, entity.AVarchar);
+            yield return new SqlParameter("parm3i" + i, entity.AText ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm4i" + i, entity.ANchar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm5i" + i, entity.ANvarchar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm6i" + i, entity.ANtext ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm7i" + i, entity.AXml ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm8i" + i, entity.ABinary ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm9i" + i, entity.AVarbinary ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm10i" + i, entity.AImage ?? (object)DBNull.Value);
+        }
+        #endregion
     }
 }

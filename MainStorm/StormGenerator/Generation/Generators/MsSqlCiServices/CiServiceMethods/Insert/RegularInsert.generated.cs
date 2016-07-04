@@ -59,6 +59,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
         {
             Write(new EntityReader(model).Execute());
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public static int MinAmountForBulk = 10;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
@@ -69,13 +72,37 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
+            WriteLiteral(@"                if(entities.Count >= MinAmountForBulk)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    CiHelper.BulkInsert(new EntityDataReader(entities), """);
             Write(model.Table.Id);
             WriteLiteral(@""", conn, trans );");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                else");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    RangeInsert(entities, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region range insert methods");
+            WriteLiteral(Environment.NewLine);
+            Write(new RangeInsert(model, options).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new ConstructRequest(model, model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new InsertParameters(model, model.Fields).Execute());
+            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

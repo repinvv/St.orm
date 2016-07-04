@@ -1,0 +1,7 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers 
+@using System.Collections.Generic
+@constructor(Model model, List<Field> fields)
+
+@{var output = "OUTPUT inserted." + model.KeyFields[0].Column.Name;}
+@[ConstructRequestImpl(model, fields, output)]

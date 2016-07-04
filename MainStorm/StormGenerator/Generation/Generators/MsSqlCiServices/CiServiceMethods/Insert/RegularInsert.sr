@@ -4,10 +4,27 @@
 
 @[EntityReader(model)]
 
+        public static int MinAmountForBulk = 10;
+
         public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-                CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
+			    if(entities.Count >= MinAmountForBulk)
+				{
+                    CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
+                }
+				else
+				{
+				    RangeInsert(entities, conn, trans);
+                }
             }
         }
+
+		#region range insert methods
+@[RangeInsert(model, options)]
+
+@[ConstructRequest(model, model.Fields)]
+
+@[InsertParameters(model, model.Fields)]
+		#endregion
