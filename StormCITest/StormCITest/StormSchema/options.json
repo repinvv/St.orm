@@ -1,16 +1,11 @@
 {
-  "ConnectionInfo": {
-    "DbType": "MsSql",
-    "Database": "StormCI",
-    "IntegratedSecurity": true,
-    "Server": "localhost"
-  },
+  "ConnectionString": "data source=.;initial catalog=StormCI;integrated security=true", 
   "GenOptions": {
     "Linq2EntitiesProvider": "linq2db",
     "ContextName": "StormTestContext",
     "CustomInterfaceForEntities": "IDbEntity",
     "OutputNamespace": "StormTestProject.StormSchema",
-    "CiOnly":  true
+    "CiOnly": true
   },
   "AutomaticPopulation": true,
   "AutomaticPopulationOptions": {

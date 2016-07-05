@@ -98,6 +98,22 @@ namespace StormTestProject.StormSchema
             }
         }
 
+        public static long GetSequenceValues(string sequenceName, int count, SqlConnection conn, SqlTransaction trans)
+        {
+            using (var cmd = new SqlCommand("sys.sp_sequence_get_range", conn))
+            {                    
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Transaction = trans;
+                cmd.Parameters.AddWithValue("@sequence_name", sequenceName);
+                cmd.Parameters.AddWithValue("@range_size", count);
+                SqlParameter firstValue = new SqlParameter("@range_first_value", SqlDbType.BigInt);
+                firstValue.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(firstValue);
+                cmd.ExecuteNonQuery();
+                return (long)firstValue.Value;
+            }
+        }
+
         public static void BulkInsert(IDataReader reader, string table, SqlConnection conn, SqlTransaction trans)
         {
             using (var bulk = new SqlBulkCopy(conn, BulkOptions, trans))

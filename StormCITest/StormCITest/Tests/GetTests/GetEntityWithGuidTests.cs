@@ -4,6 +4,7 @@
     using System.Data;
     using System.Data.SqlClient;
     using System.Linq;
+    using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StormCITest.EFSchema;
     using StormTestProject.StormSchema;
@@ -27,7 +28,7 @@
                 .First();
 
             // assert
-            Compares.CompareEntity(efEntity, entity);
+            Compare.EntityWithGuid(efEntity, entity);
         }
 
         private static entity_with_guid CreateFullEntity()
@@ -78,6 +79,71 @@
             Assert.IsNull(entity.AOffset);
             Assert.IsNull(entity.ASmalldatetime);
             Assert.IsNull(entity.ATime);
+        }
+
+        private List<EntityWithGuid> ReadEntities(SqlDataReader reader)
+        {
+            var list = new List<EntityWithGuid>();
+            while (reader.Read())
+            {
+                var entity = new EntityWithGuid
+                {
+                    Id = reader.GetGuid(0),
+                    AFloat = reader.IsDBNull(1) ? (double?)null : reader.GetDouble(1),
+                    AReal = reader.GetFloat(2),
+                    ADate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3),
+                    ATime = reader.IsDBNull(4) ? (TimeSpan?)null : reader.GetTimeSpan(4),
+                    AOffset = reader.IsDBNull(5) ? (DateTimeOffset?)null : reader.GetDateTimeOffset(5),
+                    ADatetime = reader.IsDBNull(6) ? (DateTime?)null : reader.GetDateTime(6),
+                    ADatetime2 = reader.IsDBNull(7) ? (DateTime?)null : reader.GetDateTime(7),
+                    ASmalldatetime = reader.IsDBNull(8) ? (DateTime?)null : reader.GetDateTime(8),
+                };
+                list.Add(entity);
+            }
+            return list;
+        }
+
+        [TestMethod]
+        public void Get_EntityWithGuid_ById()
+        {
+            // arrange
+            var entities = Enumerable.Range(500, 17000).Select(Create.EntityWithGuid).ToList();
+            MsSqlCi.Insert(entities, conn);
+
+            // act
+            var ids = entities.Select(x => x.Id).ToArray();
+
+            List<EntityWithGuid> result = null;
+            var time = WatchIt.Watch(() => { result = MsSqlCi.GetByPrimaryKey<EntityWithGuid>(ids, conn); });
+            Console.WriteLine("get by temp table: " + time);
+
+            var request = "select * from entity_with_guid";
+            var time3 = WatchIt.Watch(() => { result = MsSqlCi.Get<EntityWithGuid>(request, new SqlParameter[0], conn); });
+            Console.WriteLine("select all from table: " + time3);
+
+
+            var time2 = WatchIt.Watch(() =>
+            {
+                result = new List<EntityWithGuid>();
+                foreach (var idsChunk in ids.SplitInGroupsBy(1700))
+                {
+                    var idsStr = string.Join(", ", idsChunk.Select(x => "'" + x.ToString("D") + "'"));
+                    using (new ConnectionHandler(conn))
+                    {
+                        var sql = "select * from entity_with_guid where id in (" + idsStr + ")";
+                        result.AddRange(CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, (SqlConnection)conn, null));
+                    }
+                }
+            });
+            Console.WriteLine("where in, split by 300: " + time2);
+            var dict = result.ToDictionary(x => x.Id);
+
+            // assert
+            Assert.AreEqual(entities.Count, result.Count);
+            foreach (var src in entities)
+            {
+                Compare.EntityWithGuid(src, dict[src.Id]);
+            }
         }
     }
 }

@@ -90,6 +90,15 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public static void Insert<T>(T entity, DbConnection conn, DbTransaction trans = null)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            GetService<T>().Insert(entity, (SqlConnection)conn, trans as SqlTransaction);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private static Dictionary<Type, object> services =");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            new Dictionary<Type, object>");

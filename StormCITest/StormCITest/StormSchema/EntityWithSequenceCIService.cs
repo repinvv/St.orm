@@ -132,6 +132,8 @@ namespace StormTestProject.StormSchema
             {
                 if(entities.Count >= MinAmountForBulk)
                 {
+                    var seq = CiHelper.GetSequenceValues("some_schema.entity_seq", entities.Count, conn, trans);
+                    entities.ForEach(x => x.Id = (int)(seq++));
                     CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
                 }
                 else
@@ -147,7 +149,18 @@ namespace StormTestProject.StormSchema
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
-            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+            CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
+        }
+
+        private List<EntityWithSequence> ReadKey(SqlDataReader reader, List<EntityWithSequence> entities)
+        {
+            int i = 0;
+            while (reader.Read())
+            {
+                entities[i++].Id = reader.GetInt32(0);
+            }
+
+            return entities;
         }
 
         private string insertRequestCache;
@@ -162,7 +175,7 @@ namespace StormTestProject.StormSchema
             sb.AppendLine("(");
             sb.AppendLine("id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,");
             sb.AppendLine("a_ntext, a_xml, a_binary, a_varbinary, a_image");
-            sb.AppendLine(") VALUES");
+            sb.AppendLine(")OUTPUT inserted.id VALUES");
 
             AppendInsertKeys(sb, 0);
             for (int i = 1; i < count; i++)
@@ -178,33 +191,47 @@ namespace StormTestProject.StormSchema
 
         private void AppendInsertKeys(StringBuilder sb, int i)
         {
-                sb.Append("( @parm0i"); sb.Append(i);
-                sb.Append(", @parm1i"); sb.Append(i);
-                sb.Append(", @parm2i"); sb.Append(i);
-                sb.Append(", @parm3i"); sb.Append(i);
-                sb.Append(", @parm4i"); sb.Append(i);
-                sb.Append(", @parm5i"); sb.Append(i);
-                sb.Append(", @parm6i"); sb.Append(i);
-                sb.Append(", @parm7i"); sb.Append(i);
-                sb.Append(", @parm8i"); sb.Append(i);
-                sb.Append(", @parm9i"); sb.Append(i);
-                sb.Append(", @parm10i"); sb.Append(i);
+                sb.Append("( NEXT VALUE FOR some_schema.entity_seq");
+                sb.Append(",@parm0i"); sb.Append(i);
+                sb.Append(",@parm1i"); sb.Append(i);
+                sb.Append(",@parm2i"); sb.Append(i);
+                sb.Append(",@parm3i"); sb.Append(i);
+                sb.Append(",@parm4i"); sb.Append(i);
+                sb.Append(",@parm5i"); sb.Append(i);
+                sb.Append(",@parm6i"); sb.Append(i);
+                sb.Append(",@parm7i"); sb.Append(i);
+                sb.Append(",@parm8i"); sb.Append(i);
+                sb.Append(",@parm9i"); sb.Append(i);
         }
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithSequence entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.Id);
-            yield return new SqlParameter("parm1i" + i, entity.AChar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm2i" + i, entity.AVarchar);
-            yield return new SqlParameter("parm3i" + i, entity.AText ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm4i" + i, entity.ANchar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm5i" + i, entity.ANvarchar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm6i" + i, entity.ANtext ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm7i" + i, entity.AXml ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm8i" + i, entity.ABinary ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm9i" + i, entity.AVarbinary ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm10i" + i, entity.AImage ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, entity.AChar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm1i" + i, entity.AVarchar);
+            yield return new SqlParameter("parm2i" + i, entity.AText ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm3i" + i, entity.ANchar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm4i" + i, entity.ANvarchar ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm5i" + i, entity.ANtext ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm6i" + i, entity.AXml ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm7i" + i, entity.ABinary ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm8i" + i, entity.AVarbinary ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm9i" + i, entity.AImage ?? (object)DBNull.Value);
         }
         #endregion
+
+        public void Insert(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        {        
+            using(new ConnectionHandler(conn))
+            {
+                var sql = ConstructInsertRequest(1);    
+                var parms = GetInsertParameters(entity, 0).ToArray();
+                Func<IDataReader, List<EntityWithSequence>> readId = reader =>
+                    {
+                        if(reader.Read()) entity.Id = reader.GetInt32(0);
+                        return null;
+                    };
+                CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+            }
+        }
     }
 }

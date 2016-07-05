@@ -1,6 +1,7 @@
 ﻿namespace StormGenerator.Generation.GeneratorCollections
 {
     using System.Collections.Generic;
+    using System.Linq;
     using StormGenerator.Generation.Generators;
     using StormGenerator.Generation.Generators.GenericCi;
     using StormGenerator.Generation.Generators.MsSqlCiServices;

@@ -14,37 +14,21 @@
         public void Insert_EnitityWithGuid_Single()
         {
             // arrange
-            var entity = CreateFullEntity(1000);
+            var entity = Create.EntityWithGuid(1000);
 
             // act
-            var time = WatchIt.Watch(() => MsSqlCi.Insert(new List<EntityWithGuid> { entity }, conn));
+            var time = WatchIt.Watch(() => MsSqlCi.Insert(entity, conn));
             Console.WriteLine(time);
 
             // assert
             var efEntity = context.entity_with_guid.First(x => x.id == entity.Id);
-            Compares.CompareEntity(efEntity, entity);
-        }
-
-        private EntityWithGuid CreateFullEntity(int i)
-        {
-            return new EntityWithGuid
-                   {
-                       Id = Guid.NewGuid(),
-                       ADate = new DateTime(2016, 1, 1),
-                       ADatetime = new DateTime(2016, 1, 2, 1, 2, 3),
-                       ADatetime2 = new DateTime(2016, 1, 3, 1, 2, 3),
-                       AFloat = 123.456,
-                       AOffset = new DateTimeOffset(2016, 1, 4, 1, 2, 3, TimeSpan.FromMinutes(10)),
-                       AReal = (float)234.567,
-                       ASmalldatetime = new DateTime(2016, 1, 5, 1, 2, 0), //precision is one minute
-                       ATime = TimeSpan.FromMinutes(20),
-                   };
+            Compare.EntityWithGuid(efEntity, entity);
         }
 
         public void Insert_EnitityWithId_TwoHundred()
         {
             // arrange
-            var entities = Enumerable.Range(10, 200).Select(CreateFullEntity).ToList();
+            var entities = Enumerable.Range(10, 200).Select(Create.EntityWithGuid).ToList();
 
             // act
             MsSqlCi.Insert(entities, conn);
@@ -53,7 +37,7 @@
             var efEntities = context.entity_with_guid.ToDictionary(x => x.id);
             foreach (var entity in entities)
             {
-                Compares.CompareEntity(efEntities[entity.Id], entity);
+                Compare.EntityWithGuid(efEntities[entity.Id], entity);
             }
         }
 
@@ -61,7 +45,7 @@
         public void Insert_EnitityWithGuid_Perf()
         {
             // arrange
-            var entities = Enumerable.Range(10, 200000).Select(CreateFullEntity).ToList();
+            var entities = Enumerable.Range(10, 200000).Select(Create.EntityWithGuid).ToList();
             // About a second on my system, inconsistent timing
 
             // act
@@ -72,9 +56,9 @@
         [TestMethod]
         public void Insert_EnitityWithGuid_SinglePerf()
         {
-            var entities = Enumerable.Range(10, 1000).Select(CreateFullEntity).ToList();
+            var entities = Enumerable.Range(10, 1000).Select(Create.EntityWithGuid).ToList();
 
-            var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(new List<EntityWithGuid> { x }, conn)));
+            var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(x, conn)));
             DeleteAll();
             var time2 = WatchIt.Watch(() => entities.ForEach(SingleInsert));
             Console.WriteLine(time1);

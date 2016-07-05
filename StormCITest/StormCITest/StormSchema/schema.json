@@ -14,6 +14,7 @@
           "IsIdentity": true,
           "Index": 1,
           "Precision": 10,
+          "Definition": "id int",
           "Associations": []
         },
         {
@@ -24,6 +25,7 @@
           "IsNullable": true,
           "Index": 2,
           "Precision": 19,
+          "Definition": "a_bigint bigint",
           "Associations": []
         },
         {
@@ -33,6 +35,7 @@
           "CsTypeName": "int",
           "Index": 3,
           "Precision": 10,
+          "Definition": "a_int int",
           "Associations": []
         },
         {
@@ -44,6 +47,7 @@
           "Index": 4,
           "Precision": 6,
           "Scale": 2,
+          "Definition": "a_numeric numeric(6, 2)",
           "Associations": []
         },
         {
@@ -53,6 +57,7 @@
           "CsTypeName": "bool?",
           "IsNullable": true,
           "Index": 5,
+          "Definition": "a_bit bit",
           "Associations": []
         },
         {
@@ -63,6 +68,7 @@
           "IsNullable": true,
           "Index": 6,
           "Precision": 5,
+          "Definition": "a_smallint smallint",
           "Associations": []
         },
         {
@@ -74,6 +80,7 @@
           "Index": 7,
           "Precision": 8,
           "Scale": 3,
+          "Definition": "a_decimal decimal(8, 3)",
           "Associations": []
         },
         {
@@ -85,6 +92,7 @@
           "Index": 8,
           "Precision": 10,
           "Scale": 4,
+          "Definition": "a_smallmoney smallmoney",
           "Associations": []
         },
         {
@@ -95,6 +103,7 @@
           "IsNullable": true,
           "Index": 9,
           "Precision": 3,
+          "Definition": "a_tinyint tinyint",
           "Associations": []
         },
         {
@@ -106,6 +115,7 @@
           "Index": 10,
           "Precision": 19,
           "Scale": 4,
+          "Definition": "a_money money",
           "Associations": []
         }
       ]
@@ -122,25 +132,28 @@
           "CsTypeName": "Guid",
           "IsPrimaryKey": true,
           "Index": 1,
+          "Definition": "id uniqueidentifier",
           "Associations": []
         },
         {
           "Name": "a_float",
           "DbType": "float",
-          "CsType": "System.Nullable`1[[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-          "CsTypeName": "float?",
+          "CsType": "System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "double?",
           "IsNullable": true,
           "Index": 2,
           "Precision": 53,
+          "Definition": "a_float float",
           "Associations": []
         },
         {
           "Name": "a_real",
           "DbType": "real",
-          "CsType": "System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-          "CsTypeName": "double",
+          "CsType": "System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "float",
           "Index": 3,
           "Precision": 24,
+          "Definition": "a_real real",
           "Associations": []
         },
         {
@@ -150,15 +163,17 @@
           "CsTypeName": "DateTime?",
           "IsNullable": true,
           "Index": 4,
+          "Definition": "a_date date",
           "Associations": []
         },
         {
           "Name": "a_time",
           "DbType": "time",
-          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-          "CsTypeName": "DateTime?",
+          "CsType": "System.Nullable`1[[System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "TimeSpan?",
           "IsNullable": true,
           "Index": 5,
+          "Definition": "a_time time",
           "Associations": []
         },
         {
@@ -168,6 +183,7 @@
           "CsTypeName": "DateTimeOffset?",
           "IsNullable": true,
           "Index": 6,
+          "Definition": "a_offset datetimeoffset",
           "Associations": []
         },
         {
@@ -177,6 +193,7 @@
           "CsTypeName": "DateTime?",
           "IsNullable": true,
           "Index": 7,
+          "Definition": "a_datetime datetime",
           "Associations": []
         },
         {
@@ -186,6 +203,7 @@
           "CsTypeName": "DateTime?",
           "IsNullable": true,
           "Index": 8,
+          "Definition": "a_datetime2 datetime2",
           "Associations": []
         },
         {
@@ -195,6 +213,7 @@
           "CsTypeName": "DateTime?",
           "IsNullable": true,
           "Index": 9,
+          "Definition": "a_smalldatetime smalldatetime",
           "Associations": []
         }
       ]
@@ -210,8 +229,11 @@
           "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
           "CsTypeName": "int",
           "IsPrimaryKey": true,
+          "Default": "(NEXT VALUE FOR [some_schema].[entity_seq])",
           "Index": 1,
           "Precision": 10,
+          "Definition": "id int",
+          "Sequence": "some_schema.entity_seq",
           "Associations": []
         },
         {
@@ -222,6 +244,7 @@
           "IsNullable": true,
           "Index": 2,
           "Length": 1,
+          "Definition": "a_char char(1)",
           "Associations": []
         },
         {
@@ -231,6 +254,7 @@
           "CsTypeName": "string",
           "Index": 3,
           "Length": 2000,
+          "Definition": "a_varchar varchar(2000)",
           "Associations": []
         },
         {
@@ -241,6 +265,7 @@
           "IsNullable": true,
           "Index": 4,
           "Length": 2147483647,
+          "Definition": "a_text text(2147483647)",
           "Associations": []
         },
         {
@@ -251,6 +276,7 @@
           "IsNullable": true,
           "Index": 5,
           "Length": 10,
+          "Definition": "a_nchar nchar(10)",
           "Associations": []
         },
         {
@@ -261,6 +287,7 @@
           "IsNullable": true,
           "Index": 6,
           "Length": -1,
+          "Definition": "a_nvarchar nvarchar(max)",
           "Associations": []
         },
         {
@@ -271,6 +298,7 @@
           "IsNullable": true,
           "Index": 7,
           "Length": 1073741823,
+          "Definition": "a_ntext ntext(1073741823)",
           "Associations": []
         },
         {
@@ -281,6 +309,7 @@
           "IsNullable": true,
           "Index": 8,
           "Length": -1,
+          "Definition": "a_xml xml(max)",
           "Associations": []
         },
         {
@@ -291,6 +320,7 @@
           "IsNullable": true,
           "Index": 9,
           "Length": 1000,
+          "Definition": "a_binary binary(1000)",
           "Associations": []
         },
         {
@@ -300,7 +330,8 @@
           "CsTypeName": "byte[]",
           "IsNullable": true,
           "Index": 10,
-          "Length": 2000,
+          "Length": -1,
+          "Definition": "a_varbinary varbinary(max)",
           "Associations": []
         },
         {
@@ -311,6 +342,7 @@
           "IsNullable": true,
           "Index": 11,
           "Length": 2147483647,
+          "Definition": "a_image image(2147483647)",
           "Associations": []
         }
       ]
@@ -328,6 +360,7 @@
           "IsPrimaryKey": true,
           "Index": 1,
           "Precision": 10,
+          "Definition": "id_1 int",
           "Associations": []
         },
         {
@@ -338,6 +371,7 @@
           "IsPrimaryKey": true,
           "Index": 2,
           "Length": 256,
+          "Definition": "id_2 nvarchar(256)",
           "Associations": []
         },
         {
@@ -348,6 +382,7 @@
           "IsNullable": true,
           "Index": 3,
           "Length": -1,
+          "Definition": "content nvarchar(max)",
           "Associations": []
         }
       ]
@@ -364,6 +399,7 @@
           "CsTypeName": "int",
           "Index": 1,
           "Precision": 10,
+          "Definition": "value int",
           "Associations": []
         },
         {
@@ -374,6 +410,7 @@
           "IsNullable": true,
           "Index": 2,
           "Length": -1,
+          "Definition": "content nvarchar(max)",
           "Associations": []
         }
       ]
@@ -452,7 +489,6 @@
     },
     {
       "Id": "EntityWithGuid",
-      "IsStruct": true,
       "DbTableId": "entity_with_guid",
       "Fields": [
         {
@@ -513,6 +549,7 @@
       "Relations": [],
       "IsEnabled": true,
       "IsGenerated": true,
+      "IsStruct": true,
       "Name": "EntityWithGuid"
     },
     {

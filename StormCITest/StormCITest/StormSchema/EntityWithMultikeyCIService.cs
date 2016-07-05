@@ -189,5 +189,15 @@ namespace StormTestProject.StormSchema
             yield return new SqlParameter("parm2i" + i, entity.Content ?? (object)DBNull.Value);
         }
         #endregion
+
+        public void Insert(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
+        {        
+            using(new ConnectionHandler(conn))
+            {
+                var sql = ConstructInsertRequest(1);
+                var parms = GetInsertParameters(entity, 0).ToArray();
+                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+            }
+        }
     }
 }

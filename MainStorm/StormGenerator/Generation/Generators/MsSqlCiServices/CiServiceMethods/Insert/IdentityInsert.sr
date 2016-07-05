@@ -33,3 +33,6 @@
 
 @[InsertParameters(model, fields)]
 		#endregion
+
+@[SingleInsert(model)]
+

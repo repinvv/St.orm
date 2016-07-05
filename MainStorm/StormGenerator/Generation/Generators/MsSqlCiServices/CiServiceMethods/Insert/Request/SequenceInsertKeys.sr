@@ -1,13 +1,13 @@
 ﻿@visibility internal
 @using StormGenerator.Models.GenModels
 @using System.Collections.Generic
-@constructor(Model model)
+@constructor(List<Field> fields)
 		
 		private void AppendInsertKeys(StringBuilder sb, int i)
 		{
 @{var i = 0; }
-@foreach(var field in model.Fields){
-    @{var start = field == model.Fields.First() ? "(" : ","; }
+@foreach(var field in fields){
+    @{var start = field == fields.First() ? "(" : ","; }
 	@if(field.Column.IsPrimaryKey && field.Column.Sequence != null){
                 sb.Append("@start NEXT VALUE FOR @field.Column.Sequence");
 	} else {

@@ -15,38 +15,24 @@
         public void Insert_EnitityWithId_Single()
         {
             // arrange
-            var entity = CreateFullEntity(1000);
+            var entity = Create.EntityWithId(1000);
 
             // act
-            MsSqlCi.Insert(new List<EntityWithId> { entity }, conn);
+            MsSqlCi.Insert(entity, conn);
 
             // assert
             Assert.IsTrue(entity.Id > 0);
             var efEntity = context.entity_with_id.First(x => x.id == entity.Id);
-            Compares.CompareEntity(efEntity, entity);
+            Compare.EntityWithId(efEntity, entity);
         }
 
-        private EntityWithId CreateFullEntity(int intVal)
-        {
-            return new EntityWithId()
-                   {
-                       ABigint = 10L * 1000 * 1000 * 1000,
-                       AInt = intVal,
-                       ANumeric = 3123.22M, //precision is 6.2
-                       ABit = true,
-                       ASmallint = 123,
-                       ADecimal = 222.223M,
-                       ASmallmoney = 333.334M,
-                       ATinyint = 22,
-                       AMoney = 444.44M
-                   };
-        }
+
 
         [TestMethod]
         public void Insert_EnitityWithId_TwoHundred()
         {
             // arrange
-            var entities = Enumerable.Range(10, 200).Select(CreateFullEntity).ToList();
+            var entities = Enumerable.Range(10, 200).Select(Create.EntityWithId).ToList();
 
             // act
             MsSqlCi.Insert(entities, conn);
@@ -60,7 +46,7 @@
                                   .ToDictionary(x => x.id);
             foreach (var entity in entities)
             {
-                Compares.CompareEntity(efEntities[entity.Id], entity);
+                Compare.EntityWithId(efEntities[entity.Id], entity);
             }
         }
 
@@ -68,7 +54,7 @@
         public void Insert_EnitityWithId_Perf()
         {
             // arrange
-            var entities = Enumerable.Range(10, 3000).Select(CreateFullEntity).ToList(); 
+            var entities = Enumerable.Range(10, 3000).Select(Create.EntityWithId).ToList(); 
             // About a second on my system
 
             // act

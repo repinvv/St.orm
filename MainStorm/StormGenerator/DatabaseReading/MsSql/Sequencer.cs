@@ -12,7 +12,12 @@
         public string GetSequence(string defaultValue)
         {
             var match = regex.Match(defaultValue ?? string.Empty);
-            return match.Success ? match.Groups[1].Value : null;
+            return match.Success ? Clean(match.Groups[1].Value) : null;
+        }
+
+        private string Clean(string value)
+        {
+            return value.Replace("[", "").Replace("]", "");
         }
     }
 }

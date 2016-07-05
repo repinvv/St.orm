@@ -57,6 +57,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
+            Write(new EntityReader(model).Execute());
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public static int MinAmountForBulk = 10;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
@@ -74,7 +76,19 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                   ");
+            WriteLiteral(@"                    var seq = CiHelper.GetSequenceValues(""");
+            Write(model.KeyFields[0].Column.Sequence);
+            WriteLiteral(@""", entities.Count, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    entities.ForEach(x => x.");
+            Write(model.KeyFields[0].Name);
+            WriteLiteral(@" = (");
+            Write(model.KeyFields[0].Column.CsTypeName);
+            WriteLiteral(@")(seq++));");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    CiHelper.BulkInsert(new EntityDataReader(entities), """);
+            Write(model.Table.Id);
+            WriteLiteral(@""", conn, trans );");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                }");
             WriteLiteral(Environment.NewLine);
@@ -91,7 +105,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            var fields = model.ValueFields();
+            var fields = model.Fields;
             WriteLiteral(@"        #region range insert methods");
             WriteLiteral(Environment.NewLine);
             if (!model.IsStruct)
@@ -100,7 +114,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequestWithOutput(model, fields).Execute());
                 WriteLiteral(Environment.NewLine);
-                Write(new SequenceInsertKeys(model).Execute());
+                Write(new SequenceInsertKeys(fields).Execute());
             }
             else
             {
@@ -108,12 +122,14 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequest(model, fields).Execute());
                 WriteLiteral(Environment.NewLine);
-                Write(new SequenceInsertKeys(model).Execute());
+                Write(new SequenceInsertKeys(fields).Execute());
             }
             WriteLiteral(Environment.NewLine);
-            Write(new InsertParameters(model, fields).Execute());
+            Write(new InsertParameters(model, model.ValueFields()).Execute());
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            Write(new SingleInsert(model).Execute());
 
             return executed = sb.ToString();
         }

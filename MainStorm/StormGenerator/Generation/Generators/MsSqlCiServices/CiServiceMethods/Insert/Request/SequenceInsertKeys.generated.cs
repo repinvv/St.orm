@@ -18,11 +18,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     internal class SequenceInsertKeys
     {
         #region constructor
-        Model model;
+        List<Field> fields;
 
-        public SequenceInsertKeys(Model model)
+        public SequenceInsertKeys(List<Field> fields)
         {
-            this.model = model;
+            this.fields = fields;
         }
         #endregion
 
@@ -59,9 +59,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
             var i = 0; 
-            foreach (var field in model.Fields)
+            foreach (var field in fields)
             {
-                var start = field == model.Fields.First() ? "(" : ","; 
+                var start = field == fields.First() ? "(" : ","; 
                 if (field.Column.IsPrimaryKey && field.Column.Sequence != null)
                 {
                     WriteLiteral(@"                sb.Append(""");

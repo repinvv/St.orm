@@ -49,6 +49,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        void Insert(T entity, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);
 

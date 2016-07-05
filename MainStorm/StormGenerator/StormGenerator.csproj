@@ -369,6 +369,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SequenceInsert.sr</DependentUpon>
     </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\SingleInsert.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SingleInsert.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Insert\SingleInsert.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SingleInsert.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\KeyDataReader.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

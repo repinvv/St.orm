@@ -106,6 +106,27 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             Write(new InsertParameters(model, model.Fields).Execute());
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public void Insert(");
+            Write(model.Name);
+            WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {        ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            using(new ConnectionHandler(conn))");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                var sql = ConstructInsertRequest(1);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                var parms = GetInsertParameters(entity, 0).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

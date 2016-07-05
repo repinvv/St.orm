@@ -160,5 +160,21 @@ namespace StormTestProject.StormSchema
             yield return new SqlParameter("parm8i" + i, entity.AMoney ?? (object)DBNull.Value);
         }
         #endregion
+
+        public void Insert(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
+        {        
+            using(new ConnectionHandler(conn))
+            {
+                var sql = ConstructInsertRequest(1);    
+                var parms = GetInsertParameters(entity, 0).ToArray();
+                Func<IDataReader, List<EntityWithId>> readId = reader =>
+                    {
+                        if(reader.Read()) entity.Id = reader.GetInt32(0);
+                        return null;
+                    };
+                CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+            }
+        }
+
     }
 }

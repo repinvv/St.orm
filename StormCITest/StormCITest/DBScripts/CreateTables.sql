@@ -35,7 +35,7 @@ GO
 create sequence some_schema.entity_seq as int START WITH 1 MINVALUE 1;
 create table some_schema.entity_with_sequence
 (
-    id int not null,
+    id int not null default NEXT VALUE FOR some_schema.entity_seq,
 	a_char char(1),
 	a_varchar varchar(2000) not null,
 	a_text text,

@@ -34,6 +34,11 @@ namespace StormTestProject.StormSchema
             GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);
         }
 
+        public static void Insert<T>(T entity, DbConnection conn, DbTransaction trans = null)
+        {
+            GetService<T>().Insert(entity, (SqlConnection)conn, trans as SqlTransaction);
+        }
+
         private static Dictionary<Type, object> services =
             new Dictionary<Type, object>
             {

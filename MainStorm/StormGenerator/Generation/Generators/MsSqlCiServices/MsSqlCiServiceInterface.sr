@@ -13,4 +13,6 @@
 		List<T> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
 
 		void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
+
+		void Insert(T entity, SqlConnection conn, SqlTransaction trans);
     }

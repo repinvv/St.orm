@@ -37,7 +37,7 @@
                 return new List<GeneratedFile> { file };
             }
 
-            var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema);
+            var models = modelsFromConfigsCreation.CreateModelsFromSchema(schema).Where(x=>x.Model.IsEnabled).ToList();
             var collection = collectionsFactory.GetGeneratorCollections();
 
             return collection
