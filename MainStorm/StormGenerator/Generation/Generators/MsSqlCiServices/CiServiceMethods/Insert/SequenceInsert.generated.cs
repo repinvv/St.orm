@@ -59,7 +59,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
         {
             Write(new EntityReader(model).Execute());
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public static int MinAmountForBulk = 10;");
+            WriteLiteral(@"        public static int MaxAmountForGroupedInsert = 12;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(List<");
@@ -72,7 +72,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                if(entities.Count >= MinAmountForBulk)");
+            WriteLiteral(@"                if(entities.Count > MaxAmountForGroupedInsert)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                {");
             WriteLiteral(Environment.NewLine);

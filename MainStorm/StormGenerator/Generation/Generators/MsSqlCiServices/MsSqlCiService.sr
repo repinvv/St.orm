@@ -43,14 +43,16 @@
 }
 
 @if(model.KeyFields.Count != 1 
+    || model.IsStruct
     || (model.KeyFields[0].Column.Sequence == null && !model.KeyFields[0].Column.IsIdentity)){
 @[RegularInsert(model, options)]
 } else {
   @if(model.KeyFields[0].Column.IsIdentity){
 @[IdentityInsert(model, options)]
-  }
-  @if(model.KeyFields[0].Column.Sequence != null){
+  } else {
+    @if(model.KeyFields[0].Column.Sequence != null){
 @[SequenceInsert(model, options)]
+    }
   }
 }
     }

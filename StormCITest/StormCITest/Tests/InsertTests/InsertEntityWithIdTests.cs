@@ -26,8 +26,6 @@
             Compare.EntityWithId(efEntity, entity);
         }
 
-
-
         [TestMethod]
         public void Insert_EnitityWithId_TwoHundred()
         {

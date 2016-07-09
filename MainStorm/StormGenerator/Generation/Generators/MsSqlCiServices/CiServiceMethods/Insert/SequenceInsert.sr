@@ -4,13 +4,13 @@
 
 @[EntityReader(model)]
 
-        public static int MinAmountForBulk = 10;
+        public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-			    if(entities.Count >= MinAmountForBulk)
+			    if(entities.Count > MaxAmountForGroupedInsert)
 				{
                     var seq = CiHelper.GetSequenceValues("@model.KeyFields[0].Column.Sequence", entities.Count, conn, trans);
                     entities.ForEach(x => x.@model.KeyFields[0].Name = (@model.KeyFields[0].Column.CsTypeName)(seq++));

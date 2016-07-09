@@ -32,14 +32,28 @@
         }
 
         [TestMethod]
-        public void Get_EntityWithId_ById()
+        public void Get_EntityWithId_ByIdByTempTable()
+        {
+            GetEntityWithIdByIdImpl(1000);
+        }
+
+        [TestMethod]
+        public void Get_EntityWithId_ByIdByWhereIn()
+        {
+            GetEntityWithIdByIdImpl(30);
+        }
+
+        private void GetEntityWithIdByIdImpl(int length)
         {
             // arrange
-            var entities = Enumerable.Range(500, 1000).Select(Create.EntityWithId).ToList();
+            var entities = Enumerable.Range(500, length)
+                                     .Select(Create.EntityWithId)
+                                     .ToList();
             MsSqlCi.Insert(entities, conn);
 
             // act
-            var ids = entities.Select(x => x.Id).ToArray();
+            var ids = entities.Select(x => x.Id)
+                              .ToArray();
 
             List<EntityWithId> result = null;
             var time = WatchIt.Watch(() => { result = MsSqlCi.GetByPrimaryKey<EntityWithId>(ids, conn); });

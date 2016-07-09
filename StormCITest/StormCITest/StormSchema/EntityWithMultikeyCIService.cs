@@ -124,13 +124,13 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
-        public static int MinAmountForBulk = 10;
+        public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
             using (new ConnectionHandler(conn))
             {
-                if(entities.Count >= MinAmountForBulk)
+                if(entities.Count > MaxAmountForGroupedInsert)
                 {
                     CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_multikey", conn, trans );
                 }

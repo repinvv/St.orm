@@ -55,6 +55,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
+            WriteLiteral(@"        public static int MaxAmountForWhereIn = 300;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public List<");
             Write(model.Name);
             WriteLiteral(@"> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)");
@@ -68,6 +71,64 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"            using (new ConnectionHandler(conn))");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                return idsArray.Length > MaxAmountForWhereIn");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    ? GetByTempTable(idsArray, conn, trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    : GetByWhereIn(idsArray, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region getByPrimaryKey internal methods");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private List<");
+            Write(model.Name);
+            WriteLiteral(@"> GetByWhereIn(");
+            Write(model.KeyFields[0].Column.CsTypeName);
+            WriteLiteral(@"[] idsArray, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var whereIn = string.Join("", "", idsArray.Select((x,i) => """);
+            WriteLiteral(@"@");
+            WriteLiteral(@"arg"" + i));");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var parms = idsArray.Select((x, i) => new SqlParameter(""");
+            WriteLiteral(@"@");
+            WriteLiteral(@"arg"" + i, x)).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""select");
+            WriteLiteral(Environment.NewLine);
+            foreach (var line in model.Fields.GetSelectLines())
+            {
+                WriteLiteral(@"                ");
+                Write(line);
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"            from ");
+            Write(model.Table.Id);
+            WriteLiteral(@" where ");
+            Write(model.KeyFields[0].Column.Name);
+            WriteLiteral(@" in ("" + whereIn + "")"";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private List<");
+            Write(model.Name);
+            WriteLiteral(@"> GetByTempTable(");
+            Write(model.KeyFields[0].Column.CsTypeName);
+            WriteLiteral(@"[] idsArray, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                var table = CiHelper.CreateTempTableName();");
             WriteLiteral(Environment.NewLine);
@@ -107,8 +168,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                return result;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
@@ -123,6 +182,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

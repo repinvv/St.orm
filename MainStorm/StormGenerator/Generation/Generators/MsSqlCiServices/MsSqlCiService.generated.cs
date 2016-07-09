@@ -111,6 +111,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             }
             WriteLiteral(Environment.NewLine);
             if (model.KeyFields.Count != 1 
+    || model.IsStruct
     || (model.KeyFields[0].Column.Sequence == null && !model.KeyFields[0].Column.IsIdentity))
             {
                 Write(new RegularInsert(model, options).Execute());
@@ -121,9 +122,12 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 {
                     Write(new IdentityInsert(model, options).Execute());
                 }
-                if (model.KeyFields[0].Column.Sequence != null)
+                else
                 {
-                    Write(new SequenceInsert(model, options).Execute());
+                    if (model.KeyFields[0].Column.Sequence != null)
+                    {
+                        Write(new SequenceInsert(model, options).Execute());
+                    }
                 }
             }
             WriteLiteral(@"    }");

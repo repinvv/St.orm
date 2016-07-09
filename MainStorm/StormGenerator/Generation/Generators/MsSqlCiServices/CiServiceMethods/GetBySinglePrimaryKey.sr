@@ -2,12 +2,35 @@
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
 @constructor(Model model)
 
+        public static int MaxAmountForWhereIn = 300;
+
         public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
             using (new ConnectionHandler(conn))
             {
-                var table = CiHelper.CreateTempTableName();
+			    return idsArray.Length > MaxAmountForWhereIn
+				    ? GetByTempTable(idsArray, conn, trans)
+					: GetByWhereIn(idsArray, conn, trans);
+            }
+        }
+
+		#region getByPrimaryKey internal methods
+		private List<@model.Name> GetByWhereIn(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+		{
+		    var whereIn = string.Join(", ", idsArray.Select((x,i) => "@@arg" + i));
+			var parms = idsArray.Select((x, i) => new SqlParameter("@@arg" + i, x)).ToArray();
+			var sql = @"select
+  @foreach(var line in model.Fields.GetSelectLines()){
+                @line
+  }
+            from @model.Table.Id where @model.KeyFields[0].Column.Name in (" + whereIn + ")";
+			return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
+		}
+
+		private List<@model.Name> GetByTempTable(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+		{
+		        var table = CiHelper.CreateTempTableName();
                 CreateIdTempTable(table, conn, trans);
                 CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
                 var sql = @"select 
@@ -22,11 +45,11 @@
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
                 CiHelper.DropTable(table, conn, trans);
                 return result;
-            }
-        }
+		}
 
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + " ( @model.KeyFields[0].Column.Definition )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
+		#endregion

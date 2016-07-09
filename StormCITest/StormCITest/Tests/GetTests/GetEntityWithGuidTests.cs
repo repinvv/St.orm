@@ -81,61 +81,32 @@
             Assert.IsNull(entity.ATime);
         }
 
-        private List<EntityWithGuid> ReadEntities(SqlDataReader reader)
+        [TestMethod]
+        public void Get_EntityWithGuid_ByIdByTempTable()
         {
-            var list = new List<EntityWithGuid>();
-            while (reader.Read())
-            {
-                var entity = new EntityWithGuid
-                {
-                    Id = reader.GetGuid(0),
-                    AFloat = reader.IsDBNull(1) ? (double?)null : reader.GetDouble(1),
-                    AReal = reader.GetFloat(2),
-                    ADate = reader.IsDBNull(3) ? (DateTime?)null : reader.GetDateTime(3),
-                    ATime = reader.IsDBNull(4) ? (TimeSpan?)null : reader.GetTimeSpan(4),
-                    AOffset = reader.IsDBNull(5) ? (DateTimeOffset?)null : reader.GetDateTimeOffset(5),
-                    ADatetime = reader.IsDBNull(6) ? (DateTime?)null : reader.GetDateTime(6),
-                    ADatetime2 = reader.IsDBNull(7) ? (DateTime?)null : reader.GetDateTime(7),
-                    ASmalldatetime = reader.IsDBNull(8) ? (DateTime?)null : reader.GetDateTime(8),
-                };
-                list.Add(entity);
-            }
-            return list;
+            GetEntityWithGuidByIdImpl(EntityWithGuidCiService.MaxAmountForWhereIn + 1000);
         }
 
         [TestMethod]
-        public void Get_EntityWithGuid_ById()
+        public void Get_EntityWithGuid_ByIdByWhereIn()
+        {
+            GetEntityWithGuidByIdImpl(EntityWithGuidCiService.MaxAmountForWhereIn - 5);
+        }
+
+        private void GetEntityWithGuidByIdImpl(int length)
         {
             // arrange
-            var entities = Enumerable.Range(500, 17000).Select(Create.EntityWithGuid).ToList();
+            var entities = Enumerable.Range(500, length)
+                                     .Select(Create.EntityWithGuid)
+                                     .ToList();
             MsSqlCi.Insert(entities, conn);
 
             // act
-            var ids = entities.Select(x => x.Id).ToArray();
+            var ids = entities.Select(x => x.Id)
+                              .ToArray();
 
-            List<EntityWithGuid> result = null;
-            var time = WatchIt.Watch(() => { result = MsSqlCi.GetByPrimaryKey<EntityWithGuid>(ids, conn); });
-            Console.WriteLine("get by temp table: " + time);
+            List<EntityWithGuid> result = MsSqlCi.GetByPrimaryKey<EntityWithGuid>(ids, conn);
 
-            var request = "select * from entity_with_guid";
-            var time3 = WatchIt.Watch(() => { result = MsSqlCi.Get<EntityWithGuid>(request, new SqlParameter[0], conn); });
-            Console.WriteLine("select all from table: " + time3);
-
-
-            var time2 = WatchIt.Watch(() =>
-            {
-                result = new List<EntityWithGuid>();
-                foreach (var idsChunk in ids.SplitInGroupsBy(1700))
-                {
-                    var idsStr = string.Join(", ", idsChunk.Select(x => "'" + x.ToString("D") + "'"));
-                    using (new ConnectionHandler(conn))
-                    {
-                        var sql = "select * from entity_with_guid where id in (" + idsStr + ")";
-                        result.AddRange(CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, (SqlConnection)conn, null));
-                    }
-                }
-            });
-            Console.WriteLine("where in, split by 300: " + time2);
             var dict = result.ToDictionary(x => x.Id);
 
             // assert
@@ -144,6 +115,26 @@
             {
                 Compare.EntityWithGuid(src, dict[src.Id]);
             }
+        }
+
+        [TestMethod]
+        public void Get_EntityWithGuid_WhereInVsTempTablePerf()
+        {
+            var amount = EntityWithGuidCiService.MaxAmountForWhereIn;
+            var entities = Enumerable.Range(500, amount * (amount + 1))
+                                     .Select(Create.EntityWithGuid)
+                                     .ToList();
+
+            var split1 = entities.Select(x => x.Id).SplitInGroupsBy(amount).ToList();
+            var split2 = entities.Select(x => x.Id).SplitInGroupsBy(amount + 1).ToList();
+
+            var time1 = WatchIt
+                .Watch(() => split1.ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
+            var time2 = WatchIt
+                .Watch(() => split2.ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
+
+            Console.WriteLine(time1);
+            Console.WriteLine(time2);
         }
     }
 }

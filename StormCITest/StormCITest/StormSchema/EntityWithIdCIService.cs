@@ -51,11 +51,33 @@ namespace StormTestProject.StormSchema
             }
         }
 
+        public static int MaxAmountForWhereIn = 300;
+
         public List<EntityWithId> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (int[])ids;
             using (new ConnectionHandler(conn))
             {
+                return idsArray.Length > MaxAmountForWhereIn
+                    ? GetByTempTable(idsArray, conn, trans)
+                    : GetByWhereIn(idsArray, conn, trans);
+            }
+        }
+
+        #region getByPrimaryKey internal methods
+        private List<EntityWithId> GetByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
+            var sql = @"select
+                id, a_bigint, a_int, a_numeric, a_bit,
+                a_smallint, a_decimal, a_smallmoney, a_tinyint, a_money
+            from entity_with_id where id in (" + whereIn + ")";
+            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
+        }
+
+        private List<EntityWithId> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
                 var table = CiHelper.CreateTempTableName();
                 CreateIdTempTable(table, conn, trans);
                 CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
@@ -68,7 +90,6 @@ namespace StormTestProject.StormSchema
                 var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
                 CiHelper.DropTable(table, conn, trans);
                 return result;
-            }
         }
 
         private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -76,6 +97,7 @@ namespace StormTestProject.StormSchema
             var sql = "CREATE TABLE " + table + " ( id int )";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
+        #endregion
 
         public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {        

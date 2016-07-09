@@ -25,10 +25,24 @@
             Compare.EntityWithGuid(efEntity, entity);
         }
 
-        public void Insert_EnitityWithId_TwoHundred()
+        [TestMethod]
+        public void Insert_EnitityWithGuid_Bulk()
+        {
+            InsertEnitityWithIdImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert + 200);
+        }
+
+        [TestMethod]
+        public void Insert_EnitityWithGuid_Grouped()
+        {
+            InsertEnitityWithIdImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert - 3);
+        }
+
+        private void InsertEnitityWithIdImpl(int length)
         {
             // arrange
-            var entities = Enumerable.Range(10, 200).Select(Create.EntityWithGuid).ToList();
+            var entities = Enumerable.Range(10, length)
+                                     .Select(Create.EntityWithGuid)
+                                     .ToList();
 
             // act
             MsSqlCi.Insert(entities, conn);
@@ -57,10 +71,31 @@
         public void Insert_EnitityWithGuid_SinglePerf()
         {
             var entities = Enumerable.Range(10, 1000).Select(Create.EntityWithGuid).ToList();
-
-            var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(x, conn)));
-            DeleteAll();
+            
             var time2 = WatchIt.Watch(() => entities.ForEach(SingleInsert));
+            DeleteAll();
+            var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(x, conn)));
+
+
+            Console.WriteLine(time1);
+            Console.WriteLine(time2);
+        }
+
+        [TestMethod]
+        public void Insert_EnitityWithGuid_BulkVsGroupPerf()
+        {
+            var amount = EntityWithGuidCiService.MaxAmountForGroupedInsert;
+            var entities = Enumerable.Range(10, amount * (amount + 1) * 30)
+                                     .Select(Create.EntityWithGuid)
+                                     .ToList();
+
+            var split1 = entities.SplitInGroupsBy(amount).ToList();
+            var split2 = entities.SplitInGroupsBy(amount + 1).ToList();
+
+            var time1 = WatchIt.Watch(() => split1.ForEach(x => MsSqlCi.Insert(x, conn)));
+            DeleteAll();
+            var time2 = WatchIt.Watch(() => split2.ForEach(x => MsSqlCi.Insert(x, conn)));
+
             Console.WriteLine(time1);
             Console.WriteLine(time2);
         }
