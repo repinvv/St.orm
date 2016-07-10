@@ -206,15 +206,24 @@ namespace StormTestProject.StormSchema
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithGuid entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.Id);
-            yield return new SqlParameter("parm1i" + i, entity.AFloat ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm2i" + i, entity.AReal);
-            yield return new SqlParameter("parm3i" + i, entity.ADate ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm4i" + i, entity.ATime ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm5i" + i, entity.AOffset ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm6i" + i, entity.ADatetime ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm7i" + i, entity.ADatetime2 ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm8i" + i, entity.ASmalldatetime ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, SqlDbType.UniqueIdentifier)
+                { Value = entity.Id };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Real)
+                { Value = entity.AReal };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.Time)
+                { Value = entity.ATime ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.DateTimeOffset)
+                { Value = entity.AOffset ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.DateTime)
+                { Value = entity.ADatetime ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.DateTime2)
+                { Value = entity.ADatetime2 ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.SmallDateTime)
+                { Value = entity.ASmalldatetime ?? (object)DBNull.Value };
         }
         #endregion
 

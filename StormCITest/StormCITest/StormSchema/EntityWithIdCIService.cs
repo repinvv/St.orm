@@ -171,15 +171,24 @@ namespace StormTestProject.StormSchema
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithId entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.ABigint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm1i" + i, entity.AInt);
-            yield return new SqlParameter("parm2i" + i, entity.ANumeric ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm3i" + i, entity.ABit ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm4i" + i, entity.ASmallint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm5i" + i, entity.ADecimal ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm6i" + i, entity.ASmallmoney ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm7i" + i, entity.ATinyint ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm8i" + i, entity.AMoney ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.AInt };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.Bit)
+                { Value = entity.ABit ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
+                { Value = entity.ASmallint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.Decimal)
+                { Value = entity.ADecimal ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
+                { Value = entity.ASmallmoney ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
+                { Value = entity.ATinyint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.Money)
+                { Value = entity.AMoney ?? (object)DBNull.Value };
         }
         #endregion
 

@@ -184,9 +184,12 @@ namespace StormTestProject.StormSchema
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithMultikey entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.Id1);
-            yield return new SqlParameter("parm1i" + i, entity.Id2);
-            yield return new SqlParameter("parm2i" + i, entity.Content ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Id1 };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Id2 };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value };
         }
         #endregion
 

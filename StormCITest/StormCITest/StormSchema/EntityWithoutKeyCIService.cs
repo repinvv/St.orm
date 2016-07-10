@@ -134,8 +134,10 @@ namespace StormTestProject.StormSchema
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithoutKey entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.Value);
-            yield return new SqlParameter("parm1i" + i, entity.Content ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value };
         }
         #endregion
 

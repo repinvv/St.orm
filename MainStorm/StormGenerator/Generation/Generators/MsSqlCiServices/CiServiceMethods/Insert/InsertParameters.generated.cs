@@ -10,6 +10,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 {
     using StormGenerator.Models.GenModels;
     using System.Collections.Generic;
+    using GeneratorHelpers;
     using System;
     using System.Text;
     using System.Linq;
@@ -67,13 +68,17 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             {
                 WriteLiteral(@"            yield return new SqlParameter(""parm");
                 Write(i++);
-                WriteLiteral(@"i"" + i, entity.");
+                WriteLiteral(@"i"" + i, SqlDbType.");
+                Write(field.GetSqlType());
+                WriteLiteral(@")");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                { Value = entity.");
                 Write(field.Name);
                 if (field.Column.IsNullable)
                 {
                     WriteLiteral(@" ?? (object)DBNull.Value");
                 }
-                WriteLiteral(@");");
+                WriteLiteral(@" };");
                 WriteLiteral(Environment.NewLine);
             }
             WriteLiteral(@"        }");

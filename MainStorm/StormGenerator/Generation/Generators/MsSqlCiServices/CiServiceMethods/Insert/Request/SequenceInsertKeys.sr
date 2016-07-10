@@ -11,7 +11,7 @@
 	@if(field.Column.IsPrimaryKey && field.Column.Sequence != null){
                 sb.Append("@start NEXT VALUE FOR @field.Column.Sequence");
 	} else {
-                sb.Append("@start@@parm@(i++)i"); sb.Append(i);
+                sb.Append("@start @@parm@(i++)i"); sb.Append(i);
 	}
 }
         }

@@ -94,5 +94,43 @@
 
             }
         }
+
+        private static readonly Dictionary<string, string> SqlTypesMap 
+            = new Dictionary<string, string>
+              {
+                { "bigint", "BigInt" },
+                { "int", "Int" },
+                { "numeric", "Decimal" },
+                { "bit", "Bit" },
+                { "smallint", "SmallInt" },
+                { "decimal", "Decimal" },
+                { "smallmoney", "SmallMoney" },
+                { "tinyint", "TinyInt" },
+                { "money", "Money" },
+                { "uniqueidentifier", "UniqueIdentifier" },
+                { "float", "Float" },
+                { "real", "Real" },
+                { "date", "Date" },
+                { "time", "Time" },
+                { "datetimeoffset", "DateTimeOffset" },
+                { "datetime", "DateTime" },
+                { "datetime2", "DateTime2" },
+                { "smalldatetime", "SmallDateTime" },
+                { "char", "Char" },
+                { "varchar", "VarChar" },
+                { "text", "Text" },
+                { "nchar", "NChar" },
+                { "nvarchar","NVarChar" },
+                { "ntext", "NText" },
+                { "xml", "Xml" },
+                { "binary", "Binary" },
+                { "varbinary", "VarBinary" },
+                { "image", "Image" },
+            };
+
+        public static string GetSqlType(this Field field)
+        {
+            return SqlTypesMap[field.Column.DbType];
+        }
     }
 }

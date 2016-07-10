@@ -154,8 +154,8 @@ namespace StormTestProject.StormSchema
             {
                 if(entities.Count > MaxAmountForGroupedInsert)
                 {
-                    var seq = CiHelper.GetSequenceValues("some_schema.entity_seq", entities.Count, conn, trans);
-                    entities.ForEach(x => x.Id = (int)(seq++));
+                    var seq = CiHelper.GetSequenceValues<int>("some_schema.entity_seq", entities.Count, conn, trans);
+                    entities.ForEach(x => x.Id = seq++);
                     CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
                 }
                 else
@@ -214,30 +214,40 @@ namespace StormTestProject.StormSchema
         private void AppendInsertKeys(StringBuilder sb, int i)
         {
                 sb.Append("( NEXT VALUE FOR some_schema.entity_seq");
-                sb.Append(",@parm0i"); sb.Append(i);
-                sb.Append(",@parm1i"); sb.Append(i);
-                sb.Append(",@parm2i"); sb.Append(i);
-                sb.Append(",@parm3i"); sb.Append(i);
-                sb.Append(",@parm4i"); sb.Append(i);
-                sb.Append(",@parm5i"); sb.Append(i);
-                sb.Append(",@parm6i"); sb.Append(i);
-                sb.Append(",@parm7i"); sb.Append(i);
-                sb.Append(",@parm8i"); sb.Append(i);
-                sb.Append(",@parm9i"); sb.Append(i);
+                sb.Append(", @parm0i"); sb.Append(i);
+                sb.Append(", @parm1i"); sb.Append(i);
+                sb.Append(", @parm2i"); sb.Append(i);
+                sb.Append(", @parm3i"); sb.Append(i);
+                sb.Append(", @parm4i"); sb.Append(i);
+                sb.Append(", @parm5i"); sb.Append(i);
+                sb.Append(", @parm6i"); sb.Append(i);
+                sb.Append(", @parm7i"); sb.Append(i);
+                sb.Append(", @parm8i"); sb.Append(i);
+                sb.Append(", @parm9i"); sb.Append(i);
         }
 
         private IEnumerable<SqlParameter> GetInsertParameters(EntityWithSequence entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, entity.AChar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm1i" + i, entity.AVarchar);
-            yield return new SqlParameter("parm2i" + i, entity.AText ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm3i" + i, entity.ANchar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm4i" + i, entity.ANvarchar ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm5i" + i, entity.ANtext ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm6i" + i, entity.AXml ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm7i" + i, entity.ABinary ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm8i" + i, entity.AVarbinary ?? (object)DBNull.Value);
-            yield return new SqlParameter("parm9i" + i, entity.AImage ?? (object)DBNull.Value);
+            yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
+                { Value = entity.AChar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.VarChar)
+                { Value = entity.AVarchar };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
+                { Value = entity.AText ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.NChar)
+                { Value = entity.ANchar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.NVarChar)
+                { Value = entity.ANvarchar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.NText)
+                { Value = entity.ANtext ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.Xml)
+                { Value = entity.AXml ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.Binary)
+                { Value = entity.ABinary ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.VarBinary)
+                { Value = entity.AVarbinary ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm9i" + i, SqlDbType.Image)
+                { Value = entity.AImage ?? (object)DBNull.Value };
         }
         #endregion
 

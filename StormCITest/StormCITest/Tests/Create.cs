@@ -1,8 +1,10 @@
 ﻿namespace StormCITest.Tests
 {
     using System;
+    using System.Linq;
     using StormCITest.EFSchema;
     using StormTestProject.StormSchema;
+    using StormTestProject.StormSchema.SomeSchema;
 
     internal static class Create
     {
@@ -53,5 +55,40 @@
                 ATime = TimeSpan.FromMinutes(20),
             };
         }
+
+        public static entity_with_sequence EfEntityWithSequence()
+        {
+            return new entity_with_sequence()
+            {
+                a_char = "a", // length = 1
+                a_varchar = "1231231233453ffqef4vwt4v4v4tvw4vwrfvbwb",
+                a_text = "r134fg245g254v45v245vfvv54versfvw43g5v4trtv34",
+                a_nchar = "0987654321",
+                a_nvarchar = "фыаыфв89-01346759-13y64r703478fh081374gh07bh31408cbh8134bhch",
+                a_ntext = "фыавфыва39qruvhn94urbnv43rbnvu94nr9vn94rvnu94nvu9n49vn9p4n9p4rnv9pu",
+                a_xml = "<xml />", // simplest xml that reads the same way as it writes
+                a_binary = Enumerable.Range(1, 1000).Select(x => (byte)x).ToArray(),
+                a_varbinary = Enumerable.Range(100, 5000).Select(x => (byte)x).ToArray(),
+                a_image = null
+            };
+        }
+
+        public static EntityWithSequence EntityWithSequence(int len)
+        {
+            return new EntityWithSequence
+            {
+                AChar = "a", // length = 1
+                AVarchar = "1231231233453ffqef4vwt4v4v4tvw4vwrfvbwb",
+                AText = "r134fg245g254v45v245vfvv54versfvw43g5v4trtv34",
+                ANchar = "0987654321",
+                ANvarchar = "фыаыфв89-01346759-13y64r703478fh081374gh07bh31408cbh8134bhch",
+                ANtext = "фыавфыва39qruvhn94urbnv43rbnvu94nr9vn94rvnu94nvu9n49vn9p4n9p4rnv9pu",
+                AXml = "<xml />", // simplest xml that reads the same way as it writes
+                ABinary = Enumerable.Range(1, 1000).Select(x => (byte)x).ToArray(),
+                AVarbinary = Enumerable.Range(100, len).Select(x => (byte)x).ToArray(),
+                AImage = null
+            };
+        }
+
     }
 }

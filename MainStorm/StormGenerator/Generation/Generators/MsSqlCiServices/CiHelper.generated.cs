@@ -119,7 +119,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public static long GetSequenceValues(string sequenceName, int count, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"        public static T GetSequenceValues<T>(string sequenceName, int count, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
@@ -141,7 +141,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                SqlParameter firstValue = new SqlParameter(""");
             WriteLiteral(@"@");
-            WriteLiteral(@"range_first_value"", SqlDbType.BigInt);");
+            WriteLiteral(@"range_first_value"", SqlDbType.Variant);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                firstValue.Direction = ParameterDirection.Output;");
             WriteLiteral(Environment.NewLine);
@@ -149,7 +149,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                cmd.ExecuteNonQuery();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                return (long)firstValue.Value;");
+            WriteLiteral(@"                return (T)firstValue.Value;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);

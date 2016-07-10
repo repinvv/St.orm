@@ -3,9 +3,38 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StormCITest.EFSchema;
     using StormTestProject.StormSchema;
+    using StormTestProject.StormSchema.SomeSchema;
 
     public class Compare
     {
+        public static void EntityWithSequence(entity_with_sequence efEntity, EntityWithSequence entity)
+        {
+            Assert.AreEqual(efEntity.id, entity.Id);
+            Assert.AreEqual(efEntity.a_char, entity.AChar);
+            Assert.AreEqual(efEntity.a_nchar, entity.ANchar);
+            Assert.AreEqual(efEntity.a_varchar, entity.AVarchar);
+            Assert.AreEqual(efEntity.a_nvarchar, entity.ANvarchar);
+            Assert.AreEqual(efEntity.a_ntext, entity.ANtext);
+            Assert.AreEqual(efEntity.a_xml, entity.AXml);
+            CollectionAssert.AreEqual(efEntity.a_binary, entity.ABinary);
+            CollectionAssert.AreEqual(efEntity.a_varbinary, entity.AVarbinary);
+            Assert.IsNull(entity.AImage);
+        }
+
+        public static void EntityWithSequence(EntityWithSequence src, EntityWithSequence entity)
+        {
+            Assert.AreEqual(src.Id, entity.Id);
+            Assert.AreEqual(src.AChar, entity.AChar);
+            Assert.AreEqual(src.ANchar, entity.ANchar);
+            Assert.AreEqual(src.AVarchar, entity.AVarchar);
+            Assert.AreEqual(src.ANvarchar, entity.ANvarchar);
+            Assert.AreEqual(src.ANtext, entity.ANtext);
+            Assert.AreEqual(src.AXml, entity.AXml);
+            CollectionAssert.AreEqual(src.ABinary, entity.ABinary);
+            CollectionAssert.AreEqual(src.AVarbinary, entity.AVarbinary);
+            Assert.IsNull(entity.AImage);
+        }
+
         public static void EntityWithId(entity_with_id efEntity, EntityWithId entity)
         {
             Assert.AreEqual(efEntity.id, entity.Id);

@@ -12,8 +12,9 @@
             {
 			    if(entities.Count > MaxAmountForGroupedInsert)
 				{
-                    var seq = CiHelper.GetSequenceValues("@model.KeyFields[0].Column.Sequence", entities.Count, conn, trans);
-                    entities.ForEach(x => x.@model.KeyFields[0].Name = (@model.KeyFields[0].Column.CsTypeName)(seq++));
+				    @{var type = @model.KeyFields[0].Column.CsTypeName;}
+                    var seq = CiHelper.GetSequenceValues<@type>("@model.KeyFields[0].Column.Sequence", entities.Count, conn, trans);
+                    entities.ForEach(x => x.@model.KeyFields[0].Name = seq++);
 					CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
                 }
 				else
