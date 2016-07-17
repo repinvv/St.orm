@@ -12,7 +12,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using StormGenerator.Models;
     using GeneratorHelpers;
     using CiServiceMethods;
-    using CiServiceMethods.Insert;
+    using CiServiceMethods.Inserts;
+    using CiServiceMethods.Updates;
     using System;
     using System.Text;
     using System.Linq;
@@ -81,16 +82,12 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using (new ConnectionHandler(conn))");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
+            WriteLiteral(@"            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            Write(new EntityReader(model).Execute());
             WriteLiteral(Environment.NewLine);
             if (!model.KeyFields.Any())
             {
@@ -129,6 +126,15 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                         Write(new SequenceInsert(model, options).Execute());
                     }
                 }
+            }
+            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Any() && model.Fields.Count > model.KeyFields.Count)
+            {
+                Write(new Update(model, options).Execute());
+            }
+            else
+            {
+                Write(new UpdateException(model).Execute());
             }
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);

@@ -38,6 +38,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.12.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.12.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -60,6 +68,9 @@
     <Compile Include="EFSchema\entity_with_sequence.cs" />
     <Compile Include="EFSchema\StormCI.cs" />
     <Compile Include="StormSchema\BaseDataReader.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\CiException.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="StormSchema\CiHelper.cs">
@@ -115,6 +126,7 @@
     </Compile>
     <Compile Include="Tests\Compare.cs" />
     <Compile Include="Tests\Create.cs" />
+    <Compile Include="Tests\DeleteAll.cs" />
     <Compile Include="Tests\EqualityTests.cs" />
     <Compile Include="Tests\ContextInTransaction.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithGuidTests.cs" />
@@ -125,6 +137,7 @@
     <Compile Include="Tests\InsertTests\InsertEntityWithIdTests.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithSequenceTest.cs" />
     <Compile Include="Tests\TestConnection.cs" />
+    <Compile Include="Tests\UpdateTests\UpdateEntityWithGuidTest.cs" />
     <Compile Include="Tests\WatchIt.cs" />
     <Content Include="DBScripts\CreateTables.sql" />
     <Content Include="DBScripts\DropTables.sql" />

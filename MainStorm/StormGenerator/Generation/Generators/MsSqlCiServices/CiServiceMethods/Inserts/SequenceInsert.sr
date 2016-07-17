@@ -1,0 +1,41 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers Request
+@constructor(Model model, GenOptions options)
+
+        public static int MaxAmountForGroupedInsert = 12;
+
+        public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if(entities.Count > MaxAmountForGroupedInsert)
+            {
+                @{var type = @model.KeyFields[0].Column.CsTypeName;}
+                var seq = CiHelper.GetSequenceValues<@type>("@model.KeyFields[0].Column.Sequence", entities.Count, conn, trans);
+                entities.ForEach(x => x.@model.KeyFields[0].Name = seq++);
+                CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
+            }
+            else
+            {
+                GroupInsert(entities, conn, trans);
+            }
+        }
+
+@{var fields = model.Fields;}
+        #region group insert methods
+@if(!model.IsStruct){
+@[GroupInsertWithKey(model, options)]
+
+@[ConstructRequestWithOutput(model, fields)]
+
+@[SequenceInsertKeys(fields)]
+} else{
+@[GroupInsert(model, options)]
+
+@[ConstructRequest(model, fields)]
+
+@[SequenceInsertKeys(fields)]
+}
+
+@[InsertParameters(model, model.ValueFields())]
+        #endregion
+
+@[SingleInsert(model)]

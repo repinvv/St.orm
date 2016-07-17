@@ -6,24 +6,27 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts.Request
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class GetByPrimaryKeyException
+    internal class ConstructRequestWithOutput
     {
         #region constructor
         Model model;
+        List<Field> fields;
 
-        public GetByPrimaryKeyException(Model model)
+        public ConstructRequestWithOutput(Model model, List<Field> fields)
         {
             this.model = model;
+            this.fields = fields;
         }
         #endregion
 
@@ -55,18 +58,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        public List<");
-            Write(model.Name);
-            WriteLiteral(@"> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            throw new CiException(""Entity ");
-            Write(model.Name);
-            WriteLiteral(@" has no primary key"");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            var output = "OUTPUT inserted." + model.KeyFields[0].Column.Name;
+            Write(new ConstructRequestImpl(model, fields, output).Execute());
 
             return executed = sb.ToString();
         }

@@ -57,6 +57,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"            | SqlBulkCopyOptions.KeepIdentity;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public static readonly SqlParameter[] NoParameters = new SqlParameter[0];");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             Write(new CombineHashcodes().Execute());
             WriteLiteral(Environment.NewLine);
             Write(new ReadBytes().Execute());
@@ -179,7 +182,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ""DROP TABLE "" + table;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            ExecuteNonQuery(sql, new SqlParameter[0],  conn, trans);");
+            WriteLiteral(@"            ExecuteNonQuery(sql, NoParameters,  conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

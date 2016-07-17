@@ -1,0 +1,12 @@
+﻿@visibility internal
+@inherits NsFileGenerator(GenOptions options)
+@using StormGenerator.Settings GenericCi
+@member{public override string FileName => "CiException";}
+    
+	using System;
+
+    @options.Visibility class CiException : Exception
+    {
+        public CiException(string message) : base(message) { }
+    }
+

@@ -55,6 +55,21 @@
                 ATime = TimeSpan.FromMinutes(20),
             };
         }
+        public static EntityWithGuid EntityWithGuid(Guid guid)
+        {
+            return new EntityWithGuid
+            {
+                Id = guid,
+                ADate = new DateTime(2017, 1, 1),
+                ADatetime = new DateTime(2017, 1, 2, 1, 2, 3),
+                ADatetime2 = new DateTime(2017, 1, 3, 1, 2, 3),
+                AFloat = 223.456,
+                AOffset = new DateTimeOffset(2017, 1, 4, 1, 2, 3, TimeSpan.FromMinutes(10)),
+                AReal = (float)234.567,
+                ASmalldatetime = new DateTime(2017, 1, 5, 1, 2, 0), //precision is one minute
+                ATime = TimeSpan.FromMinutes(30),
+            };
+        }
 
         public static entity_with_sequence EfEntityWithSequence()
         {

@@ -16,6 +16,8 @@
             | SqlBulkCopyOptions.KeepNulls
             | SqlBulkCopyOptions.KeepIdentity;
 
+		public static readonly SqlParameter[] NoParameters = new SqlParameter[0];
+
 @[CombineHashcodes()]
 
 @[ReadBytes()]
@@ -78,7 +80,7 @@
         public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "DROP TABLE " + table;
-            ExecuteNonQuery(sql, new SqlParameter[0],  conn, trans);
+            ExecuteNonQuery(sql, NoParameters,  conn, trans);
         }
 
         public static string CreateTempTableName()

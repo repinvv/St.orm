@@ -75,51 +75,45 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
                 WriteLiteral(@"];");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(@"            var table = CiHelper.CreateTempTableName();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
+            WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var table = CiHelper.CreateTempTableName();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CreateIdTempTable(table, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var dataReader = new KeyDataReader(");
+            WriteLiteral(@"            var dataReader = new KeyDataReader(");
             Write(model.JoinKeyNames());
             WriteLiteral(@");");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.BulkInsert(dataReader, table, conn, trans);");
+            WriteLiteral(@"            CiHelper.BulkInsert(dataReader, table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var sql = ");
+            WriteLiteral(@"            var sql = ");
             WriteLiteral(@"@");
             WriteLiteral(@"""select ");
             WriteLiteral(Environment.NewLine);
             foreach (var line in model.Fields.GetSelectLines("e."))
             {
-                WriteLiteral(@"                ");
+                WriteLiteral(@"    ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                from ");
+            WriteLiteral(@"  from ");
             Write(model.Table.Id);
             WriteLiteral(@" e");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                inner join "" + table + ");
+            WriteLiteral(@"  inner join "" + table + ");
             WriteLiteral(@"@");
             WriteLiteral(@""" t on ");
             WriteLiteral(Environment.NewLine);
             foreach (var line in model.GetKeyEqualityLines("e.", "t.", "\";"))
             {
-                WriteLiteral(@"                ");
+                WriteLiteral(@"    ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);");
+            WriteLiteral(@"            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.DropTable(table, conn, trans);");
+            WriteLiteral(@"            CiHelper.DropTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                return result;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
+            WriteLiteral(@"            return result;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
@@ -128,24 +122,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + ");
-            WriteLiteral(@"@");
-            WriteLiteral(@"""(");
-            WriteLiteral(Environment.NewLine);
-            foreach (var field in model.KeyFields)
-            {
-                WriteLiteral(@"                ");
-                Write(field.Column.Definition);
-                if (field != model.KeyFields.Last())
-                {
-                    WriteLiteral(@",");
-                }
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"                )"";");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
-            WriteLiteral(Environment.NewLine);
+            Write(new CreateTableContent(model.KeyFields).Execute());
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
 

@@ -9,33 +9,25 @@
 	@foreach(var key in model.KeyFields){
             var key@i = (@(key.Column.CsTypeName)[])idsArray[@(i++)];
     }
-            using (new ConnectionHandler(conn))
-            {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                var dataReader = new KeyDataReader(@model.JoinKeyNames());
-                CiHelper.BulkInsert(dataReader, table, conn, trans);
-                var sql = @"select 
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            var dataReader = new KeyDataReader(@model.JoinKeyNames());
+            CiHelper.BulkInsert(dataReader, table, conn, trans);
+            var sql = @"select 
   @foreach(var line in model.Fields.GetSelectLines("e.")){
-                @line
+    @line
   }
-				from @model.Table.Id e
-                inner join " + table + @" t on 
+  from @model.Table.Id e
+  inner join " + table + @" t on 
   @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
-                @line
+    @line
   }
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-            }
+            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+            return result;
         }
 
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
-            var sql = "CREATE TABLE " + table + @"(
-@foreach(var field in model.KeyFields){
-                @field.Column.Definition@if(field != model.KeyFields.Last()){,}
-}
-                )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+@[CreateTableContent(model.KeyFields)]
         }

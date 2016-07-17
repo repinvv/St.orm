@@ -68,17 +68,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             Write(model.KeyFields[0].Column.CsTypeName);
             WriteLiteral(@"[])ids;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(@"            return idsArray.Length > MaxAmountForWhereIn");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
+            WriteLiteral(@"                ? GetByTempTable(idsArray, conn, trans)");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                return idsArray.Length > MaxAmountForWhereIn");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                    ? GetByTempTable(idsArray, conn, trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                    : GetByWhereIn(idsArray, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            }");
+            WriteLiteral(@"                : GetByWhereIn(idsArray, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
@@ -162,7 +156,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);");
+            WriteLiteral(@"                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                CiHelper.DropTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
@@ -175,12 +169,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + "" ( ");
-            Write(model.KeyFields[0].Column.Definition);
-            WriteLiteral(@" )"";");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
-            WriteLiteral(Environment.NewLine);
+            Write(new CreateTableSingleFieldContent(model.KeyFields[0]).Execute());
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #endregion");

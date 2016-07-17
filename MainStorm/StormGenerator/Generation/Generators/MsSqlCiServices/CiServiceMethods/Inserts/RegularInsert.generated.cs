@@ -6,29 +6,27 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
-    using System.Collections.Generic;
+    using Request;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ConstructRequestImpl
+    internal class RegularInsert
     {
         #region constructor
         Model model;
-        List<Field> fields;
-        string output;
+        GenOptions options;
 
-        public ConstructRequestImpl(Model model, List<Field> fields, string output)
+        public RegularInsert(Model model, GenOptions options)
         {
             this.model = model;
-            this.fields = fields;
-            this.output = output;
+            this.options = options;
         }
         #endregion
 
@@ -60,57 +58,59 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        private string insertRequestCache;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private int insertCacheLength;");
+            WriteLiteral(@"        public static int MaxAmountForGroupedInsert = 12;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private string ConstructInsertRequest(int count)");
+            WriteLiteral(@"        public void Insert(List<");
+            Write(model.Name);
+            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            if(insertCacheLength == count) return insertRequestCache;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sb = new StringBuilder();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            sb.AppendLine(""INSERT INTO ");
-            Write(model.Table.Id);
-            WriteLiteral(@""");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            sb.AppendLine(""("");");
-            WriteLiteral(Environment.NewLine);
-            foreach (var line in fields.GetSelectLines())
-            {
-                WriteLiteral(@"            sb.AppendLine(""");
-                Write(line);
-                WriteLiteral(@""");");
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"            sb.AppendLine("")");
-            Write(output);
-            WriteLiteral(@" VALUES"");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            AppendInsertKeys(sb, 0);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            for (int i = 1; i < count; i++)");
+            WriteLiteral(@"            if(entities.Count > MaxAmountForGroupedInsert)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                sb.AppendLine(""), "");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                AppendInsertKeys(sb, i);");
+            WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
+            Write(model.Table.Id);
+            WriteLiteral(@""", conn, trans );");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            ");
+            WriteLiteral(@"            else");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            sb.AppendLine("")"");");
+            WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            insertCacheLength = count;");
+            WriteLiteral(@"                GroupInsert(entities, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return insertRequestCache = sb.ToString();");
+            WriteLiteral(@"            }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region group insert methods");
+            WriteLiteral(Environment.NewLine);
+            Write(new GroupInsert(model, options).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new ConstructRequest(model, model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new AppendInsertKeys(model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new InsertParameters(model, model.Fields).Execute());
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public void Insert(");
+            Write(model.Name);
+            WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ConstructInsertRequest(1);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var parms = GetInsertParameters(entity, 0).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

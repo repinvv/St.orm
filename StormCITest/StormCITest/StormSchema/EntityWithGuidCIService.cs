@@ -44,59 +44,8 @@ namespace StormTestProject.StormSchema
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
-
-        public static int MaxAmountForWhereIn = 300;
-
-        public List<EntityWithGuid> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-            var idsArray = (Guid[])ids;
-            using (new ConnectionHandler(conn))
-            {
-                return idsArray.Length > MaxAmountForWhereIn
-                    ? GetByTempTable(idsArray, conn, trans)
-                    : GetByWhereIn(idsArray, conn, trans);
-            }
-        }
-
-        #region getByPrimaryKey internal methods
-        private List<EntityWithGuid> GetByWhereIn(Guid[] idsArray, SqlConnection conn, SqlTransaction trans)
-        {
-            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
-            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
-            var sql = @"select
-                id, a_float, a_real, a_date, a_time,
-                a_offset, a_datetime, a_datetime2, a_smalldatetime
-            from entity_with_guid where id in (" + whereIn + ")";
-            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
-        }
-
-        private List<EntityWithGuid> GetByTempTable(Guid[] idsArray, SqlConnection conn, SqlTransaction trans)
-        {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                CiHelper.BulkInsert(new SingleKeyDataReader<Guid>(idsArray), table, conn, trans);
-                var sql = @"select 
-                e.id, e.a_float, e.a_real, e.a_date, e.a_time,
-                e.a_offset, e.a_datetime, e.a_datetime2, e.a_smalldatetime
-                from entity_with_guid e
-                inner join " + table + @" t on 
-                e.id = t.id";
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-        }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + " ( id uniqueidentifier )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-        }
-        #endregion
 
         #region EntityDataReader
         internal class EntityDataReader : BaseDataReader
@@ -139,25 +88,66 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public static int MaxAmountForWhereIn = 300;
+
+        public List<EntityWithGuid> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            var idsArray = (Guid[])ids;
+            return idsArray.Length > MaxAmountForWhereIn
+                ? GetByTempTable(idsArray, conn, trans)
+                : GetByWhereIn(idsArray, conn, trans);
+        }
+
+        #region getByPrimaryKey internal methods
+        private List<EntityWithGuid> GetByWhereIn(Guid[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
+            var sql = @"select
+                id, a_float, a_real, a_date, a_time,
+                a_offset, a_datetime, a_datetime2, a_smalldatetime
+            from entity_with_guid where id in (" + whereIn + ")";
+            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
+        }
+
+        private List<EntityWithGuid> GetByTempTable(Guid[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+                CiHelper.BulkInsert(new SingleKeyDataReader<Guid>(idsArray), table, conn, trans);
+                var sql = @"select 
+                e.id, e.a_float, e.a_real, e.a_date, e.a_time,
+                e.a_offset, e.a_datetime, e.a_datetime2, e.a_smalldatetime
+                from entity_with_guid e
+                inner join " + table + @" t on 
+                e.id = t.id";
+                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+        }
+
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + " ( id uniqueidentifier )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
+        #endregion
+
         public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
+            if(entities.Count > MaxAmountForGroupedInsert)
             {
-                if(entities.Count > MaxAmountForGroupedInsert)
-                {
-                    CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_guid", conn, trans );
-                }
-                else
-                {
-                    RangeInsert(entities, conn, trans);
-                }
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_guid", conn, trans );
+            }
+            else
+            {
+                GroupInsert(entities, conn, trans);
             }
         }
 
-        #region range insert methods
-        private void RangeInsert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+        #region group insert methods
+        private void GroupInsert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -228,13 +218,126 @@ namespace StormTestProject.StormSchema
         #endregion
 
         public void Insert(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
-        {        
-            using(new ConnectionHandler(conn))
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public void Update(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var sql = GetUpdateRequest(0);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public static int MaxAmountForGroupedUpdate = 41;
+
+        public void Update(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForGroupedUpdate)
             {
-                var sql = ConstructInsertRequest(1);
-                var parms = GetInsertParameters(entity, 0).ToArray();
-                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+                BulkUpdate(entities, conn, trans);
+            }
+            else
+            {
+                GroupUpdate(entities, conn, trans);
             }
         }
+
+        #region update members
+        private void BulkUpdate(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"UPDATE entity_with_guid SET
+    a_float = s.a_float,
+    a_real = s.a_real,
+    a_date = s.a_date,
+    a_time = s.a_time,
+    a_offset = s.a_offset,
+    a_datetime = s.a_datetime,
+    a_datetime2 = s.a_datetime2,
+    a_smalldatetime = s.a_smalldatetime
+  FROM entity_with_guid src
+  INNER JOIN " + table + @" s 
+    ON src.id = s.id
+";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+        }
+        
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id uniqueidentifier,
+                a_float float,
+                a_real real,
+                a_date date,
+                a_time time,
+                a_offset datetimeoffset,
+                a_datetime datetime,
+                a_datetime2 datetime2,
+                a_smalldatetime smalldatetime
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupUpdate(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            int i = 0;
+            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var sql = ConstructUpdateRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithGuid entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.Real)
+                { Value = entity.AReal };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.Time)
+                { Value = entity.ATime ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.DateTimeOffset)
+                { Value = entity.AOffset ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.DateTime)
+                { Value = entity.ADatetime ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.DateTime2)
+                { Value = entity.ADatetime2 ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.SmallDateTime)
+                { Value = entity.ASmalldatetime ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.UniqueIdentifier)
+                { Value = entity.Id };
+        }
+
+        private string ConstructUpdateRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetUpdateRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetUpdateRequest(int index)
+        {
+            return @"UPDATE entity_with_guid SET
+    a_float = @parm0i" + index + @",
+    a_real = @parm1i" + index + @",
+    a_date = @parm2i" + index + @",
+    a_time = @parm3i" + index + @",
+    a_offset = @parm4i" + index + @",
+    a_datetime = @parm5i" + index + @",
+    a_datetime2 = @parm6i" + index + @",
+    a_smalldatetime = @parm7i" + index + @"
+  WHERE id = @parm8i" + index + ";";
+        }
+        #endregion
     }
 }

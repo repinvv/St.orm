@@ -6,26 +6,29 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts.Request
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class RangeInsertWithKey
+    internal class ConstructRequestImpl
     {
         #region constructor
         Model model;
-        GenOptions options;
+        List<Field> fields;
+        string output;
 
-        public RangeInsertWithKey(Model model, GenOptions options)
+        public ConstructRequestImpl(Model model, List<Field> fields, string output)
         {
             this.model = model;
-            this.options = options;
+            this.fields = fields;
+            this.output = output;
         }
         #endregion
 
@@ -57,47 +60,57 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        private void RangeInsert(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"        private string insertRequestCache;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private int insertCacheLength;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private string ConstructInsertRequest(int count)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            int i = 0;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ConstructInsertRequest(entities.Count);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
+            WriteLiteral(@"            if(insertCacheLength == count) return insertRequestCache;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private List<");
-            Write(model.Name);
-            WriteLiteral(@"> ReadKey(SqlDataReader reader, List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities)");
+            WriteLiteral(@"            var sb = new StringBuilder();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
+            WriteLiteral(@"            sb.AppendLine(""INSERT INTO ");
+            Write(model.Table.Id);
+            WriteLiteral(@""");");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            int i = 0;");
+            WriteLiteral(@"            sb.AppendLine(""("");");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            while (reader.Read())");
+            foreach (var line in fields.GetSelectLines())
+            {
+                WriteLiteral(@"            sb.AppendLine(""");
+                Write(line);
+                WriteLiteral(@""");");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"            sb.AppendLine("")");
+            Write(output);
+            WriteLiteral(@" VALUES"");");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            AppendInsertKeys(sb, 0);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            for (int i = 1; i < count; i++)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                entities[i++].");
-            Write(model.KeyFields[0].Name);
-            WriteLiteral(@" = ");
-            Write(model.KeyFields[0].GetReaderMethod(0));
-            WriteLiteral(@";");
+            WriteLiteral(@"                sb.AppendLine(""), "");");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                AppendInsertKeys(sb, i);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return entities;");
+            WriteLiteral(@"            sb.AppendLine("")"");");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            insertCacheLength = count;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return insertRequestCache = sb.ToString();");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

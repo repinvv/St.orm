@@ -1,0 +1,19 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)
+
+        public void Insert(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {		
+            var sql = ConstructInsertRequest(1);	
+			var parms = GetInsertParameters(entity, 0).ToArray();
+@if(model.IsStruct){
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+} else{
+            Func<IDataReader, List<@model.Name>> readId = reader =>
+                {
+                    if(reader.Read()) entity.@model.KeyFields[0].Name = @model.KeyFields[0].GetReaderMethod(0);
+                    return null;
+                @};
+			CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+}
+        }

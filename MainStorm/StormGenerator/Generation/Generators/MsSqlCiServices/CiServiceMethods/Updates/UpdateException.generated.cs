@@ -6,27 +6,24 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Updates
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
-    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ConstructRequestWithOutput
+    internal class UpdateException
     {
         #region constructor
         Model model;
-        List<Field> fields;
 
-        public ConstructRequestWithOutput(Model model, List<Field> fields)
+        public UpdateException(Model model)
         {
             this.model = model;
-            this.fields = fields;
         }
         #endregion
 
@@ -58,8 +55,30 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            var output = "OUTPUT inserted." + model.KeyFields[0].Column.Name;
-            Write(new ConstructRequestImpl(model, fields, output).Execute());
+            WriteLiteral(@"        public void Update(");
+            Write(model.Name);
+            WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            throw new CiException(""Can not update entity ");
+            Write(model.Name);
+            WriteLiteral(@""");");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public void Update(List<");
+            Write(model.Name);
+            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            throw new CiException(""Can not update entity ");
+            Write(model.Name);
+            WriteLiteral(@""");");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
 
             return executed = sb.ToString();
         }

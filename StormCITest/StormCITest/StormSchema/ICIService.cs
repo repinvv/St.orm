@@ -20,5 +20,9 @@ namespace StormTestProject.StormSchema
         void Insert(List<T> entities, SqlConnection conn, SqlTransaction trans);
 
         void Insert(T entity, SqlConnection conn, SqlTransaction trans);
+
+        void Update(T entity, SqlConnection conn, SqlTransaction trans);
+
+        void Update(List<T> entities, SqlConnection conn, SqlTransaction trans);
     }
 }

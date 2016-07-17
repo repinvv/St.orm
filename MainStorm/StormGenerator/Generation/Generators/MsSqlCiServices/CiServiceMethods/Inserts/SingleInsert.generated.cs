@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
@@ -61,43 +61,37 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {        ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using(new ConnectionHandler(conn))");
+            WriteLiteral(@"            var sql = ConstructInsertRequest(1);    ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var sql = ConstructInsertRequest(1);    ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var parms = GetInsertParameters(entity, 0).ToArray();");
+            WriteLiteral(@"            var parms = GetInsertParameters(entity, 0).ToArray();");
             WriteLiteral(Environment.NewLine);
             if (model.IsStruct)
             {
-                WriteLiteral(@"                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
+                WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
                 WriteLiteral(Environment.NewLine);
             }
             else
             {
-                WriteLiteral(@"                Func<IDataReader, List<");
+                WriteLiteral(@"            Func<IDataReader, List<");
                 Write(model.Name);
                 WriteLiteral(@">> readId = reader =>");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                    {");
+                WriteLiteral(@"                {");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                        if(reader.Read()) entity.");
+                WriteLiteral(@"                    if(reader.Read()) entity.");
                 Write(model.KeyFields[0].Name);
                 WriteLiteral(@" = ");
                 Write(model.KeyFields[0].GetReaderMethod(0));
                 WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                        return null;");
+                WriteLiteral(@"                    return null;");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                    ");
+                WriteLiteral(@"                ");
                 WriteLiteral(@"};");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);");
+                WriteLiteral(@"            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"            }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
 

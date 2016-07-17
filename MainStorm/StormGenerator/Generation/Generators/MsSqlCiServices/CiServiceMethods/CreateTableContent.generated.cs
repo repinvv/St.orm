@@ -17,15 +17,13 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class ConstructRequest
+    internal class CreateTableContent
     {
         #region constructor
-        Model model;
         List<Field> fields;
 
-        public ConstructRequest(Model model, List<Field> fields)
+        public CreateTableContent(List<Field> fields)
         {
-            this.model = model;
             this.fields = fields;
         }
         #endregion
@@ -58,7 +56,24 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            Write(new ConstructRequestImpl(model, fields, string.Empty).Execute());
+            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""(");
+            WriteLiteral(Environment.NewLine);
+            foreach (var field in fields)
+            {
+                WriteLiteral(@"                ");
+                Write(field.Column.Definition);
+                if (field != fields.Last())
+                {
+                    WriteLiteral(@",");
+                }
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"                )"";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
+            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

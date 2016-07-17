@@ -6,22 +6,26 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts.Request
 {
+    using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
+    using GeneratorHelpers;
     using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class AppendInsertKeys
+    internal class ConstructRequest
     {
         #region constructor
+        Model model;
         List<Field> fields;
 
-        public AppendInsertKeys(List<Field> fields)
+        public ConstructRequest(Model model, List<Field> fields)
         {
+            this.model = model;
             this.fields = fields;
         }
         #endregion
@@ -54,24 +58,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        private void AppendInsertKeys(StringBuilder sb, int i)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            var i = 0; 
-            foreach (var field in fields)
-            {
-                var start = field == fields.First() ? "( " : ", "; 
-                WriteLiteral(@"                sb.Append(""");
-                Write(start);
-                WriteLiteral(@"@");
-                WriteLiteral(@"parm");
-                Write(i++);
-                WriteLiteral(@"i""); sb.Append(i);");
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            Write(new ConstructRequestImpl(model, fields, string.Empty).Execute());
 
             return executed = sb.ToString();
         }

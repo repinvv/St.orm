@@ -37,15 +37,7 @@ namespace StormTestProject.StormSchema
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
-        }
-
-        public List<EntityWithoutKey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-            throw new Exception("Entity EntityWithoutKey has no primary key");
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
         #region EntityDataReader
@@ -75,25 +67,27 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public List<EntityWithoutKey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Entity EntityWithoutKey has no primary key");
+        }
+
         public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
+            if(entities.Count > MaxAmountForGroupedInsert)
             {
-                if(entities.Count > MaxAmountForGroupedInsert)
-                {
-                    CiHelper.BulkInsert(new EntityDataReader(entities), "entity_without_key", conn, trans );
-                }
-                else
-                {
-                    RangeInsert(entities, conn, trans);
-                }
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_without_key", conn, trans );
+            }
+            else
+            {
+                GroupInsert(entities, conn, trans);
             }
         }
 
-        #region range insert methods
-        private void RangeInsert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        #region group insert methods
+        private void GroupInsert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -142,13 +136,19 @@ namespace StormTestProject.StormSchema
         #endregion
 
         public void Insert(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
-        {        
-            using(new ConnectionHandler(conn))
-            {
-                var sql = ConstructInsertRequest(1);
-                var parms = GetInsertParameters(entity, 0).ToArray();
-                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
-            }
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
-    }
+
+        public void Update(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Can not update entity EntityWithoutKey");
+        }
+
+        public void Update(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Can not update entity EntityWithoutKey");
+        }    }
 }

@@ -6,26 +6,26 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
+    using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
-    using System.Collections.Generic;
     using GeneratorHelpers;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class InsertParameters
+    internal class GroupInsert
     {
         #region constructor
         Model model;
-        List<Field> fields;
+        GenOptions options;
 
-        public InsertParameters(Model model, List<Field> fields)
+        public GroupInsert(Model model, GenOptions options)
         {
             this.model = model;
-            this.fields = fields;
+            this.options = options;
         }
         #endregion
 
@@ -57,30 +57,20 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        private IEnumerable<SqlParameter> GetInsertParameters(");
+            WriteLiteral(@"        private void GroupInsert(List<");
             Write(model.Name);
-            WriteLiteral(@" entity, int i)");
+            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            var i = 0; 
-            foreach (var field in fields)
-            {
-                WriteLiteral(@"            yield return new SqlParameter(""parm");
-                Write(i++);
-                WriteLiteral(@"i"" + i, SqlDbType.");
-                Write(field.GetSqlType());
-                WriteLiteral(@")");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                { Value = entity.");
-                Write(field.Name);
-                if (field.Column.IsNullable)
-                {
-                    WriteLiteral(@" ?? (object)DBNull.Value");
-                }
-                WriteLiteral(@" };");
-                WriteLiteral(Environment.NewLine);
-            }
+            WriteLiteral(@"            int i = 0;");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ConstructInsertRequest(entities.Count);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
 

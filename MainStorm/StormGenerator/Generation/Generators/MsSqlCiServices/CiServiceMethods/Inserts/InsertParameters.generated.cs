@@ -6,22 +6,25 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
     using StormGenerator.Models.GenModels;
     using System.Collections.Generic;
+    using GeneratorHelpers;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class SequenceInsertKeys
+    internal class InsertParameters
     {
         #region constructor
+        Model model;
         List<Field> fields;
 
-        public SequenceInsertKeys(List<Field> fields)
+        public InsertParameters(Model model, List<Field> fields)
         {
+            this.model = model;
             this.fields = fields;
         }
         #endregion
@@ -54,34 +57,29 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        private void AppendInsertKeys(StringBuilder sb, int i)");
+            WriteLiteral(@"        private IEnumerable<SqlParameter> GetInsertParameters(");
+            Write(model.Name);
+            WriteLiteral(@" entity, int i)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
             var i = 0; 
             foreach (var field in fields)
             {
-                var start = field == fields.First() ? "(" : ","; 
-                if (field.Column.IsPrimaryKey && field.Column.Sequence != null)
+                WriteLiteral(@"            yield return new SqlParameter(""parm");
+                Write(i++);
+                WriteLiteral(@"i"" + i, SqlDbType.");
+                Write(field.GetSqlType());
+                WriteLiteral(@")");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                { Value = entity.");
+                Write(field.Name);
+                if (field.Column.IsNullable)
                 {
-                    WriteLiteral(@"                sb.Append(""");
-                    Write(start);
-                    WriteLiteral(@" NEXT VALUE FOR ");
-                    Write(field.Column.Sequence);
-                    WriteLiteral(@""");");
-                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@" ?? (object)DBNull.Value");
                 }
-                else
-                {
-                    WriteLiteral(@"                sb.Append(""");
-                    Write(start);
-                    WriteLiteral(@" ");
-                    WriteLiteral(@"@");
-                    WriteLiteral(@"parm");
-                    Write(i++);
-                    WriteLiteral(@"i""); sb.Append(i);");
-                    WriteLiteral(Environment.NewLine);
-                }
+                WriteLiteral(@" };");
+                WriteLiteral(Environment.NewLine);
             }
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

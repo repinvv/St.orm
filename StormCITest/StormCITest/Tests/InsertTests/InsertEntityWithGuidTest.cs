@@ -73,7 +73,7 @@
             var entities = Enumerable.Range(10, 1000).Select(Create.EntityWithGuid).ToList();
             
             var time2 = WatchIt.Watch(() => entities.ForEach(SingleInsert));
-            DeleteAll();
+            DeleteAll.EntityWithGuid(conn);
             var time1 = WatchIt.Watch(() => entities.ForEach(x => MsSqlCi.Insert(x, conn)));
 
 
@@ -93,20 +93,11 @@
             var split2 = entities.SplitInGroupsBy(amount + 1).ToList();
 
             var time1 = WatchIt.Watch(() => split1.ForEach(x => MsSqlCi.Insert(x, conn)));
-            DeleteAll();
+            DeleteAll.EntityWithGuid(conn);
             var time2 = WatchIt.Watch(() => split2.ForEach(x => MsSqlCi.Insert(x, conn)));
 
             Console.WriteLine(time1);
             Console.WriteLine(time2);
-        }
-
-        private void DeleteAll()
-        {
-            using (new ConnectionHandler(conn))
-            {
-                var sql = "delete from entity_with_guid";
-                CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], (SqlConnection)conn, null);
-            }
         }
 
         private void SingleInsert(EntityWithGuid e)

@@ -1,0 +1,96 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+        public void Update(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var sql = GetUpdateRequest(0);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public static int MaxAmountForGroupedUpdate = 15;
+
+        public void Update(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForGroupedUpdate)
+            {
+                BulkUpdate(entities, conn, trans);
+            }
+            else
+            {
+                GroupUpdate(entities, conn, trans);
+            }
+        }
+
+        #region update members
+        private void BulkUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"UPDATE @model.Table.Id SET
+@{var fields = model.ValueFields();}
+@foreach(var field in fields){
+    @field.Column.Name = s.@field.Column.Name@if(field != fields.Last()){,}
+}
+  FROM @model.Table.Id src
+  INNER JOIN " + table + @" s 
+@foreach(var field in model.KeyFields){
+  @{var start = field == model.KeyFields[0] ? "ON" : "AND";}
+    @start src.@field.Column.Name = s.@field.Column.Name
+}
+";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+        }
+        
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+@[CreateTableContent(model.Fields)]
+        }
+
+        private void GroupUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            int i = 0;
+            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var sql = ConstructUpdateRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private IEnumerable<SqlParameter> GetUpdateParameters(@model.Name entity, int i)
+        {
+@{var i = 0; }
+@{fields = model.ValueFieldsThenKeys();}
+@foreach(var field in fields){
+            yield return new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
+			    { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} };
+}
+        }
+
+        private string ConstructUpdateRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetUpdateRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetUpdateRequest(int index)
+        {
+            return @"UPDATE @model.Table.Id SET
+@{i = 0;}
+@{fields = model.ValueFields();}
+@foreach(var field in fields){
+    @field.Column.Name = @@parm@(i++)i" + index + @"@if(field != fields.Last()){,}
+}
+@foreach(var field in model.KeyFields){
+@{var start = field == model.KeyFields.First() ? "WHERE" : "AND";}
+@{var end = field == model.KeyFields.Last() ? "\";\";" : "@\",";}
+  @start @field.Column.Name = @@parm@(i++)i" + index + @end
+}
+        }
+        #endregion

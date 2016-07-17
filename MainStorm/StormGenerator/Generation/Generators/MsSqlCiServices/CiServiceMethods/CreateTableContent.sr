@@ -1,0 +1,11 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@using System.Collections.Generic
+@constructor(List<Field> fields)
+
+            var sql = "CREATE TABLE " + table + @"(
+@foreach(var field in fields){
+                @field.Column.Definition@if(field != fields.Last()){,}
+}
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);

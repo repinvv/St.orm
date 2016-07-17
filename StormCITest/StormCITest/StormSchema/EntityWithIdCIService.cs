@@ -45,23 +45,60 @@ namespace StormTestProject.StormSchema
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
+
+        #region EntityDataReader
+        internal class EntityDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithId> entities;
+
+            public EntityDataReader(List<EntityWithId> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Id;
+                    case 1:
+                        return entities[current].ABigint;
+                    case 2:
+                        return entities[current].AInt;
+                    case 3:
+                        return entities[current].ANumeric;
+                    case 4:
+                        return entities[current].ABit;
+                    case 5:
+                        return entities[current].ASmallint;
+                    case 6:
+                        return entities[current].ADecimal;
+                    case 7:
+                        return entities[current].ASmallmoney;
+                    case 8:
+                        return entities[current].ATinyint;
+                    case 9:
+                        return entities[current].AMoney;
+                    default:
+                        throw new Exception("EntityWithId Can't read field " + i);
+                }
+            }
+
+            public override int FieldCount { get { return 10; } }
+        }
+        #endregion
 
         public static int MaxAmountForWhereIn = 300;
 
         public List<EntityWithId> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (int[])ids;
-            using (new ConnectionHandler(conn))
-            {
-                return idsArray.Length > MaxAmountForWhereIn
-                    ? GetByTempTable(idsArray, conn, trans)
-                    : GetByWhereIn(idsArray, conn, trans);
-            }
+            return idsArray.Length > MaxAmountForWhereIn
+                ? GetByTempTable(idsArray, conn, trans)
+                : GetByWhereIn(idsArray, conn, trans);
         }
 
         #region getByPrimaryKey internal methods
@@ -87,7 +124,7 @@ namespace StormTestProject.StormSchema
                 from entity_with_id e
                 inner join " + table + @" t on 
                 e.id = t.id";
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
                 CiHelper.DropTable(table, conn, trans);
                 return result;
         }
@@ -95,23 +132,20 @@ namespace StormTestProject.StormSchema
         private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + " ( id int )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-        }
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
         #endregion
 
         public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {        
-           using(new ConnectionHandler(conn))
-           {
-               foreach(var group in entities.SplitInGroupsBy(83))
-               {
-                   RangeInsert(group, conn, trans);
-               }
-           }
+            foreach(var group in entities.SplitInGroupsBy(83))
+            {
+                GroupInsert(group, conn, trans);
+            }
+           
         }
 
         #region range insert methods
-        private void RangeInsert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        private void GroupInsert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -194,18 +228,135 @@ namespace StormTestProject.StormSchema
 
         public void Insert(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
         {        
-            using(new ConnectionHandler(conn))
+            var sql = ConstructInsertRequest(1);    
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            Func<IDataReader, List<EntityWithId>> readId = reader =>
+                {
+                    if(reader.Read()) entity.Id = reader.GetInt32(0);
+                    return null;
+                };
+            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+        }
+
+        public void Update(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var sql = GetUpdateRequest(0);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public static int MaxAmountForGroupedUpdate = 15;
+
+        public void Update(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForGroupedUpdate)
             {
-                var sql = ConstructInsertRequest(1);    
-                var parms = GetInsertParameters(entity, 0).ToArray();
-                Func<IDataReader, List<EntityWithId>> readId = reader =>
-                    {
-                        if(reader.Read()) entity.Id = reader.GetInt32(0);
-                        return null;
-                    };
-                CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+                BulkUpdate(entities, conn, trans);
+            }
+            else
+            {
+                GroupUpdate(entities, conn, trans);
             }
         }
 
+        #region update members
+        private void BulkUpdate(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"UPDATE entity_with_id SET
+    a_bigint = s.a_bigint,
+    a_int = s.a_int,
+    a_numeric = s.a_numeric,
+    a_bit = s.a_bit,
+    a_smallint = s.a_smallint,
+    a_decimal = s.a_decimal,
+    a_smallmoney = s.a_smallmoney,
+    a_tinyint = s.a_tinyint,
+    a_money = s.a_money
+  FROM entity_with_id src
+  INNER JOIN " + table + @" s 
+    ON src.id = s.id
+";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+        }
+        
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id int,
+                a_bigint bigint,
+                a_int int,
+                a_numeric numeric(6, 2),
+                a_bit bit,
+                a_smallint smallint,
+                a_decimal decimal(8, 3),
+                a_smallmoney smallmoney,
+                a_tinyint tinyint,
+                a_money money
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupUpdate(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            int i = 0;
+            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var sql = ConstructUpdateRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithId entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.AInt };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.Bit)
+                { Value = entity.ABit ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
+                { Value = entity.ASmallint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.Decimal)
+                { Value = entity.ADecimal ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
+                { Value = entity.ASmallmoney ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
+                { Value = entity.ATinyint ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.Money)
+                { Value = entity.AMoney ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm9i" + i, SqlDbType.Int)
+                { Value = entity.Id };
+        }
+
+        private string ConstructUpdateRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetUpdateRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetUpdateRequest(int index)
+        {
+            return @"UPDATE entity_with_id SET
+    a_bigint = @parm0i" + index + @",
+    a_int = @parm1i" + index + @",
+    a_numeric = @parm2i" + index + @",
+    a_bit = @parm3i" + index + @",
+    a_smallint = @parm4i" + index + @",
+    a_decimal = @parm5i" + index + @",
+    a_smallmoney = @parm6i" + index + @",
+    a_tinyint = @parm7i" + index + @",
+    a_money = @parm8i" + index + @"
+  WHERE id = @parm9i" + index + ";";
+        }
+        #endregion
     }
 }

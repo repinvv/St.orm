@@ -7,12 +7,9 @@
         public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
-            using (new ConnectionHandler(conn))
-            {
-			    return idsArray.Length > MaxAmountForWhereIn
-				    ? GetByTempTable(idsArray, conn, trans)
-					: GetByWhereIn(idsArray, conn, trans);
-            }
+		    return idsArray.Length > MaxAmountForWhereIn
+			    ? GetByTempTable(idsArray, conn, trans)
+				: GetByWhereIn(idsArray, conn, trans);
         }
 
 		#region getByPrimaryKey internal methods
@@ -42,14 +39,13 @@
   @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
                 @line
   }
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
+                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
                 CiHelper.DropTable(table, conn, trans);
                 return result;
 		}
 
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
-            var sql = "CREATE TABLE " + table + " ( @model.KeyFields[0].Column.Definition )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+@[CreateTableSingleFieldContent(model.KeyFields[0])]
         }
 		#endregion

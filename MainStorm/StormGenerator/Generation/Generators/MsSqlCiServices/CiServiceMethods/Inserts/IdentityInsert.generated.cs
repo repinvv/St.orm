@@ -6,11 +6,12 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
+    using Request;
     using System;
     using System.Text;
     using System.Linq;
@@ -66,21 +67,17 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {        ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"           using(new ConnectionHandler(conn))");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"           {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"               foreach(var group in entities.SplitInGroupsBy(");
+            WriteLiteral(@"            foreach(var group in entities.SplitInGroupsBy(");
             Write(maxItems);
             WriteLiteral(@"))");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"               {");
+            WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                   RangeInsert(group, conn, trans);");
+            WriteLiteral(@"                GroupInsert(group, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"               }");
+            WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"           }");
+            WriteLiteral(@"           ");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
@@ -90,7 +87,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             if (!model.IsStruct)
             {
-                Write(new RangeInsertWithKey(model, options).Execute());
+                Write(new GroupInsertWithKey(model, options).Execute());
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequestWithOutput(model, fields).Execute());
                 WriteLiteral(Environment.NewLine);
@@ -98,7 +95,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             }
             else
             {
-                Write(new RangeInsert(model, options).Execute());
+                Write(new GroupInsert(model, options).Execute());
                 WriteLiteral(Environment.NewLine);
                 Write(new ConstructRequest(model, fields).Execute());
                 WriteLiteral(Environment.NewLine);
@@ -110,7 +107,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             Write(new SingleInsert(model).Execute());
-            WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();
         }

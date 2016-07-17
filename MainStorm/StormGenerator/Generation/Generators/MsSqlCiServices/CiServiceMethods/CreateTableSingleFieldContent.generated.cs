@@ -16,14 +16,14 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class GetByPrimaryKeyException
+    internal class CreateTableSingleFieldContent
     {
         #region constructor
-        Model model;
+        Field field;
 
-        public GetByPrimaryKeyException(Model model)
+        public CreateTableSingleFieldContent(Field field)
         {
-            this.model = model;
+            this.field = field;
         }
         #endregion
 
@@ -55,18 +55,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        public List<");
-            Write(model.Name);
-            WriteLiteral(@"> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + "" ( ");
+            Write(field.Column.Definition);
+            WriteLiteral(@" )"";");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            throw new CiException(""Entity ");
-            Write(model.Name);
-            WriteLiteral(@" has no primary key"");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
 
             return executed = sb.ToString();
         }

@@ -1,0 +1,5 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Field field)
+            var sql = "CREATE TABLE " + table + " ( @field.Column.Definition )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);

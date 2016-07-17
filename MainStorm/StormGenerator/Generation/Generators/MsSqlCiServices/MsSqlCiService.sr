@@ -1,6 +1,7 @@
 ﻿@visibility internal
 @inherits NsFileGenerator(GenOptions options)
-@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods CiServiceMethods.Insert
+@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods CiServiceMethods.Inserts
+@using CiServiceMethods.Updates
 @constructor(EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
@@ -24,11 +25,10 @@
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
+
+@[EntityReader(model)]
 
 @if(!model.KeyFields.Any()){
 @[GetByPrimaryKeyException(model)]
@@ -54,5 +54,11 @@
 @[SequenceInsert(model, options)]
     }
   }
+}
+
+@if(model.KeyFields.Any() && model.Fields.Count > model.KeyFields.Count){
+@[Update(model, options)]
+} else {
+@[UpdateException(model)]
 }
     }

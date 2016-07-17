@@ -47,59 +47,8 @@ namespace StormTestProject.StormSchema
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
-
-        public static int MaxAmountForWhereIn = 300;
-
-        public List<EntityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-            var idsArray = (int[])ids;
-            using (new ConnectionHandler(conn))
-            {
-                return idsArray.Length > MaxAmountForWhereIn
-                    ? GetByTempTable(idsArray, conn, trans)
-                    : GetByWhereIn(idsArray, conn, trans);
-            }
-        }
-
-        #region getByPrimaryKey internal methods
-        private List<EntityWithSequence> GetByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
-        {
-            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
-            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
-            var sql = @"select
-                id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,
-                a_ntext, a_xml, a_binary, a_varbinary, a_image
-            from some_schema.entity_with_sequence where id in (" + whereIn + ")";
-            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
-        }
-
-        private List<EntityWithSequence> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
-        {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
-                var sql = @"select 
-                e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
-                e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
-                from some_schema.entity_with_sequence e
-                inner join " + table + @" t on 
-                e.id = t.id";
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-        }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + " ( id int )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-        }
-        #endregion
 
         #region EntityDataReader
         internal class EntityDataReader : BaseDataReader
@@ -146,27 +95,68 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        public static int MaxAmountForWhereIn = 300;
+
+        public List<EntityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            var idsArray = (int[])ids;
+            return idsArray.Length > MaxAmountForWhereIn
+                ? GetByTempTable(idsArray, conn, trans)
+                : GetByWhereIn(idsArray, conn, trans);
+        }
+
+        #region getByPrimaryKey internal methods
+        private List<EntityWithSequence> GetByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
+            var sql = @"select
+                id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,
+                a_ntext, a_xml, a_binary, a_varbinary, a_image
+            from some_schema.entity_with_sequence where id in (" + whereIn + ")";
+            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
+        }
+
+        private List<EntityWithSequence> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+                var table = CiHelper.CreateTempTableName();
+                CreateIdTempTable(table, conn, trans);
+                CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
+                var sql = @"select 
+                e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
+                e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
+                from some_schema.entity_with_sequence e
+                inner join " + table + @" t on 
+                e.id = t.id";
+                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
+                CiHelper.DropTable(table, conn, trans);
+                return result;
+        }
+
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + " ( id int )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
+        #endregion
+
         public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
+            if(entities.Count > MaxAmountForGroupedInsert)
             {
-                if(entities.Count > MaxAmountForGroupedInsert)
-                {
-                    var seq = CiHelper.GetSequenceValues<int>("some_schema.entity_seq", entities.Count, conn, trans);
-                    entities.ForEach(x => x.Id = seq++);
-                    CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
-                }
-                else
-                {
-                    RangeInsert(entities, conn, trans);
-                }
+                var seq = CiHelper.GetSequenceValues<int>("some_schema.entity_seq", entities.Count, conn, trans);
+                entities.ForEach(x => x.Id = seq++);
+                CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
+            }
+            else
+            {
+                GroupInsert(entities, conn, trans);
             }
         }
 
-        #region range insert methods
-        private void RangeInsert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        #region group insert methods
+        private void GroupInsert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -253,17 +243,140 @@ namespace StormTestProject.StormSchema
 
         public void Insert(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
         {        
-            using(new ConnectionHandler(conn))
+            var sql = ConstructInsertRequest(1);    
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            Func<IDataReader, List<EntityWithSequence>> readId = reader =>
+                {
+                    if(reader.Read()) entity.Id = reader.GetInt32(0);
+                    return null;
+                };
+            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+        }
+
+        public void Update(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var sql = GetUpdateRequest(0);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public static int MaxAmountForGroupedUpdate = 15;
+
+        public void Update(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForGroupedUpdate)
             {
-                var sql = ConstructInsertRequest(1);    
-                var parms = GetInsertParameters(entity, 0).ToArray();
-                Func<IDataReader, List<EntityWithSequence>> readId = reader =>
-                    {
-                        if(reader.Read()) entity.Id = reader.GetInt32(0);
-                        return null;
-                    };
-                CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+                BulkUpdate(entities, conn, trans);
+            }
+            else
+            {
+                GroupUpdate(entities, conn, trans);
             }
         }
+
+        #region update members
+        private void BulkUpdate(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"UPDATE some_schema.entity_with_sequence SET
+    a_char = s.a_char,
+    a_varchar = s.a_varchar,
+    a_text = s.a_text,
+    a_nchar = s.a_nchar,
+    a_nvarchar = s.a_nvarchar,
+    a_ntext = s.a_ntext,
+    a_xml = s.a_xml,
+    a_binary = s.a_binary,
+    a_varbinary = s.a_varbinary,
+    a_image = s.a_image
+  FROM some_schema.entity_with_sequence src
+  INNER JOIN " + table + @" s 
+    ON src.id = s.id
+";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+        }
+        
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id int,
+                a_char char(1),
+                a_varchar varchar(2000),
+                a_text text(2147483647),
+                a_nchar nchar(10),
+                a_nvarchar nvarchar(max),
+                a_ntext ntext(1073741823),
+                a_xml xml(max),
+                a_binary binary(1000),
+                a_varbinary varbinary(max),
+                a_image image(2147483647)
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupUpdate(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            int i = 0;
+            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var sql = ConstructUpdateRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithSequence entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
+                { Value = entity.AChar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.VarChar)
+                { Value = entity.AVarchar };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
+                { Value = entity.AText ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm3i" + i, SqlDbType.NChar)
+                { Value = entity.ANchar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm4i" + i, SqlDbType.NVarChar)
+                { Value = entity.ANvarchar ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm5i" + i, SqlDbType.NText)
+                { Value = entity.ANtext ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm6i" + i, SqlDbType.Xml)
+                { Value = entity.AXml ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm7i" + i, SqlDbType.Binary)
+                { Value = entity.ABinary ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm8i" + i, SqlDbType.VarBinary)
+                { Value = entity.AVarbinary ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm9i" + i, SqlDbType.Image)
+                { Value = entity.AImage ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm10i" + i, SqlDbType.Int)
+                { Value = entity.Id };
+        }
+
+        private string ConstructUpdateRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetUpdateRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetUpdateRequest(int index)
+        {
+            return @"UPDATE some_schema.entity_with_sequence SET
+    a_char = @parm0i" + index + @",
+    a_varchar = @parm1i" + index + @",
+    a_text = @parm2i" + index + @",
+    a_nchar = @parm3i" + index + @",
+    a_nvarchar = @parm4i" + index + @",
+    a_ntext = @parm5i" + index + @",
+    a_xml = @parm6i" + index + @",
+    a_binary = @parm7i" + index + @",
+    a_varbinary = @parm8i" + index + @",
+    a_image = @parm9i" + index + @"
+  WHERE id = @parm10i" + index + ";";
+        }
+        #endregion
     }
 }

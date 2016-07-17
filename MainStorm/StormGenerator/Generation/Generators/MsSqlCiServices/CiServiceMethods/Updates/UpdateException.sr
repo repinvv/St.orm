@@ -1,0 +1,13 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model)
+
+        public void Update(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {
+		    throw new CiException("Can not update entity @model.Name");
+        }
+
+        public void Update(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+		    throw new CiException("Can not update entity @model.Name");
+        }

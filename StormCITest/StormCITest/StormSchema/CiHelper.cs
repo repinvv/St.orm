@@ -21,6 +21,8 @@ namespace StormTestProject.StormSchema
             | SqlBulkCopyOptions.KeepNulls
             | SqlBulkCopyOptions.KeepIdentity;
 
+        public static readonly SqlParameter[] NoParameters = new SqlParameter[0];
+
         public static int CombineHashcodes(this IEnumerable<int> hashcodes)
         {
             unchecked
@@ -126,7 +128,7 @@ namespace StormTestProject.StormSchema
         public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "DROP TABLE " + table;
-            ExecuteNonQuery(sql, new SqlParameter[0],  conn, trans);
+            ExecuteNonQuery(sql, NoParameters,  conn, trans);
         }
 
         public static string CreateTempTableName()

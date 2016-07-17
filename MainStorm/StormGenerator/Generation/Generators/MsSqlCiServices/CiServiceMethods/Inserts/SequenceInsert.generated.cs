@@ -6,23 +6,24 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Insert
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
+    using Request;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class RegularInsert
+    internal class SequenceInsert
     {
         #region constructor
         Model model;
         GenOptions options;
 
-        public RegularInsert(Model model, GenOptions options)
+        public SequenceInsert(Model model, GenOptions options)
         {
             this.model = model;
             this.options = options;
@@ -57,8 +58,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            Write(new EntityReader(model).Execute());
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public static int MaxAmountForGroupedInsert = 12;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
@@ -68,65 +67,63 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using (new ConnectionHandler(conn))");
+            WriteLiteral(@"            if(entities.Count > MaxAmountForGroupedInsert)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                if(entities.Count > MaxAmountForGroupedInsert)");
+            var type = @model.KeyFields[0].Column.CsTypeName;
+            WriteLiteral(@"                var seq = CiHelper.GetSequenceValues<");
+            Write(type);
+            WriteLiteral(@">(""");
+            Write(model.KeyFields[0].Column.Sequence);
+            WriteLiteral(@""", entities.Count, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                {");
+            WriteLiteral(@"                entities.ForEach(x => x.");
+            Write(model.KeyFields[0].Name);
+            WriteLiteral(@" = seq++);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                    CiHelper.BulkInsert(new EntityDataReader(entities), """);
+            WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
             Write(model.Table.Id);
             WriteLiteral(@""", conn, trans );");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                else");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                    RangeInsert(entities, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #region range insert methods");
-            WriteLiteral(Environment.NewLine);
-            Write(new RangeInsert(model, options).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new ConstructRequest(model, model.Fields).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new AppendInsertKeys(model.Fields).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new InsertParameters(model, model.Fields).Execute());
-            WriteLiteral(@"        #endregion");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public void Insert(");
-            Write(model.Name);
-            WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {        ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            using(new ConnectionHandler(conn))");
+            WriteLiteral(@"            else");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var sql = ConstructInsertRequest(1);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var parms = GetInsertParameters(entity, 0).ToArray();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
+            WriteLiteral(@"                GroupInsert(entities, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            var fields = model.Fields;
+            WriteLiteral(@"        #region group insert methods");
+            WriteLiteral(Environment.NewLine);
+            if (!model.IsStruct)
+            {
+                Write(new GroupInsertWithKey(model, options).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new ConstructRequestWithOutput(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new SequenceInsertKeys(fields).Execute());
+            }
+            else
+            {
+                Write(new GroupInsert(model, options).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new ConstructRequest(model, fields).Execute());
+                WriteLiteral(Environment.NewLine);
+                Write(new SequenceInsertKeys(fields).Execute());
+            }
+            WriteLiteral(Environment.NewLine);
+            Write(new InsertParameters(model, model.ValueFields()).Execute());
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            Write(new SingleInsert(model).Execute());
 
             return executed = sb.ToString();
         }

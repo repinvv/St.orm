@@ -59,5 +59,9 @@
         {
             return model.Fields.Except(model.KeyFields).ToList();
         }
+        public static List<Field> ValueFieldsThenKeys(this Model model)
+        {
+            return model.Fields.Except(model.KeyFields).Concat(model.KeyFields).ToList();
+        }
     }
 }

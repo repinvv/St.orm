@@ -2,7 +2,7 @@
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
 @constructor(Model model, GenOptions options)
 
-		private void RangeInsert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+		private void GroupInsert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
 		{
 			int i = 0;
 			var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();

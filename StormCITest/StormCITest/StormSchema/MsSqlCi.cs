@@ -21,22 +21,50 @@ namespace StormTestProject.StormSchema
             DbConnection conn, 
             DbTransaction trans = null)
         {
-            return GetService<T>().Get(query, parms, (SqlConnection)conn, trans as SqlTransaction);
+            using (new ConnectionHandler(conn))
+            {
+                return GetService<T>().Get(query, parms, (SqlConnection)conn, trans as SqlTransaction);
+            }
         }
 
         public static List<T> GetByPrimaryKey<T>(object ids, DbConnection conn, DbTransaction trans = null)
         {
-            return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
+            using (new ConnectionHandler(conn))
+            {
+                return GetService<T>().GetByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
+            }
         }
 
         public static void Insert<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)
         {
-            GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Insert(entities, (SqlConnection)conn, trans as SqlTransaction);
+            }
         }
 
         public static void Insert<T>(T entity, DbConnection conn, DbTransaction trans = null)
         {
-            GetService<T>().Insert(entity, (SqlConnection)conn, trans as SqlTransaction);
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Insert(entity, (SqlConnection)conn, trans as SqlTransaction);
+            }
+        }
+
+        public static void Update<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Update(entities, (SqlConnection)conn, trans as SqlTransaction);
+            }
+        }
+
+        public static void Update<T>(T entity, DbConnection conn, DbTransaction trans = null)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Update(entity, (SqlConnection)conn, trans as SqlTransaction);
+            }
         }
 
         private static Dictionary<Type, object> services =

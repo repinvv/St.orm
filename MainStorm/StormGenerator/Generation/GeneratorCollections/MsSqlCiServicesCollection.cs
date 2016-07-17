@@ -18,6 +18,7 @@
             yield return new MsSqlCi(models, options);
             yield return new MsSqlCiServiceInterface(options);
             yield return new CiHelper(options);
+            yield return new CiException(options);
             foreach (var entityModel in models)
             {
                 yield return new MsSqlCiService(entityModel, options);

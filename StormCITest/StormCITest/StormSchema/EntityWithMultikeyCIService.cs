@@ -38,61 +38,7 @@ namespace StormTestProject.StormSchema
             SqlConnection conn, 
             SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
-            {
-                return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-            }
-        }
-
-        #region KeyDataReader
-        private class KeyDataReader : BaseDataReader
-        {
-            int[] key0;
-            string[] key1;
-            public KeyDataReader(int[] key0, string[] key1) : base(key0.Length)
-            {
-                this.key0 = key0;
-                this.key1 = key1;
-            }
-
-            public override object GetValue(int i)
-            {
-                return i == 0 ? key0[current] as object : key1[current];
-            }
-
-            public override int FieldCount { get { return 2; } }
-        }
-        #endregion
-
-        public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-            var idsArray = (object[])ids;
-            var key0 = (int[])idsArray[0];
-            var key1 = (string[])idsArray[1];
-            using (new ConnectionHandler(conn))
-            {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                var dataReader = new KeyDataReader(key0, key1);
-                CiHelper.BulkInsert(dataReader, table, conn, trans);
-                var sql = @"select 
-                e.id_1, e.id_2, e.content
-                from entity_with_multikey e
-                inner join " + table + @" t on 
-                e.id_1 = t.id_1 AND e.id_2 = t.id_2";
-                var result = CiHelper.ExecuteSelect(sql, new SqlParameter[0], ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-            }
-        }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + @"(
-                id_1 int,
-                id_2 nvarchar(256)
-                )";
-            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
         #region EntityDataReader
@@ -124,25 +70,70 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        #region KeyDataReader
+        private class KeyDataReader : BaseDataReader
+        {
+            int[] key0;
+            string[] key1;
+            public KeyDataReader(int[] key0, string[] key1) : base(key0.Length)
+            {
+                this.key0 = key0;
+                this.key1 = key1;
+            }
+
+            public override object GetValue(int i)
+            {
+                return i == 0 ? key0[current] as object : key1[current];
+            }
+
+            public override int FieldCount { get { return 2; } }
+        }
+        #endregion
+
+        public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            var idsArray = (object[])ids;
+            var key0 = (int[])idsArray[0];
+            var key1 = (string[])idsArray[1];
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            var dataReader = new KeyDataReader(key0, key1);
+            CiHelper.BulkInsert(dataReader, table, conn, trans);
+            var sql = @"select 
+    e.id_1, e.id_2, e.content
+  from entity_with_multikey e
+  inner join " + table + @" t on 
+    e.id_1 = t.id_1 AND e.id_2 = t.id_2";
+            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+            return result;
+        }
+
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id_1 int,
+                id_2 nvarchar(256)
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
         public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-            using (new ConnectionHandler(conn))
+            if(entities.Count > MaxAmountForGroupedInsert)
             {
-                if(entities.Count > MaxAmountForGroupedInsert)
-                {
-                    CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_multikey", conn, trans );
-                }
-                else
-                {
-                    RangeInsert(entities, conn, trans);
-                }
+                CiHelper.BulkInsert(new EntityDataReader(entities), "entity_with_multikey", conn, trans );
+            }
+            else
+            {
+                GroupInsert(entities, conn, trans);
             }
         }
 
-        #region range insert methods
-        private void RangeInsert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        #region group insert methods
+        private void GroupInsert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -194,13 +185,96 @@ namespace StormTestProject.StormSchema
         #endregion
 
         public void Insert(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
-        {        
-            using(new ConnectionHandler(conn))
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public void Update(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var sql = GetUpdateRequest(0);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        public static int MaxAmountForGroupedUpdate = 15;
+
+        public void Update(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForGroupedUpdate)
             {
-                var sql = ConstructInsertRequest(1);
-                var parms = GetInsertParameters(entity, 0).ToArray();
-                CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+                BulkUpdate(entities, conn, trans);
+            }
+            else
+            {
+                GroupUpdate(entities, conn, trans);
             }
         }
+
+        #region update members
+        private void BulkUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"UPDATE entity_with_multikey SET
+    content = s.content
+  FROM entity_with_multikey src
+  INNER JOIN " + table + @" s 
+    ON src.id_1 = s.id_1
+    AND src.id_2 = s.id_2
+";
+            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
+            CiHelper.DropTable(table, conn, trans);
+        }
+        
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id_1 int,
+                id_2 nvarchar(256),
+                content nvarchar(max)
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            int i = 0;
+            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var sql = ConstructUpdateRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithMultikey entity, int i)
+        {
+            yield return new SqlParameter("parm0i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value };
+            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.Id1 };
+            yield return new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
+                { Value = entity.Id2 };
+        }
+
+        private string ConstructUpdateRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetUpdateRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetUpdateRequest(int index)
+        {
+            return @"UPDATE entity_with_multikey SET
+    content = @parm0i" + index + @"
+  WHERE id_1 = @parm1i" + index + @",
+  AND id_2 = @parm2i" + index + ";";
+        }
+        #endregion
     }
 }
