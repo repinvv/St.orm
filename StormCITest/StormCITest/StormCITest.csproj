@@ -148,6 +148,8 @@
     <Compile Include="Tests\ListExtension.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\UpdateTests\UpdateEntityWithGuidTest.cs" />
+    <Compile Include="Tests\UpdateTests\UpdateEntityWithIdTest.cs" />
+    <Compile Include="Tests\UpdateTests\UpdateEntityWithSequence.cs" />
     <Compile Include="Tests\UpdateTests\UpdateSmallEntityWithSequenceTest.cs" />
     <Compile Include="Tests\WatchIt.cs" />
     <Content Include="DBScripts\CreateTables.sql" />

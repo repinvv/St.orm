@@ -40,6 +40,23 @@
             };
         }
 
+        public static EntityWithId EntityWithIdForUpdate(int id)
+        {
+            return new EntityWithId
+            {
+                Id = id,
+                ABigint = 10L * 1000 * 1000,
+                AInt = 4,
+                ANumeric = 4123.22M, //precision is 6.2
+                ABit = true,
+                ASmallint = 223,
+                ADecimal = 322.223M,
+                ASmallmoney = 433.334M,
+                ATinyint = 32,
+                AMoney = 544.44M
+            };
+        }
+
         public static EntityWithGuid EntityWithGuid(int i)
         {
             return new EntityWithGuid
@@ -124,6 +141,24 @@
                 AVarbinary = Enumerable.Range(100, len).Select(x => (byte)x).ToArray(),
                 AImage = null
             };
+        }
+
+        public static EntityWithSequence EntityWithSequenceForUpdate(int id)
+        {
+            return new EntityWithSequence
+                   {
+                       Id = id,
+                       AChar = "a", // length = 1
+                       AVarchar = "1231231233453ffqef4vwt",
+                       AText = "r134fg245g254v45v245vfvv5",
+                       ANchar = "0987654321",
+                       ANvarchar = "фыаыфв89-0",
+                       ANtext = "фыавфыва39qru",
+                       AXml = "<xml />", // simplest xml that reads the same way as it writes
+                       ABinary = Enumerable.Range(1, 1000).Select(x => (byte)(x + 1)).ToArray(),
+                       AVarbinary = Enumerable.Range(100, 100).Select(x => (byte)x).ToArray(),
+                       AImage = Enumerable.Range(1, 1000).Select(x => (byte)(x + 1)).ToArray()
+                   };
         }
 
         public static entity_with_multikey EfEntityWithMultikey(int i)

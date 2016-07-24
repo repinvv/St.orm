@@ -309,7 +309,7 @@ namespace StormTestProject.StormSchema
                 a_nchar nchar(10),
                 a_nvarchar nvarchar(max),
                 a_ntext ntext,
-                a_xml xml(max),
+                a_xml xml,
                 a_binary binary(1000),
                 a_varbinary varbinary(max),
                 a_image image

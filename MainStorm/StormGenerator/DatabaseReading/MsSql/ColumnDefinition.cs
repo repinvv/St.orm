@@ -12,7 +12,6 @@
                                    "varchar",
                                    "nchar",
                                    "nvarchar",
-                                   "xml",
                                    "binary",
                                    "varbinary"
                                };

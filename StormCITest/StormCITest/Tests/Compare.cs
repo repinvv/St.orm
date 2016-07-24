@@ -19,7 +19,7 @@
             Assert.AreEqual(efEntity.a_xml, entity.AXml);
             CollectionAssert.AreEqual(efEntity.a_binary, entity.ABinary);
             CollectionAssert.AreEqual(efEntity.a_varbinary, entity.AVarbinary);
-            Assert.IsNull(entity.AImage);
+            CollectionAssert.AreEqual(efEntity.a_image, entity.AImage);
         }
 
         public static void SmallEntityWithSequence(smallentity_with_sequence efEntity,
