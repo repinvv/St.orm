@@ -15,6 +15,7 @@ namespace StormCITest.EFSchema
         public virtual DbSet<entity_with_guid> entity_with_guid { get; set; }
         public virtual DbSet<entity_with_id> entity_with_id { get; set; }
         public virtual DbSet<entity_with_multikey> entity_with_multikey { get; set; }
+        public virtual DbSet<smallentity_with_sequence> smallentity_with_sequence { get; set; }
         public virtual DbSet<entity_with_sequence> entity_with_sequence { get; set; }
         public virtual DbSet<entity_without_key> entity_without_key { get; set; }
 
@@ -35,6 +36,19 @@ namespace StormCITest.EFSchema
             modelBuilder.Entity<entity_with_id>()
                 .Property(e => e.a_money)
                 .HasPrecision(19, 4);
+
+            modelBuilder.Entity<smallentity_with_sequence>()
+                .Property(e => e.a_char)
+                .IsFixedLength()
+                .IsUnicode(false);
+
+            modelBuilder.Entity<smallentity_with_sequence>()
+                .Property(e => e.a_varchar)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<smallentity_with_sequence>()
+                .Property(e => e.a_text)
+                .IsUnicode(false);
 
             modelBuilder.Entity<entity_with_sequence>()
                 .Property(e => e.a_char)

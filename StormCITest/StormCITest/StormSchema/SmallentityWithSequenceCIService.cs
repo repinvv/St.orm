@@ -14,35 +14,27 @@ namespace StormTestProject.StormSchema
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using SomeSchema;
 
-    public class EntityWithSequenceCiService : ICiService<EntityWithSequence>
+    public class SmallentityWithSequenceCiService : ICiService<SmallentityWithSequence>
     {
-        private List<EntityWithSequence> ReadEntities(SqlDataReader reader)
+        private List<SmallentityWithSequence> ReadEntities(SqlDataReader reader)
         {
-            var list = new List<EntityWithSequence>();
+            var list = new List<SmallentityWithSequence>();
             while (reader.Read())
             {
-                var entity = new EntityWithSequence
+                var entity = new SmallentityWithSequence
                 {
                     Id = reader.GetInt32(0),
                     AChar = reader.IsDBNull(1) ? null : reader.GetString(1),
                     AVarchar = reader.GetString(2),
                     AText = reader.IsDBNull(3) ? null : reader.GetString(3),
-                    ANchar = reader.IsDBNull(4) ? null : reader.GetString(4),
-                    ANvarchar = reader.IsDBNull(5) ? null : reader.GetString(5),
-                    ANtext = reader.IsDBNull(6) ? null : reader.GetString(6),
-                    AXml = reader.IsDBNull(7) ? null : reader.GetString(7),
-                    ABinary = reader.IsDBNull(8) ? null : reader.ReadBytes(8),
-                    AVarbinary = reader.IsDBNull(9) ? null : reader.ReadBytes(9),
-                    AImage = reader.IsDBNull(10) ? null : reader.ReadBytes(10),
                 };
                 list.Add(entity);
             }
             return list;
         }
 
-        public List<EntityWithSequence> Get(string query, 
+        public List<SmallentityWithSequence> Get(string query, 
             SqlParameter[] parms, 
             SqlConnection conn, 
             SqlTransaction trans)
@@ -53,9 +45,9 @@ namespace StormTestProject.StormSchema
         #region EntityDataReader
         internal class EntityDataReader : BaseDataReader
         {
-            private readonly List<EntityWithSequence> entities;
+            private readonly List<SmallentityWithSequence> entities;
 
-            public EntityDataReader(List<EntityWithSequence> entities) : base(entities.Count)
+            public EntityDataReader(List<SmallentityWithSequence> entities) : base(entities.Count)
             {
                 this.entities = entities;
             }
@@ -72,32 +64,18 @@ namespace StormTestProject.StormSchema
                         return entities[current].AVarchar;
                     case 3:
                         return entities[current].AText;
-                    case 4:
-                        return entities[current].ANchar;
-                    case 5:
-                        return entities[current].ANvarchar;
-                    case 6:
-                        return entities[current].ANtext;
-                    case 7:
-                        return entities[current].AXml;
-                    case 8:
-                        return entities[current].ABinary;
-                    case 9:
-                        return entities[current].AVarbinary;
-                    case 10:
-                        return entities[current].AImage;
                     default:
-                        throw new Exception("EntityWithSequence Can't read field " + i);
+                        throw new Exception("SmallentityWithSequence Can't read field " + i);
                 }
             }
 
-            public override int FieldCount { get { return 11; } }
+            public override int FieldCount { get { return 4; } }
         }
         #endregion
 
         public static int MaxAmountForWhereIn = 300;
 
-        public List<EntityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        public List<SmallentityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (int[])ids;
             return idsArray.Length > MaxAmountForWhereIn
@@ -106,26 +84,24 @@ namespace StormTestProject.StormSchema
         }
 
         #region getByPrimaryKey internal methods
-        private List<EntityWithSequence> GetByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        private List<SmallentityWithSequence> GetByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
         {
             var whereIn = string.Join(", ", idsArray.Select((x,i) => "@arg" + i));
             var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
             var sql = @"select
-                id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,
-                a_ntext, a_xml, a_binary, a_varbinary, a_image
-            from some_schema.entity_with_sequence where id in (" + whereIn + ")";
+                id, a_char, a_varchar, a_text
+            from smallentity_with_sequence where id in (" + whereIn + ")";
             return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
         }
 
-        private List<EntityWithSequence> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        private List<SmallentityWithSequence> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
         {
                 var table = CiHelper.CreateTempTableName();
                 CreateIdTempTable(table, conn, trans);
                 CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
                 var sql = @"select 
-                e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
-                e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
-                from some_schema.entity_with_sequence e
+                e.id, e.a_char, e.a_varchar, e.a_text
+                from smallentity_with_sequence e
                 inner join " + table + @" t on 
                 e.id = t.id";
                 var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
@@ -139,15 +115,15 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
         #endregion
 
-        public static int MaxAmountForGroupedInsert = 10;
+        public static int MaxAmountForGroupedInsert = 36;
 
-        public void Insert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        public void Insert(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             if(entities.Count > MaxAmountForGroupedInsert)
             {
-                var seq = CiHelper.GetSequenceValues<int>("some_schema.entity_seq", entities.Count, conn, trans);
+                var seq = CiHelper.GetSequenceValues<int>("smallentity_seq", entities.Count, conn, trans);
                 entities.ForEach(x => x.Id = seq++);
-                CiHelper.BulkInsert(new EntityDataReader(entities), "some_schema.entity_with_sequence", conn, trans );
+                CiHelper.BulkInsert(new EntityDataReader(entities), "smallentity_with_sequence", conn, trans );
             }
             else
             {
@@ -156,7 +132,7 @@ namespace StormTestProject.StormSchema
         }
 
         #region group insert methods
-        private void GroupInsert(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        private void GroupInsert(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
@@ -164,7 +140,7 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
         }
 
-        private List<EntityWithSequence> ReadKey(SqlDataReader reader, List<EntityWithSequence> entities)
+        private List<SmallentityWithSequence> ReadKey(SqlDataReader reader, List<SmallentityWithSequence> entities)
         {
             int i = 0;
             while (reader.Read())
@@ -183,10 +159,9 @@ namespace StormTestProject.StormSchema
             if(insertCacheLength == count) return insertRequestCache;
 
             var sb = new StringBuilder();
-            sb.AppendLine("INSERT INTO some_schema.entity_with_sequence");
+            sb.AppendLine("INSERT INTO smallentity_with_sequence");
             sb.AppendLine("(");
-            sb.AppendLine("id, a_char, a_varchar, a_text, a_nchar, a_nvarchar,");
-            sb.AppendLine("a_ntext, a_xml, a_binary, a_varbinary, a_image");
+            sb.AppendLine("id, a_char, a_varchar, a_text");
             sb.AppendLine(")OUTPUT inserted.id VALUES");
 
             AppendInsertKeys(sb, 0);
@@ -203,20 +178,13 @@ namespace StormTestProject.StormSchema
 
         private void AppendInsertKeys(StringBuilder sb, int i)
         {
-                sb.Append("( NEXT VALUE FOR some_schema.entity_seq");
+                sb.Append("( NEXT VALUE FOR smallentity_seq");
                 sb.Append(", @parm0i"); sb.Append(i);
                 sb.Append(", @parm1i"); sb.Append(i);
                 sb.Append(", @parm2i"); sb.Append(i);
-                sb.Append(", @parm3i"); sb.Append(i);
-                sb.Append(", @parm4i"); sb.Append(i);
-                sb.Append(", @parm5i"); sb.Append(i);
-                sb.Append(", @parm6i"); sb.Append(i);
-                sb.Append(", @parm7i"); sb.Append(i);
-                sb.Append(", @parm8i"); sb.Append(i);
-                sb.Append(", @parm9i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithSequence entity, int i)
+        private IEnumerable<SqlParameter> GetInsertParameters(SmallentityWithSequence entity, int i)
         {
             yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
                 { Value = entity.AChar ?? (object)DBNull.Value };
@@ -224,28 +192,14 @@ namespace StormTestProject.StormSchema
                 { Value = entity.AVarchar };
             yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
                 { Value = entity.AText ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.NChar)
-                { Value = entity.ANchar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.NVarChar)
-                { Value = entity.ANvarchar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.NText)
-                { Value = entity.ANtext ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.Xml)
-                { Value = entity.AXml ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.Binary)
-                { Value = entity.ABinary ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.VarBinary)
-                { Value = entity.AVarbinary ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm9i" + i, SqlDbType.Image)
-                { Value = entity.AImage ?? (object)DBNull.Value };
         }
         #endregion
 
-        public void Insert(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        public void Insert(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
         {        
             var sql = ConstructInsertRequest(1);    
             var parms = GetInsertParameters(entity, 0).ToArray();
-            Func<IDataReader, List<EntityWithSequence>> readId = reader =>
+            Func<IDataReader, List<SmallentityWithSequence>> readId = reader =>
                 {
                     if(reader.Read()) entity.Id = reader.GetInt32(0);
                     return null;
@@ -253,7 +207,7 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
         }
 
-        public void Update(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        public void Update(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
         {
             var parms = GetUpdateParameters(entity, 0).ToArray();
             var sql = GetUpdateRequest(0);
@@ -262,7 +216,7 @@ namespace StormTestProject.StormSchema
 
         public static int MaxAmountForGroupedUpdate = 40;
 
-        public void Update(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        public void Update(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             if (entities.Count > MaxAmountForGroupedUpdate)
             {
@@ -275,23 +229,16 @@ namespace StormTestProject.StormSchema
         }
 
         #region update members
-        private void BulkUpdate(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        private void BulkUpdate(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
             CreateTempTable(table, conn, trans);
             CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
-            var sql = @"UPDATE some_schema.entity_with_sequence SET
+            var sql = @"UPDATE smallentity_with_sequence SET
     a_char = s.a_char,
     a_varchar = s.a_varchar,
-    a_text = s.a_text,
-    a_nchar = s.a_nchar,
-    a_nvarchar = s.a_nvarchar,
-    a_ntext = s.a_ntext,
-    a_xml = s.a_xml,
-    a_binary = s.a_binary,
-    a_varbinary = s.a_varbinary,
-    a_image = s.a_image
-  FROM some_schema.entity_with_sequence src
+    a_text = s.a_text
+  FROM smallentity_with_sequence src
   INNER JOIN " + table + @" s 
     ON src.id = s.id
 ";
@@ -305,19 +252,12 @@ namespace StormTestProject.StormSchema
                 id int,
                 a_char char(1),
                 a_varchar varchar(2000),
-                a_text text(2147483647),
-                a_nchar nchar(10),
-                a_nvarchar nvarchar(max),
-                a_ntext ntext(1073741823),
-                a_xml xml(max),
-                a_binary binary(1000),
-                a_varbinary varbinary(max),
-                a_image image(2147483647)
+                a_text text(2147483647)
                 )";
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
 
-        private void GroupUpdate(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        private void GroupUpdate(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             int i = 0;
             var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
@@ -325,7 +265,7 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithSequence entity, int i)
+        private IEnumerable<SqlParameter> GetUpdateParameters(SmallentityWithSequence entity, int i)
         {
             yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
                 { Value = entity.AChar ?? (object)DBNull.Value };
@@ -333,21 +273,7 @@ namespace StormTestProject.StormSchema
                 { Value = entity.AVarchar };
             yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
                 { Value = entity.AText ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.NChar)
-                { Value = entity.ANchar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.NVarChar)
-                { Value = entity.ANvarchar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.NText)
-                { Value = entity.ANtext ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.Xml)
-                { Value = entity.AXml ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.Binary)
-                { Value = entity.ABinary ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.VarBinary)
-                { Value = entity.AVarbinary ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm9i" + i, SqlDbType.Image)
-                { Value = entity.AImage ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm10i" + i, SqlDbType.Int)
+            yield return new SqlParameter("parm3i" + i, SqlDbType.Int)
                 { Value = entity.Id };
         }
 
@@ -364,18 +290,11 @@ namespace StormTestProject.StormSchema
 
         private string GetUpdateRequest(int index)
         {
-            return @"UPDATE some_schema.entity_with_sequence SET
+            return @"UPDATE smallentity_with_sequence SET
     a_char = @parm0i" + index + @",
     a_varchar = @parm1i" + index + @",
-    a_text = @parm2i" + index + @",
-    a_nchar = @parm3i" + index + @",
-    a_nvarchar = @parm4i" + index + @",
-    a_ntext = @parm5i" + index + @",
-    a_xml = @parm6i" + index + @",
-    a_binary = @parm7i" + index + @",
-    a_varbinary = @parm8i" + index + @",
-    a_image = @parm9i" + index + @"
-  WHERE id = @parm10i" + index + ";";
+    a_text = @parm2i" + index + @"
+  WHERE id = @parm3i" + index + ";";
         }
         #endregion
     }

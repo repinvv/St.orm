@@ -58,7 +58,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        public static int MaxAmountForGroupedInsert = 12;");
+            WriteLiteral(@"        public static int MaxAmountForGroupedInsert = ");
+            Write(model.MaxAmountForRegularGroupedInsert());
+            WriteLiteral(@";");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(List<");

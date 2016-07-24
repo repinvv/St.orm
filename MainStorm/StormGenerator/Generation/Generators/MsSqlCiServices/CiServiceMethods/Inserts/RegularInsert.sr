@@ -2,7 +2,7 @@
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers Request
 @constructor(Model model, GenOptions options)
 
-        public static int MaxAmountForGroupedInsert = 12;
+        public static int MaxAmountForGroupedInsert = @model.MaxAmountForRegularGroupedInsert();
 
         public void Insert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {

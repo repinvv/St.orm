@@ -88,6 +88,16 @@
             };
         }
 
+        public static SmallentityWithSequence SmallEntityWithSequence(int len)
+        {
+            return new SmallentityWithSequence
+            {
+                AChar = "a", // length = 1
+                AVarchar = "1231231233453ffqef4vwt4v4v4tvw4vwrfvbwb",
+                AText = "r134fg245g254v45v245vfvv54versfvw43g5v4trtv34",
+            };
+        }
+
         public static EntityWithSequence EntityWithSequence(int len)
         {
             return new EntityWithSequence

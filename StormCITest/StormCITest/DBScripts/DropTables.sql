@@ -7,3 +7,6 @@ drop schema some_schema;
 
 drop table entity_with_multikey;
 drop table entity_without_key;
+
+drop table smallentity_with_sequence;
+drop sequence smallentity_seq;

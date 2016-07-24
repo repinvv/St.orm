@@ -121,7 +121,7 @@
         public void Get_EntityWithGuid_WhereInVsTempTablePerf()
         {
             var amount = EntityWithGuidCiService.MaxAmountForWhereIn;
-            var entities = Enumerable.Range(500, amount * (amount + 1))
+            var entities = Enumerable.Range(500, 10000)
                                      .Select(Create.EntityWithGuid)
                                      .ToList();
 

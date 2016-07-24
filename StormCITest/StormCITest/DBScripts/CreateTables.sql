@@ -65,3 +65,13 @@ create table entity_without_key
 	content nvarchar(max),
 );
 GO
+
+create sequence smallentity_seq as int START WITH 1 MINVALUE 1;
+create table smallentity_with_sequence
+(
+    id int not null default NEXT VALUE FOR smallentity_seq,
+	a_char char(1),
+	a_varchar varchar(2000) not null,
+	a_text text,
+    constraint smallentity_with_sequence_pk primary key (id)
+);

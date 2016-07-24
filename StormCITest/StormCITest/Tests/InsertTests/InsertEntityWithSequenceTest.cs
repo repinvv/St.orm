@@ -29,7 +29,13 @@
         [TestMethod]
         public void Insert_EnitityWithSequence_Grouped()
         {
-            Insert_EnitityWithSequence_Impl(EntityWithSequenceCiService.MaxAmountForGroupedInsert - 10);
+            Insert_EnitityWithSequence_Impl(EntityWithSequenceCiService.MaxAmountForGroupedInsert - 3);
+        }
+
+        [TestMethod]
+        public void Insert_EnitityWithSequence_Bulk()
+        {
+            Insert_EnitityWithSequence_Impl(EntityWithSequenceCiService.MaxAmountForGroupedInsert + 3);
         }
 
         private void Insert_EnitityWithSequence_Impl(int length)
@@ -48,16 +54,10 @@
         }
 
         [TestMethod]
-        public void Insert_EnitityWithSequence_Bulk()
-        {
-            Insert_EnitityWithSequence_Impl(EntityWithSequenceCiService.MaxAmountForGroupedInsert + 20);
-        }
-
-        [TestMethod]
         public void Insert_EnitityWithSequence_Perf()
         {
             var amount = EntityWithSequenceCiService.MaxAmountForGroupedInsert;
-            var entities = Enumerable.Range(10, amount * (amount + 1) * 30)
+            var entities = Enumerable.Range(10, amount * (amount + 1) * 10)
                                      .Select(x => Create.EntityWithSequence(100))
                                      .ToList();
 

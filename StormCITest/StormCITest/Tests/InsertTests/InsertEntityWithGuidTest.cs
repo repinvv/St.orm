@@ -85,7 +85,7 @@
         public void Insert_EnitityWithGuid_BulkVsGroupPerf()
         {
             var amount = EntityWithGuidCiService.MaxAmountForGroupedInsert;
-            var entities = Enumerable.Range(10, amount * (amount + 1) * 30)
+            var entities = Enumerable.Range(10, amount * (amount + 1) * 10)
                                      .Select(Create.EntityWithGuid)
                                      .ToList();
 

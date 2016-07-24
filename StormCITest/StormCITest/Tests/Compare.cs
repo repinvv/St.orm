@@ -11,6 +11,7 @@
         {
             Assert.AreEqual(efEntity.id, entity.Id);
             Assert.AreEqual(efEntity.a_char, entity.AChar);
+            Assert.AreEqual(efEntity.a_text, entity.AText);
             Assert.AreEqual(efEntity.a_nchar, entity.ANchar);
             Assert.AreEqual(efEntity.a_varchar, entity.AVarchar);
             Assert.AreEqual(efEntity.a_nvarchar, entity.ANvarchar);
@@ -19,6 +20,15 @@
             CollectionAssert.AreEqual(efEntity.a_binary, entity.ABinary);
             CollectionAssert.AreEqual(efEntity.a_varbinary, entity.AVarbinary);
             Assert.IsNull(entity.AImage);
+        }
+
+        public static void SmallEntityWithSequence(smallentity_with_sequence efEntity,
+            SmallentityWithSequence entity)
+        {
+            Assert.AreEqual(efEntity.id, entity.Id);
+            Assert.AreEqual(efEntity.a_char, entity.AChar);
+            Assert.AreEqual(efEntity.a_varchar, entity.AVarchar);
+            Assert.AreEqual(efEntity.a_text, entity.AText);
         }
 
         public static void EntityWithSequence(EntityWithSequence src, EntityWithSequence entity)

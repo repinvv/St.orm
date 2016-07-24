@@ -414,6 +414,58 @@
           "Associations": []
         }
       ]
+    },
+    {
+      "Id": "smallentity_with_sequence",
+      "Name": "smallentity_with_sequence",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "id",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "IsPrimaryKey": true,
+          "Default": "(NEXT VALUE FOR [smallentity_seq])",
+          "Index": 1,
+          "Precision": 10,
+          "Definition": "id int",
+          "Sequence": "smallentity_seq",
+          "Associations": []
+        },
+        {
+          "Name": "a_char",
+          "DbType": "char",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 2,
+          "Length": 1,
+          "Definition": "a_char char(1)",
+          "Associations": []
+        },
+        {
+          "Name": "a_varchar",
+          "DbType": "varchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "Index": 3,
+          "Length": 2000,
+          "Definition": "a_varchar varchar(2000)",
+          "Associations": []
+        },
+        {
+          "Name": "a_text",
+          "DbType": "text",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 4,
+          "Length": 2147483647,
+          "Definition": "a_text text(2147483647)",
+          "Associations": []
+        }
+      ]
     }
   ],
   "Configs": [
@@ -489,6 +541,7 @@
     },
     {
       "Id": "EntityWithGuid",
+      "IsStruct": true,
       "DbTableId": "entity_with_guid",
       "Fields": [
         {
@@ -549,7 +602,6 @@
       "Relations": [],
       "IsEnabled": true,
       "IsGenerated": true,
-      "IsStruct":  true,
       "Name": "EntityWithGuid"
     },
     {
@@ -678,6 +730,40 @@
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "EntityWithoutKey"
+    },
+    {
+      "Id": "SmallentityWithSequence",
+      "DbTableId": "smallentity_with_sequence",
+      "Fields": [
+        {
+          "DbColumnName": "id",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Id"
+        },
+        {
+          "DbColumnName": "a_char",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AChar"
+        },
+        {
+          "DbColumnName": "a_varchar",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AVarchar"
+        },
+        {
+          "DbColumnName": "a_text",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AText"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "SmallentityWithSequence"
     }
   ]
 }

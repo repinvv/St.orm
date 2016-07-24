@@ -42,7 +42,7 @@
         public void Insert_EnitityWithMultiKey_BulkVsGroupPerf()
         {
             var amount = EntityWithMultikeyCiService.MaxAmountForGroupedInsert;
-            var entities = Enumerable.Range(10, amount * (amount + 1) * 5)
+            var entities = Enumerable.Range(10, amount * (amount + 1) * 2)
                                      .Select(Create.EntityWithMultikey)
                                      .ToList();
 

@@ -1,5 +1,6 @@
 ﻿namespace StormGenerator.Generation.Generators.GeneratorHelpers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using StormGenerator.Models;
@@ -62,6 +63,15 @@
         public static List<Field> ValueFieldsThenKeys(this Model model)
         {
             return model.Fields.Except(model.KeyFields).Concat(model.KeyFields).ToList();
+        }
+
+        public static int MaxAmountForRegularGroupedInsert(this Model model)
+        {
+            return Math.Max((369 - 33 * model.Fields.Count) / 6, 10);
+        }
+        public static int MaxAmountForSequenceGroupedInsert(this Model model)
+        {
+            return Math.Max((361 - 27 * model.Fields.Count) / 7, 10);
         }
     }
 }

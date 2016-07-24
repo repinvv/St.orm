@@ -72,7 +72,7 @@ namespace StormTestProject.StormSchema
             throw new CiException("Entity EntityWithoutKey has no primary key");
         }
 
-        public static int MaxAmountForGroupedInsert = 12;
+        public static int MaxAmountForGroupedInsert = 50;
 
         public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {

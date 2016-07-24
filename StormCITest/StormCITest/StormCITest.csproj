@@ -66,6 +66,7 @@
     <Compile Include="EFSchema\entity_with_id.cs" />
     <Compile Include="EFSchema\entity_with_multikey.cs" />
     <Compile Include="EFSchema\entity_with_sequence.cs" />
+    <Compile Include="EFSchema\smallentity_with_sequence.cs" />
     <Compile Include="EFSchema\StormCI.cs" />
     <Compile Include="StormSchema\BaseDataReader.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
@@ -119,6 +120,12 @@
     <Compile Include="StormSchema\SingleKeyDataReader.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StormSchema\SmallentityWithSequence.main.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StormSchema\SmallentityWithSequenceCIService.cs">
+      <DependentUpon>StormEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="StormSchema\StormEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -137,6 +144,7 @@
     <Compile Include="Tests\InsertTests\InsertEntityWithIdTests.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithMultiKeyTest.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithSequenceTest.cs" />
+    <Compile Include="Tests\InsertTests\InsertSmallEntityWithSequenceTest.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\UpdateTests\UpdateEntityWithGuidTest.cs" />
     <Compile Include="Tests\WatchIt.cs" />

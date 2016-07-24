@@ -75,6 +75,7 @@ namespace StormTestProject.StormSchema
                 { typeof(EntityWithSequence), new EntityWithSequenceCiService() },
                 { typeof(EntityWithMultikey), new EntityWithMultikeyCiService() },
                 { typeof(EntityWithoutKey), new EntityWithoutKeyCiService() },
+                { typeof(SmallentityWithSequence), new SmallentityWithSequenceCiService() },
            };
 
         private static ICiService<T> GetService<T>()

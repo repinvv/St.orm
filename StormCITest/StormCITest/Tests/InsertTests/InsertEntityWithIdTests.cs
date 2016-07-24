@@ -52,8 +52,8 @@
         public void Insert_EnitityWithId_Perf()
         {
             // arrange
-            var entities = Enumerable.Range(10, 3000).Select(Create.EntityWithId).ToList(); 
-            // About a second on my system
+            var entities = Enumerable.Range(10, 1500).Select(Create.EntityWithId).ToList(); 
+            // About half a second on my system
 
             // act
             var time = WatchIt.Watch(() => MsSqlCi.Insert(entities, conn));
