@@ -105,5 +105,24 @@
             };
         }
 
+        public static entity_with_multikey EfEntityWithMultikey(int i)
+        {
+            return new entity_with_multikey
+            {
+                id_1 = i,
+                id_2 = "id2",
+                content = "content " + i
+            };
+        }
+
+        public static EntityWithMultikey EntityWithMultikey(int i)
+        {
+            return new EntityWithMultikey
+            {
+                Id1 = i,
+                Id2 = "id2",
+                Content = "content " + i
+            };
+        }
     }
 }

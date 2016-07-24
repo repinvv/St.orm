@@ -28,16 +28,16 @@
         [TestMethod]
         public void Insert_EnitityWithGuid_Bulk()
         {
-            InsertEnitityWithIdImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert + 200);
+            InsertEnitityWithGuidImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert + 200);
         }
 
         [TestMethod]
         public void Insert_EnitityWithGuid_Grouped()
         {
-            InsertEnitityWithIdImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert - 3);
+            InsertEnitityWithGuidImpl(EntityWithGuidCiService.MaxAmountForGroupedInsert - 3);
         }
 
-        private void InsertEnitityWithIdImpl(int length)
+        private void InsertEnitityWithGuidImpl(int length)
         {
             // arrange
             var entities = Enumerable.Range(10, length)

@@ -118,7 +118,7 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
 
-        public static int MaxAmountForGroupedInsert = 12;
+        public static int MaxAmountForGroupedInsert = 45;
 
         public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {

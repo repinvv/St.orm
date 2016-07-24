@@ -549,7 +549,7 @@
       "Relations": [],
       "IsEnabled": true,
       "IsGenerated": true,
-      "IsStruct": true,
+      "IsStruct":  true,
       "Name": "EntityWithGuid"
     },
     {

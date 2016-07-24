@@ -1,5 +1,5 @@
 {
-  "ConnectionString": "data source=.;initial catalog=StormCI;integrated security=true", 
+  "ConnectionString": "data source=.;initial catalog=StormCI;user id=sa;password=sa;", 
   "GenOptions": {
     "Linq2EntitiesProvider": "linq2db",
     "ContextName": "StormTestContext",

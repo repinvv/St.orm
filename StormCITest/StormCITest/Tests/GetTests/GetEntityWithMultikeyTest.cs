@@ -12,7 +12,7 @@
         public void Get_EntityWithMultiKey_ByIds()
         {
             // arrange
-            var entities = Enumerable.Range(500, 2000).Select(CreateEntity).ToList();
+            var entities = Enumerable.Range(500, 2000).Select(Create.EfEntityWithMultikey).ToList();
             context.entity_with_multikey.AddRange(entities);
             context.SaveChanges();
 
@@ -30,25 +30,8 @@
             Assert.AreEqual(entities.Count, result.Count);
             foreach (var efEntity in entities)
             {
-                CompareEntity(efEntity, dict[new { id1 = efEntity.id_1, id2 = efEntity.id_2 }]);
+                Compare.EntityWithMultikey(efEntity, dict[new { id1 = efEntity.id_1, id2 = efEntity.id_2 }]);
             }
-        }
-
-        private void CompareEntity(entity_with_multikey efEntity, EntityWithMultikey entity)
-        {
-            Assert.AreEqual(efEntity.id_1, entity.Id1);
-            Assert.AreEqual(efEntity.id_2, entity.Id2);
-            Assert.AreEqual(efEntity.content, entity.Content);
-        }
-
-        private entity_with_multikey CreateEntity(int i)
-        {
-            return new entity_with_multikey
-                   {
-                       id_1 = i,
-                       id_2 = "id2",
-                       content = "content " + i
-                   };
         }
     }
 }

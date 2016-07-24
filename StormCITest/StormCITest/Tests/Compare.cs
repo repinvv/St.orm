@@ -87,6 +87,11 @@
             Assert.AreEqual(src.ATime, entity.ATime);
         }
 
-
+        public static void EntityWithMultikey(entity_with_multikey efEntity, EntityWithMultikey entity)
+        {
+            Assert.AreEqual(efEntity.id_1, entity.Id1);
+            Assert.AreEqual(efEntity.id_2, entity.Id2);
+            Assert.AreEqual(efEntity.content, entity.Content);
+        }
     }
 }

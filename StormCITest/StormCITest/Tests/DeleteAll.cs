@@ -14,5 +14,14 @@
                 CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], (SqlConnection)conn, null);
             }
         }
+
+        public static void EntityWithMultikey(DbConnection conn)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                var sql = "delete from entity_with_multikey";
+                CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], (SqlConnection)conn, null);
+            }
+        }
     }
 }

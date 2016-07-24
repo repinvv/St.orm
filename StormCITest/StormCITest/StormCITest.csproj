@@ -135,6 +135,7 @@
     <Compile Include="Tests\GetTests\GetEntityWithSequenceTest.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithGuidTest.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithIdTests.cs" />
+    <Compile Include="Tests\InsertTests\InsertEntityWithMultiKeyTest.cs" />
     <Compile Include="Tests\InsertTests\InsertEntityWithSequenceTest.cs" />
     <Compile Include="Tests\TestConnection.cs" />
     <Compile Include="Tests\UpdateTests\UpdateEntityWithGuidTest.cs" />
@@ -157,9 +158,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StormSchema\123\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
