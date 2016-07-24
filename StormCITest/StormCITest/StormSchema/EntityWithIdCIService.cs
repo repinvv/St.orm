@@ -245,7 +245,7 @@ namespace StormTestProject.StormSchema
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        public static int MaxAmountForGroupedUpdate = 40;
+        public static int MaxAmountForGroupedUpdate = 30;
 
         public void Update(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {

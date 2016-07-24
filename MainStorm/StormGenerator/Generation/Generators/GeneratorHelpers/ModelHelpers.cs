@@ -73,5 +73,10 @@
         {
             return Math.Max((361 - 27 * model.Fields.Count) / 7, 10);
         }
+
+        public static int MaxAmountForGroupedUpdate(this Model model)
+        {
+            return Math.Max((632 - 48 * model.Fields.Count) / 5, 10);
+        }
     }
 }

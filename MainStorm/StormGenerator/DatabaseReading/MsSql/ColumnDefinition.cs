@@ -10,14 +10,11 @@
         string[] lengthTypes = {
                                    "char",
                                    "varchar",
-                                   "text",
                                    "nchar",
                                    "nvarchar",
-                                   "ntext",
                                    "xml",
                                    "binary",
-                                   "varbinary",
-                                   "image"
+                                   "varbinary"
                                };
 
         public string GetColumnDefinition(DbColumn column)

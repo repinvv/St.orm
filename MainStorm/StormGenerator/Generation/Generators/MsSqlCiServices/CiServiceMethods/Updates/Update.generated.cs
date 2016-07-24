@@ -72,7 +72,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public static int MaxAmountForGroupedUpdate = 40;");
+            WriteLiteral(@"        public static int MaxAmountForGroupedUpdate = ");
+            Write(model.MaxAmountForGroupedUpdate());
+            WriteLiteral(@";");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Update(List<");

@@ -98,6 +98,17 @@
             };
         }
 
+        public static SmallentityWithSequence SmallEntityWithSequenceForUpdate(int id)
+        {
+            return new SmallentityWithSequence
+            {
+                Id=id,
+                AChar = "b", // length = 1
+                AVarchar = "12312312334",
+                AText = "r134fg245g254v45v",
+            };
+        }
+
         public static EntityWithSequence EntityWithSequence(int len)
         {
             return new EntityWithSequence

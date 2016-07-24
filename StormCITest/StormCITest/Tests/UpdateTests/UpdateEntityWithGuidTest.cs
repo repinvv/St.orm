@@ -32,6 +32,12 @@
             Update_EntityWithGuid_Impl(EntityWithGuidCiService.MaxAmountForGroupedUpdate);
         }
 
+        [TestMethod]
+        public void Update_EntityWithGuid_Bulk()
+        {
+            Update_EntityWithGuid_Impl(EntityWithGuidCiService.MaxAmountForGroupedUpdate + 100);
+        }
+
         private void Update_EntityWithGuid_Impl(int length)
         {
             // arrange
@@ -54,11 +60,6 @@
             {
                 Compare.EntityWithGuid(efEntities[entity.Id], entity);
             }
-        }
-
-        public void Update_EntityWithGuid_Bulk()
-        {
-            Update_EntityWithGuid_Impl(EntityWithGuidCiService.MaxAmountForGroupedUpdate + 100);
         }
 
         [TestMethod]

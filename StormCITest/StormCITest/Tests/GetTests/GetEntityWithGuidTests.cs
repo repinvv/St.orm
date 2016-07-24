@@ -121,7 +121,7 @@
         public void Get_EntityWithGuid_WhereInVsTempTablePerf()
         {
             var amount = EntityWithGuidCiService.MaxAmountForWhereIn;
-            var entities = Enumerable.Range(500, 10000)
+            var entities = Enumerable.Range(500, amount * (amount + 1))
                                      .Select(Create.EntityWithGuid)
                                      .ToList();
 
@@ -129,9 +129,9 @@
             var split2 = entities.Select(x => x.Id).SplitInGroupsBy(amount + 1).ToList();
 
             var time1 = WatchIt
-                .Watch(() => split1.ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
+                .Watch(() => split1.Portion(8).ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
             var time2 = WatchIt
-                .Watch(() => split2.ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
+                .Watch(() => split2.Portion(8).ForEach(x => MsSqlCi.GetByPrimaryKey<EntityWithGuid>(x.ToArray(), conn)));
 
             Console.WriteLine(time1);
             Console.WriteLine(time2);
