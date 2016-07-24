@@ -1,0 +1,79 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+        public void Delete(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {
+            
+        }
+
+        public void Delete(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForWhereIn)
+            {
+                DeleteByTempTable(entities, conn, trans);
+            }
+            else
+            {
+                DeleteByWhereIn(entities, conn, trans);
+            }
+        }
+
+        public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        { 
+            var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
+            if (idsArray.Length > MaxAmountForWhereIn)
+            {
+                DeleteByTempTable(idsArray, conn, trans);
+            }
+            else
+            {
+                DeleteByWhereIn(idsArray, conn, trans);
+            }
+        }
+
+		#region delete methods
+        private void DeleteByTempTable(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"delete from @model.Table.Id e
+  inner join " + table + @" t on 
+@foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
+    @line
+}
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void DeleteByWhereIn(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", entities.Select((x, i) => "@@arg" + i));
+            var parms = entities.Select((x, i) => new SqlParameter("@@arg" + i, x.@model.KeyFields[0].Name)).ToArray();
+            var sql = @"delete from @model.Table.Id where @model.KeyFields[0].Column.Name in (" + whereIn + ")";
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private void DeleteByTempTable(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new SingleKeyDataReader<@(model.KeyFields[0].Column.CsTypeName)>(idsArray), table, conn, trans);
+            var sql = @"delete from @model.Table.Id e
+  inner join " + table + @" t on 
+@foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
+    @line
+}
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);		 
+		}
+
+        private void DeleteByWhereIn(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+        { 
+		    var whereIn = string.Join(", ", idsArray.Select((x, i) => "@@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@@arg" + i, x)).ToArray();
+            var sql = @"delete from @model.Table.Id where @model.KeyFields[0].Column.Name in (" + whereIn + ")";
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+		}
+		#endregion

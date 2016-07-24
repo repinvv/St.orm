@@ -110,7 +110,6 @@
     <Compile Include="StormSchema\EntityWithSequenceCIService.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="StormSchema\Extension.cs" />
     <Compile Include="StormSchema\ICIService.cs">
       <DependentUpon>StormEntities.tt</DependentUpon>
     </Compile>

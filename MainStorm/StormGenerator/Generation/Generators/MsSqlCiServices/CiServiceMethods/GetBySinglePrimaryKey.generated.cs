@@ -124,43 +124,41 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var table = CiHelper.CreateTempTableName();");
+            WriteLiteral(@"            var table = CiHelper.CreateTempTableName();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CreateIdTempTable(table, conn, trans);");
+            WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.BulkInsert(new SingleKeyDataReader<");
+            WriteLiteral(@"            CiHelper.BulkInsert(new SingleKeyDataReader<");
             Write(model.KeyFields[0].Column.CsTypeName);
             WriteLiteral(@">(idsArray), table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                var sql = ");
+            WriteLiteral(@"            var sql = ");
             WriteLiteral(@"@");
             WriteLiteral(@"""select ");
             WriteLiteral(Environment.NewLine);
             foreach (var line in model.Fields.GetSelectLines("e."))
             {
-                WriteLiteral(@"                ");
+                WriteLiteral(@"    ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                from ");
+            WriteLiteral(@"  from ");
             Write(model.Table.Id);
             WriteLiteral(@" e");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                inner join "" + table + ");
+            WriteLiteral(@"  inner join "" + table + ");
             WriteLiteral(@"@");
             WriteLiteral(@""" t on ");
             WriteLiteral(Environment.NewLine);
-            foreach (var line in model.GetKeyEqualityLines("e.", "t.", "\";"))
+            foreach (var line in model.GetKeyEqualityLines("e.", "t.", ";"))
             {
-                WriteLiteral(@"                ");
+                WriteLiteral(@"    ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
+            WriteLiteral(@"drop table "" + table + "";"";");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                CiHelper.DropTable(table, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                return result;");
+            WriteLiteral(@"            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

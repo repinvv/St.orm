@@ -14,6 +14,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using CiServiceMethods;
     using CiServiceMethods.Inserts;
     using CiServiceMethods.Updates;
+    using CiServiceMethods.Deletes;
     using System;
     using System.Text;
     using System.Linq;
@@ -135,6 +136,19 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             else
             {
                 Write(new UpdateException(model).Execute());
+            }
+            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Count == 0)
+            {
+                Write(new DeleteNoKey(model, options).Execute());
+            }
+            if (model.KeyFields.Count > 1)
+            {
+                Write(new DeleteMultiKey(model, options).Execute());
+            }
+            if (model.KeyFields.Count == 1)
+            {
+                Write(new DeleteSingleKey(model, options).Execute());
             }
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);

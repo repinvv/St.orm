@@ -150,5 +150,23 @@ namespace StormTestProject.StormSchema
         public void Update(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
             throw new CiException("Can not update entity EntityWithoutKey");
-        }    }
+        }
+        public void Delete(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            
+        }
+
+        public void Delete(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+
+        }
+
+        public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        { 
+            throw new CiException("EntityWithoutKey has no primary key");
+        }
+
+        #region delete methods
+        #endregion
+    }
 }

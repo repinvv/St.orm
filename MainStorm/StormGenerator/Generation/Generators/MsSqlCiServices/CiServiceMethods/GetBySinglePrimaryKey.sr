@@ -7,45 +7,44 @@
         public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             var idsArray = (@(model.KeyFields[0].Column.CsTypeName)[])ids;
-		    return idsArray.Length > MaxAmountForWhereIn
-			    ? GetByTempTable(idsArray, conn, trans)
-				: GetByWhereIn(idsArray, conn, trans);
+            return idsArray.Length > MaxAmountForWhereIn
+                ? GetByTempTable(idsArray, conn, trans)
+                : GetByWhereIn(idsArray, conn, trans);
         }
 
-		#region getByPrimaryKey internal methods
-		private List<@model.Name> GetByWhereIn(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
-		{
-		    var whereIn = string.Join(", ", idsArray.Select((x,i) => "@@arg" + i));
-			var parms = idsArray.Select((x, i) => new SqlParameter("@@arg" + i, x)).ToArray();
-			var sql = @"select
+        #region getByPrimaryKey internal methods
+        private List<@model.Name> GetByWhereIn(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", idsArray.Select((x,i) => "@@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@@arg" + i, x)).ToArray();
+            var sql = @"select
   @foreach(var line in model.Fields.GetSelectLines()){
                 @line
   }
             from @model.Table.Id where @model.KeyFields[0].Column.Name in (" + whereIn + ")";
-			return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
-		}
+            return CiHelper.ExecuteSelect(sql, parms, ReadEntities, conn, trans);
+        }
 
-		private List<@model.Name> GetByTempTable(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
-		{
-		        var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
-                var sql = @"select 
-  @foreach(var line in model.Fields.GetSelectLines("e.")){
-                @line
-  }
-				from @model.Table.Id e
-                inner join " + table + @" t on 
-  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
-                @line
-  }
-                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
-		}
+        private List<@model.Name> GetByTempTable(@(model.KeyFields[0].Column.CsTypeName)[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new SingleKeyDataReader<@model.KeyFields[0].Column.CsTypeName>(idsArray), table, conn, trans);
+            var sql = @"select 
+@foreach(var line in model.Fields.GetSelectLines("e.")){
+    @line
+}
+  from @model.Table.Id e
+  inner join " + table + @" t on 
+@foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
+    @line
+}
+drop table " + table + ";";
+            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
+        }
 
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
 @[CreateTableSingleFieldContent(model.KeyFields[0])]
         }
-		#endregion
+        #endregion

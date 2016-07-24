@@ -65,6 +65,30 @@
             }
         }
 
+        public static void Delete<T>(T entity, DbConnection conn, DbTransaction trans = null)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Delete(entity, (SqlConnection)conn, trans as SqlTransaction);
+            }
+        }
+
+        public static void Delete<T>(List<T> entities, DbConnection conn, DbTransaction trans = null)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().Delete(entities, (SqlConnection)conn, trans as SqlTransaction);
+            }
+        }
+
+        public static void DeleteByPrimaryKey<T>(object ids, DbConnection conn, DbTransaction trans = null)
+        {
+            using (new ConnectionHandler(conn))
+            {
+                GetService<T>().DeleteByPrimaryKey(ids, (SqlConnection)conn, trans as SqlTransaction);
+            }
+        }
+
         private static Dictionary<Type, object> services =
             new Dictionary<Type, object>
             {

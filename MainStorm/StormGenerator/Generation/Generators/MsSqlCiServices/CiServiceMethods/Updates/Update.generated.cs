@@ -102,7 +102,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #region update members");
+            WriteLiteral(@"        #region update methods");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void BulkUpdate(List<");
             Write(model.Name);
@@ -141,24 +141,17 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"  INNER JOIN "" + table + ");
             WriteLiteral(@"@");
-            WriteLiteral(@""" s ");
+            WriteLiteral(@""" s on");
             WriteLiteral(Environment.NewLine);
-            foreach (var field in model.KeyFields)
+            foreach (var line in model.GetKeyEqualityLines("src.", "s.", ";"))
             {
-                var start = field == model.KeyFields[0] ? "ON" : "AND";
                 WriteLiteral(@"    ");
-                Write(start);
-                WriteLiteral(@" src.");
-                Write(field.Column.Name);
-                WriteLiteral(@" = s.");
-                Write(field.Column.Name);
+                Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@""";");
+            WriteLiteral(@"drop table "" + table + "";"";");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.DropTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

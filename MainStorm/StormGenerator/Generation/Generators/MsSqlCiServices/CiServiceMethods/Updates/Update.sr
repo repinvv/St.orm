@@ -23,7 +23,7 @@
             }
         }
 
-        #region update members
+        #region update methods
         private void BulkUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -35,14 +35,12 @@
     @field.Column.Name = s.@field.Column.Name@if(field != fields.Last()){,}
 }
   FROM @model.Table.Id src
-  INNER JOIN " + table + @" s 
-@foreach(var field in model.KeyFields){
-  @{var start = field == model.KeyFields[0] ? "ON" : "AND";}
-    @start src.@field.Column.Name = s.@field.Column.Name
+  INNER JOIN " + table + @" s on
+@foreach(var line in model.GetKeyEqualityLines("src.", "s.", ";")){
+    @line
 }
-";
+drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-            CiHelper.DropTable(table, conn, trans);
         }
         
         private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)

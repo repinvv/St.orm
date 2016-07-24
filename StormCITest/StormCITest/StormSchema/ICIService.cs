@@ -24,5 +24,11 @@ namespace StormTestProject.StormSchema
         void Update(T entity, SqlConnection conn, SqlTransaction trans);
 
         void Update(List<T> entities, SqlConnection conn, SqlTransaction trans);
+
+        void Delete(T entity, SqlConnection conn, SqlTransaction trans);
+
+        void Delete(List<T> entities, SqlConnection conn, SqlTransaction trans);
+
+        void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);
     }
 }

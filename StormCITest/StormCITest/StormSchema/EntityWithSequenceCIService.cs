@@ -119,18 +119,17 @@ namespace StormTestProject.StormSchema
 
         private List<EntityWithSequence> GetByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
         {
-                var table = CiHelper.CreateTempTableName();
-                CreateIdTempTable(table, conn, trans);
-                CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
-                var sql = @"select 
-                e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
-                e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
-                from some_schema.entity_with_sequence e
-                inner join " + table + @" t on 
-                e.id = t.id";
-                var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
-                CiHelper.DropTable(table, conn, trans);
-                return result;
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
+            var sql = @"select 
+    e.id, e.a_char, e.a_varchar, e.a_text, e.a_nchar, e.a_nvarchar,
+    e.a_ntext, e.a_xml, e.a_binary, e.a_varbinary, e.a_image
+  from some_schema.entity_with_sequence e
+  inner join " + table + @" t on 
+    e.id = t.id;
+drop table " + table + ";";
+            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
 
         private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -274,7 +273,7 @@ namespace StormTestProject.StormSchema
             }
         }
 
-        #region update members
+        #region update methods
         private void BulkUpdate(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -292,11 +291,10 @@ namespace StormTestProject.StormSchema
     a_varbinary = s.a_varbinary,
     a_image = s.a_image
   FROM some_schema.entity_with_sequence src
-  INNER JOIN " + table + @" s 
-    ON src.id = s.id
-";
+  INNER JOIN " + table + @" s on
+    src.id = s.id;
+drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-            CiHelper.DropTable(table, conn, trans);
         }
         
         private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -376,6 +374,78 @@ namespace StormTestProject.StormSchema
     a_varbinary = @parm8i" + index + @",
     a_image = @parm9i" + index + @"
   WHERE id = @parm10i" + index + ";";
+        }
+        #endregion
+
+        public void Delete(EntityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        {
+            
+        }
+
+        public void Delete(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            if (entities.Count > MaxAmountForWhereIn)
+            {
+                DeleteByTempTable(entities, conn, trans);
+            }
+            else
+            {
+                DeleteByWhereIn(entities, conn, trans);
+            }
+        }
+
+        public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        { 
+            var idsArray = (int[])ids;
+            if (idsArray.Length > MaxAmountForWhereIn)
+            {
+                DeleteByTempTable(idsArray, conn, trans);
+            }
+            else
+            {
+                DeleteByWhereIn(idsArray, conn, trans);
+            }
+        }
+
+        #region delete methods
+        private void DeleteByTempTable(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"delete from some_schema.entity_with_sequence e
+  inner join " + table + @" t on 
+    e.id = t.id;
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void DeleteByWhereIn(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var whereIn = string.Join(", ", entities.Select((x, i) => "@arg" + i));
+            var parms = entities.Select((x, i) => new SqlParameter("@arg" + i, x.Id)).ToArray();
+            var sql = @"delete from some_schema.entity_with_sequence where id in (" + whereIn + ")";
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private void DeleteByTempTable(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
+            var sql = @"delete from some_schema.entity_with_sequence e
+  inner join " + table + @" t on 
+    e.id = t.id;
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);         
+        }
+
+        private void DeleteByWhereIn(int[] idsArray, SqlConnection conn, SqlTransaction trans)
+        { 
+            var whereIn = string.Join(", ", idsArray.Select((x, i) => "@arg" + i));
+            var parms = idsArray.Select((x, i) => new SqlParameter("@arg" + i, x)).ToArray();
+            var sql = @"delete from some_schema.entity_with_sequence where id in (" + whereIn + ")";
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
         #endregion
     }

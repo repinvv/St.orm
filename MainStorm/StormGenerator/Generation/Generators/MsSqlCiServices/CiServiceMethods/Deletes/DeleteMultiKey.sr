@@ -1,0 +1,21 @@
+﻿@visibility internal
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+        public void Delete(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {
+            
+        }
+
+        public void Delete(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+
+        }
+
+        public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Will not delete @model.Name by multi key, use other deletion method instead.");
+        }
+
+		#region delete methods
+		#endregion

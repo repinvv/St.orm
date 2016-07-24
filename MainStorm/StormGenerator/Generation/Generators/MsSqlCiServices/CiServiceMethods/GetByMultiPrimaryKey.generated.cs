@@ -103,17 +103,15 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"@");
             WriteLiteral(@""" t on ");
             WriteLiteral(Environment.NewLine);
-            foreach (var line in model.GetKeyEqualityLines("e.", "t.", "\";"))
+            foreach (var line in model.GetKeyEqualityLines("e.", "t.", ";"))
             {
                 WriteLiteral(@"    ");
                 Write(line);
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
+            WriteLiteral(@"drop table "" + table + "";"";");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.DropTable(table, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return result;");
+            WriteLiteral(@"            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

@@ -58,6 +58,15 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        void Update(List<T> entities, SqlConnection conn, SqlTransaction trans);");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        void Delete(T entity, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        void Delete(List<T> entities, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans);");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);
 

@@ -1,8 +1,6 @@
 ﻿namespace StormGenerator.DatabaseReading.MsSql
 {
-    using System;
     using System.Linq;
-    using System.Runtime.InteropServices;
 
     internal class ColumnDefinition
     {

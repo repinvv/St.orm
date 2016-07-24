@@ -103,10 +103,9 @@ namespace StormTestProject.StormSchema
     e.id_1, e.id_2, e.content
   from entity_with_multikey e
   inner join " + table + @" t on 
-    e.id_1 = t.id_1 AND e.id_2 = t.id_2";
-            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
-            CiHelper.DropTable(table, conn, trans);
-            return result;
+    e.id_1 = t.id_1 AND e.id_2 = t.id_2;
+drop table " + table + ";";
+            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
 
         private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -212,7 +211,7 @@ namespace StormTestProject.StormSchema
             }
         }
 
-        #region update members
+        #region update methods
         private void BulkUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -221,12 +220,10 @@ namespace StormTestProject.StormSchema
             var sql = @"UPDATE entity_with_multikey SET
     content = s.content
   FROM entity_with_multikey src
-  INNER JOIN " + table + @" s 
-    ON src.id_1 = s.id_1
-    AND src.id_2 = s.id_2
-";
+  INNER JOIN " + table + @" s on
+    src.id_1 = s.id_1 AND src.id_2 = s.id_2;
+drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-            CiHelper.DropTable(table, conn, trans);
         }
         
         private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -275,6 +272,24 @@ namespace StormTestProject.StormSchema
   WHERE id_1 = @parm1i" + index + @",
   AND id_2 = @parm2i" + index + ";";
         }
+        #endregion
+
+        public void Delete(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            
+        }
+
+        public void Delete(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+
+        }
+
+        public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Will not delete EntityWithMultikey by multi key, use other deletion method instead.");
+        }
+
+        #region delete methods
         #endregion
     }
 }

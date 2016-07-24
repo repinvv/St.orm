@@ -176,17 +176,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ""DROP TABLE "" + table;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            ExecuteNonQuery(sql, NoParameters,  conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public static string CreateTempTableName()");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");

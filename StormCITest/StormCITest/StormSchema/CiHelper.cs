@@ -125,12 +125,6 @@ namespace StormTestProject.StormSchema
             }
         }
 
-        public static void DropTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "DROP TABLE " + table;
-            ExecuteNonQuery(sql, NoParameters,  conn, trans);
-        }
-
         public static string CreateTempTableName()
         {
             return "#a" + Guid.NewGuid().ToString("N");

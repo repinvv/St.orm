@@ -82,6 +82,21 @@
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteMultiKey.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>DeleteMultiKey.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteNoKey.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>DeleteNoKey.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteSingleKey.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>DeleteSingleKey.generated.cs</LastGenOutput>
+    </None>
     <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Inserts\Request\AppendInsertKeys.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts.Request</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
@@ -303,6 +318,21 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateTableSingleFieldContent.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteMultiKey.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteMultiKey.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteNoKey.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteNoKey.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteSingleKey.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteSingleKey.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\GetByMultiPrimaryKey.generated.cs">
       <AutoGen>True</AutoGen>

@@ -1,9 +1,6 @@
 ﻿namespace StormGenerator.DatabaseReading.MsSql
 {
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Text.RegularExpressions;
-    using StormGenerator.Models.DbModels;
 
     internal class Sequencer
     {

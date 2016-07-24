@@ -19,12 +19,11 @@
   }
   from @model.Table.Id e
   inner join " + table + @" t on 
-  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", "\";")){
+  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
     @line
   }
-            var result = CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
-            CiHelper.DropTable(table, conn, trans);
-            return result;
+drop table " + table + ";";
+            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
 
 		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)

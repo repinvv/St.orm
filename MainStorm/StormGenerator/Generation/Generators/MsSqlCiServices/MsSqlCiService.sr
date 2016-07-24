@@ -1,7 +1,7 @@
 ﻿@visibility internal
 @inherits NsFileGenerator(GenOptions options)
-@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods CiServiceMethods.Inserts
-@using CiServiceMethods.Updates
+@using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods
+@using CiServiceMethods.Inserts CiServiceMethods.Updates CiServiceMethods.Deletes
 @constructor(EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
@@ -60,5 +60,15 @@
 @[Update(model, options)]
 } else {
 @[UpdateException(model)]
+}
+
+@if(model.KeyFields.Count == 0){
+@[DeleteNoKey(model, options)]
+}
+@if(model.KeyFields.Count > 1){
+@[DeleteMultiKey(model, options)]
+}
+@if(model.KeyFields.Count == 1){
+@[DeleteSingleKey(model, options)]
 }
     }
