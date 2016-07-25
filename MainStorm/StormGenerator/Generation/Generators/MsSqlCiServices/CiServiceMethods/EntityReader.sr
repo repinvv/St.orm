@@ -1,31 +1,35 @@
 ﻿@visibility internal
 @using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
-@constructor(Model model)
+@using System.Collections.Generic
+@constructor(Model model, List<Field> fields, string Name)
 
-        #region EntityDataReader
-        internal class EntityDataReader : BaseDataReader
+        internal class @Name : BaseDataReader
 		{
             private readonly List<@model.Name> entities;
 
-            public EntityDataReader(List<@model.Name> entities) : base(entities.Count)
+            public @(Name)(List<@model.Name> entities) : base(entities.Count)
             {
                 this.entities = entities;
             }
 
             public override object GetValue(int i)
             {
+@if(fields.Count > 1)
+{
                 switch(i)
 				{
-@{int i = 0;}
-@foreach(var field in model.Fields){
+  @{int i = 0;}
+  @foreach(var field in fields){
                     case @i++:
 					    return entities[current].@field.Name;
-}
+  }
                     default:
 					    throw new Exception("@model.Name Can't read field " + i);
-				}
-            }
+				@}            
+} else {
+				return entities[current].@fields[0].Name;
+}
+			}
 
-            public override int FieldCount { get { return @model.Fields.Count; } }
+            public override int FieldCount { get { return @fields.Count; } }
 		}
-        #endregion

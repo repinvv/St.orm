@@ -11,6 +11,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
+    using System.Collections.Generic;
     using System;
     using System.Text;
     using System.Linq;
@@ -20,10 +21,14 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
     {
         #region constructor
         Model model;
+        List<Field> fields;
+        string Name;
 
-        public EntityReader(Model model)
+        public EntityReader(Model model, List<Field> fields, string Name)
         {
             this.model = model;
+            this.fields = fields;
+            this.Name = Name;
         }
         #endregion
 
@@ -55,9 +60,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        #region EntityDataReader");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        internal class EntityDataReader : BaseDataReader");
+            WriteLiteral(@"        internal class ");
+            Write(Name);
+            WriteLiteral(@" : BaseDataReader");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
@@ -66,7 +71,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(@"> entities;");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            public EntityDataReader(List<");
+            WriteLiteral(@"            public ");
+            Write(Name);
+            WriteLiteral(@"(List<");
             Write(model.Name);
             WriteLiteral(@"> entities) : base(entities.Count)");
             WriteLiteral(Environment.NewLine);
@@ -81,40 +88,49 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                switch(i)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                {");
-            WriteLiteral(Environment.NewLine);
-            int i = 0;
-            foreach (var field in model.Fields)
+            if (fields.Count > 1)
             {
-                WriteLiteral(@"                    case ");
-                Write(i++);
-                WriteLiteral(@":");
+                WriteLiteral(@"                switch(i)");
                 WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                        return entities[current].");
-                Write(field.Name);
+                WriteLiteral(@"                {");
+                WriteLiteral(Environment.NewLine);
+                int i = 0;
+                foreach (var field in fields)
+                {
+                    WriteLiteral(@"                    case ");
+                    Write(i++);
+                    WriteLiteral(@":");
+                    WriteLiteral(Environment.NewLine);
+                    WriteLiteral(@"                        return entities[current].");
+                    Write(field.Name);
+                    WriteLiteral(@";");
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"                    default:");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                        throw new Exception(""");
+                Write(model.Name);
+                WriteLiteral(@" Can't read field "" + i);");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                ");
+                WriteLiteral(@"}            ");
+                WriteLiteral(Environment.NewLine);
+            }
+            else
+            {
+                WriteLiteral(@"                return entities[current].");
+                Write(fields[0].Name);
                 WriteLiteral(@";");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                    default:");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                        throw new Exception(""");
-            Write(model.Name);
-            WriteLiteral(@" Can't read field "" + i);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            public override int FieldCount { get { return ");
-            Write(model.Fields.Count);
+            Write(fields.Count);
             WriteLiteral(@"; } }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

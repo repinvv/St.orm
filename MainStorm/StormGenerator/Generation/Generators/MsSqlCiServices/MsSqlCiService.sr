@@ -28,7 +28,9 @@
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-@[EntityReader(model)]
+        #region EntityDataReader
+@[EntityReader(model, model.Fields, "EntityDataReader")]
+		#endregion
 
 @if(!model.KeyFields.Any()){
 @[GetByPrimaryKeyException(model)]

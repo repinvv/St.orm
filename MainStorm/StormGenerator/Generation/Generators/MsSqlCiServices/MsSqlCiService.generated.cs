@@ -88,7 +88,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            Write(new EntityReader(model).Execute());
+            WriteLiteral(@"        #region EntityDataReader");
+            WriteLiteral(Environment.NewLine);
+            Write(new EntityReader(model, model.Fields, "EntityDataReader").Execute());
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             if (!model.KeyFields.Any())
             {

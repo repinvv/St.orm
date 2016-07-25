@@ -81,7 +81,7 @@ namespace StormTestProject.StormSchema
                         return entities[current].ASmalldatetime;
                     default:
                         throw new Exception("EntityWithGuid Can't read field " + i);
-                }
+                }            
             }
 
             public override int FieldCount { get { return 9; } }
@@ -369,12 +369,29 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        internal class EntityKeyDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithGuid> entities;
+
+            public EntityKeyDataReader(List<EntityWithGuid> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                return entities[current].Id;
+            }
+
+            public override int FieldCount { get { return 1; } }
+        }
+
         private void DeleteByTempTable(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
-            var sql = @"delete from entity_with_guid e
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
+            var sql = @"delete e from entity_with_guid e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";
@@ -394,7 +411,7 @@ drop table " + table + ";";
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
             CiHelper.BulkInsert(new SingleKeyDataReader<Guid>(idsArray), table, conn, trans);
-            var sql = @"delete from entity_with_guid e
+            var sql = @"delete e from entity_with_guid e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";

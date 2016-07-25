@@ -122,6 +122,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #region delete methods");
             WriteLiteral(Environment.NewLine);
+            Write(new EntityReader(model, model.KeyFields, "EntityKeyDataReader").Execute());
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void DeleteByTempTable(List<");
             Write(model.Name);
             WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
@@ -132,11 +134,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);");
+            WriteLiteral(@"            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ");
             WriteLiteral(@"@");
-            WriteLiteral(@"""delete from ");
+            WriteLiteral(@"""delete e from ");
             Write(model.Table.Id);
             WriteLiteral(@" e");
             WriteLiteral(Environment.NewLine);
@@ -202,7 +204,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ");
             WriteLiteral(@"@");
-            WriteLiteral(@"""delete from ");
+            WriteLiteral(@"""delete e from ");
             Write(model.Table.Id);
             WriteLiteral(@" e");
             WriteLiteral(Environment.NewLine);

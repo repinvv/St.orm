@@ -88,7 +88,7 @@ namespace StormTestProject.StormSchema
                         return entities[current].AImage;
                     default:
                         throw new Exception("EntityWithSequence Can't read field " + i);
-                }
+                }            
             }
 
             public override int FieldCount { get { return 11; } }
@@ -408,12 +408,29 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        internal class EntityKeyDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithSequence> entities;
+
+            public EntityKeyDataReader(List<EntityWithSequence> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                return entities[current].Id;
+            }
+
+            public override int FieldCount { get { return 1; } }
+        }
+
         private void DeleteByTempTable(List<EntityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
-            var sql = @"delete from some_schema.entity_with_sequence e
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
+            var sql = @"delete e from some_schema.entity_with_sequence e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";
@@ -433,7 +450,7 @@ drop table " + table + ";";
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
             CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
-            var sql = @"delete from some_schema.entity_with_sequence e
+            var sql = @"delete e from some_schema.entity_with_sequence e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";

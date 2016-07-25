@@ -63,7 +63,7 @@ namespace StormTestProject.StormSchema
                         return entities[current].Content;
                     default:
                         throw new Exception("EntityWithMultikey Can't read field " + i);
-                }
+                }            
             }
 
             public override int FieldCount { get { return 3; } }

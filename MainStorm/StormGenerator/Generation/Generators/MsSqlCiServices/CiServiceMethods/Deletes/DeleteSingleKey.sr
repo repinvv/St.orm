@@ -33,12 +33,14 @@
         }
 
 		#region delete methods
+@[EntityReader(model, model.KeyFields, "EntityKeyDataReader")]
+
         private void DeleteByTempTable(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
-            var sql = @"delete from @model.Table.Id e
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
+            var sql = @"delete e from @model.Table.Id e
   inner join " + table + @" t on 
 @foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
     @line
@@ -60,7 +62,7 @@ drop table " + table + ";";
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
             CiHelper.BulkInsert(new SingleKeyDataReader<@(model.KeyFields[0].Column.CsTypeName)>(idsArray), table, conn, trans);
-            var sql = @"delete from @model.Table.Id e
+            var sql = @"delete e from @model.Table.Id e
   inner join " + table + @" t on 
 @foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
     @line

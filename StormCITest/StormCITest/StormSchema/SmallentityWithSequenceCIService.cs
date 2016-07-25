@@ -66,7 +66,7 @@ namespace StormTestProject.StormSchema
                         return entities[current].AText;
                     default:
                         throw new Exception("SmallentityWithSequence Can't read field " + i);
-                }
+                }            
             }
 
             public override int FieldCount { get { return 4; } }
@@ -327,12 +327,29 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        internal class EntityKeyDataReader : BaseDataReader
+        {
+            private readonly List<SmallentityWithSequence> entities;
+
+            public EntityKeyDataReader(List<SmallentityWithSequence> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                return entities[current].Id;
+            }
+
+            public override int FieldCount { get { return 1; } }
+        }
+
         private void DeleteByTempTable(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
-            var sql = @"delete from smallentity_with_sequence e
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
+            var sql = @"delete e from smallentity_with_sequence e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";
@@ -352,7 +369,7 @@ drop table " + table + ";";
             var table = CiHelper.CreateTempTableName();
             CreateIdTempTable(table, conn, trans);
             CiHelper.BulkInsert(new SingleKeyDataReader<int>(idsArray), table, conn, trans);
-            var sql = @"delete from smallentity_with_sequence e
+            var sql = @"delete e from smallentity_with_sequence e
   inner join " + table + @" t on 
     e.id = t.id;
 drop table " + table + ";";
