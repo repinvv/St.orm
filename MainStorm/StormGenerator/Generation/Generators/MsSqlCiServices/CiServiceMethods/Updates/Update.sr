@@ -42,11 +42,6 @@
 drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
-        
-        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-@[CreateTableContent(model.Fields)]
-        }
 
         private void GroupUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {

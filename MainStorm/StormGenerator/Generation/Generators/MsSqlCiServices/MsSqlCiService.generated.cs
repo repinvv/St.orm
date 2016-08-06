@@ -15,6 +15,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
     using CiServiceMethods.Inserts;
     using CiServiceMethods.Updates;
     using CiServiceMethods.Deletes;
+    using CiServiceMethods.Extras;
     using System;
     using System.Text;
     using System.Linq;
@@ -88,9 +89,31 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #region EntityDataReader");
+            WriteLiteral(@"        #region EntityDataReaders and temp tables");
             WriteLiteral(Environment.NewLine);
             Write(new EntityReader(model, model.Fields, "EntityDataReader").Execute());
+            if (model.KeyFields.Any())
+            {
+                WriteLiteral(Environment.NewLine);
+                Write(new EntityReader(model, model.KeyFields, "EntityKeyDataReader").Execute());
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"        {");
+                WriteLiteral(Environment.NewLine);
+                Write(new CreateTableContent(model.KeyFields).Execute());
+                WriteLiteral(@"        ");
+                WriteLiteral(@"}");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            Write(new CreateTableContent(model.Fields).Execute());
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
@@ -106,8 +129,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                 }
                 else
                 {
-                    Write(new KeyDataReader(model).Execute());
-                    WriteLiteral(Environment.NewLine);
                     Write(new GetByMultiPrimaryKey(model).Execute());
                 }
             }

@@ -47,7 +47,7 @@ namespace StormTestProject.StormSchema
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-        #region EntityDataReader
+        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithGuid> entities;
@@ -85,6 +85,45 @@ namespace StormTestProject.StormSchema
             }
 
             public override int FieldCount { get { return 9; } }
+        }
+
+        internal class EntityKeyDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithGuid> entities;
+
+            public EntityKeyDataReader(List<EntityWithGuid> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                return entities[current].Id;
+            }
+
+            public override int FieldCount { get { return 1; } }
+        }
+
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + " ( id uniqueidentifier )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id uniqueidentifier,
+                a_float float,
+                a_real real,
+                a_date date,
+                a_time time,
+                a_offset datetimeoffset,
+                a_datetime datetime,
+                a_datetime2 datetime2,
+                a_smalldatetime smalldatetime
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
         #endregion
 
@@ -124,11 +163,6 @@ namespace StormTestProject.StormSchema
 drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + " ( id uniqueidentifier )";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
         #endregion
 
         public static int MaxAmountForGroupedInsert = 12;
@@ -265,22 +299,6 @@ drop table " + table + ";";
 drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
-        
-        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + @"(
-                id uniqueidentifier,
-                a_float float,
-                a_real real,
-                a_date date,
-                a_time time,
-                a_offset datetimeoffset,
-                a_datetime datetime,
-                a_datetime2 datetime2,
-                a_smalldatetime smalldatetime
-                )";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
-        }
 
         private void GroupUpdate(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
@@ -369,23 +387,6 @@ drop table " + table + ";";
         }
 
         #region delete methods
-        internal class EntityKeyDataReader : BaseDataReader
-        {
-            private readonly List<EntityWithGuid> entities;
-
-            public EntityKeyDataReader(List<EntityWithGuid> entities) : base(entities.Count)
-            {
-                this.entities = entities;
-            }
-
-            public override object GetValue(int i)
-            {
-                return entities[current].Id;
-            }
-
-            public override int FieldCount { get { return 1; } }
-        }
-
         private void DeleteByTempTable(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();

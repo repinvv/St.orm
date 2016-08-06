@@ -2,6 +2,7 @@
 @inherits NsFileGenerator(GenOptions options)
 @using StormGenerator.Settings StormGenerator.Models GeneratorHelpers CiServiceMethods
 @using CiServiceMethods.Inserts CiServiceMethods.Updates CiServiceMethods.Deletes
+@using CiServiceMethods.Extras
 @constructor(EntityModel entityModel)
 @member{public override string FileName => entityModel.Model.Name + "CIService";}
 
@@ -28,8 +29,21 @@
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-        #region EntityDataReader
+        #region EntityDataReaders and temp tables
 @[EntityReader(model, model.Fields, "EntityDataReader")]
+@if(model.KeyFields.Any()){@newline
+@[EntityReader(model, model.KeyFields, "EntityKeyDataReader")]
+
+		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+@[CreateTableContent(model.KeyFields)]
+        @}
+}
+
+		private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+@[CreateTableContent(model.Fields)]
+        }
 		#endregion
 
 @if(!model.KeyFields.Any()){
@@ -38,8 +52,6 @@
   @if(model.KeyFields.Count == 1){
 @[GetBySinglePrimaryKey(model)]
   } else {
-@[KeyDataReader(model)]
-
 @[GetByMultiPrimaryKey(model)]
   }
 }

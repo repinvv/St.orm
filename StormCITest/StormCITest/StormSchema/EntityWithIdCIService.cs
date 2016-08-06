@@ -48,7 +48,7 @@ namespace StormTestProject.StormSchema
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-        #region EntityDataReader
+        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithId> entities;
@@ -89,6 +89,46 @@ namespace StormTestProject.StormSchema
 
             public override int FieldCount { get { return 10; } }
         }
+
+        internal class EntityKeyDataReader : BaseDataReader
+        {
+            private readonly List<EntityWithId> entities;
+
+            public EntityKeyDataReader(List<EntityWithId> entities) : base(entities.Count)
+            {
+                this.entities = entities;
+            }
+
+            public override object GetValue(int i)
+            {
+                return entities[current].Id;
+            }
+
+            public override int FieldCount { get { return 1; } }
+        }
+
+        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + " ( id int )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id int,
+                a_bigint bigint,
+                a_int int,
+                a_numeric numeric(6, 2),
+                a_bit bit,
+                a_smallint smallint,
+                a_decimal decimal(8, 3),
+                a_smallmoney smallmoney,
+                a_tinyint tinyint,
+                a_money money
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
         #endregion
 
         public static int MaxAmountForWhereIn = 300;
@@ -127,11 +167,6 @@ namespace StormTestProject.StormSchema
 drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + " ( id int )";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);        }
         #endregion
 
         public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
@@ -280,23 +315,6 @@ drop table " + table + ";";
 drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
         }
-        
-        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + @"(
-                id int,
-                a_bigint bigint,
-                a_int int,
-                a_numeric numeric(6, 2),
-                a_bit bit,
-                a_smallint smallint,
-                a_decimal decimal(8, 3),
-                a_smallmoney smallmoney,
-                a_tinyint tinyint,
-                a_money money
-                )";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
-        }
 
         private void GroupUpdate(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
@@ -388,23 +406,6 @@ drop table " + table + ";";
         }
 
         #region delete methods
-        internal class EntityKeyDataReader : BaseDataReader
-        {
-            private readonly List<EntityWithId> entities;
-
-            public EntityKeyDataReader(List<EntityWithId> entities) : base(entities.Count)
-            {
-                this.entities = entities;
-            }
-
-            public override object GetValue(int i)
-            {
-                return entities[current].Id;
-            }
-
-            public override int FieldCount { get { return 1; } }
-        }
-
         private void DeleteByTempTable(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();

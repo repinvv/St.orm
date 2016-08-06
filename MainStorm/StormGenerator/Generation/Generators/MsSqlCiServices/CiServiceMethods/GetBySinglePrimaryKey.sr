@@ -42,9 +42,4 @@
 drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
-
-        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-@[CreateTableSingleFieldContent(model.KeyFields[0])]
-        }
         #endregion

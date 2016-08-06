@@ -8,12 +8,12 @@
 //------------------------------------------------------------------------------
 namespace StormGenerator.Generation.Generators.Linq2Db
 {
-    using Models;
     using System.Collections.Generic;
     using Settings;
+    using StormGenerator.Models;
     using System;
     using System.Text;
-    using StormGenerator.Models;
+    using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
     internal class StormContext : FileGenerator
@@ -33,27 +33,28 @@ namespace StormGenerator.Generation.Generators.Linq2Db
 
         public override string Execute()
         {
-            WriteLiteral("namespace ");
+            WriteLiteral(@"namespace ");
             Write(options.OutputNamespace);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("{");
+            WriteLiteral(@"{");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    using LinqToDB;");
+            WriteLiteral(@"    using LinqToDB;");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    public partial class ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"    public partial class ");
             Write(options.ContextName);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("	{");
+            WriteLiteral(@"    {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("    ");
+            WriteLiteral(@"    ");
             foreach (var m in model)
             {
                 Write(new ContextTableLine(m).Execute());
             }
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("	}	");
+            WriteLiteral(@"    }    ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral("}");
+            WriteLiteral(@"}");
             WriteLiteral(Environment.NewLine);
 
             return ToString();

@@ -40,7 +40,7 @@ namespace StormTestProject.StormSchema
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-        #region EntityDataReader
+        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithoutKey> entities;
@@ -64,6 +64,15 @@ namespace StormTestProject.StormSchema
             }
 
             public override int FieldCount { get { return 2; } }
+        }
+
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                value int,
+                content nvarchar(max)
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
         #endregion
 

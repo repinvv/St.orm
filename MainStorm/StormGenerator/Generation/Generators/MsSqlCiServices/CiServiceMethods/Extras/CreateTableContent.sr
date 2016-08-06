@@ -3,9 +3,14 @@
 @using System.Collections.Generic
 @constructor(List<Field> fields)
 
+@if(fields.Count == 1){
+            var sql = "CREATE TABLE " + table + " ( @fields[0].Column.Definition )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+} else {
             var sql = "CREATE TABLE " + table + @"(
-@foreach(var field in fields){
+  @foreach(var field in fields){
                 @field.Column.Definition@if(field != fields.Last()){,}
-}
+  }
                 )";
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+}

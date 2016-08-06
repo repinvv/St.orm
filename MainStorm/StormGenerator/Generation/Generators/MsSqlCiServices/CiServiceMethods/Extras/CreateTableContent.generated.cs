@@ -6,7 +6,7 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Extras
 {
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
@@ -56,24 +56,36 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + ");
-            WriteLiteral(@"@");
-            WriteLiteral(@"""(");
-            WriteLiteral(Environment.NewLine);
-            foreach (var field in fields)
+            if (fields.Count == 1)
             {
-                WriteLiteral(@"                ");
-                Write(field.Column.Definition);
-                if (field != fields.Last())
-                {
-                    WriteLiteral(@",");
-                }
+                WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + "" ( ");
+                Write(fields[0].Column.Definition);
+                WriteLiteral(@" )"";");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"                )"";");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
-            WriteLiteral(Environment.NewLine);
+            else
+            {
+                WriteLiteral(@"            var sql = ""CREATE TABLE "" + table + ");
+                WriteLiteral(@"@");
+                WriteLiteral(@"""(");
+                WriteLiteral(Environment.NewLine);
+                foreach (var field in fields)
+                {
+                    WriteLiteral(@"                ");
+                    Write(field.Column.Definition);
+                    if (field != fields.Last())
+                    {
+                        WriteLiteral(@",");
+                    }
+                    WriteLiteral(Environment.NewLine);
+                }
+                WriteLiteral(@"                )"";");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
+                WriteLiteral(Environment.NewLine);
+            }
 
             return executed = sb.ToString();
         }

@@ -11,6 +11,7 @@ namespace StormGenerator.Generation.Generators.Linq2Db
     using StormGenerator.Models;
     using System;
     using System.Text;
+    using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
     internal class ContextTableLine
@@ -52,13 +53,13 @@ namespace StormGenerator.Generation.Generators.Linq2Db
 
         public string Execute()
         {
-            WriteLiteral("public ITable<");
+            WriteLiteral(@"public ITable<");
             Write(model.Model.Name);
-            WriteLiteral("> ");
+            WriteLiteral(@"> ");
             Write(model.Name);
-            WriteLiteral(" { get { return GetTable<");
+            WriteLiteral(@" { get { return GetTable<");
             Write(model.Model.Name);
-            WriteLiteral(">(); } }");
+            WriteLiteral(@">(); } }");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

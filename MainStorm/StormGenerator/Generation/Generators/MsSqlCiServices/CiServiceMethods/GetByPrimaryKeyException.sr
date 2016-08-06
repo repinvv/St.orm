@@ -4,5 +4,5 @@
 
         public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            throw new CiException("Entity @model.Name has no primary key");
+            throw new CiException("Entity @model.Name has no primary key, GetByPrimaryKey is not supported");
         }

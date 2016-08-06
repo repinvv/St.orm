@@ -1,5 +1,6 @@
 ﻿namespace StormCITest.Tests.GetTests
 {
+    using System.Data.SqlClient;
     using System.Linq;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using StormCITest.EFSchema;
@@ -9,7 +10,7 @@
     public class GetEntityWithMultikeyTest : ContextInTransaction
     {
         [TestMethod]
-        public void Get_EntityWithMultiKey_ByIds()
+        public void Get_EntityWithMultiKey()
         {
             // arrange
             var entities = Enumerable.Range(500, 2000).Select(Create.EfEntityWithMultikey).ToList();
@@ -17,13 +18,8 @@
             context.SaveChanges();
 
             // act
-            
-            var id1 = entities.Select(x => x.id_1).ToArray();
-            var id2 = entities.Select(x => x.id_2).ToArray();
-            var keys = new object[] { id1, id2 };
-            
-
-            var result = MsSqlCi.GetByPrimaryKey<EntityWithMultikey>(keys, conn);
+            var sql = "select * from entity_with_multikey";
+            var result = MsSqlCi.Get<EntityWithMultikey>(sql, new SqlParameter[0], conn);
             var dict = result.ToDictionary(x => new { id1 = x.Id1, id2 = x.Id2 });
 
             // assert

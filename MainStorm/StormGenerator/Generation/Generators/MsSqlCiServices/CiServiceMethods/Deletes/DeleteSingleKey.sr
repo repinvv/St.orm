@@ -33,21 +33,7 @@
         }
 
 		#region delete methods
-@[EntityReader(model, model.KeyFields, "EntityKeyDataReader")]
-
-        private void DeleteByTempTable(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
-        {
-            var table = CiHelper.CreateTempTableName();
-            CreateIdTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
-            var sql = @"delete e from @model.Table.Id e
-  inner join " + table + @" t on 
-@foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
-    @line
-}
-drop table " + table + ";";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
-        }
+@[DeleteByTempTable(model, options)]
 
         private void DeleteByWhereIn(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {

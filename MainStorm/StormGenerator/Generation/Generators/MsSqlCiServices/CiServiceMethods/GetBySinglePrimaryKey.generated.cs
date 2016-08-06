@@ -162,14 +162,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            Write(new CreateTableSingleFieldContent(model.KeyFields[0]).Execute());
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
 

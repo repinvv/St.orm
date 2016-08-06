@@ -1,8 +1,8 @@
-﻿@using Models System.Collections.Generic
-@using Settings
+﻿@using System.Collections.Generic
+@using Settings StormGenerator.Models
 @visibility internal
 @inherits FileGenerator
-@constructor(GenerationOptions options, List<EntityModel> model)
+@constructor(GenOptions options, List<EntityModel> model)
 @member{public override string FileName => options.ContextName;}
 
 namespace @options.OutputNamespace

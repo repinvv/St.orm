@@ -6,24 +6,26 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes
 {
     using StormGenerator.Settings;
-    using GeneratorHelpers;
     using StormGenerator.Models.GenModels;
+    using GeneratorHelpers;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class GetByMultiPrimaryKey
+    internal class DeleteByTempTable
     {
         #region constructor
         Model model;
+        GenOptions options;
 
-        public GetByMultiPrimaryKey(Model model)
+        public DeleteByTempTable(Model model, GenOptions options)
         {
             this.model = model;
+            this.options = options;
         }
         #endregion
 
@@ -55,15 +57,37 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods
 
         public string Execute()
         {
-            WriteLiteral(@"        public List<");
+            WriteLiteral(@"        private void DeleteByTempTable(List<");
             Write(model.Name);
-            WriteLiteral(@"> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)");
+            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            throw new CiException(""Entity ");
-            Write(model.Name);
-            WriteLiteral(@" has complex primary key, GetByPrimaryKey is not supported"");");
+            WriteLiteral(@"            var table = CiHelper.CreateTempTableName();");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            var sql = ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""delete e from ");
+            Write(model.Table.Id);
+            WriteLiteral(@" e");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"  inner join "" + table + ");
+            WriteLiteral(@"@");
+            WriteLiteral(@""" t on ");
+            WriteLiteral(Environment.NewLine);
+            foreach (var line in model.GetKeyEqualityLines("e.", "t.", ";"))
+            {
+                WriteLiteral(@"    ");
+                Write(line);
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"drop table "" + table + "";"";");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);

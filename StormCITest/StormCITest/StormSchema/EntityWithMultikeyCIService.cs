@@ -41,7 +41,7 @@ namespace StormTestProject.StormSchema
             return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
         }
 
-        #region EntityDataReader
+        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithMultikey> entities;
@@ -68,44 +68,30 @@ namespace StormTestProject.StormSchema
 
             public override int FieldCount { get { return 3; } }
         }
-        #endregion
 
-        #region KeyDataReader
-        private class KeyDataReader : BaseDataReader
+        internal class EntityKeyDataReader : BaseDataReader
         {
-            int[] key0;
-            string[] key1;
-            public KeyDataReader(int[] key0, string[] key1) : base(key0.Length)
+            private readonly List<EntityWithMultikey> entities;
+
+            public EntityKeyDataReader(List<EntityWithMultikey> entities) : base(entities.Count)
             {
-                this.key0 = key0;
-                this.key1 = key1;
+                this.entities = entities;
             }
 
             public override object GetValue(int i)
             {
-                return i == 0 ? key0[current] as object : key1[current];
+                switch(i)
+                {
+                    case 0:
+                        return entities[current].Id1;
+                    case 1:
+                        return entities[current].Id2;
+                    default:
+                        throw new Exception("EntityWithMultikey Can't read field " + i);
+                }            
             }
 
             public override int FieldCount { get { return 2; } }
-        }
-        #endregion
-
-        public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
-        {
-            var idsArray = (object[])ids;
-            var key0 = (int[])idsArray[0];
-            var key1 = (string[])idsArray[1];
-            var table = CiHelper.CreateTempTableName();
-            CreateIdTempTable(table, conn, trans);
-            var dataReader = new KeyDataReader(key0, key1);
-            CiHelper.BulkInsert(dataReader, table, conn, trans);
-            var sql = @"select 
-    e.id_1, e.id_2, e.content
-  from entity_with_multikey e
-  inner join " + table + @" t on 
-    e.id_1 = t.id_1 AND e.id_2 = t.id_2;
-drop table " + table + ";";
-            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
 
         private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
@@ -115,6 +101,22 @@ drop table " + table + ";";
                 id_2 nvarchar(256)
                 )";
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = "CREATE TABLE " + table + @"(
+                id_1 int,
+                id_2 nvarchar(256),
+                content nvarchar(max)
+                )";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+        #endregion
+
+        public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
+        {
+            throw new CiException("Entity EntityWithMultikey has complex primary key, GetByPrimaryKey is not supported");
         }
 
         public static int MaxAmountForGroupedInsert = 45;
@@ -224,16 +226,6 @@ drop table " + table + ";";
     src.id_1 = s.id_1 AND src.id_2 = s.id_2;
 drop table " + table + ";";
             CiHelper.ExecuteNonQuery(sql, new SqlParameter[0], conn, trans);
-        }
-        
-        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = "CREATE TABLE " + table + @"(
-                id_1 int,
-                id_2 nvarchar(256),
-                content nvarchar(max)
-                )";
-            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
 
         private void GroupUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)

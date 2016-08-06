@@ -155,15 +155,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            Write(new CreateTableContent(model.Fields).Execute());
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void GroupUpdate(List<");
             Write(model.Name);

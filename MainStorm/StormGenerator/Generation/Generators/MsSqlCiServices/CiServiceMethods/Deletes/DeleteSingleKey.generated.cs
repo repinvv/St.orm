@@ -122,42 +122,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #region delete methods");
             WriteLiteral(Environment.NewLine);
-            Write(new EntityReader(model, model.KeyFields, "EntityKeyDataReader").Execute());
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private void DeleteByTempTable(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var table = CiHelper.CreateTempTableName();");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var sql = ");
-            WriteLiteral(@"@");
-            WriteLiteral(@"""delete e from ");
-            Write(model.Table.Id);
-            WriteLiteral(@" e");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"  inner join "" + table + ");
-            WriteLiteral(@"@");
-            WriteLiteral(@""" t on ");
-            WriteLiteral(Environment.NewLine);
-            foreach (var line in model.GetKeyEqualityLines("e.", "t.", ";"))
-            {
-                WriteLiteral(@"    ");
-                Write(line);
-                WriteLiteral(Environment.NewLine);
-            }
-            WriteLiteral(@"drop table "" + table + "";"";");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            Write(new DeleteByTempTable(model, options).Execute());
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void DeleteByWhereIn(List<");
             Write(model.Name);

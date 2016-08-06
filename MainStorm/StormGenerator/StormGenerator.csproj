@@ -279,11 +279,6 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>ReadEntities.generated.cs</LastGenOutput>
     </None>
-    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\KeyDataReader.sr">
-      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
-      <Generator>SharpRazor</Generator>
-      <LastGenOutput>KeyDataReader.generated.cs</LastGenOutput>
-    </None>
     <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\GetByPrimaryKeyException.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
@@ -294,31 +289,31 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>GetByMultiPrimaryKey.generated.cs</LastGenOutput>
     </None>
-    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\EntityReader.sr">
-      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Extras\EntityReader.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Extras</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
       <LastGenOutput>EntityReader.generated.cs</LastGenOutput>
     </None>
-    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\CreateTableContent.sr">
-      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Extras\CreateTableContent.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Extras</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
       <LastGenOutput>CreateTableContent.generated.cs</LastGenOutput>
     </None>
-    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\CreateTableSingleFieldContent.sr">
-      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods</CustomToolNamespace>
-      <Generator>SharpRazor</Generator>
-      <LastGenOutput>CreateTableSingleFieldContent.generated.cs</LastGenOutput>
-    </None>
-    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\CreateTableContent.generated.cs">
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteByTempTable.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteByTempTable.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Extras\CreateTableContent.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateTableContent.sr</DependentUpon>
     </Compile>
-    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\CreateTableSingleFieldContent.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CreateTableSingleFieldContent.sr</DependentUpon>
-    </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteByTempTable.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>DeleteByTempTable.generated.cs</LastGenOutput>
+    </None>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteMultiKey.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -384,7 +379,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConstructRequest.sr</DependentUpon>
     </Compile>
-    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\EntityReader.generated.cs">
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Extras\EntityReader.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EntityReader.sr</DependentUpon>
@@ -443,11 +438,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SingleInsert.sr</DependentUpon>
-    </Compile>
-    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\KeyDataReader.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>KeyDataReader.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\ReadEntities.generated.cs">
       <AutoGen>True</AutoGen>

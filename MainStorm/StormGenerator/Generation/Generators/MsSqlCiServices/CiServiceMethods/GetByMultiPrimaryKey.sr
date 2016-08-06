@@ -4,29 +4,5 @@
 
         public List<@model.Name> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            var idsArray = (object[])ids;
-	@{var i = 0;}
-	@foreach(var key in model.KeyFields){
-            var key@i = (@(key.Column.CsTypeName)[])idsArray[@(i++)];
-    }
-            var table = CiHelper.CreateTempTableName();
-            CreateIdTempTable(table, conn, trans);
-            var dataReader = new KeyDataReader(@model.JoinKeyNames());
-            CiHelper.BulkInsert(dataReader, table, conn, trans);
-            var sql = @"select 
-  @foreach(var line in model.Fields.GetSelectLines("e.")){
-    @line
-  }
-  from @model.Table.Id e
-  inner join " + table + @" t on 
-  @foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){
-    @line
-  }
-drop table " + table + ";";
-            return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
-        }
-
-		private void CreateIdTempTable(string table, SqlConnection conn, SqlTransaction trans)
-        {
-@[CreateTableContent(model.KeyFields)]
+            throw new CiException("Entity @model.Name has complex primary key, GetByPrimaryKey is not supported");
         }
