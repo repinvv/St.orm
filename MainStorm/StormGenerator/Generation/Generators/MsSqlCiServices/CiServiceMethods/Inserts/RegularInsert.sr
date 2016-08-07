@@ -16,6 +16,13 @@
             }
         }
 
+		public void Insert(@model.Name entity, SqlConnection conn, SqlTransaction trans)
+        {
+		    var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
 		#region group insert methods
 @[GroupInsert(model, options)]
 
@@ -25,10 +32,3 @@
 
 @[InsertParameters(model, model.Fields)]
 		#endregion
-
-		public void Insert(@model.Name entity, SqlConnection conn, SqlTransaction trans)
-        {
-		    var sql = ConstructInsertRequest(1);
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
-        }

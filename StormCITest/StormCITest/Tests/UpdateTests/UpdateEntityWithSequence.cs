@@ -10,6 +10,22 @@
     public class UpdateEntityWithSequenceTest : ContextInTransaction
     {
         [TestMethod]
+        public void Update_EntityWithSequence_Single()
+        {
+            // arrange
+            var entity = Create.EntityWithSequence(100);
+            MsSqlCi.Insert(entity, conn);
+
+            // act
+            var toUpdate = Create.EntityWithSequenceForUpdate(entity.Id);
+            MsSqlCi.Update(toUpdate, conn);
+
+            // assert
+            var efEntity = context.entity_with_sequence.First(x=>x.id == toUpdate.Id);
+            Compare.EntityWithSequence(efEntity, toUpdate);
+        }
+
+        [TestMethod]
         public void Update_EntityWithSequence_Grouped()
         {
             Update_EntityWithSequence_Impl(EntityWithSequenceCiService.MaxAmountForGroupedUpdate);

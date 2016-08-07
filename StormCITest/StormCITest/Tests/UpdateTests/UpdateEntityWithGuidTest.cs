@@ -21,9 +21,8 @@
             MsSqlCi.Update(toUpdate, conn);
 
             // assert
-            var efEntities = context.entity_with_guid.ToList();
-            efEntities.Count.Should().Be(1);
-            Compare.EntityWithGuid(efEntities[0], toUpdate);
+            var efEntity = context.entity_with_guid.First(x=>x.id == toUpdate.Id);
+            Compare.EntityWithGuid(efEntity, toUpdate);
         }
 
         [TestMethod]

@@ -17,6 +17,7 @@ namespace StormTestProject.StormSchema
 
     public class EntityWithMultikeyCiService : ICiService<EntityWithMultikey>
     {
+        #region internal artefacts
         private List<EntityWithMultikey> ReadEntities(SqlDataReader reader)
         {
             var list = new List<EntityWithMultikey>();
@@ -33,15 +34,6 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithMultikey> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithMultikey> entities;
@@ -114,11 +106,22 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        #region Get
+        public List<EntityWithMultikey> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
         public List<EntityWithMultikey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             throw new CiException("Entity EntityWithMultikey has complex primary key, GetByPrimaryKey is not supported");
         }
+        #endregion
 
+        #region insert
         public static int MaxAmountForGroupedInsert = 45;
 
         public void Insert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
@@ -133,17 +136,29 @@ namespace StormTestProject.StormSchema
             }
         }
 
+        public void Insert(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
         #region group insert methods
         private void GroupInsert(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
         private string insertRequestCache;
         private int insertCacheLength;
+        private const string SingleInsertRequest = @"INSERT INTO entity_with_multikey (
+  id_1, id_2, content
+)  VALUES
+  @parm0i0,
+  @parm1i0,
+  @parm2i0)";
 
         private string ConstructInsertRequest(int count)
         {
@@ -174,27 +189,25 @@ namespace StormTestProject.StormSchema
                 sb.Append(", @parm2i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithMultikey entity, int i)
+        private SqlParameter[] GetInsertParameters(EntityWithMultikey entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.Int)
-                { Value = entity.Id1 };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
-                { Value = entity.Id2 };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
-                { Value = entity.Content ?? (object)DBNull.Value };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Id1 },
+                new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Id2 },
+                new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value },
+            };
         }
         #endregion
+        #endregion
 
-        public void Insert(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = ConstructInsertRequest(1);
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
-        }
-
+        #region update
         public void Update(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
         {
-            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var parms = GetUpdateParameters(entity, 0);
             var sql = GetUpdateRequest(0);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
@@ -214,6 +227,11 @@ namespace StormTestProject.StormSchema
         }
 
         #region update methods
+        private const string SingleUpdateRequest = @"UPDATE entity_with_multikey SET
+    content = @parm0i0
+  WHERE id_1 = @parm1i0,
+  AND id_2 = @parm2i0;";
+
         private void BulkUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -230,20 +248,22 @@ drop table " + table + ";";
 
         private void GroupUpdate(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();
             var sql = ConstructUpdateRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithMultikey entity, int i)
+        private SqlParameter[] GetUpdateParameters(EntityWithMultikey entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.NVarChar)
-                { Value = entity.Content ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
-                { Value = entity.Id1 };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
-                { Value = entity.Id2 };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.Id1 },
+                new SqlParameter("parm2i" + i, SqlDbType.NVarChar)
+                { Value = entity.Id2 },
+            };
         }
 
         private string ConstructUpdateRequest(int count)
@@ -265,23 +285,87 @@ drop table " + table + ";";
   AND id_2 = @parm2i" + index + ";";
         }
         #endregion
+        #endregion
 
+        #region delete
         public void Delete(EntityWithMultikey entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity, 0);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
+
+        public static int MaxAmountForGroupedDelete = 27;
 
         public void Delete(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
         {
-
+            if (entities.Count > MaxAmountForGroupedDelete)
+            {
+                DeleteByTempTable(entities, conn, trans);
+            }
+            else
+            {
+                GroupDelete(entities, conn, trans);
+            }
         }
 
         public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
-            throw new CiException("Will not delete EntityWithMultikey by multi key, use other deletion method instead.");
+            throw new CiException("Entity EntityWithMultikey has complex primary key, DeleteByPrimaryKey is not supported");
         }
 
         #region delete methods
+        private const string SingleDeleteRequest = @"DELETE FROM entity_with_multikey 
+  WHERE id_1 = @parm0i0,
+  AND id_2 = @parm1i0;";
+
+        private void DeleteByTempTable(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
+            var sql = @"delete e from entity_with_multikey e
+  inner join " + table + @" t on 
+    e.id_1 = t.id_1 AND e.id_2 = t.id_2;
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupDelete(List<EntityWithMultikey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = entities.SelectMany((x, i) => GetDeleteParameters(x, i)).ToArray();
+            var sql = ConstructDeleteRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private SqlParameter[] GetDeleteParameters(EntityWithMultikey entity, int i)
+        {
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Id1 },
+                new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Id2 },
+            };
+        }
+
+        private string ConstructDeleteRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetDeleteRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetDeleteRequest(int index)
+        {
+            return @"DELETE from entity_with_multikey 
+  WHERE id_1 = @parm0i" + index + @"
+  AND id_2 = @parm1i" + index + ";";
+        }
+        #endregion
         #endregion
     }
 }

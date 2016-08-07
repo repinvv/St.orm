@@ -101,6 +101,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
+            Write(new SingleInsert(model).Execute());
+            WriteLiteral(Environment.NewLine);
             var fields = model.Fields;
             WriteLiteral(@"        #region group insert methods");
             WriteLiteral(Environment.NewLine);
@@ -124,8 +126,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             Write(new InsertParameters(model, model.ValueFields()).Execute());
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            Write(new SingleInsert(model).Execute());
 
             return executed = sb.ToString();
         }

@@ -1,0 +1,45 @@
+﻿@visibility internal
+@using System.Collections.Generic
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, List<Field> fields, GenOptions options)
+
+        private void GroupDelete(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = entities.SelectMany((x, i) => GetDeleteParameters(x, i)).ToArray();
+            var sql = ConstructDeleteRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private SqlParameter[] GetDeleteParameters(@model.Name entity, int i)
+        {
+            return new[]
+            {
+@{var i = 0; }
+@foreach(var field in fields){
+                new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
+                { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} },
+}
+            };
+        }
+
+        private string ConstructDeleteRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetDeleteRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetDeleteRequest(int index)
+        {
+@{i = 0;}
+            return @"DELETE from @model.Table.Id 
+@foreach(var field in fields){
+    @{var start = field == fields.First() ? "WHERE" : "AND";}
+    @{var end = field == fields.Last() ? "\";\";" : "@\"";}
+  @start @field.Column.Name = @@parm@(i++)i" + index + @end
+}
+        }

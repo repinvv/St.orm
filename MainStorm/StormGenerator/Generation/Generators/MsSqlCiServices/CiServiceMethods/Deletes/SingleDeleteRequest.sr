@@ -1,0 +1,12 @@
+﻿@visibility internal
+@using System.Collections.Generic
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, List<Field> fields)
+
+@{int i = 0;}
+        private const string SingleDeleteRequest = @"DELETE FROM @model.Table.Id 
+@foreach(var field in fields){
+    @{var start = field == fields.First() ? "WHERE" : "AND";}
+    @{var end = field == fields.Last() ? ";\";" : ",";}
+  @start @field.Column.Name = @@parm@(i++)i0@end
+}

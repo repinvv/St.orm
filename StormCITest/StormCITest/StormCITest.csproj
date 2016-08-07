@@ -135,6 +135,7 @@
     <Compile Include="Tests\DeleteAll.cs" />
     <Compile Include="Tests\DeleteTests\DeleteEnitityWithMultyKeyTests.cs" />
     <Compile Include="Tests\DeleteTests\DeleteEntityWithGuidTests.cs" />
+    <Compile Include="Tests\DeleteTests\DeleteEntityWithNoKeyTests.cs" />
     <Compile Include="Tests\EqualityTests.cs" />
     <Compile Include="Tests\ContextInTransaction.cs" />
     <Compile Include="Tests\GetTests\GetEntityWithGuidTests.cs" />

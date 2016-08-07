@@ -1,0 +1,16 @@
+﻿@visibility internal
+@using System.Collections.Generic
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, GenOptions options)
+
+        private const string SingleUpdateRequest = @"UPDATE @model.Table.Id SET
+@{int i = 0;}
+@{var fields = model.ValueFields();}
+@foreach(var field in fields){
+    @field.Column.Name = @@parm@(i++)i0@if(field != fields.Last()){,}
+  }
+@foreach(var field in model.KeyFields){
+    @{var start = field == model.KeyFields.First() ? "WHERE" : "AND";}
+    @{var end = field == model.KeyFields.Last() ? ";\";" : ",";}
+  @start @field.Column.Name = @@parm@(i++)i0@end
+}

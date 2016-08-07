@@ -65,6 +65,12 @@
             return model.Fields.Except(model.KeyFields).Concat(model.KeyFields).ToList();
         }
 
+        public static bool NeedsOutput(this Model model)
+        {
+            return model.KeyFields.Count == 1 &&
+                   (model.KeyFields[0].Column.IsIdentity || model.KeyFields[0].Column.Sequence != null);
+        }
+
         public static int MaxAmountForRegularGroupedInsert(this Model model)
         {
             return Math.Max((369 - 33 * model.Fields.Count) / 6, 10);

@@ -17,6 +17,7 @@ namespace StormTestProject.StormSchema
 
     public class EntityWithGuidCiService : ICiService<EntityWithGuid>
     {
+        #region internal artefacts
         private List<EntityWithGuid> ReadEntities(SqlDataReader reader)
         {
             var list = new List<EntityWithGuid>();
@@ -39,15 +40,6 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithGuid> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithGuid> entities;
@@ -127,6 +119,15 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        #region Get
+        public List<EntityWithGuid> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
         public static int MaxAmountForWhereIn = 300;
 
         public List<EntityWithGuid> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
@@ -164,7 +165,9 @@ drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
         #endregion
+        #endregion
 
+        #region insert
         public static int MaxAmountForGroupedInsert = 12;
 
         public void Insert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
@@ -179,17 +182,36 @@ drop table " + table + ";";
             }
         }
 
+        public void Insert(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
         #region group insert methods
         private void GroupInsert(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
         private string insertRequestCache;
         private int insertCacheLength;
+        private const string SingleInsertRequest = @"INSERT INTO entity_with_guid (
+  id, a_float, a_real, a_date, a_time,
+  a_offset, a_datetime, a_datetime2, a_smalldatetime
+)  VALUES
+  @parm0i0,
+  @parm1i0,
+  @parm2i0,
+  @parm3i0,
+  @parm4i0,
+  @parm5i0,
+  @parm6i0,
+  @parm7i0,
+  @parm8i0)";
 
         private string ConstructInsertRequest(int count)
         {
@@ -227,39 +249,37 @@ drop table " + table + ";";
                 sb.Append(", @parm8i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithGuid entity, int i)
+        private SqlParameter[] GetInsertParameters(EntityWithGuid entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.UniqueIdentifier)
-                { Value = entity.Id };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.Float)
-                { Value = entity.AFloat ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Real)
-                { Value = entity.AReal };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.Date)
-                { Value = entity.ADate ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.Time)
-                { Value = entity.ATime ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.DateTimeOffset)
-                { Value = entity.AOffset ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.DateTime)
-                { Value = entity.ADatetime ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.DateTime2)
-                { Value = entity.ADatetime2 ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.SmallDateTime)
-                { Value = entity.ASmalldatetime ?? (object)DBNull.Value };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.UniqueIdentifier)
+                { Value = entity.Id },
+                new SqlParameter("parm1i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value },
+                new SqlParameter("parm2i" + i, SqlDbType.Real)
+                { Value = entity.AReal },
+                new SqlParameter("parm3i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value },
+                new SqlParameter("parm4i" + i, SqlDbType.Time)
+                { Value = entity.ATime ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.DateTimeOffset)
+                { Value = entity.AOffset ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.DateTime)
+                { Value = entity.ADatetime ?? (object)DBNull.Value },
+                new SqlParameter("parm7i" + i, SqlDbType.DateTime2)
+                { Value = entity.ADatetime2 ?? (object)DBNull.Value },
+                new SqlParameter("parm8i" + i, SqlDbType.SmallDateTime)
+                { Value = entity.ASmalldatetime ?? (object)DBNull.Value },
+            };
         }
         #endregion
+        #endregion
 
-        public void Insert(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = ConstructInsertRequest(1);
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
-        }
-
+        #region update
         public void Update(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
         {
-            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var parms = GetUpdateParameters(entity, 0);
             var sql = GetUpdateRequest(0);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
@@ -279,6 +299,17 @@ drop table " + table + ";";
         }
 
         #region update methods
+        private const string SingleUpdateRequest = @"UPDATE entity_with_guid SET
+    a_float = @parm0i0,
+    a_real = @parm1i0,
+    a_date = @parm2i0,
+    a_time = @parm3i0,
+    a_offset = @parm4i0,
+    a_datetime = @parm5i0,
+    a_datetime2 = @parm6i0,
+    a_smalldatetime = @parm7i0
+  WHERE id = @parm8i0;";
+
         private void BulkUpdate(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -302,32 +333,34 @@ drop table " + table + ";";
 
         private void GroupUpdate(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();
             var sql = ConstructUpdateRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithGuid entity, int i)
+        private SqlParameter[] GetUpdateParameters(EntityWithGuid entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.Float)
-                { Value = entity.AFloat ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.Real)
-                { Value = entity.AReal };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Date)
-                { Value = entity.ADate ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.Time)
-                { Value = entity.ATime ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.DateTimeOffset)
-                { Value = entity.AOffset ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.DateTime)
-                { Value = entity.ADatetime ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.DateTime2)
-                { Value = entity.ADatetime2 ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.SmallDateTime)
-                { Value = entity.ASmalldatetime ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.UniqueIdentifier)
-                { Value = entity.Id };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.Real)
+                { Value = entity.AReal },
+                new SqlParameter("parm2i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Time)
+                { Value = entity.ATime ?? (object)DBNull.Value },
+                new SqlParameter("parm4i" + i, SqlDbType.DateTimeOffset)
+                { Value = entity.AOffset ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.DateTime)
+                { Value = entity.ADatetime ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.DateTime2)
+                { Value = entity.ADatetime2 ?? (object)DBNull.Value },
+                new SqlParameter("parm7i" + i, SqlDbType.SmallDateTime)
+                { Value = entity.ASmalldatetime ?? (object)DBNull.Value },
+                new SqlParameter("parm8i" + i, SqlDbType.UniqueIdentifier)
+                { Value = entity.Id },
+            };
         }
 
         private string ConstructUpdateRequest(int count)
@@ -355,10 +388,13 @@ drop table " + table + ";";
   WHERE id = @parm8i" + index + ";";
         }
         #endregion
+        #endregion
 
+        #region delete
         public void Delete(EntityWithGuid entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
 
         public void Delete(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
@@ -387,6 +423,9 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        private const string SingleDeleteRequest = @"DELETE FROM entity_with_guid 
+  WHERE id = @parm0i0;";
+
         private void DeleteByTempTable(List<EntityWithGuid> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -426,6 +465,16 @@ drop table " + table + ";";
             var sql = @"delete from entity_with_guid where id in (" + whereIn + ")";
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
+
+        private SqlParameter[] GetDeleteParameters(EntityWithGuid entity)
+        {
+            return new[]
+            {
+            new SqlParameter("parm0i0", SqlDbType.UniqueIdentifier)
+                { Value = entity.Id },
+            };
+        }      
+        #endregion
         #endregion
     }
 }

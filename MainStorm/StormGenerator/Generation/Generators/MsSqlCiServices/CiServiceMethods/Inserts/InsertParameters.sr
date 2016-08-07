@@ -2,11 +2,14 @@
 @using StormGenerator.Models.GenModels System.Collections.Generic GeneratorHelpers
 @constructor(Model model, List<Field> fields)
 
-	    private IEnumerable<SqlParameter> GetInsertParameters(@model.Name entity, int i)
+	    private SqlParameter[] GetInsertParameters(@model.Name entity, int i)
 		{
+            return new[]
+            {
 @{var i = 0; }
 @foreach(var field in fields){
-            yield return new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
-			    { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} };
+                new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
+			    { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} },
 }
+            };
         }

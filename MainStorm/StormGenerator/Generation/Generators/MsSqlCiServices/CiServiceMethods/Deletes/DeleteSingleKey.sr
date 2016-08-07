@@ -4,7 +4,8 @@
 
         public void Delete(@model.Name entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
 
         public void Delete(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
@@ -33,7 +34,9 @@
         }
 
 		#region delete methods
-@[DeleteByTempTable(model, options)]
+@[SingleDeleteRequest(model, model.KeyFields)]
+
+@[DeleteByIdTempTable(model, options)]
 
         private void DeleteByWhereIn(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
@@ -64,4 +67,17 @@ drop table " + table + ";";
             var sql = @"delete from @model.Table.Id where @model.KeyFields[0].Column.Name in (" + whereIn + ")";
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
 		}
+
+        private SqlParameter[] GetDeleteParameters(@model.Name entity)
+        {
+            return new[]
+            {
+@{var i = 0; }
+@{var fields = model.KeyFields;}
+@foreach(var field in fields){
+            new SqlParameter("parm@(i++)i0", SqlDbType.@field.GetSqlType())
+                { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} },
+}
+            };
+        }      
 		#endregion

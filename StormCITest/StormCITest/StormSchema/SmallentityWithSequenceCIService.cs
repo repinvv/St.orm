@@ -17,6 +17,7 @@ namespace StormTestProject.StormSchema
 
     public class SmallentityWithSequenceCiService : ICiService<SmallentityWithSequence>
     {
+        #region internal artefacts
         private List<SmallentityWithSequence> ReadEntities(SqlDataReader reader)
         {
             var list = new List<SmallentityWithSequence>();
@@ -34,15 +35,6 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<SmallentityWithSequence> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<SmallentityWithSequence> entities;
@@ -107,6 +99,15 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        #region Get
+        public List<SmallentityWithSequence> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
         public static int MaxAmountForWhereIn = 300;
 
         public List<SmallentityWithSequence> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
@@ -142,7 +143,9 @@ drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
         #endregion
+        #endregion
 
+        #region insert
         public static int MaxAmountForGroupedInsert = 36;
 
         public void Insert(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
@@ -159,11 +162,22 @@ drop table " + table + ";";
             }
         }
 
+        public void Insert(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
+        {        
+            var sql = ConstructInsertRequest(1);    
+            var parms = GetInsertParameters(entity, 0);
+            Func<IDataReader, List<SmallentityWithSequence>> readId = reader =>
+                {
+                    if(reader.Read()) entity.Id = reader.GetInt32(0);
+                    return null;
+                };
+            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
+        }
+
         #region group insert methods
         private void GroupInsert(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
             CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
         }
@@ -181,6 +195,13 @@ drop table " + table + ";";
 
         private string insertRequestCache;
         private int insertCacheLength;
+        private const string SingleInsertRequest = @"INSERT INTO smallentity_with_sequence (
+  id, a_char, a_varchar, a_text
+) OUTPUT inserted.id VALUES
+  @parm0i0,
+  @parm1i0,
+  @parm2i0,
+  @parm3i0)";
 
         private string ConstructInsertRequest(int count)
         {
@@ -212,32 +233,25 @@ drop table " + table + ";";
                 sb.Append(", @parm2i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(SmallentityWithSequence entity, int i)
+        private SqlParameter[] GetInsertParameters(SmallentityWithSequence entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
-                { Value = entity.AChar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.VarChar)
-                { Value = entity.AVarchar };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
-                { Value = entity.AText ?? (object)DBNull.Value };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Char)
+                { Value = entity.AChar ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.VarChar)
+                { Value = entity.AVarchar },
+                new SqlParameter("parm2i" + i, SqlDbType.Text)
+                { Value = entity.AText ?? (object)DBNull.Value },
+            };
         }
         #endregion
+        #endregion
 
-        public void Insert(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
-        {        
-            var sql = ConstructInsertRequest(1);    
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            Func<IDataReader, List<SmallentityWithSequence>> readId = reader =>
-                {
-                    if(reader.Read()) entity.Id = reader.GetInt32(0);
-                    return null;
-                };
-            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
-        }
-
+        #region update
         public void Update(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
         {
-            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var parms = GetUpdateParameters(entity, 0);
             var sql = GetUpdateRequest(0);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
@@ -257,6 +271,12 @@ drop table " + table + ";";
         }
 
         #region update methods
+        private const string SingleUpdateRequest = @"UPDATE smallentity_with_sequence SET
+    a_char = @parm0i0,
+    a_varchar = @parm1i0,
+    a_text = @parm2i0
+  WHERE id = @parm3i0;";
+
         private void BulkUpdate(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -275,22 +295,24 @@ drop table " + table + ";";
 
         private void GroupUpdate(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();
             var sql = ConstructUpdateRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(SmallentityWithSequence entity, int i)
+        private SqlParameter[] GetUpdateParameters(SmallentityWithSequence entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.Char)
-                { Value = entity.AChar ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.VarChar)
-                { Value = entity.AVarchar };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Text)
-                { Value = entity.AText ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.Int)
-                { Value = entity.Id };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Char)
+                { Value = entity.AChar ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.VarChar)
+                { Value = entity.AVarchar },
+                new SqlParameter("parm2i" + i, SqlDbType.Text)
+                { Value = entity.AText ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Int)
+                { Value = entity.Id },
+            };
         }
 
         private string ConstructUpdateRequest(int count)
@@ -313,10 +335,13 @@ drop table " + table + ";";
   WHERE id = @parm3i" + index + ";";
         }
         #endregion
+        #endregion
 
+        #region delete
         public void Delete(SmallentityWithSequence entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
 
         public void Delete(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
@@ -345,6 +370,9 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        private const string SingleDeleteRequest = @"DELETE FROM smallentity_with_sequence 
+  WHERE id = @parm0i0;";
+
         private void DeleteByTempTable(List<SmallentityWithSequence> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -384,6 +412,16 @@ drop table " + table + ";";
             var sql = @"delete from smallentity_with_sequence where id in (" + whereIn + ")";
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
+
+        private SqlParameter[] GetDeleteParameters(SmallentityWithSequence entity)
+        {
+            return new[]
+            {
+            new SqlParameter("parm0i0", SqlDbType.Int)
+                { Value = entity.Id },
+            };
+        }      
+        #endregion
         #endregion
     }
 }

@@ -4,7 +4,7 @@
 
         public void Update(@model.Name entity, SqlConnection conn, SqlTransaction trans)
         {
-            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var parms = GetUpdateParameters(entity, 0);
             var sql = GetUpdateRequest(0);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
@@ -24,6 +24,8 @@
         }
 
         #region update methods
+@[SingleUpdateRequest(model, options)]
+
         private void BulkUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -45,20 +47,22 @@ drop table " + table + ";";
 
         private void GroupUpdate(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();
             var sql = ConstructUpdateRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(@model.Name entity, int i)
+        private SqlParameter[] GetUpdateParameters(@model.Name entity, int i)
         {
+            return new[]
+            {
 @{var i = 0; }
 @{fields = model.ValueFieldsThenKeys();}
 @foreach(var field in fields){
-            yield return new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
-			    { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} };
+                new SqlParameter("parm@(i++)i" + i, SqlDbType.@field.GetSqlType())
+			    { Value = entity.@field.Name@if(field.Column.IsNullable){ ?? (object)DBNull.Value} },
 }
+            };
         }
 
         private string ConstructUpdateRequest(int count)
@@ -81,8 +85,8 @@ drop table " + table + ";";
     @field.Column.Name = @@parm@(i++)i" + index + @"@if(field != fields.Last()){,}
 }
 @foreach(var field in model.KeyFields){
-@{var start = field == model.KeyFields.First() ? "WHERE" : "AND";}
-@{var end = field == model.KeyFields.Last() ? "\";\";" : "@\",";}
+    @{var start = field == model.KeyFields.First() ? "WHERE" : "AND";}
+    @{var end = field == model.KeyFields.Last() ? "\";\";" : "@\",";}
   @start @field.Column.Name = @@parm@(i++)i" + index + @end
 }
         }

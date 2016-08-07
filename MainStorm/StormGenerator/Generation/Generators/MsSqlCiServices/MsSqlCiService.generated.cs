@@ -70,26 +70,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    {");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region internal artefacts");
+            WriteLiteral(Environment.NewLine);
             Write(new ReadEntities(model).Execute());
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public List<");
-            Write(model.Name);
-            WriteLiteral(@"> Get(string query, ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            SqlParameter[] parms, ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            SqlConnection conn, ");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #region EntityDataReaders and temp tables");
             WriteLiteral(Environment.NewLine);
             Write(new EntityReader(model, model.Fields, "EntityDataReader").Execute());
             if (model.KeyFields.Any())
@@ -117,6 +100,25 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region Get");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        public List<");
+            Write(model.Name);
+            WriteLiteral(@"> Get(string query, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            SqlParameter[] parms, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            SqlConnection conn, ");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            SqlTransaction trans)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
             if (!model.KeyFields.Any())
             {
                 Write(new GetByPrimaryKeyException(model).Execute());
@@ -132,6 +134,10 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                     Write(new GetByMultiPrimaryKey(model).Execute());
                 }
             }
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region insert");
             WriteLiteral(Environment.NewLine);
             if (model.KeyFields.Count != 1 
     || model.IsStruct
@@ -153,8 +159,12 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
                     }
                 }
             }
+            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
-            if (model.KeyFields.Any() && model.Fields.Count > model.KeyFields.Count)
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region update");
+            WriteLiteral(Environment.NewLine);
+            if (model.KeyFields.Any() && !model.Fields.All(x => x.Column.IsPrimaryKey))
             {
                 Write(new Update(model, options).Execute());
             }
@@ -162,6 +172,10 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             {
                 Write(new UpdateException(model).Execute());
             }
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region delete");
             WriteLiteral(Environment.NewLine);
             if (model.KeyFields.Count == 0)
             {
@@ -175,6 +189,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             {
                 Write(new DeleteSingleKey(model, options).Execute());
             }
+            WriteLiteral(@"        #endregion");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"    }");
             WriteLiteral(Environment.NewLine);
 

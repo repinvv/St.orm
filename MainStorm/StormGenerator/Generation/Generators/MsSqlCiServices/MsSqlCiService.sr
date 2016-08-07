@@ -19,17 +19,9 @@
 
     @options.Visibility class @(model.Name)CiService : ICiService<@model.Name>
     {
+        #region internal artefacts
 @[ReadEntities(model)]
 
-        public List<@model.Name> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
 @[EntityReader(model, model.Fields, "EntityDataReader")]
 @if(model.KeyFields.Any()){@newline
 @[EntityReader(model, model.KeyFields, "EntityKeyDataReader")]
@@ -46,6 +38,15 @@
         }
 		#endregion
 
+        #region Get
+        public List<@model.Name> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
 @if(!model.KeyFields.Any()){
 @[GetByPrimaryKeyException(model)]
 } else {
@@ -55,7 +56,9 @@
 @[GetByMultiPrimaryKey(model)]
   }
 }
+        #endregion
 
+        #region insert
 @if(model.KeyFields.Count != 1 
     || model.IsStruct
     || (model.KeyFields[0].Column.Sequence == null && !model.KeyFields[0].Column.IsIdentity)){
@@ -69,13 +72,17 @@
     }
   }
 }
+        #endregion
 
-@if(model.KeyFields.Any() && model.Fields.Count > model.KeyFields.Count){
+        #region update
+@if(model.KeyFields.Any() && !model.Fields.All(x => x.Column.IsPrimaryKey)){
 @[Update(model, options)]
 } else {
 @[UpdateException(model)]
 }
+        #endregion
 
+        #region delete
 @if(model.KeyFields.Count == 0){
 @[DeleteNoKey(model, options)]
 }
@@ -85,4 +92,5 @@
 @if(model.KeyFields.Count == 1){
 @[DeleteSingleKey(model, options)]
 }
+        #endregion
     }

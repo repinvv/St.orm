@@ -61,8 +61,14 @@ GO
 
 create table entity_without_key
 (
-    value int not null,
+    val int not null,
 	content nvarchar(max),
+    a_float float,
+	a_real real not null,
+	a_date date,
+	a_bigint bigint,
+    a_int int not null,
+    a_numeric numeric(6,2),
 );
 GO
 

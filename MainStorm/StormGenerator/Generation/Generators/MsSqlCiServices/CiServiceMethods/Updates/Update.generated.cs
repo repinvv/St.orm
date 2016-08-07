@@ -63,7 +63,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var parms = GetUpdateParameters(entity, 0).ToArray();");
+            WriteLiteral(@"            var parms = GetUpdateParameters(entity, 0);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = GetUpdateRequest(0);");
             WriteLiteral(Environment.NewLine);
@@ -103,6 +103,8 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #region update methods");
+            WriteLiteral(Environment.NewLine);
+            Write(new SingleUpdateRequest(model, options).Execute());
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void BulkUpdate(List<");
             Write(model.Name);
@@ -162,9 +164,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            int i = 0;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();");
+            WriteLiteral(@"            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ConstructUpdateRequest(entities.Count);");
             WriteLiteral(Environment.NewLine);
@@ -173,17 +173,21 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        private IEnumerable<SqlParameter> GetUpdateParameters(");
+            WriteLiteral(@"        private SqlParameter[] GetUpdateParameters(");
             Write(model.Name);
             WriteLiteral(@" entity, int i)");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return new[]");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
             var i = 0; 
             fields = model.ValueFieldsThenKeys();
             foreach (var field in fields)
             {
-                WriteLiteral(@"            yield return new SqlParameter(""parm");
+                WriteLiteral(@"                new SqlParameter(""parm");
                 Write(i++);
                 WriteLiteral(@"i"" + i, SqlDbType.");
                 Write(field.GetSqlType());
@@ -195,9 +199,11 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
                 {
                     WriteLiteral(@" ?? (object)DBNull.Value");
                 }
-                WriteLiteral(@" };");
+                WriteLiteral(@" },");
                 WriteLiteral(Environment.NewLine);
             }
+            WriteLiteral(@"            };");
+            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);

@@ -265,7 +265,7 @@
           "IsNullable": true,
           "Index": 4,
           "Length": 2147483647,
-          "Definition": "a_text text(2147483647)",
+          "Definition": "a_text text",
           "Associations": []
         },
         {
@@ -298,7 +298,7 @@
           "IsNullable": true,
           "Index": 7,
           "Length": 1073741823,
-          "Definition": "a_ntext ntext(1073741823)",
+          "Definition": "a_ntext ntext",
           "Associations": []
         },
         {
@@ -309,7 +309,7 @@
           "IsNullable": true,
           "Index": 8,
           "Length": -1,
-          "Definition": "a_xml xml(max)",
+          "Definition": "a_xml xml",
           "Associations": []
         },
         {
@@ -342,7 +342,7 @@
           "IsNullable": true,
           "Index": 11,
           "Length": 2147483647,
-          "Definition": "a_image image(2147483647)",
+          "Definition": "a_image image",
           "Associations": []
         }
       ]
@@ -381,34 +381,6 @@
           "CsTypeName": "string",
           "IsNullable": true,
           "Index": 3,
-          "Length": -1,
-          "Definition": "content nvarchar(max)",
-          "Associations": []
-        }
-      ]
-    },
-    {
-      "Id": "entity_without_key",
-      "Name": "entity_without_key",
-      "Schema": "dbo",
-      "Columns": [
-        {
-          "Name": "value",
-          "DbType": "int",
-          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-          "CsTypeName": "int",
-          "Index": 1,
-          "Precision": 10,
-          "Definition": "value int",
-          "Associations": []
-        },
-        {
-          "Name": "content",
-          "DbType": "nvarchar",
-          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-          "CsTypeName": "string",
-          "IsNullable": true,
-          "Index": 2,
           "Length": -1,
           "Definition": "content nvarchar(max)",
           "Associations": []
@@ -462,7 +434,99 @@
           "IsNullable": true,
           "Index": 4,
           "Length": 2147483647,
-          "Definition": "a_text text(2147483647)",
+          "Definition": "a_text text",
+          "Associations": []
+        }
+      ]
+    },
+    {
+      "Id": "entity_without_key",
+      "Name": "entity_without_key",
+      "Schema": "dbo",
+      "Columns": [
+        {
+          "Name": "val",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "Index": 1,
+          "Precision": 10,
+          "Definition": "val int",
+          "Associations": []
+        },
+        {
+          "Name": "content",
+          "DbType": "nvarchar",
+          "CsType": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "string",
+          "IsNullable": true,
+          "Index": 2,
+          "Length": -1,
+          "Definition": "content nvarchar(max)",
+          "Associations": []
+        },
+        {
+          "Name": "a_float",
+          "DbType": "float",
+          "CsType": "System.Nullable`1[[System.Double, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "double?",
+          "IsNullable": true,
+          "Index": 3,
+          "Precision": 53,
+          "Definition": "a_float float",
+          "Associations": []
+        },
+        {
+          "Name": "a_real",
+          "DbType": "real",
+          "CsType": "System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "float",
+          "Index": 4,
+          "Precision": 24,
+          "Definition": "a_real real",
+          "Associations": []
+        },
+        {
+          "Name": "a_date",
+          "DbType": "date",
+          "CsType": "System.Nullable`1[[System.DateTime, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "DateTime?",
+          "IsNullable": true,
+          "Index": 5,
+          "Definition": "a_date date",
+          "Associations": []
+        },
+        {
+          "Name": "a_bigint",
+          "DbType": "bigint",
+          "CsType": "System.Nullable`1[[System.Int64, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "long?",
+          "IsNullable": true,
+          "Index": 6,
+          "Precision": 19,
+          "Definition": "a_bigint bigint",
+          "Associations": []
+        },
+        {
+          "Name": "a_int",
+          "DbType": "int",
+          "CsType": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "int",
+          "Index": 7,
+          "Precision": 10,
+          "Definition": "a_int int",
+          "Associations": []
+        },
+        {
+          "Name": "a_numeric",
+          "DbType": "numeric",
+          "CsType": "System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "CsTypeName": "decimal?",
+          "IsNullable": true,
+          "Index": 8,
+          "Precision": 6,
+          "Scale": 2,
+          "Definition": "a_numeric numeric(6, 2)",
           "Associations": []
         }
       ]
@@ -710,28 +774,6 @@
       "Name": "EntityWithMultikey"
     },
     {
-      "Id": "EntityWithoutKey",
-      "DbTableId": "entity_without_key",
-      "Fields": [
-        {
-          "DbColumnName": "value",
-          "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Value"
-        },
-        {
-          "DbColumnName": "content",
-          "IsEnabled": true,
-          "IsGenerated": true,
-          "Name": "Content"
-        }
-      ],
-      "Relations": [],
-      "IsEnabled": true,
-      "IsGenerated": true,
-      "Name": "EntityWithoutKey"
-    },
-    {
       "Id": "SmallentityWithSequence",
       "DbTableId": "smallentity_with_sequence",
       "Fields": [
@@ -764,6 +806,64 @@
       "IsEnabled": true,
       "IsGenerated": true,
       "Name": "SmallentityWithSequence"
+    },
+    {
+      "Id": "EntityWithoutKey",
+      "DbTableId": "entity_without_key",
+      "Fields": [
+        {
+          "DbColumnName": "val",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Val"
+        },
+        {
+          "DbColumnName": "content",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "Content"
+        },
+        {
+          "DbColumnName": "a_float",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AFloat"
+        },
+        {
+          "DbColumnName": "a_real",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AReal"
+        },
+        {
+          "DbColumnName": "a_date",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ADate"
+        },
+        {
+          "DbColumnName": "a_bigint",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ABigint"
+        },
+        {
+          "DbColumnName": "a_int",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "AInt"
+        },
+        {
+          "DbColumnName": "a_numeric",
+          "IsEnabled": true,
+          "IsGenerated": true,
+          "Name": "ANumeric"
+        }
+      ],
+      "Relations": [],
+      "IsEnabled": true,
+      "IsGenerated": true,
+      "Name": "EntityWithoutKey"
     }
   ]
 }

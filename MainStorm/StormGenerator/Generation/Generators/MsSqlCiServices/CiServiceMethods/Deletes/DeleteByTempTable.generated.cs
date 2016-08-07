@@ -65,9 +65,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var table = CiHelper.CreateTempTableName();");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CreateIdTempTable(table, conn, trans);");
+            WriteLiteral(@"            CreateTempTable(table, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);");
+            WriteLiteral(@"            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ");
             WriteLiteral(@"@");

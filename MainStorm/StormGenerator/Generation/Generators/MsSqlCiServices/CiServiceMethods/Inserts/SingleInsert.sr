@@ -5,7 +5,7 @@
         public void Insert(@model.Name entity, SqlConnection conn, SqlTransaction trans)
         {		
             var sql = ConstructInsertRequest(1);	
-			var parms = GetInsertParameters(entity, 0).ToArray();
+			var parms = GetInsertParameters(entity, 0);
 @if(model.IsStruct){
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
 } else{

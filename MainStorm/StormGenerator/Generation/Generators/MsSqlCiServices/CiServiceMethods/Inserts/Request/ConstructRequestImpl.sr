@@ -5,6 +5,7 @@
 
 		private string insertRequestCache;
 		private int insertCacheLength;
+@[SingleInsertRequest(model, fields, output)]
 
 		private string ConstructInsertRequest(int count)
 		{

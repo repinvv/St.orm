@@ -6,8 +6,9 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Updates
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes
 {
+    using System.Collections.Generic;
     using StormGenerator.Settings;
     using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
@@ -16,14 +17,16 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class UpdateException
+    internal class SingleDeleteRequest
     {
         #region constructor
         Model model;
+        List<Field> fields;
 
-        public UpdateException(Model model)
+        public SingleDeleteRequest(Model model, List<Field> fields)
         {
             this.model = model;
+            this.fields = fields;
         }
         #endregion
 
@@ -55,31 +58,29 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        public void Update(");
-            Write(model.Name);
-            WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
+            int i = 0;
+            WriteLiteral(@"        private const string SingleDeleteRequest = ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""DELETE FROM ");
+            Write(model.Table.Id);
+            WriteLiteral(@" ");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            throw new CiException(""Can not update entity ");
-            Write(model.Name);
-            WriteLiteral(@""");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        public void Update(List<");
-            Write(model.Name);
-            WriteLiteral(@"> entities, SqlConnection conn, SqlTransaction trans)");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            throw new CiException(""Can not update entity ");
-            Write(model.Name);
-            WriteLiteral(@""");");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            foreach (var field in fields)
+            {
+                var start = field == fields.First() ? "WHERE" : "AND";
+                var end = field == fields.Last() ? ";\";" : ",";
+                WriteLiteral(@"  ");
+                Write(start);
+                WriteLiteral(@" ");
+                Write(field.Column.Name);
+                WriteLiteral(@" = ");
+                WriteLiteral(@"@");
+                WriteLiteral(@"parm");
+                Write(i++);
+                WriteLiteral(@"i0");
+                Write(end);
+                WriteLiteral(Environment.NewLine);
+            }
 
             return executed = sb.ToString();
         }

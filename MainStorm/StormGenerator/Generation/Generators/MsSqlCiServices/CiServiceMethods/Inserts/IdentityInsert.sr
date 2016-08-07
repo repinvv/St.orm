@@ -10,8 +10,9 @@
             {
                 GroupInsert(group, conn, trans);
             }
-           
         }
+
+@[SingleInsert(model)]
 
 @{var fields = model.ValueFields();}
         #region range insert methods
@@ -31,5 +32,3 @@
 
 @[InsertParameters(model, fields)]
         #endregion
-
-@[SingleInsert(model)]

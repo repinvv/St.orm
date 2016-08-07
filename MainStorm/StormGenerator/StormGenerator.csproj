@@ -82,6 +82,11 @@
     <Compile Include="Generation\GeneratorCollections\IGeneratorCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\Linq2DbContextCollection.cs" />
     <Compile Include="Generation\GeneratorCollections\ModelsCollection.cs" />
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteByIdTempTable.sr">
+      <Generator>SharpRazor</Generator>
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <LastGenOutput>DeleteByIdTempTable.generated.cs</LastGenOutput>
+    </None>
     <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteMultiKey.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
@@ -126,6 +131,16 @@
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts</CustomToolNamespace>
       <Generator>SharpRazor</Generator>
       <LastGenOutput>GroupInsertWithKey.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Inserts\Request\SingleInsertRequest.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts.Request</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SingleInsertRequest1.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Updates\SingleUpdateRequest.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Updates</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SingleUpdateRequest.generated.cs</LastGenOutput>
     </None>
     <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Updates\UpdateException.sr">
       <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Updates</CustomToolNamespace>
@@ -299,10 +314,30 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>CreateTableContent.generated.cs</LastGenOutput>
     </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteByIdTempTable.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeleteByIdTempTable.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\DeleteByTempTable.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DeleteByTempTable.sr</DependentUpon>
+    </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\GroupDelete.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>GroupDelete.generated.cs</LastGenOutput>
+    </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\GroupDelete.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GroupDelete.sr</DependentUpon>
+    </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\SingleDeleteRequest.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SingleDeleteRequest.sr</DependentUpon>
     </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Extras\CreateTableContent.generated.cs">
       <AutoGen>True</AutoGen>
@@ -329,6 +364,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DeleteSingleKey.sr</DependentUpon>
     </Compile>
+    <None Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Deletes\SingleDeleteRequest.sr">
+      <CustomToolNamespace>StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Deletes</CustomToolNamespace>
+      <Generator>SharpRazor</Generator>
+      <LastGenOutput>SingleDeleteRequest.generated.cs</LastGenOutput>
+    </None>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\GetByMultiPrimaryKey.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -424,6 +464,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SequenceInsertKeys.sr</DependentUpon>
     </Compile>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Inserts\Request\SingleInsertRequest1.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SingleInsertRequest.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Inserts\SequenceInsert.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -454,6 +499,11 @@
       <Generator>SharpRazor</Generator>
       <LastGenOutput>Update.generated.cs</LastGenOutput>
     </None>
+    <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Updates\SingleUpdateRequest.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SingleUpdateRequest.sr</DependentUpon>
+    </Compile>
     <Compile Include="Generation\Generators\MsSqlCiServices\CiServiceMethods\Updates\Update.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

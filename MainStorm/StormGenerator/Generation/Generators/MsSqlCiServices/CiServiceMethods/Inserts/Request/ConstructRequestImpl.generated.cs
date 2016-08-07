@@ -64,6 +64,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private int insertCacheLength;");
             WriteLiteral(Environment.NewLine);
+            Write(new SingleInsertRequest(model, fields, output).Execute());
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private string ConstructInsertRequest(int count)");
             WriteLiteral(Environment.NewLine);

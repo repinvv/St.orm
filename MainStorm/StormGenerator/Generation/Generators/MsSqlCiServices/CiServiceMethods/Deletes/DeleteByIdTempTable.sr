@@ -5,8 +5,8 @@
         private void DeleteByTempTable(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
-            CreateTempTable(table, conn, trans);
-            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            CreateIdTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityKeyDataReader(entities), table, conn, trans);
             var sql = @"delete e from @model.Table.Id e
   inner join " + table + @" t on 
 @foreach(var line in model.GetKeyEqualityLines("e.", "t.", ";")){

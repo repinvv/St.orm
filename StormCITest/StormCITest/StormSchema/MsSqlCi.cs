@@ -98,8 +98,8 @@ namespace StormTestProject.StormSchema
                 { typeof(EntityWithGuid), new EntityWithGuidCiService() },
                 { typeof(EntityWithSequence), new EntityWithSequenceCiService() },
                 { typeof(EntityWithMultikey), new EntityWithMultikeyCiService() },
-                { typeof(EntityWithoutKey), new EntityWithoutKeyCiService() },
                 { typeof(SmallentityWithSequence), new SmallentityWithSequenceCiService() },
+                { typeof(EntityWithoutKey), new EntityWithoutKeyCiService() },
            };
 
         private static ICiService<T> GetService<T>()

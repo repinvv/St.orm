@@ -10,6 +10,22 @@
     public class UpdateEntityWithIdTest : ContextInTransaction
     {
         [TestMethod]
+        public void Update_EntityWithId_Single()
+        {
+            // arrange
+            var entity = Create.EntityWithId(100);
+            MsSqlCi.Insert(entity, conn);
+
+            // act
+            var toUpdate = Create.EntityWithIdForUpdate(entity.Id);
+            MsSqlCi.Update(toUpdate, conn);
+
+            // assert
+            var efEntity = context.entity_with_id.First(x=>x.id == toUpdate.Id);
+            Compare.EntityWithId(efEntity, toUpdate);
+        }
+
+        [TestMethod]
         public void Update_EntityWithId_Grouped()
         {
             Update_EntityWithId_Impl(EntityWithIdCiService.MaxAmountForGroupedUpdate);

@@ -17,6 +17,7 @@ namespace StormTestProject.StormSchema
 
     public class EntityWithoutKeyCiService : ICiService<EntityWithoutKey>
     {
+        #region internal artefacts
         private List<EntityWithoutKey> ReadEntities(SqlDataReader reader)
         {
             var list = new List<EntityWithoutKey>();
@@ -24,23 +25,20 @@ namespace StormTestProject.StormSchema
             {
                 var entity = new EntityWithoutKey
                 {
-                    Value = reader.GetInt32(0),
+                    Val = reader.GetInt32(0),
                     Content = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    AFloat = reader.IsDBNull(2) ? (double?)null : reader.GetDouble(2),
+                    AReal = reader.GetFloat(3),
+                    ADate = reader.IsDBNull(4) ? (DateTime?)null : reader.GetDateTime(4),
+                    ABigint = reader.IsDBNull(5) ? (long?)null : reader.GetInt64(5),
+                    AInt = reader.GetInt32(6),
+                    ANumeric = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7),
                 };
                 list.Add(entity);
             }
             return list;
         }
 
-        public List<EntityWithoutKey> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithoutKey> entities;
@@ -55,33 +53,62 @@ namespace StormTestProject.StormSchema
                 switch(i)
                 {
                     case 0:
-                        return entities[current].Value;
+                        return entities[current].Val;
                     case 1:
                         return entities[current].Content;
+                    case 2:
+                        return entities[current].AFloat;
+                    case 3:
+                        return entities[current].AReal;
+                    case 4:
+                        return entities[current].ADate;
+                    case 5:
+                        return entities[current].ABigint;
+                    case 6:
+                        return entities[current].AInt;
+                    case 7:
+                        return entities[current].ANumeric;
                     default:
                         throw new Exception("EntityWithoutKey Can't read field " + i);
                 }            
             }
 
-            public override int FieldCount { get { return 2; } }
+            public override int FieldCount { get { return 8; } }
         }
 
         private void CreateTempTable(string table, SqlConnection conn, SqlTransaction trans)
         {
             var sql = "CREATE TABLE " + table + @"(
-                value int,
-                content nvarchar(max)
+                val int,
+                content nvarchar(max),
+                a_float float,
+                a_real real,
+                a_date date,
+                a_bigint bigint,
+                a_int int,
+                a_numeric numeric(6, 2)
                 )";
             CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
         }
         #endregion
 
+        #region Get
+        public List<EntityWithoutKey> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
         public List<EntityWithoutKey> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
         {
             throw new CiException("Entity EntityWithoutKey has no primary key");
         }
+        #endregion
 
-        public static int MaxAmountForGroupedInsert = 50;
+        #region insert
+        public static int MaxAmountForGroupedInsert = 17;
 
         public void Insert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
@@ -95,17 +122,34 @@ namespace StormTestProject.StormSchema
             }
         }
 
+        public void Insert(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
+        {
+            var sql = ConstructInsertRequest(1);
+            var parms = GetInsertParameters(entity, 0).ToArray();
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
         #region group insert methods
         private void GroupInsert(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
         private string insertRequestCache;
         private int insertCacheLength;
+        private const string SingleInsertRequest = @"INSERT INTO entity_without_key (
+  val, content, a_float, a_real, a_date, a_bigint, a_int, a_numeric
+)  VALUES
+  @parm0i0,
+  @parm1i0,
+  @parm2i0,
+  @parm3i0,
+  @parm4i0,
+  @parm5i0,
+  @parm6i0,
+  @parm7i0)";
 
         private string ConstructInsertRequest(int count)
         {
@@ -114,7 +158,7 @@ namespace StormTestProject.StormSchema
             var sb = new StringBuilder();
             sb.AppendLine("INSERT INTO entity_without_key");
             sb.AppendLine("(");
-            sb.AppendLine("value, content");
+            sb.AppendLine("val, content, a_float, a_real, a_date, a_bigint, a_int, a_numeric");
             sb.AppendLine(") VALUES");
 
             AppendInsertKeys(sb, 0);
@@ -133,24 +177,40 @@ namespace StormTestProject.StormSchema
         {
                 sb.Append("( @parm0i"); sb.Append(i);
                 sb.Append(", @parm1i"); sb.Append(i);
+                sb.Append(", @parm2i"); sb.Append(i);
+                sb.Append(", @parm3i"); sb.Append(i);
+                sb.Append(", @parm4i"); sb.Append(i);
+                sb.Append(", @parm5i"); sb.Append(i);
+                sb.Append(", @parm6i"); sb.Append(i);
+                sb.Append(", @parm7i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithoutKey entity, int i)
+        private SqlParameter[] GetInsertParameters(EntityWithoutKey entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.Int)
-                { Value = entity.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
-                { Value = entity.Content ?? (object)DBNull.Value };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Val },
+                new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value },
+                new SqlParameter("parm2i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Real)
+                { Value = entity.AReal },
+                new SqlParameter("parm4i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.Int)
+                { Value = entity.AInt },
+                new SqlParameter("parm7i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value },
+            };
         }
         #endregion
+        #endregion
 
-        public void Insert(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
-        {
-            var sql = ConstructInsertRequest(1);
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
-        }
-
+        #region update
         public void Update(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
         {
             throw new CiException("Can not update entity EntityWithoutKey");
@@ -160,14 +220,27 @@ namespace StormTestProject.StormSchema
         {
             throw new CiException("Can not update entity EntityWithoutKey");
         }
+        #endregion
+
+        #region delete
         public void Delete(EntityWithoutKey entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity, 0);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
+
+        public static int MaxAmountForGroupedDelete = 27;
 
         public void Delete(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
         {
-
+            if (entities.Count > MaxAmountForGroupedDelete)
+            {
+                DeleteByTempTable(entities, conn, trans);
+            }
+            else
+            {
+                GroupDelete(entities, conn, trans);
+            }
         }
 
         public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
@@ -176,6 +249,82 @@ namespace StormTestProject.StormSchema
         }
 
         #region delete methods
+        private const string SingleDeleteRequest = @"DELETE FROM entity_without_key 
+  WHERE val = @parm0i0,
+  AND content = @parm1i0,
+  AND a_float = @parm2i0,
+  AND a_real = @parm3i0,
+  AND a_date = @parm4i0,
+  AND a_bigint = @parm5i0,
+  AND a_int = @parm6i0,
+  AND a_numeric = @parm7i0;";
+
+        private void DeleteByTempTable(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var table = CiHelper.CreateTempTableName();
+            CreateTempTable(table, conn, trans);
+            CiHelper.BulkInsert(new EntityDataReader(entities), table, conn, trans);
+            var sql = @"delete e from entity_without_key e
+  inner join " + table + @" t on 
+    e.val = t.val AND e.content = t.content AND e.a_float = t.a_float AND e.a_real = t.a_real AND e.a_date = t.a_date AND e.a_bigint = t.a_bigint AND e.a_int = t.a_int AND e.a_numeric = t.a_numeric;
+drop table " + table + ";";
+            CiHelper.ExecuteNonQuery(sql, CiHelper.NoParameters, conn, trans);
+        }
+
+        private void GroupDelete(List<EntityWithoutKey> entities, SqlConnection conn, SqlTransaction trans)
+        {
+            var parms = entities.SelectMany((x, i) => GetDeleteParameters(x, i)).ToArray();
+            var sql = ConstructDeleteRequest(entities.Count);
+            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
+        }
+
+        private SqlParameter[] GetDeleteParameters(EntityWithoutKey entity, int i)
+        {
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.Int)
+                { Value = entity.Val },
+                new SqlParameter("parm1i" + i, SqlDbType.NVarChar)
+                { Value = entity.Content ?? (object)DBNull.Value },
+                new SqlParameter("parm2i" + i, SqlDbType.Float)
+                { Value = entity.AFloat ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Real)
+                { Value = entity.AReal },
+                new SqlParameter("parm4i" + i, SqlDbType.Date)
+                { Value = entity.ADate ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.Int)
+                { Value = entity.AInt },
+                new SqlParameter("parm7i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value },
+            };
+        }
+
+        private string ConstructDeleteRequest(int count)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.AppendLine(GetDeleteRequest(i));
+            }
+
+            return sb.ToString();
+        }
+
+        private string GetDeleteRequest(int index)
+        {
+            return @"DELETE from entity_without_key 
+  WHERE val = @parm0i" + index + @"
+  AND content = @parm1i" + index + @"
+  AND a_float = @parm2i" + index + @"
+  AND a_real = @parm3i" + index + @"
+  AND a_date = @parm4i" + index + @"
+  AND a_bigint = @parm5i" + index + @"
+  AND a_int = @parm6i" + index + @"
+  AND a_numeric = @parm7i" + index + ";";
+        }
+        #endregion
         #endregion
     }
 }

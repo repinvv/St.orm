@@ -17,6 +17,7 @@ namespace StormTestProject.StormSchema
 
     public class EntityWithIdCiService : ICiService<EntityWithId>
     {
+        #region internal artefacts
         private List<EntityWithId> ReadEntities(SqlDataReader reader)
         {
             var list = new List<EntityWithId>();
@@ -40,15 +41,6 @@ namespace StormTestProject.StormSchema
             return list;
         }
 
-        public List<EntityWithId> Get(string query, 
-            SqlParameter[] parms, 
-            SqlConnection conn, 
-            SqlTransaction trans)
-        {
-            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
-        }
-
-        #region EntityDataReaders and temp tables
         internal class EntityDataReader : BaseDataReader
         {
             private readonly List<EntityWithId> entities;
@@ -131,6 +123,15 @@ namespace StormTestProject.StormSchema
         }
         #endregion
 
+        #region Get
+        public List<EntityWithId> Get(string query, 
+            SqlParameter[] parms, 
+            SqlConnection conn, 
+            SqlTransaction trans)
+        {
+            return CiHelper.ExecuteSelect(query, parms, ReadEntities, conn, trans);
+        }
+
         public static int MaxAmountForWhereIn = 300;
 
         public List<EntityWithId> GetByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
@@ -168,21 +169,33 @@ drop table " + table + ";";
             return CiHelper.ExecuteSelect(sql, CiHelper.NoParameters, ReadEntities, conn, trans);
         }
         #endregion
+        #endregion
 
+        #region insert
         public void Insert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {        
             foreach(var group in entities.SplitInGroupsBy(83))
             {
                 GroupInsert(group, conn, trans);
             }
-           
+        }
+
+        public void Insert(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
+        {        
+            var sql = ConstructInsertRequest(1);    
+            var parms = GetInsertParameters(entity, 0);
+            Func<IDataReader, List<EntityWithId>> readId = reader =>
+                {
+                    if(reader.Read()) entity.Id = reader.GetInt32(0);
+                    return null;
+                };
+            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
         }
 
         #region range insert methods
         private void GroupInsert(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
             var sql = ConstructInsertRequest(entities.Count);
             CiHelper.ExecuteSelect(sql, parms, reader => ReadKey(reader, entities), conn, trans);
         }
@@ -200,6 +213,19 @@ drop table " + table + ";";
 
         private string insertRequestCache;
         private int insertCacheLength;
+        private const string SingleInsertRequest = @"INSERT INTO entity_with_id (
+  a_bigint, a_int, a_numeric, a_bit, a_smallint,
+  a_decimal, a_smallmoney, a_tinyint, a_money
+) OUTPUT inserted.id VALUES
+  @parm0i0,
+  @parm1i0,
+  @parm2i0,
+  @parm3i0,
+  @parm4i0,
+  @parm5i0,
+  @parm6i0,
+  @parm7i0,
+  @parm8i0)";
 
         private string ConstructInsertRequest(int count)
         {
@@ -237,44 +263,37 @@ drop table " + table + ";";
                 sb.Append(", @parm8i"); sb.Append(i);
         }
 
-        private IEnumerable<SqlParameter> GetInsertParameters(EntityWithId entity, int i)
+        private SqlParameter[] GetInsertParameters(EntityWithId entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.BigInt)
-                { Value = entity.ABigint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
-                { Value = entity.AInt };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Decimal)
-                { Value = entity.ANumeric ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.Bit)
-                { Value = entity.ABit ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
-                { Value = entity.ASmallint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.Decimal)
-                { Value = entity.ADecimal ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
-                { Value = entity.ASmallmoney ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
-                { Value = entity.ATinyint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.Money)
-                { Value = entity.AMoney ?? (object)DBNull.Value };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.AInt },
+                new SqlParameter("parm2i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Bit)
+                { Value = entity.ABit ?? (object)DBNull.Value },
+                new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
+                { Value = entity.ASmallint ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.Decimal)
+                { Value = entity.ADecimal ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
+                { Value = entity.ASmallmoney ?? (object)DBNull.Value },
+                new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
+                { Value = entity.ATinyint ?? (object)DBNull.Value },
+                new SqlParameter("parm8i" + i, SqlDbType.Money)
+                { Value = entity.AMoney ?? (object)DBNull.Value },
+            };
         }
         #endregion
+        #endregion
 
-        public void Insert(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
-        {        
-            var sql = ConstructInsertRequest(1);    
-            var parms = GetInsertParameters(entity, 0).ToArray();
-            Func<IDataReader, List<EntityWithId>> readId = reader =>
-                {
-                    if(reader.Read()) entity.Id = reader.GetInt32(0);
-                    return null;
-                };
-            CiHelper.ExecuteSelect(sql, parms, readId, conn, trans);
-        }
-
+        #region update
         public void Update(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
         {
-            var parms = GetUpdateParameters(entity, 0).ToArray();
+            var parms = GetUpdateParameters(entity, 0);
             var sql = GetUpdateRequest(0);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
@@ -294,6 +313,18 @@ drop table " + table + ";";
         }
 
         #region update methods
+        private const string SingleUpdateRequest = @"UPDATE entity_with_id SET
+    a_bigint = @parm0i0,
+    a_int = @parm1i0,
+    a_numeric = @parm2i0,
+    a_bit = @parm3i0,
+    a_smallint = @parm4i0,
+    a_decimal = @parm5i0,
+    a_smallmoney = @parm6i0,
+    a_tinyint = @parm7i0,
+    a_money = @parm8i0
+  WHERE id = @parm9i0;";
+
         private void BulkUpdate(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -318,34 +349,36 @@ drop table " + table + ";";
 
         private void GroupUpdate(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
-            int i = 0;
-            var parms = entities.SelectMany(x => GetUpdateParameters(x, i++)).ToArray();
+            var parms = entities.SelectMany((x, i) => GetUpdateParameters(x, i)).ToArray();
             var sql = ConstructUpdateRequest(entities.Count);
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
 
-        private IEnumerable<SqlParameter> GetUpdateParameters(EntityWithId entity, int i)
+        private SqlParameter[] GetUpdateParameters(EntityWithId entity, int i)
         {
-            yield return new SqlParameter("parm0i" + i, SqlDbType.BigInt)
-                { Value = entity.ABigint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm1i" + i, SqlDbType.Int)
-                { Value = entity.AInt };
-            yield return new SqlParameter("parm2i" + i, SqlDbType.Decimal)
-                { Value = entity.ANumeric ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm3i" + i, SqlDbType.Bit)
-                { Value = entity.ABit ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
-                { Value = entity.ASmallint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm5i" + i, SqlDbType.Decimal)
-                { Value = entity.ADecimal ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
-                { Value = entity.ASmallmoney ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
-                { Value = entity.ATinyint ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm8i" + i, SqlDbType.Money)
-                { Value = entity.AMoney ?? (object)DBNull.Value };
-            yield return new SqlParameter("parm9i" + i, SqlDbType.Int)
-                { Value = entity.Id };
+            return new[]
+            {
+                new SqlParameter("parm0i" + i, SqlDbType.BigInt)
+                { Value = entity.ABigint ?? (object)DBNull.Value },
+                new SqlParameter("parm1i" + i, SqlDbType.Int)
+                { Value = entity.AInt },
+                new SqlParameter("parm2i" + i, SqlDbType.Decimal)
+                { Value = entity.ANumeric ?? (object)DBNull.Value },
+                new SqlParameter("parm3i" + i, SqlDbType.Bit)
+                { Value = entity.ABit ?? (object)DBNull.Value },
+                new SqlParameter("parm4i" + i, SqlDbType.SmallInt)
+                { Value = entity.ASmallint ?? (object)DBNull.Value },
+                new SqlParameter("parm5i" + i, SqlDbType.Decimal)
+                { Value = entity.ADecimal ?? (object)DBNull.Value },
+                new SqlParameter("parm6i" + i, SqlDbType.SmallMoney)
+                { Value = entity.ASmallmoney ?? (object)DBNull.Value },
+                new SqlParameter("parm7i" + i, SqlDbType.TinyInt)
+                { Value = entity.ATinyint ?? (object)DBNull.Value },
+                new SqlParameter("parm8i" + i, SqlDbType.Money)
+                { Value = entity.AMoney ?? (object)DBNull.Value },
+                new SqlParameter("parm9i" + i, SqlDbType.Int)
+                { Value = entity.Id },
+            };
         }
 
         private string ConstructUpdateRequest(int count)
@@ -374,10 +407,13 @@ drop table " + table + ";";
   WHERE id = @parm9i" + index + ";";
         }
         #endregion
+        #endregion
 
+        #region delete
         public void Delete(EntityWithId entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
 
         public void Delete(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
@@ -406,6 +442,9 @@ drop table " + table + ";";
         }
 
         #region delete methods
+        private const string SingleDeleteRequest = @"DELETE FROM entity_with_id 
+  WHERE id = @parm0i0;";
+
         private void DeleteByTempTable(List<EntityWithId> entities, SqlConnection conn, SqlTransaction trans)
         {
             var table = CiHelper.CreateTempTableName();
@@ -445,6 +484,16 @@ drop table " + table + ";";
             var sql = @"delete from entity_with_id where id in (" + whereIn + ")";
             CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
         }
+
+        private SqlParameter[] GetDeleteParameters(EntityWithId entity)
+        {
+            return new[]
+            {
+            new SqlParameter("parm0i0", SqlDbType.Int)
+                { Value = entity.Id },
+            };
+        }      
+        #endregion
         #endregion
     }
 }

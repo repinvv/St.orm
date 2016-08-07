@@ -63,7 +63,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            ");
+            WriteLiteral(@"            var parms = GetDeleteParameters(entity);");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
@@ -122,7 +124,9 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #region delete methods");
             WriteLiteral(Environment.NewLine);
-            Write(new DeleteByTempTable(model, options).Execute());
+            Write(new SingleDeleteRequest(model, model.KeyFields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new DeleteByIdTempTable(model, options).Execute());
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        private void DeleteByWhereIn(List<");
             Write(model.Name);
@@ -215,6 +219,40 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        private SqlParameter[] GetDeleteParameters(");
+            Write(model.Name);
+            WriteLiteral(@" entity)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            return new[]");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"            {");
+            WriteLiteral(Environment.NewLine);
+            var i = 0; 
+            var fields = model.KeyFields;
+            foreach (var field in fields)
+            {
+                WriteLiteral(@"            new SqlParameter(""parm");
+                Write(i++);
+                WriteLiteral(@"i0"", SqlDbType.");
+                Write(field.GetSqlType());
+                WriteLiteral(@")");
+                WriteLiteral(Environment.NewLine);
+                WriteLiteral(@"                { Value = entity.");
+                Write(field.Name);
+                if (field.Column.IsNullable)
+                {
+                    WriteLiteral(@" ?? (object)DBNull.Value");
+                }
+                WriteLiteral(@" },");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"            };");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        }      ");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);

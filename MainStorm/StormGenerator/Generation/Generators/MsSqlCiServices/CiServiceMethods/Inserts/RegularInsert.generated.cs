@@ -90,18 +90,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"        }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        #region group insert methods");
-            WriteLiteral(Environment.NewLine);
-            Write(new GroupInsert(model, options).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new ConstructRequest(model, model.Fields).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new AppendInsertKeys(model.Fields).Execute());
-            WriteLiteral(Environment.NewLine);
-            Write(new InsertParameters(model, model.Fields).Execute());
-            WriteLiteral(@"        #endregion");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        public void Insert(");
             Write(model.Name);
             WriteLiteral(@" entity, SqlConnection conn, SqlTransaction trans)");
@@ -115,6 +103,18 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(@"            CiHelper.ExecuteNonQuery(sql, parms, conn, trans);");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        }");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"        #region group insert methods");
+            WriteLiteral(Environment.NewLine);
+            Write(new GroupInsert(model, options).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new ConstructRequest(model, model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new AppendInsertKeys(model.Fields).Execute());
+            WriteLiteral(Environment.NewLine);
+            Write(new InsertParameters(model, model.Fields).Execute());
+            WriteLiteral(@"        #endregion");
             WriteLiteral(Environment.NewLine);
 
             return executed = sb.ToString();

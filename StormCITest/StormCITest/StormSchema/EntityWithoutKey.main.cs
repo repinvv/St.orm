@@ -12,9 +12,21 @@ namespace StormTestProject.StormSchema
 
     public partial class EntityWithoutKey : IEquatable<EntityWithoutKey>
     {	
-        public int Value { get; set; }
+        public int Val { get; set; }
 
         public string Content { get; set; }
+
+        public double? AFloat { get; set; }
+
+        public float AReal { get; set; }
+
+        public DateTime? ADate { get; set; }
+
+        public long? ABigint { get; set; }
+
+        public int AInt { get; set; }
+
+        public decimal? ANumeric { get; set; }
 
         #region equality
         public override bool Equals(object obj)
@@ -31,8 +43,14 @@ namespace StormTestProject.StormSchema
         {
             return new int[]
             {
-                Value.GetHashCode(),
+                Val.GetHashCode(),
                 Content.GetHashCode(),
+                AFloat.GetHashCode(),
+                AReal.GetHashCode(),
+                ADate.GetHashCode(),
+                ABigint.GetHashCode(),
+                AInt.GetHashCode(),
+                ANumeric.GetHashCode(),
             }.CombineHashcodes();
         }
 
@@ -41,8 +59,14 @@ namespace StormTestProject.StormSchema
             return ReferenceEquals(left, right)
                 || (left as object) != null 
                 && (right as object) != null
-                && left.Value == right.Value
+                && left.Val == right.Val
                 && left.Content == right.Content
+                && left.AFloat == right.AFloat
+                && left.AReal == right.AReal
+                && left.ADate == right.ADate
+                && left.ABigint == right.ABigint
+                && left.AInt == right.AInt
+                && left.ANumeric == right.ANumeric
 		    ;
         }
 

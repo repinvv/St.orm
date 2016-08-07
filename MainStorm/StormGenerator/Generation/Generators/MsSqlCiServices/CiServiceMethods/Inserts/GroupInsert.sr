@@ -4,8 +4,7 @@
 
 		private void GroupInsert(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
 		{
-			int i = 0;
-			var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();
+			var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();
 			var sql = ConstructInsertRequest(entities.Count);
 	        CiHelper.ExecuteNonQuery(sql, parms, conn, trans);
 		}

@@ -4,12 +4,22 @@
 
         public void Delete(@model.Name entity, SqlConnection conn, SqlTransaction trans)
         {
-            
+            var parms = GetDeleteParameters(entity, 0);
+            CiHelper.ExecuteNonQuery(SingleDeleteRequest, parms, conn, trans);
         }
+
+        public static int MaxAmountForGroupedDelete = 180;
 
         public void Delete(List<@model.Name> entities, SqlConnection conn, SqlTransaction trans)
         {
-
+            if (entities.Count > MaxAmountForGroupedDelete)
+            {
+                DeleteByTempTable(entities, conn, trans);
+            }
+            else
+            {
+                GroupDelete(entities, conn, trans);
+            }
         }
 
         public void DeleteByPrimaryKey(object ids, SqlConnection conn, SqlTransaction trans)
@@ -17,5 +27,10 @@
             throw new CiException("@model.Name has no primary key");
         }
 
-		#region delete methods
-		#endregion
+        #region delete methods
+@[SingleDeleteRequest(model, model.Fields)]
+
+@[DeleteByTempTable(model, options)]
+
+@[GroupDelete(model, model.Fields, options)]
+        #endregion

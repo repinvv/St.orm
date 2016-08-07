@@ -1,0 +1,15 @@
+﻿@visibility internal
+@using System.Collections.Generic
+@using StormGenerator.Settings StormGenerator.Models.GenModels GeneratorHelpers
+@constructor(Model model, List<Field> fields, string output)
+
+        private const string SingleInsertRequest = @"INSERT INTO @model.Table.Id (
+@foreach(var line in fields.GetSelectLines()){
+  @line
+}
+) @output VALUES
+@{var i = 0; }
+@foreach(var field in fields){
+    @{var end = field == fields.Last() ? ")\";" : ","; }
+  @@parm@(i++)i0@end
+}

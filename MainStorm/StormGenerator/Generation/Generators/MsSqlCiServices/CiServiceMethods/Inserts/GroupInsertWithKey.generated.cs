@@ -63,9 +63,7 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"        {");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            int i = 0;");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            var parms = entities.SelectMany(x => GetInsertParameters(x, i++)).ToArray();");
+            WriteLiteral(@"            var parms = entities.SelectMany((x, i) => GetInsertParameters(x, i)).ToArray();");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"            var sql = ConstructInsertRequest(entities.Count);");
             WriteLiteral(Environment.NewLine);

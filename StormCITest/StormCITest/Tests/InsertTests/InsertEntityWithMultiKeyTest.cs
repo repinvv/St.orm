@@ -9,6 +9,22 @@
     public class InsertEntityWithMultiKeyTest : ContextInTransaction
     {
         [TestMethod]
+        public void Insert_EntityWithMultikey_Single()
+        {
+            // arrange
+            var entity = Create.EntityWithMultikey(10);
+            
+            // act
+            MsSqlCi.Insert(entity, conn);
+
+            // assert
+            var efEntity = context.entity_with_multikey
+                                  .Where(x => x.id_2 == entity.Id2)
+                                  .First(x => x.id_1 == entity.Id1);
+            Compare.EntityWithMultikey(efEntity, entity);
+        }
+
+        [TestMethod]
         public void Insert_EnitityWithMultikey_Bulk()
         {
             InsertEnitityWithMultikeyImpl(EntityWithMultikeyCiService.MaxAmountForGroupedInsert + 200);

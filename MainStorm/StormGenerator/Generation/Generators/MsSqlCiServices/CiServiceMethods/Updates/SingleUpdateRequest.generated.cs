@@ -6,26 +6,27 @@
 //    Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Inserts
+namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.Updates
 {
-    using StormGenerator.Models.GenModels;
     using System.Collections.Generic;
+    using StormGenerator.Settings;
+    using StormGenerator.Models.GenModels;
     using GeneratorHelpers;
     using System;
     using System.Text;
     using System.Linq;
 
     [System.CodeDom.Compiler.GeneratedCode("SharpRazor", "1.0.0.0")]
-    internal class InsertParameters
+    internal class SingleUpdateRequest
     {
         #region constructor
         Model model;
-        List<Field> fields;
+        GenOptions options;
 
-        public InsertParameters(Model model, List<Field> fields)
+        public SingleUpdateRequest(Model model, GenOptions options)
         {
             this.model = model;
-            this.fields = fields;
+            this.options = options;
         }
         #endregion
 
@@ -57,38 +58,45 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
 
         public string Execute()
         {
-            WriteLiteral(@"        private SqlParameter[] GetInsertParameters(");
-            Write(model.Name);
-            WriteLiteral(@" entity, int i)");
+            WriteLiteral(@"        private const string SingleUpdateRequest = ");
+            WriteLiteral(@"@");
+            WriteLiteral(@"""UPDATE ");
+            Write(model.Table.Id);
+            WriteLiteral(@" SET");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        {");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            return new[]");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"            {");
-            WriteLiteral(Environment.NewLine);
-            var i = 0; 
+            int i = 0;
+            var fields = model.ValueFields();
             foreach (var field in fields)
             {
-                WriteLiteral(@"                new SqlParameter(""parm");
+                WriteLiteral(@"    ");
+                Write(field.Column.Name);
+                WriteLiteral(@" = ");
+                WriteLiteral(@"@");
+                WriteLiteral(@"parm");
                 Write(i++);
-                WriteLiteral(@"i"" + i, SqlDbType.");
-                Write(field.GetSqlType());
-                WriteLiteral(@")");
-                WriteLiteral(Environment.NewLine);
-                WriteLiteral(@"                { Value = entity.");
-                Write(field.Name);
-                if (field.Column.IsNullable)
+                WriteLiteral(@"i0");
+                if (field != fields.Last())
                 {
-                    WriteLiteral(@" ?? (object)DBNull.Value");
+                    WriteLiteral(@",");
                 }
-                WriteLiteral(@" },");
                 WriteLiteral(Environment.NewLine);
             }
-            WriteLiteral(@"            };");
-            WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"        }");
-            WriteLiteral(Environment.NewLine);
+            foreach (var field in model.KeyFields)
+            {
+                var start = field == model.KeyFields.First() ? "WHERE" : "AND";
+                var end = field == model.KeyFields.Last() ? ";\";" : ",";
+                WriteLiteral(@"  ");
+                Write(start);
+                WriteLiteral(@" ");
+                Write(field.Column.Name);
+                WriteLiteral(@" = ");
+                WriteLiteral(@"@");
+                WriteLiteral(@"parm");
+                Write(i++);
+                WriteLiteral(@"i0");
+                Write(end);
+                WriteLiteral(Environment.NewLine);
+            }
 
             return executed = sb.ToString();
         }

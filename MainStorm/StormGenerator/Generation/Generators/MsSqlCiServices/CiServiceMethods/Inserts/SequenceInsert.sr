@@ -19,6 +19,8 @@
             }
         }
 
+@[SingleInsert(model)]
+
 @{var fields = model.Fields;}
         #region group insert methods
 @if(!model.IsStruct){
@@ -37,5 +39,3 @@
 
 @[InsertParameters(model, model.ValueFields())]
         #endregion
-
-@[SingleInsert(model)]
