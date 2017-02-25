@@ -60,7 +60,6 @@
 
         #region insert
 @if(model.KeyFields.Count != 1 
-    || model.IsStruct
     || (model.KeyFields[0].Column.Sequence == null && !model.KeyFields[0].Column.IsIdentity)){
 @[RegularInsert(model, options)]
 } else {

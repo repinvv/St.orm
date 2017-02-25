@@ -80,9 +80,22 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices.CiServiceMethods.
             Write(model.KeyFields[0].Column.Sequence);
             WriteLiteral(@""", entities.Count, conn, trans);");
             WriteLiteral(Environment.NewLine);
-            WriteLiteral(@"                entities.ForEach(x => x.");
+            WriteLiteral(@"                for(var i = 0; i < entities.Count; i++)");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                {");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    var entity = entities[i];");
+            WriteLiteral(Environment.NewLine);
+            WriteLiteral(@"                    entity.");
             Write(model.KeyFields[0].Name);
-            WriteLiteral(@" = seq++);");
+            WriteLiteral(@" = seq++;");
+            WriteLiteral(Environment.NewLine);
+            if (model.IsStruct)
+            {
+                WriteLiteral(@"                    entities[i] = entity;");
+                WriteLiteral(Environment.NewLine);
+            }
+            WriteLiteral(@"                }");
             WriteLiteral(Environment.NewLine);
             WriteLiteral(@"                CiHelper.BulkInsert(new EntityDataReader(entities), """);
             Write(model.Table.Id);

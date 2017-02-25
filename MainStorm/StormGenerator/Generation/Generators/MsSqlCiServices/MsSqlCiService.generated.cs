@@ -140,7 +140,6 @@ namespace StormGenerator.Generation.Generators.MsSqlCiServices
             WriteLiteral(@"        #region insert");
             WriteLiteral(Environment.NewLine);
             if (model.KeyFields.Count != 1 
-    || model.IsStruct
     || (model.KeyFields[0].Column.Sequence == null && !model.KeyFields[0].Column.IsIdentity))
             {
                 Write(new RegularInsert(model, options).Execute());

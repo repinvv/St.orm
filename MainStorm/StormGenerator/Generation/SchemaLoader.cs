@@ -34,7 +34,7 @@
                 TypeNameHandling = TypeNameHandling.Auto
             };
 
-            var schema = JsonConvert.DeserializeObject<Schema>(File.ReadAllText(schemaFile), settings) ?? new Schema();
+            var schema = JsonConvert.DeserializeObject<Schema>(ReadSchemaFile(schemaFile), settings) ?? new Schema();
             var save = false;
             if (schema.Tables == null || !schema.Tables.Any() || options.ForceRefreshDbInfo)
             {
@@ -58,6 +58,13 @@
             schema.Tables = factory.GetReader().GetTables();
             File.WriteAllText(schemaFile, JsonConvert.SerializeObject(schema, settings));
             return schema;
+        }
+
+        private string ReadSchemaFile(string schemaFile)
+        {
+            return File.Exists(schemaFile) 
+                ? File.ReadAllText(schemaFile) 
+                : "{}";
         }
     }
 }

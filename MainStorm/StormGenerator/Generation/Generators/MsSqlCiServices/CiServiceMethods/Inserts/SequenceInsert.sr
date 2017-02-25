@@ -10,7 +10,14 @@
             {
                 @{var type = @model.KeyFields[0].Column.CsTypeName;}
                 var seq = CiHelper.GetSequenceValues<@type>("@model.KeyFields[0].Column.Sequence", entities.Count, conn, trans);
-                entities.ForEach(x => x.@model.KeyFields[0].Name = seq++);
+                for(var i = 0; i < entities.Count; i++)
+                {
+                    var entity = entities[i];
+                    entity.@model.KeyFields[0].Name = seq++;
+@if(model.IsStruct){
+                    entities[i] = entity;
+}
+                }
                 CiHelper.BulkInsert(new EntityDataReader(entities), "@model.Table.Id", conn, trans );
             }
             else
